@@ -12,6 +12,7 @@
           EntranceNavigationTransitionInfo.IsTargetElement="True">
 
         <TextBlock Style="{ThemeResource TitleTextBlockStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Your App Content"/>
+        <GridView x:Name="gridView" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100"/>
 
     </Grid>
 </Page>

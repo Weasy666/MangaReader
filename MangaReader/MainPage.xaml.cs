@@ -31,21 +31,27 @@ namespace MangaReader
             {
                 new NavMenuItem()
                 {
-                    Symbol = Symbol.Contact,
-                    Label = "Basic Page",
+                    Symbol = Symbol.Sync,
+                    Label = "Latest Releases",
                     DestPage = typeof(BasicPage)
                 },
                 new NavMenuItem()
                 {
-                    Symbol = Symbol.Edit,
-                    Label = "CommandBar Page",
+                    Symbol = Symbol.Favorite,
+                    Label = "Favorite",
                     DestPage = typeof(CommandBarPage)
                 },
                 new NavMenuItem()
                 {
-                    Symbol = Symbol.Favorite,
-                    Label = "Drill In Page",
+                    Symbol = Symbol.Library,
+                    Label = "Manga Library",
                     DestPage = typeof(DrillInPage)
+                },
+                new NavMenuItem()
+                {
+                    Symbol = Symbol.Setting,
+                    Label = "Settings",
+                    DestPage = typeof(SettingsPage)
                 },
             });
 
