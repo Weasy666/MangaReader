@@ -33,7 +33,7 @@ namespace MangaReader
                 {
                     Symbol = Symbol.Sync,
                     Label = "Latest Releases",
-                    DestPage = typeof(BasicPage)
+                    DestPage = typeof(MainPage2)
                 },
                 new NavMenuItem()
                 {
@@ -87,7 +87,7 @@ namespace MangaReader
             NavMenuList.ItemsSource = navlist;
         }
 
-        public Frame AppFrame { get { return this.frame; } }
+        public Frame AppFrame { get { return this.RootFrame; } }
 
         /// <summary>
         /// Default keyboard focus movement for any unhandled keyboarding

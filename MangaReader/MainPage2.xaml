@@ -1,0 +1,114 @@
+﻿<Page
+    x:Class="MangaReader.MainPage2"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MangaReader"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    KeyDown="MainPage2_KeyDown"
+    TabNavigation="Cycle"
+    mc:Ignorable="d">
+
+    <Grid >
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MySplitView.DisplayMode"
+                                Value="Overlay" />
+                        <Setter Target="MySplitView.IsPaneOpen"
+                                Value="False" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Compact">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MySplitView.DisplayMode"
+                                Value="CompactOverlay" />
+                        <Setter Target="MySplitView.IsPaneOpen"
+                                Value="False" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Wide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1920"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MySplitView.DisplayMode"
+                                Value="CompactInline" />
+                        <Setter Target="MySplitView.IsPaneOpen"
+                                Value="True" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <SplitView x:Name="MySplitView" DisplayMode="Inline" IsPaneOpen="True">
+            <SplitView.Pane>
+                <StackPanel Margin="0,0,0,48" >
+                    <SearchBox Margin="48,0,0,0" Height="48" FontSize="20" FontFamily="Segoe UI Light" Padding="12,10,8,4">
+
+                    </SearchBox>
+                    <ListBox Name="MenuBox"
+                             SelectionMode="Single"
+                             SelectionChanged="MenuBox_SelectionChanged">
+                        <ListBoxItem Name="LatestReleasesButton"
+                                     Height="48" >
+                            <StackPanel Orientation="Horizontal">
+                                <SymbolIcon Symbol="NewWindow" />
+                                <TextBlock Text="Latest Releases" Margin="15,0,0,0" />
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem Name="FavoritesButton"
+                                     Height="48">
+                            <StackPanel Orientation="Horizontal">
+                                <SymbolIcon Symbol="Favorite" />
+                                <TextBlock Text="Favorites" Margin="15,0,0,0" />
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem Name="LibraryButton"
+                                     Height="48">
+                            <StackPanel Orientation="Horizontal">
+                                <SymbolIcon Symbol="Library" />
+                                <TextBlock Text="Manga Library" Margin="15,0,0,0" />
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem Name="SettingsButton"
+                                     Height="48" >
+                            <StackPanel Orientation="Horizontal">
+                                <SymbolIcon Symbol="Setting" />
+                                <TextBlock Text="Settings" Margin="15,0,0,0" />
+                            </StackPanel>
+                        </ListBoxItem>
+                    </ListBox>
+                </StackPanel>
+            </SplitView.Pane>
+            <Frame Name="rootFrame"
+                    >
+                <Frame.ContentTransitions>
+                    <TransitionCollection>
+                        <NavigationThemeTransition>
+                            <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                                <EntranceNavigationTransitionInfo/>
+                            </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                        </NavigationThemeTransition>
+                    </TransitionCollection>
+                </Frame.ContentTransitions>
+            </Frame>
+        </SplitView>
+        <Button Name="HamburgerButton" 
+                TabIndex="1"
+                Content="&#xE700;"
+                FontFamily="Segoe MDL2 Assets"
+                FontSize="20"
+                Width="{Binding ElementName=MySplitView, Path=CompactPaneLength}"
+                Height="48"
+                VerticalAlignment="Top" 
+                Click="HamburgerButton_Click"/>
+    </Grid>
+</Page>
