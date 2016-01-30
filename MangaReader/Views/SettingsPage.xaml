@@ -29,7 +29,7 @@
                     <!-- Personalization -->
                     <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,12,12,4">Personalization</TextBlock>
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="0,4">Theme</TextBlock>
-                    <ToggleSwitch x:Name="ThemeToggle" OffContent="Light" OnContent="Dark"></ToggleSwitch>       
+                    <ToggleSwitch x:Name="ThemeToggle" OffContent="Light" OnContent="Dark" Toggled="ThemeToggle_Toggled"></ToggleSwitch>       
                     <!-- Sources -->
                     <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,12,12,4">Sources</TextBlock>
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="0,4">Here you can select at which provider the app searches for mangas.</TextBlock>

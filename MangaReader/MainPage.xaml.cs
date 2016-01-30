@@ -45,7 +45,7 @@ namespace MangaReader
                 {
                     Symbol = Symbol.Library,
                     Label = "Manga Library",
-                    DestPage = typeof(DrillInPage)
+                    DestPage = typeof(SemanticPage)
                 },
                 new NavMenuItem()
                 {

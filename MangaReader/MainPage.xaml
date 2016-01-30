@@ -70,14 +70,10 @@
                    IsTabStop="False">
             <SplitView.Pane>
                 <StackPanel >
-                    <SearchBox Margin="48,0,0,0"
+                    <AutoSuggestBox Margin="48,0,0,0"
                                Height="48"
-                               FontSize="20"
-                               FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                               Padding="12,10,8,4"
-                               BorderThickness="0">
-
-                    </SearchBox>
+                               QueryIcon="Find">
+                    </AutoSuggestBox>
                     <!-- A custom ListView to display the items in the pane.  The automation Name is set in the ContainerContentChanging event. -->
                     <controls:NavMenuListView x:Name="NavMenuList"
                                               TabIndex="3"

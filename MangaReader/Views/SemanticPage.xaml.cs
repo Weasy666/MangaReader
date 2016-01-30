@@ -20,17 +20,11 @@ namespace MangaReader.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class SettingsPage : Page
+    public sealed partial class SemanticPage : Page
     {
-        public SettingsPage()
+        public SemanticPage()
         {
             this.InitializeComponent();
-        }
-
-        private void ThemeToggle_Toggled(object sender, RoutedEventArgs e)
-        {
-            //Not working!!!
-            //App.Current.RequestedTheme = ApplicationTheme.Dark;
         }
     }
 }
