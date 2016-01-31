@@ -127,6 +127,9 @@
     <Compile Include="Views\LandingPage.xaml.cs">
       <DependentUpon>LandingPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MangaOverviewPage.xaml.cs">
+      <DependentUpon>MangaOverviewPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SemanticPage.xaml.cs">
       <DependentUpon>SemanticPage.xaml</DependentUpon>
     </Compile>
@@ -189,6 +192,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LandingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MangaOverviewPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

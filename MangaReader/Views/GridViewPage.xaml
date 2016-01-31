@@ -9,8 +9,11 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <GridView ItemsSource="{x:Bind Mangas}"
-                  Margin="12,4,0,0">
+        <GridView x:Name="MangaGridView"
+                  ItemsSource="{x:Bind mangas}"
+                  Margin="12,4,0,0"
+                  IsItemClickEnabled="True"
+                  ItemClick="MangaGridView_ItemClick" >
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="models:Manga">
                     <StackPanel Orientation="Horizontal" 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -22,22 +21,22 @@ namespace MangaReader.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class GridViewPage : Page
+    public sealed partial class MangaOverviewPage : Page
     {
-        private List<Manga> mangas; 
-                             
-        public GridViewPage()
+        public Manga manga { get; set; }
+        public MangaOverviewPage()
         {
             this.InitializeComponent();
-            mangas = MainPage.Mangas;
         }
 
-        private void MangaGridView_ItemClick(object sender, ItemClickEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.Frame.Navigate(
-                typeof(MangaOverviewPage),
-                e.ClickedItem,
-                new Windows.UI.Xaml.Media.Animation.DrillInNavigationTransitionInfo());
+            if (e.Parameter is Manga)
+            {
+                this.manga = (Manga)e.Parameter;
+            }
+
+            base.OnNavigatedTo(e);
         }
     }
 }
