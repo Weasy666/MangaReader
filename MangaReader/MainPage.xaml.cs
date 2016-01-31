@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using MangaReader.Controls;
+using MangaReader.Models;
 using MangaReader.Views;
 
 namespace MangaReader
@@ -33,7 +34,7 @@ namespace MangaReader
                 {
                     Symbol = Symbol.Sync,
                     Label = "Latest Releases",
-                    DestPage = typeof(MainPage2)
+                    DestPage = typeof(GridViewPage)
                 },
                 new NavMenuItem()
                 {
@@ -54,6 +55,7 @@ namespace MangaReader
                     DestPage = typeof(SettingsPage)
                 },
             });
+
 
         public static MainPage Current = null;
 

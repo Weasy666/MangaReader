@@ -29,8 +29,7 @@ namespace MangaReader.Views
 
         private void ThemeToggle_Toggled(object sender, RoutedEventArgs e)
         {
-            //Not working!!!
-            //App.Current.RequestedTheme = ApplicationTheme.Dark;
+            MainPage.Current.RequestedTheme = (MainPage.Current.RequestedTheme == ElementTheme.Light || MainPage.Current.RequestedTheme == ElementTheme.Default) ? ElementTheme.Dark : ElementTheme.Light;
         }
     }
 }

@@ -1,0 +1,31 @@
+﻿<Page
+    x:Class="MangaReader.Views.GridViewPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MangaReader.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:MangaReader.Models"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <GridView ItemsSource="{x:Bind Mangas}"
+                  Margin="12,4,0,0">
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="models:Manga">
+                    <StackPanel Orientation="Horizontal" 
+                                HorizontalAlignment="Center"
+                                Width="350"
+                                >
+                        <Image Source="{x:Bind Image}" Width="103" Height="150" />
+                        <StackPanel Orientation="Vertical" 
+                                    Margin="5,0,0,0" >
+                            <TextBlock Text="{x:Bind Title}" FontSize="20"/>
+                            <TextBlock Text="{x:Bind Category}" FontSize="20"/>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+    </Grid>
+</Page>
