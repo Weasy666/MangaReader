@@ -107,7 +107,9 @@
     </Compile>
     <Compile Include="Controls\NavMenuItem.cs" />
     <Compile Include="Models\Manga.cs" />
+    <Compile Include="Models\MangaEdenRepository.cs" />
     <Compile Include="Models\MangaManager.cs" />
+    <Compile Include="Models\Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\BasicPage.xaml.cs">
       <DependentUpon>BasicPage.xaml</DependentUpon>

@@ -24,12 +24,12 @@ namespace MangaReader.Views
     /// </summary>
     public sealed partial class GridViewPage : Page
     {
-        private List<Manga> mangas; 
+        private List<MangaEdenManga> mangas; 
                              
         public GridViewPage()
         {
             this.InitializeComponent();
-            mangas = MainPage.Mangas;
+            mangas = MainPage.MangaEden.GetManga();
         }
 
         private void MangaGridView_ItemClick(object sender, ItemClickEventArgs e)

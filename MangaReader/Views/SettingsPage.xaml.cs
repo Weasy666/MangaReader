@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,6 +23,8 @@ namespace MangaReader.Views
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
+        private ApplicationDataContainer Theme;
+
         public SettingsPage()
         {
             this.InitializeComponent();
@@ -29,6 +32,7 @@ namespace MangaReader.Views
 
         private void ThemeToggle_Toggled(object sender, RoutedEventArgs e)
         {
+            
             MainPage.Current.RequestedTheme = (MainPage.Current.RequestedTheme == ElementTheme.Light || MainPage.Current.RequestedTheme == ElementTheme.Default) ? ElementTheme.Dark : ElementTheme.Light;
         }
     }

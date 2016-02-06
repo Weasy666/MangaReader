@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:MangaReader.Models"
+    xmlns:models1="using:MangaReader.Models"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -15,16 +16,16 @@
                   IsItemClickEnabled="True"
                   ItemClick="MangaGridView_ItemClick" >
             <GridView.ItemTemplate>
-                <DataTemplate x:DataType="models:Manga">
+                <DataTemplate x:DataType="models1:MangaEdenManga">
                     <StackPanel Orientation="Horizontal" 
                                 HorizontalAlignment="Center"
                                 Width="350"
                                 >
-                        <Image Source="{x:Bind Image}" Width="103" Height="150" />
+                        <!--<Image Source="{x:Bind im}" Width="103" Height="150" />-->
                         <StackPanel Orientation="Vertical" 
                                     Margin="5,0,0,0" >
-                            <TextBlock Text="{x:Bind Title}" FontSize="20"/>
-                            <TextBlock Text="{x:Bind Category}" FontSize="20"/>
+                            <TextBlock Text="{x:Bind t}" FontSize="20"/>
+                            <TextBlock Text="{x:Bind c}" FontSize="20"/>
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>
