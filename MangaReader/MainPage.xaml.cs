@@ -58,7 +58,7 @@ namespace MangaReader
             });
 
 
-        public static MainPage Current = null;
+        public static MainPage Current;
         public static List<Manga> Mangas { get; set; }
         public static MangaEdenRepository MangaEden { get; set; }
 

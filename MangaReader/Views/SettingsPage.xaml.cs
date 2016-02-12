@@ -23,17 +23,33 @@ namespace MangaReader.Views
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
-        private ApplicationDataContainer Theme;
+        private MainPage rootPage = MainPage.Current;
+        private ApplicationDataContainer localSettings;
 
         public SettingsPage()
         {
             this.InitializeComponent();
+
+            //NOT WORKING
+            localSettings = ApplicationData.Current.LocalSettings;
+
+            if(localSettings.Containers.ContainsKey("ThemeToggle"))
+                ThemeToggle = localSettings.Values["ThemeToggle"] as ToggleSwitch;
+            else if (localSettings.Containers.ContainsKey("Settings"))
+                localSettings = localSettings.CreateContainer("Settings", ApplicationDataCreateDisposition.Always);
         }
 
         private void ThemeToggle_Toggled(object sender, RoutedEventArgs e)
         {
-            
-            MainPage.Current.RequestedTheme = (MainPage.Current.RequestedTheme == ElementTheme.Light || MainPage.Current.RequestedTheme == ElementTheme.Default) ? ElementTheme.Dark : ElementTheme.Light;
+            //var requestedTheme = rootPage.RequestedTheme;
+            //if(requestedTheme == ElementTheme.Light)
+
+            rootPage.RequestedTheme = (rootPage.RequestedTheme == ElementTheme.Light || rootPage.RequestedTheme == ElementTheme.Default) ? ElementTheme.Dark : ElementTheme.Light;
+            localSettings.Containers["Settings"].Values["ThemeToggle"] = ThemeToggle;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
         }
     }
 }
