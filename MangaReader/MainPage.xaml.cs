@@ -73,6 +73,8 @@ namespace MangaReader
 
             this.Loaded += (sender, args) =>
             {
+                // This is a static public property that allows downstream pages to get a handle to the MainPage instance
+                // in order to call methods that are in this class.
                 Current = this;
 
                 this.TogglePaneButton.Focus(FocusState.Programmatic);
@@ -92,7 +94,7 @@ namespace MangaReader
             NavMenuList.ItemsSource = navlist;
 
             MangaEden = new MangaEdenRepository();
-            MangaEden.LoadManga();
+            LoadManga();
 
             //Mangas = new List<Manga>
             //{
@@ -106,6 +108,12 @@ namespace MangaReader
             //    new Manga {Title = "Golden Kamui", Category = "G", Image = "http://c.mfcdn.net/store/manga/17215/cover.jpg?1453817402"},
             //    new Manga {Title = "Tantei Gakuen Q", Category = "T", Image = "http://c.mfcdn.net/store/manga/813/cover.jpg?1453815722"},
             //};
+        }
+
+        async void LoadManga()
+        {
+            await MangaEden.LoadManga();
+
         }
 
         public Frame AppFrame { get { return this.RootFrame; } }

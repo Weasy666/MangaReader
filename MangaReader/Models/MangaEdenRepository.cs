@@ -27,16 +27,19 @@ namespace MangaReader.Models
             HttpClient.BaseAddress = new Uri(root);
         }
 
-        public async void LoadManga()
+        public async Task<Rootobject> LoadManga()
         {
             var response = await HttpClient.GetAsync(api);
             var result = await response.Content.ReadAsStringAsync();
-            Repository = JsonConvert.DeserializeObject<Rootobject>(result);
+            return Repository = JsonConvert.DeserializeObject<Rootobject>(result);
         }
 
         public List<MangaEdenManga> GetManga()
         {
-            return Repository.manga.ToList();
+            var manga = Repository.manga.ToList();
+            foreach (MangaEdenManga m in manga)
+                m.im = "https://cdn.mangaeden.com/mangasimg/" + m.im;
+            return manga;
         }
     }
 

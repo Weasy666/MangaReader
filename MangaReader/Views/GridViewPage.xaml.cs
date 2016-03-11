@@ -24,6 +24,7 @@ namespace MangaReader.Views
     /// </summary>
     public sealed partial class GridViewPage : Page
     {
+        private MainPage rootPage = MainPage.Current;
         private List<MangaEdenManga> mangas; 
                              
         public GridViewPage()

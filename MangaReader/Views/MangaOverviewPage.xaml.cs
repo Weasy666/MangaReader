@@ -23,6 +23,7 @@ namespace MangaReader.Views
     /// </summary>
     public sealed partial class MangaOverviewPage : Page
     {
+        MainPage rootPage = MainPage.Current;
         public Manga manga { get; set; }
         public MangaOverviewPage()
         {

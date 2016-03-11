@@ -23,8 +23,8 @@ namespace MangaReader.Views
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
-        private MainPage rootPage = MainPage.Current;
-        private ApplicationDataContainer localSettings;
+        MainPage rootPage = MainPage.Current;
+        ApplicationDataContainer localSettings;
 
         public SettingsPage()
         {
@@ -33,10 +33,12 @@ namespace MangaReader.Views
             //NOT WORKING
             localSettings = ApplicationData.Current.LocalSettings;
 
-            if(localSettings.Containers.ContainsKey("ThemeToggle"))
-                ThemeToggle = localSettings.Values["ThemeToggle"] as ToggleSwitch;
-            else if (localSettings.Containers.ContainsKey("Settings"))
-                localSettings = localSettings.CreateContainer("Settings", ApplicationDataCreateDisposition.Always);
+            //ThemeToggle.IsOn = localSettings.Values["ThemeToggleValue"] as string == "on";
+
+            //if (localSettings.Containers.ContainsKey("ThemeToggle"))
+            //    ThemeToggle = localSettings.Values["ThemeToggle"] as ToggleSwitch;
+            //else if (localSettings.Containers.ContainsKey("Settings"))
+            //    localSettings = localSettings.CreateContainer("Settings", ApplicationDataCreateDisposition.Always);
         }
 
         private void ThemeToggle_Toggled(object sender, RoutedEventArgs e)
@@ -44,8 +46,19 @@ namespace MangaReader.Views
             //var requestedTheme = rootPage.RequestedTheme;
             //if(requestedTheme == ElementTheme.Light)
 
-            rootPage.RequestedTheme = (rootPage.RequestedTheme == ElementTheme.Light || rootPage.RequestedTheme == ElementTheme.Default) ? ElementTheme.Dark : ElementTheme.Light;
-            localSettings.Containers["Settings"].Values["ThemeToggle"] = ThemeToggle;
+            //rootPage.RequestedTheme = (rootPage.RequestedTheme == ElementTheme.Light || rootPage.RequestedTheme == ElementTheme.Default) ? ElementTheme.Dark : ElementTheme.Light;
+            if (rootPage.RequestedTheme == ElementTheme.Light || rootPage.RequestedTheme == ElementTheme.Default)
+            {
+                rootPage.RequestedTheme = ElementTheme.Dark;
+                localSettings.Values["ThemeToggle"] = "Dark";
+                localSettings.Values["ThemeToggleValue"] = "on";
+            }
+            else
+            {
+                rootPage.RequestedTheme = ElementTheme.Light;
+                localSettings.Values["ThemeToggle"] = "Light";
+                localSettings.Values["ThemeToggleValue"] = "off";
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
