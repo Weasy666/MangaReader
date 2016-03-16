@@ -5,11 +5,68 @@
     xmlns:local="using:MangaReader.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:MangaReader.Controls"
+    xmlns:models="using:MangaReader.Models"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock Style="{ThemeResource TitleTextBlockStyle}"
-                   Text="{x:Bind manga.Title}"
-                   Margin="12,4,0,0"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <controls:PageHeader Grid.ColumnSpan="2">
+            <controls:PageHeader.HeaderContent>
+                <TextBlock Text="{x:Bind manga.Title}" Style="{ThemeResource TitleTextBlockStyle}" Margin="12,8,12,8"  TextWrapping="NoWrap"/>
+            </controls:PageHeader.HeaderContent>
+        </controls:PageHeader>
+
+        <Grid Grid.Row="1">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical" Margin="12,4,0,0">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                        <Image Source="{x:Bind manga.Image}" Width="206" Height="300"/>
+                        <StackPanel Orientation="Vertical" Margin="12,0,0,0">
+                            <!--<TextBlock Style="{ThemeResource TitleTextBlockStyle}"
+                               Text="{x:Bind manga.Title}"
+                               Margin="12,4,0,0"/>-->
+                            <TextBlock Text="{x:Bind manga.Category}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind manga.Status}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind manga.NumberOfChapters}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind manga.LastUpdated}" FontSize="15"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock Text="{x:Bind manga.MangaInfos.description}" />
+                </StackPanel>
+                <GridView x:Name="ChapterGridView"
+                  ItemsSource="{x:Bind manga.MangaInfos.chapters}"
+                  Margin="12,0,0,0"
+                  IsItemClickEnabled="True"
+                  IncrementalLoadingThreshold="20"
+                  IncrementalLoadingTrigger="Edge"
+                  >
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="models:MangaEdenMangaInfos">
+                            <StackPanel Orientation="Horizontal" 
+                                HorizontalAlignment="Center"
+                                Width="350"
+                                >
+                                <Image Source="{x:Bind image}" Width="103" Height="150" />
+                                <StackPanel Orientation="Vertical" 
+                                    Margin="5,0,0,0" >
+                                    <TextBlock Text="{x:Bind title}" FontSize="20" TextWrapping="WrapWholeWords"/>
+                                    <TextBlock Text="{x:Bind categories}" FontSize="15"/>
+                                    <TextBlock Text="{x:Bind status}" FontSize="15"/>
+                                    <TextBlock Text="{x:Bind last_chapter_date}" FontSize="15"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>
+
+
+

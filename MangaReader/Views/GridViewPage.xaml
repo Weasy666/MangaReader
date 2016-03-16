@@ -6,26 +6,32 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:MangaReader.Models"
-    xmlns:models1="using:MangaReader.Models"
+
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" ScrollViewer.HorizontalScrollMode="Disabled">
         <GridView x:Name="MangaGridView"
                   ItemsSource="{x:Bind mangas}"
                   Margin="12,4,0,0"
                   IsItemClickEnabled="True"
-                  ItemClick="MangaGridView_ItemClick" >
+                  ItemClick="MangaGridView_ItemClick"
+                  IncrementalLoadingThreshold="20"
+                  IncrementalLoadingTrigger="Edge"
+                  
+                  >
             <GridView.ItemTemplate>
-                <DataTemplate x:DataType="models1:MangaEdenManga">
+                <DataTemplate x:DataType="models:MangaEdenManga">
                     <StackPanel Orientation="Horizontal" 
                                 HorizontalAlignment="Center"
                                 Width="350"
                                 >
-                        <Image Source="{x:Bind im}" Width="103" Height="150" />
+                        <Image Source="{x:Bind Image}" Width="103" Height="150" />
                         <StackPanel Orientation="Vertical" 
                                     Margin="5,0,0,0" >
-                            <TextBlock Text="{x:Bind t}" FontSize="20"/>
-                            <TextBlock Text="{x:Bind c}" FontSize="20"/>
+                            <TextBlock Text="{x:Bind Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
+                            <TextBlock Text="{x:Bind Category}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind Status}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind LastUpdated}" FontSize="15"/>
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>
