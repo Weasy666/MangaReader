@@ -25,21 +25,21 @@
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Vertical" Margin="12,4,0,0">
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                        <Image Source="{x:Bind manga.Image}" Width="206" Height="300"/>
+                        <Image Source="{x:Bind manga.Image}" Width="206" Height="300" VerticalAlignment="Top"/>
                         <StackPanel Orientation="Vertical" Margin="12,0,0,0">
                             <!--<TextBlock Style="{ThemeResource TitleTextBlockStyle}"
                                Text="{x:Bind manga.Title}"
                                Margin="12,4,0,0"/>-->
                             <TextBlock Text="{x:Bind manga.Category}" FontSize="15"/>
                             <TextBlock Text="{x:Bind manga.Status}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind manga.NumberOfChapters}" FontSize="15"/>
+                            <!--<TextBlock Text="{x:Bind manga.NumberOfChapters}" FontSize="15"/>-->
                             <TextBlock Text="{x:Bind manga.LastUpdated}" FontSize="15"/>
                         </StackPanel>
                     </StackPanel>
-                    <TextBlock Text="{x:Bind manga.MangaInfos.description}" />
-                </StackPanel>
+                    <!--<TextBlock Text="{x:Bind manga.MangaInfos.description}" />-->
+                </StackPanel><!--ItemsSource="{x:Bind manga.MangaInfos.chapters}"-->
                 <GridView x:Name="ChapterGridView"
-                  ItemsSource="{x:Bind manga.MangaInfos.chapters}"
+                  
                   Margin="12,0,0,0"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="20"

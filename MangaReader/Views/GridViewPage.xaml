@@ -10,6 +10,9 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" ScrollViewer.HorizontalScrollMode="Disabled">
+        <Grid x:Name="LoadingGrid" Background="{ThemeResource SystemControlDisabledBaseLowBrush}" Canvas.ZIndex="1" Opacity="0.5">
+            <ProgressRing x:Name="ProgressCircle" IsActive="False" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="100"/>
+        </Grid>
         <GridView x:Name="MangaGridView"
                   ItemsSource="{x:Bind mangas}"
                   Margin="12,4,0,0"
@@ -20,12 +23,12 @@
                   
                   >
             <GridView.ItemTemplate>
-                <DataTemplate x:DataType="models:MangaEdenManga">
+                <DataTemplate x:DataType="models:Manga">
                     <StackPanel Orientation="Horizontal" 
                                 HorizontalAlignment="Center"
                                 Width="350"
                                 >
-                        <Image Source="{x:Bind Image}" Width="103" Height="150" />
+                        <Image Source="{x:Bind ImgCover}" Width="103" Height="150" />
                         <StackPanel Orientation="Vertical" 
                                     Margin="5,0,0,0" >
                             <TextBlock Text="{x:Bind Title}" FontSize="20" TextWrapping="WrapWholeWords"/>

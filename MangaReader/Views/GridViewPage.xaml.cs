@@ -24,13 +24,29 @@ namespace MangaReader.Views
     /// </summary>
     public sealed partial class GridViewPage : Page
     {
-        private MainPage rootPage = MainPage.Current;
-        private List<MangaEdenManga> mangas; 
+        private readonly MainPage _rootPage = MainPage.Current;
+        private ObservableCollection<Manga> mangas; 
                              
         public GridViewPage()
         {
             this.InitializeComponent();
-            mangas = MainPage.MangaEden.GetManga();
+        }
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            LoadingGrid.Visibility = Visibility.Visible;
+            ProgressCircle.IsActive = true;
+
+            await _rootPage.MangaManager.LoadRepository();
+            var test = await _rootPage.MangaManager.GetListofMangas();
+            mangas = new ObservableCollection<Manga>(test);
+
+            MangaGridView.DataContext = mangas;
+
+            LoadingGrid.Visibility = Visibility.Collapsed;
+            ProgressCircle.IsActive = false;
+
+            base.OnNavigatedTo(e);
         }
 
         private void MangaGridView_ItemClick(object sender, ItemClickEventArgs e)

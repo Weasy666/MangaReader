@@ -35,7 +35,7 @@ namespace MangaReader.Views
             if (e.Parameter is MangaEdenManga)
             {
                 manga = (MangaEdenManga)e.Parameter;
-                manga.LoadInfos();
+                
             }
 
             base.OnNavigatedTo(e);
