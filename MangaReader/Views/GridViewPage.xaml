@@ -10,7 +10,7 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" ScrollViewer.HorizontalScrollMode="Disabled">
-        <Grid x:Name="LoadingGrid" Background="{ThemeResource SystemControlDisabledBaseLowBrush}" Canvas.ZIndex="1" Opacity="0.5">
+        <Grid x:Name="LoadingGrid" Background="{ThemeResource SystemControlDisabledBaseLowBrush}" Canvas.ZIndex="1">
             <ProgressRing x:Name="ProgressCircle" IsActive="False" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="100"/>
         </Grid>
         <GridView x:Name="MangaGridView"
@@ -20,7 +20,6 @@
                   ItemClick="MangaGridView_ItemClick"
                   IncrementalLoadingThreshold="20"
                   IncrementalLoadingTrigger="Edge"
-                  
                   >
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="models:Manga">

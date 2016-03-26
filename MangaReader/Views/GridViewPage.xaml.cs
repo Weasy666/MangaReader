@@ -34,26 +34,42 @@ namespace MangaReader.Views
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            LoadingGrid.Visibility = Visibility.Visible;
-            ProgressCircle.IsActive = true;
+            if (!_rootPage.MangaManager.Loaded)
+            {
+                LoadingGrid.Visibility = Visibility.Visible;
+                ProgressCircle.IsActive = true;
 
-            await _rootPage.MangaManager.LoadRepository();
-            var test = await _rootPage.MangaManager.GetListofMangas();
-            mangas = new ObservableCollection<Manga>(test);
+                await _rootPage.MangaManager.LoadRepositoryAsync();
+                var mangaList = await _rootPage.MangaManager.GetListofMangasAsync();
+                mangas = new ObservableCollection<Manga>(mangaList);
 
-            MangaGridView.DataContext = mangas;
+                MangaGridView.ItemsSource = mangas;
 
-            LoadingGrid.Visibility = Visibility.Collapsed;
-            ProgressCircle.IsActive = false;
+                LoadingGrid.Visibility = Visibility.Collapsed;
+                ProgressCircle.IsActive = false;
+            }
+            else
+            {
+                LoadingGrid.Visibility = Visibility.Collapsed;
+                ProgressCircle.IsActive = false;
 
+                var mangaList = await _rootPage.MangaManager.GetListofMangasAsync();
+                mangas = new ObservableCollection<Manga>(mangaList);
+
+                //MangaGridView.ItemsSource = null;
+                MangaGridView.ItemsSource = mangas;
+            }
+            
             base.OnNavigatedTo(e);
         }
 
-        private void MangaGridView_ItemClick(object sender, ItemClickEventArgs e)
+        private async void MangaGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            var clickedItem = e.ClickedItem as Manga;
+            clickedItem = await _rootPage.MangaManager.GetMangaInfoAsync(clickedItem);
             this.Frame.Navigate(
                 typeof(MangaOverviewPage),
-                e.ClickedItem,
+                clickedItem,
                 new Windows.UI.Xaml.Media.Animation.DrillInNavigationTransitionInfo());
         }
     }

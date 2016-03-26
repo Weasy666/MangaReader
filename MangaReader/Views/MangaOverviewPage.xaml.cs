@@ -24,7 +24,7 @@ namespace MangaReader.Views
     public sealed partial class MangaOverviewPage : Page
     {
         MainPage rootPage = MainPage.Current;
-        public MangaEdenManga manga { get; set; }
+        public Manga manga { get; set; }
         public MangaOverviewPage()
         {
             this.InitializeComponent();
@@ -32,11 +32,8 @@ namespace MangaReader.Views
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter is MangaEdenManga)
-            {
-                manga = (MangaEdenManga)e.Parameter;
-                
-            }
+            var parameter = e.Parameter as Manga;
+            if (parameter != null) manga = parameter;
 
             base.OnNavigatedTo(e);
         }

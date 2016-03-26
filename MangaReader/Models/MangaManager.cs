@@ -14,6 +14,7 @@ namespace MangaReader.Models
         /// 0 = MangaEden, 1 = MangaFox, 2 = MangaReader
         /// </summary>
         public MangaSources Source { get; set; }
+        public bool Loaded { get; set; }
         
 
         public MangaManager()
@@ -22,15 +23,16 @@ namespace MangaReader.Models
         }
 
         /// <summary>
-        /// Load Mangas from chosen Source
+        /// Load Mangas from chosen online source
         /// </summary>
-        public async Task LoadRepository()
+        public async Task LoadRepositoryAsync()
         {
             switch (Source)
             {
                 case MangaSources.MangaEden:
                     MangaEden = new MangaEdenRepository();
                     await MangaEden.LoadManga();
+                    Loaded = true;
                     break;
                 case MangaSources.MangaFox:
                     break;
@@ -41,23 +43,32 @@ namespace MangaReader.Models
             }
         }
 
-        public async Task<List<Manga>> GetListofMangas()
+        /// <summary>
+        /// Get a List of loaded Manga
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<Manga>> GetListofMangasAsync()
         {
             switch (Source)
             {
                 case MangaSources.MangaEden:
                     List<Manga> ret;
                     if (MangaEden != null)
-                        ret = MangaEden.GetManga();
+                        ret = MangaEden.GetListOfManga();
                     else
                     {
-                        await LoadRepository();
-                        ret = MangaEden.GetManga();
+                        await LoadRepositoryAsync();
+                        ret = MangaEden.GetListOfManga();
                     }
                     return ret;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(Source), Source, null);
             }
+        }
+
+        public async Task<Manga> GetMangaInfoAsync(Manga manga)
+        {
+            return await MangaEden.LoadInfosAsync(manga);
         }
     }
 

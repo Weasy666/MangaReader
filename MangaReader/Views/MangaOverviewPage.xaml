@@ -23,41 +23,41 @@
 
         <Grid Grid.Row="1">
             <StackPanel Orientation="Horizontal">
-                <StackPanel Orientation="Vertical" Margin="12,4,0,0">
+                <StackPanel Orientation="Vertical" Margin="10,10,0,0" MaxWidth="600">
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                        <Image Source="{x:Bind manga.Image}" Width="206" Height="300" VerticalAlignment="Top"/>
+                        <Image Source="{x:Bind manga.ImgCover}" Width="206" Height="300" VerticalAlignment="Top"/>
                         <StackPanel Orientation="Vertical" Margin="12,0,0,0">
                             <!--<TextBlock Style="{ThemeResource TitleTextBlockStyle}"
                                Text="{x:Bind manga.Title}"
                                Margin="12,4,0,0"/>-->
                             <TextBlock Text="{x:Bind manga.Category}" FontSize="15"/>
                             <TextBlock Text="{x:Bind manga.Status}" FontSize="15"/>
-                            <!--<TextBlock Text="{x:Bind manga.NumberOfChapters}" FontSize="15"/>-->
+                            <TextBlock Text="{x:Bind manga.NumberOfChapters}" FontSize="15"/>
                             <TextBlock Text="{x:Bind manga.LastUpdated}" FontSize="15"/>
                         </StackPanel>
                     </StackPanel>
-                    <!--<TextBlock Text="{x:Bind manga.MangaInfos.description}" />-->
+                    <TextBlock Text="{x:Bind manga.Description}" TextWrapping="WrapWholeWords"/>
                 </StackPanel><!--ItemsSource="{x:Bind manga.MangaInfos.chapters}"-->
                 <GridView x:Name="ChapterGridView"
-                  
-                  Margin="12,0,0,0"
+                  ItemsSource="{x:Bind manga.Chapters}"
+                  Margin="12,10,0,0"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="20"
                   IncrementalLoadingTrigger="Edge"
                   >
                     <GridView.ItemTemplate>
-                        <DataTemplate x:DataType="models:MangaEdenMangaInfos">
+                        <DataTemplate x:DataType="models:Chapter">
                             <StackPanel Orientation="Horizontal" 
                                 HorizontalAlignment="Center"
                                 Width="350"
                                 >
-                                <Image Source="{x:Bind image}" Width="103" Height="150" />
+                                <Image Source="" Width="103" Height="150" />
                                 <StackPanel Orientation="Vertical" 
                                     Margin="5,0,0,0" >
-                                    <TextBlock Text="{x:Bind title}" FontSize="20" TextWrapping="WrapWholeWords"/>
-                                    <TextBlock Text="{x:Bind categories}" FontSize="15"/>
-                                    <TextBlock Text="{x:Bind status}" FontSize="15"/>
-                                    <TextBlock Text="{x:Bind last_chapter_date}" FontSize="15"/>
+                                    <TextBlock Text="{x:Bind Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
+                                    <TextBlock Text="{x:Bind Number}" FontSize="15"/>
+                                    <TextBlock Text="{x:Bind NumberOfPages}" FontSize="15"/>
+                                    <TextBlock Text="{x:Bind Released}" FontSize="15"/>
                                 </StackPanel>
                             </StackPanel>
                         </DataTemplate>

@@ -30,15 +30,15 @@ namespace MangaReader.Models
         }
 
         /// <summary>
-        /// Load the complete list of manga
+        /// Load the complete list of manga from MangaEden
         /// </summary>
         public async Task LoadManga()
         {
-            using (var testClient = new HttpClient {BaseAddress = new Uri(Root)})
+            using (var httpClient = new HttpClient { BaseAddress = new Uri(Root) })
             {
                 try
                 {
-                    var response = await testClient.GetAsync(ApiAllManga);
+                    var response = await httpClient.GetAsync(ApiAllManga);
                     var result = await response.Content.ReadAsStringAsync();
                     if (response.IsSuccessStatusCode)
                     {
@@ -57,27 +57,50 @@ namespace MangaReader.Models
         /// Returns an alphabetically sorted List of MangaEdenManga
         /// </summary>
         /// <returns></returns>
-        public List<Manga> GetManga()
+        public List<Manga> GetListOfManga()
         {
             var mangaEdenMangas = Repository.manga.ToList();
-            var mangas = new List<Manga>();
-            foreach (var manga in mangaEdenMangas)
+            var mangas = mangaEdenMangas.Select(manga => new Manga
             {
-                var toAdd = new Manga
-                {
-                    Title = manga.Title,
-                    Alais = manga.a,
-                    ID = manga.i,
-                    ImgCover = manga.Image,
-                    Category = manga.Category,
-                    Hits = manga.h,
-                    LastUpdated = manga.LastUpdated,
-                    Status = manga.Status
-                };
-                mangas.Add(toAdd);
-            }
+                Title = System.Net.WebUtility.HtmlDecode(manga.Title), Alais = System.Net.WebUtility.HtmlDecode(manga.a), ID = manga.i, ImgCover = manga.Image, Category = manga.Category, Hits = manga.h, LastUpdated = manga.LastUpdated, Status = manga.Status
+            }).ToList();
             mangas.Sort();
             return mangas;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public async Task<Manga> LoadInfosAsync(Manga manga)
+        {
+            MangaEdenMangaInfos mangaInfos = null;
+            using (var httpClient = new HttpClient { BaseAddress = new Uri(Root) })
+            {
+                try
+                {
+                    var response = await httpClient.GetAsync(string.Format(ApiMangaInfos, manga.ID));
+                    var result = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        mangaInfos = JsonConvert.DeserializeObject<MangaEdenMangaInfos>(result);
+                    }
+                }
+                catch (HttpRequestException e)
+                {
+                    var dialog = new MessageDialog(e.Message);
+                    await dialog.ShowAsync();
+                }
+            }
+            if (mangaInfos != null)
+            {
+                manga.Artist = System.Net.WebUtility.HtmlDecode(mangaInfos.artist);
+                manga.Author = System.Net.WebUtility.HtmlDecode(mangaInfos.author);
+                //manga.Chapters = mangaInfos.chapters.ToList<Chapter>;
+                manga.Description = System.Net.WebUtility.HtmlDecode(mangaInfos.description);
+                manga.NumberOfChapters = mangaInfos.chapters_len;
+                manga.Released = mangaInfos.released.ToString();
+            }
+            return manga;
         }
     }
 
@@ -120,33 +143,6 @@ namespace MangaReader.Models
             // A null value means that this object is greater.
             return comparePart == null ? 1 : this.t.CompareTo(comparePart.t);
         }
-
-        //Mangainfos and Chapters
-        //public MangaEdenMangaInfos MangaInfos { get; set; }
-
-        //public int NumberOfChapters => MangaInfos.chapters_len;
-
-        //public async void LoadInfos()
-        //{
-        //    using (HttpClient = new HttpClient { BaseAddress = new Uri(root) })
-        //    {
-        //        try
-        //        {
-        //            var response = await HttpClient.GetAsync(string.Format(apiMangaInfos, i));
-        //            var result = await response.Content.ReadAsStringAsync();
-
-        //            if (response.IsSuccessStatusCode)
-        //            {
-        //                MangaInfos = JsonConvert.DeserializeObject<MangaEdenMangaInfos>(result);
-        //            }
-        //        }
-        //        catch (HttpRequestException e)
-        //        {
-        //            var dialog = new MessageDialog(e.Message);
-        //            await dialog.ShowAsync();
-        //        }
-        //    }
-        //}
     }
 
     public class MangaEdenMangaInfos

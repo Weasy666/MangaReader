@@ -35,10 +35,10 @@ namespace MangaReader.Models
     {
         public int Number { get; set; }
         public string Title { get; set; }
-        public string ID { get; set; }
+        public string Id { get; set; }
         public MangaPage[] Pages { get; set; }
-
-            
+        public int NumberOfPages => Pages.Length;
+        public DateTime Released { get; set; }
     }
     public class MangaPage
     {

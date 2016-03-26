@@ -60,6 +60,18 @@ namespace MangaReader
 
         public static MainPage Current;
         public  MangaManager MangaManager { get; set; }
+
+        private List<Manga> Mangas
+        {
+            get
+            {
+                if (MangaManager.Loaded)
+                    return MangaManager.GetListofMangasAsync().Result;
+                else
+                    return new List<Manga>();
+            }
+        }
+
         //public static MangaEdenRepository MangaEden { get; set; }
 
         /// <summary>
@@ -70,7 +82,7 @@ namespace MangaReader
         public MainPage()
         {
             this.InitializeComponent();
-
+            
             this.Loaded += (sender, args) =>
             {
                 // This is a static public property that allows downstream pages to get a handle to the MainPage instance
@@ -95,11 +107,12 @@ namespace MangaReader
 
             MangaManager = new MangaManager {Source = 0};
             LoadManga();
+
         }
 
          void LoadManga()
          {
-            MangaManager.LoadRepository();
+            MangaManager.LoadRepositoryAsync();
          }
 
         public Frame AppFrame => this.RootFrame;
