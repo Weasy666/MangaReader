@@ -25,7 +25,7 @@
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Vertical" Margin="10,10,0,0" MaxWidth="600">
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                        <Image Source="{x:Bind manga.ImgCover}" Width="206" Height="300" VerticalAlignment="Top"/>
+                        <Image Source="{x:Bind manga.MangaCover}" Width="206" Height="300" VerticalAlignment="Top"/>
                         <StackPanel Orientation="Vertical" Margin="12,0,0,0">
                             <!--<TextBlock Style="{ThemeResource TitleTextBlockStyle}"
                                Text="{x:Bind manga.Title}"
@@ -37,7 +37,7 @@
                         </StackPanel>
                     </StackPanel>
                     <TextBlock Text="{x:Bind manga.Description}" TextWrapping="WrapWholeWords"/>
-                </StackPanel><!--ItemsSource="{x:Bind manga.MangaInfos.chapters}"-->
+                </StackPanel>
                 <GridView x:Name="ChapterGridView"
                   ItemsSource="{x:Bind manga.Chapters}"
                   Margin="12,10,0,0"
@@ -51,9 +51,10 @@
                                 HorizontalAlignment="Center"
                                 Width="350"
                                 >
-                                <Image Source="" Width="103" Height="150" />
+                                <Image Source="{x:Bind ChapterCover}" Width="103" Height="150" />
                                 <StackPanel Orientation="Vertical" 
-                                    Margin="5,0,0,0" >
+                                            Margin="5,0,0,0" 
+                                            MaxWidth="247">
                                     <TextBlock Text="{x:Bind Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
                                     <TextBlock Text="{x:Bind Number}" FontSize="15"/>
                                     <TextBlock Text="{x:Bind NumberOfPages}" FontSize="15"/>

@@ -56,7 +56,6 @@ namespace MangaReader.Views
                 var mangaList = await _rootPage.MangaManager.GetListofMangasAsync();
                 mangas = new ObservableCollection<Manga>(mangaList);
 
-                //MangaGridView.ItemsSource = null;
                 MangaGridView.ItemsSource = mangas;
             }
             

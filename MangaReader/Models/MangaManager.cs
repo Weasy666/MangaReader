@@ -66,10 +66,16 @@ namespace MangaReader.Models
             }
         }
 
+        /// <summary>
+        /// Gets the info for a Manga
+        /// </summary>
+        /// <param name="manga">Manga whichs Info will be loaded</param>
+        /// <returns></returns>
         public async Task<Manga> GetMangaInfoAsync(Manga manga)
         {
             return await MangaEden.LoadInfosAsync(manga);
         }
+
     }
 
     public enum MangaSources

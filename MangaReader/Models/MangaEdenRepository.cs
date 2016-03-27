@@ -17,9 +17,10 @@ namespace MangaReader.Models
     {
         //MangaEden languages are: english(0) and italian(1)
         private static int Language = 0;
-        protected static string Root;
-        private static string ApiAllManga;
-        protected static string ApiMangaInfos;
+        public static string Root { get; }
+        public static string ApiAllManga { get; }
+        public static string ApiMangaInfos { get; }
+        public static string ApiMangaChapterPages { get; }
         private MangaList Repository { get; set; }
 
         static MangaEdenRepository()
@@ -27,6 +28,7 @@ namespace MangaReader.Models
             Root = "http://www.mangaeden.com";
             ApiAllManga = string.Format("/api/list/{0}/", Language);
             ApiMangaInfos = "/api/manga/{0}/";
+            ApiMangaChapterPages = "/api/chapter/{0}";
         }
 
         /// <summary>
@@ -62,7 +64,14 @@ namespace MangaReader.Models
             var mangaEdenMangas = Repository.manga.ToList();
             var mangas = mangaEdenMangas.Select(manga => new Manga
             {
-                Title = System.Net.WebUtility.HtmlDecode(manga.Title), Alais = System.Net.WebUtility.HtmlDecode(manga.a), ID = manga.i, ImgCover = manga.Image, Category = manga.Category, Hits = manga.h, LastUpdated = manga.LastUpdated, Status = manga.Status
+                Title = System.Net.WebUtility.HtmlDecode(manga.Title),
+                Alais = System.Net.WebUtility.HtmlDecode(manga.a),
+                Id = manga.i,
+                MangaCover = manga.Image,
+                Category = manga.Category,
+                Hits = manga.h,
+                LastUpdated = manga.LastUpdated,
+                Status = manga.Status
             }).ToList();
             mangas.Sort();
             return mangas;
@@ -78,7 +87,7 @@ namespace MangaReader.Models
             {
                 try
                 {
-                    var response = await httpClient.GetAsync(string.Format(ApiMangaInfos, manga.ID));
+                    var response = await httpClient.GetAsync(string.Format(ApiMangaInfos, manga.Id));
                     var result = await response.Content.ReadAsStringAsync();
                     if (response.IsSuccessStatusCode)
                     {
@@ -95,13 +104,14 @@ namespace MangaReader.Models
             {
                 manga.Artist = System.Net.WebUtility.HtmlDecode(mangaInfos.artist);
                 manga.Author = System.Net.WebUtility.HtmlDecode(mangaInfos.author);
-                //manga.Chapters = mangaInfos.chapters.ToList<Chapter>;
+                manga.Chapters = await mangaInfos.GetChaptersAsListAsync();
                 manga.Description = System.Net.WebUtility.HtmlDecode(mangaInfos.description);
                 manga.NumberOfChapters = mangaInfos.chapters_len;
                 manga.Released = mangaInfos.released.ToString();
             }
             return manga;
         }
+
     }
 
     public class MangaList
@@ -136,7 +146,7 @@ namespace MangaReader.Models
         public string Title => t;
         public string Category => string.Join(", ", c);
         public string Status => s != 0 ? "Ongoing" : "Completed";
-        public DateTime LastUpdated => DateTimeOffset.FromUnixTimeSeconds((long) ld).DateTime.ToLocalTime(); //ToString(CultureInfo.CurrentCulture);
+        public DateTime LastUpdated => DateTimeOffset.FromUnixTimeSeconds((long)ld).DateTime.ToLocalTime(); //ToString(CultureInfo.CurrentCulture);
 
         public int CompareTo(MangaEdenManga comparePart)
         {
@@ -172,5 +182,65 @@ namespace MangaReader.Models
         public string[] title_kw { get; set; }
         public int type { get; set; }
         public bool updatedKeywords { get; set; }
+
+        public async Task<List<Chapter>> GetChaptersAsListAsync()
+        {
+            var list = chapters.Select(chap => new Chapter
+            {
+                Number = int.Parse(chap[0].ToString()),
+                Released = DateTimeOffset.FromUnixTimeSeconds(long.Parse(chap[1].ToString())).DateTime.ToLocalTime(),
+                Title = System.Net.WebUtility.HtmlDecode(chap[2].ToString()),
+                Id = chap[3].ToString(),
+            }).ToList();
+
+            foreach (var chap in list)
+            {
+                var buffer = await LoadPages(chap.Id);
+                chap.Pages = buffer;
+                chap.ChapterCover = "https://cdn.mangaeden.com/mangasimg/" + buffer[0].Url;
+            }
+            return list;
+        }
+
+        private static async Task<List<MangaPage>> LoadPages(string id)
+        {
+            MangaEdenChapterPages chapterPages = null;
+            using (var httpClient = new HttpClient { BaseAddress = new Uri(MangaEdenRepository.Root) })
+            {
+                try
+                {
+                    var response = await httpClient.GetAsync(string.Format(MangaEdenRepository.ApiMangaChapterPages, id));
+                    var result = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        chapterPages = JsonConvert.DeserializeObject<MangaEdenChapterPages>(result);
+                    }
+                }
+                catch (HttpRequestException e)
+                {
+                    var dialog = new MessageDialog(e.Message);
+                    await dialog.ShowAsync();
+                }
+            }
+            if (chapterPages != null)
+                return chapterPages.GetPagesAsList();
+            return new List<MangaPage>();
+        }
+    }
+
+    public class MangaEdenChapterPages
+    {
+        public object[][] images { get; set; }
+
+        public List<MangaPage> GetPagesAsList()
+        {
+            return images.Select(page => new MangaPage
+            {
+                Number = int.Parse(page[0].ToString()),
+                Url = page[1].ToString(),
+                Width = int.Parse(page[2].ToString()),
+                Height = int.Parse(page[3].ToString())
+            }).ToList();
+        }
     }
 }
