@@ -197,7 +197,7 @@ namespace MangaReader.Models
             {
                 var buffer = await LoadPages(chap.Id);
                 chap.Pages = buffer;
-                chap.ChapterCover = "https://cdn.mangaeden.com/mangasimg/" + buffer[0].Url;
+                chap.ChapterCover = buffer[0].Url;
             }
             return list;
         }
@@ -237,7 +237,7 @@ namespace MangaReader.Models
             return images.Select(page => new MangaPage
             {
                 Number = int.Parse(page[0].ToString()),
-                Url = page[1].ToString(),
+                Url = "https://cdn.mangaeden.com/mangasimg/" + page[1].ToString(),
                 Width = int.Parse(page[2].ToString()),
                 Height = int.Parse(page[3].ToString())
             }).ToList();

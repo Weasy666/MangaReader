@@ -9,29 +9,34 @@
 
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" ScrollViewer.HorizontalScrollMode="Disabled">
-        <Grid x:Name="LoadingGrid" Background="{ThemeResource SystemControlDisabledBaseLowBrush}" Canvas.ZIndex="1">
-            <ProgressRing x:Name="ProgressCircle" IsActive="False" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="100"/>
-        </Grid>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+          Loaded="Grid_Loaded">
+        <ProgressRing x:Name="StartupProgressRing"
+                      IsActive="False"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Width="100"
+                      Height="100"/>
+        <!--<Grid x:Name="LoadingGrid" Background="{ThemeResource SystemControlDisabledBaseLowBrush}" Canvas.ZIndex="1"/>-->
+        
         <GridView x:Name="MangaGridView"
-                  ItemsSource="{x:Bind mangas}"
-                  Margin="12,4,0,0"
+                  ItemsSource="{x:Bind _mangas}"
+                  Margin="10,4,0,0"
                   IsItemClickEnabled="True"
                   ItemClick="MangaGridView_ItemClick"
                   IncrementalLoadingThreshold="20"
-                  IncrementalLoadingTrigger="Edge"
-                  >
+                  IncrementalLoadingTrigger="Edge" >
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="models:Manga">
                     <StackPanel Orientation="Horizontal" 
                                 HorizontalAlignment="Center"
-                                Width="350"
-                                >
+                                Width="350" >
                         <Image Source="{x:Bind MangaCover}" Width="103" Height="150" />
                         <StackPanel Orientation="Vertical" 
-                                    Margin="5,0,0,0" >
+                                    Margin="5,0,0,0"
+                                    MaxWidth="247">
                             <TextBlock Text="{x:Bind Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
-                            <TextBlock Text="{x:Bind Category}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind Category}" FontSize="15" TextWrapping="WrapWholeWords"/>
                             <TextBlock Text="{x:Bind Status}" FontSize="15"/>
                             <TextBlock Text="{x:Bind LastUpdated}" FontSize="15"/>
                         </StackPanel>

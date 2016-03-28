@@ -21,30 +21,20 @@ namespace MangaReader.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MangaOverviewPage : Page
+    public sealed partial class ChapterPage : Page
     {
         private readonly MainPage _rootPage = MainPage.Current;
-        public Manga Manga { get; set; }
-        public MangaOverviewPage()
+        public List<MangaPage> Pages { get; set; }
+        public ChapterPage()
         {
             this.InitializeComponent();
         }
-
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            var parameter = e.Parameter as Manga;
-            if (parameter != null) Manga = parameter;
+            var parameter = e.Parameter as List<MangaPage>;
+            if (parameter != null) Pages = parameter;
 
             base.OnNavigatedTo(e);
-        }
-
-        private void ChapterGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            var clickedItem = e.ClickedItem as Chapter;
-            this.Frame.Navigate(
-                typeof(ChapterPage),
-                clickedItem.Pages,
-                new Windows.UI.Xaml.Media.Animation.DrillInNavigationTransitionInfo());
         }
     }
 }

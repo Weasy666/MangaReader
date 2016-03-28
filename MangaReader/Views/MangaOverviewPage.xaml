@@ -14,43 +14,41 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MaxWidth="600"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         
         <controls:PageHeader Grid.ColumnSpan="2">
             <controls:PageHeader.HeaderContent>
-                <TextBlock Text="{x:Bind manga.Title}" Style="{ThemeResource TitleTextBlockStyle}" Margin="12,8,12,8"  TextWrapping="NoWrap"/>
+                <TextBlock Text="{x:Bind Manga.Title}" Style="{ThemeResource TitleTextBlockStyle}" Margin="12,8,12,8"  TextWrapping="NoWrap"/>
             </controls:PageHeader.HeaderContent>
         </controls:PageHeader>
-
-        <Grid Grid.Row="1">
-            <StackPanel Orientation="Horizontal">
-                <StackPanel Orientation="Vertical" Margin="10,10,0,0" MaxWidth="600">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                        <Image Source="{x:Bind manga.MangaCover}" Width="206" Height="300" VerticalAlignment="Top"/>
-                        <StackPanel Orientation="Vertical" Margin="12,0,0,0">
-                            <!--<TextBlock Style="{ThemeResource TitleTextBlockStyle}"
-                               Text="{x:Bind manga.Title}"
-                               Margin="12,4,0,0"/>-->
-                            <TextBlock Text="{x:Bind manga.Category}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind manga.Status}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind manga.NumberOfChapters}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind manga.LastUpdated}" FontSize="15"/>
+                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0"
+                            Margin="10,10,0,0">
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,0,0,4">
+                        <Image Source="{x:Bind Manga.MangaCover}" Width="206" Height="300" VerticalAlignment="Top"/>
+                        <StackPanel Orientation="Vertical"
+                                    Margin="12,0,0,0">
+                            <TextBlock Text="{x:Bind Manga.Category}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind Manga.Status}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind Manga.NumberOfChapters}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind Manga.LastUpdated}" FontSize="15"/>
                         </StackPanel>
                     </StackPanel>
-                    <TextBlock Text="{x:Bind manga.Description}" TextWrapping="WrapWholeWords"/>
+                    <TextBlock Text="{x:Bind Manga.Description}" TextWrapping="WrapWholeWords"/>
                 </StackPanel>
-                <GridView x:Name="ChapterGridView"
-                  ItemsSource="{x:Bind manga.Chapters}"
-                  Margin="12,10,0,0"
-                  IsItemClickEnabled="True"
-                  IncrementalLoadingThreshold="20"
-                  IncrementalLoadingTrigger="Edge"
-                  >
+                <GridView x:Name="ChapterGridView" Grid.Row="1" Grid.Column="1"
+                          ItemsSource="{x:Bind Manga.Chapters}"
+                          Margin="12,10,0,0"
+                          IsItemClickEnabled="True"
+                          IncrementalLoadingThreshold="20"
+                          ItemClick="ChapterGridView_ItemClick" >
                     <GridView.ItemTemplate>
                         <DataTemplate x:DataType="models:Chapter">
                             <StackPanel Orientation="Horizontal" 
-                                HorizontalAlignment="Center"
-                                Width="350"
-                                >
+                                        Width="350" >
                                 <Image Source="{x:Bind ChapterCover}" Width="103" Height="150" />
                                 <StackPanel Orientation="Vertical" 
                                             Margin="5,0,0,0" 
@@ -64,8 +62,6 @@
                         </DataTemplate>
                     </GridView.ItemTemplate>
                 </GridView>
-            </StackPanel>
-        </Grid>
     </Grid>
 </Page>
 
