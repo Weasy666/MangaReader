@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -32,39 +33,59 @@ namespace MangaReader.Views
             this.InitializeComponent();
         }
 
-        private async void MangaGridView_ItemClick(object sender, ItemClickEventArgs e)
+        private void MangaGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var clickedItem = e.ClickedItem as Manga;
-            clickedItem = await _rootPage.MangaManager.GetMangaInfoAsync(clickedItem);
+
             this.Frame.Navigate(
                 typeof(MangaOverviewPage),
                 clickedItem,
                 new Windows.UI.Xaml.Media.Animation.DrillInNavigationTransitionInfo());
         }
+        private async void AppBarReloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            _rootPage.MangaManager.Loaded = false;
+            await LoadGridContent();
+        }
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e)
         {
+            await LoadGridContent();
+        }
+
+        private async Task LoadGridContent()
+        {
             if (!_rootPage.MangaManager.Loaded)
             {
+                LoadingGrid.Visibility = Visibility.Visible;
                 StartupProgressRing.IsActive = true;
 
                 await _rootPage.MangaManager.LoadRepositoryAsync();
-                var mangaList = await _rootPage.MangaManager.GetListofMangasAsync();
-                _mangas = new ObservableCollection<Manga>(mangaList);
+                _mangas = await _rootPage.MangaManager.GetListofMangasAsync();
 
                 MangaGridView.ItemsSource = _mangas;
-                
+
                 StartupProgressRing.IsActive = false;
+                LoadingGrid.Visibility = Visibility.Collapsed;
             }
             else
             {
                 StartupProgressRing.IsActive = false;
+                LoadingGrid.Visibility = Visibility.Collapsed;
 
-                var mangaList = await _rootPage.MangaManager.GetListofMangasAsync();
-                _mangas = new ObservableCollection<Manga>(mangaList);
+                _mangas = await _rootPage.MangaManager.GetListofMangasAsync();
 
                 MangaGridView.ItemsSource = _mangas;
             }
+        }
+
+        private void FavoriteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var icon = sender as Button;
+            var manga = icon.DataContext as Manga;
+            manga.IsFavorit = !manga.IsFavorit;
+            icon.DataContext = manga;
+            icon.Content = icon.Content.ToString() == "\uE1CF" ? "\uE1CE" : "\uE1CF";
         }
     }
 }

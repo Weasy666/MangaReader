@@ -25,6 +25,7 @@ namespace MangaReader.Views
     {
         private readonly MainPage _rootPage = MainPage.Current;
         public Manga Manga { get; set; }
+
         public MangaOverviewPage()
         {
             this.InitializeComponent();
@@ -42,9 +43,21 @@ namespace MangaReader.Views
         {
             var clickedItem = e.ClickedItem as Chapter;
             this.Frame.Navigate(
-                typeof(ChapterPage),
-                clickedItem.Pages,
+                typeof (ChapterPage),
+                clickedItem,
                 new Windows.UI.Xaml.Media.Animation.DrillInNavigationTransitionInfo());
+        }
+
+        private async void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            StartupProgressRing.IsActive = true;
+
+            Manga = await _rootPage.MangaManager.GetMangaInfoAsync(Manga);
+
+            ChapterGridView.ItemsSource = null;
+            ChapterGridView.ItemsSource = Manga.Chapters;
+
+            StartupProgressRing.IsActive = false;
         }
     }
 }

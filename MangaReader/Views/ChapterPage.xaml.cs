@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -24,15 +25,23 @@ namespace MangaReader.Views
     public sealed partial class ChapterPage : Page
     {
         private readonly MainPage _rootPage = MainPage.Current;
-        public List<MangaPage> Pages { get; set; }
+        private ObservableCollection<MangaPage> _pages;
+
         public ChapterPage()
         {
             this.InitializeComponent();
         }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            var parameter = e.Parameter as List<MangaPage>;
-            if (parameter != null) Pages = parameter;
+            var parameter = e.Parameter as Chapter;
+
+            StartupProgressRing.IsActive = true;
+
+            if (parameter != null) _pages = await _rootPage.MangaManager.LoadPagesAsync(parameter);
+            pageView.ItemsSource = _pages;
+
+            StartupProgressRing.IsActive = false;
 
             base.OnNavigatedTo(e);
         }

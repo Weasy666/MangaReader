@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,12 +48,12 @@ namespace MangaReader.Models
         /// Get a List of loaded Manga
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Manga>> GetListofMangasAsync()
+        public async Task<ObservableCollection<Manga>> GetListofMangasAsync()
         {
             switch (Source)
             {
                 case MangaSources.MangaEden:
-                    List<Manga> ret;
+                    ObservableCollection<Manga> ret;
                     if (MangaEden != null)
                         ret = MangaEden.GetListOfManga();
                     else
@@ -76,6 +77,10 @@ namespace MangaReader.Models
             return await MangaEden.LoadInfosAsync(manga);
         }
 
+        public async Task<ObservableCollection<MangaPage>> LoadPagesAsync(Chapter chapter)
+        {
+            return await MangaEden.LoadPagesAsync(chapter);
+        }
     }
 
     public enum MangaSources

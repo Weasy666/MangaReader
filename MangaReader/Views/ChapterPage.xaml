@@ -9,13 +9,20 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <ProgressRing x:Name="StartupProgressRing"
+                      IsActive="False"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Width="100"
+                      Height="100"
+                      Canvas.ZIndex="2"/>
         <ScrollViewer HorizontalScrollMode="Enabled"
                       HorizontalScrollBarVisibility="Auto"
                       VerticalScrollMode="Disabled"
                       VerticalScrollBarVisibility="Disabled">
             <GridView x:Name="pageView"
                       Margin="0,0,0,0"
-                      ItemsSource="{x:Bind Pages}"
+                      ItemsSource="{x:Bind _pages}"
                       VerticalContentAlignment="Stretch"
                       IsItemClickEnabled="False"
                       FlowDirection="RightToLeft">

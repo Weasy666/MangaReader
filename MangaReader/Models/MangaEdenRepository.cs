@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -59,7 +60,7 @@ namespace MangaReader.Models
         /// Returns an alphabetically sorted List of MangaEdenManga
         /// </summary>
         /// <returns></returns>
-        public List<Manga> GetListOfManga()
+        public ObservableCollection<Manga> GetListOfManga()
         {
             var mangaEdenMangas = Repository.manga.ToList();
             var mangas = mangaEdenMangas.Select(manga => new Manga
@@ -74,7 +75,7 @@ namespace MangaReader.Models
                 Status = manga.Status
             }).ToList();
             mangas.Sort();
-            return mangas;
+            return new ObservableCollection<Manga>(mangas);
         }
 
         /// <summary>
@@ -112,6 +113,30 @@ namespace MangaReader.Models
             return manga;
         }
 
+        public async Task<ObservableCollection<MangaPage>> LoadPagesAsync(Chapter chapter)
+        {
+            MangaEdenChapterPages chapterPages = null;
+            using (var httpClient = new HttpClient { BaseAddress = new Uri(Root) })
+            {
+                try
+                {
+                    var response = await httpClient.GetAsync(string.Format(ApiMangaChapterPages, chapter.Id));
+                    var result = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        chapterPages = JsonConvert.DeserializeObject<MangaEdenChapterPages>(result);
+                    }
+                }
+                catch (HttpRequestException e)
+                {
+                    var dialog = new MessageDialog(e.Message);
+                    await dialog.ShowAsync();
+                }
+            }
+            if (chapterPages != null)
+                return new ObservableCollection<MangaPage>(chapterPages.GetPagesAsList());
+            return new ObservableCollection<MangaPage>();
+        }
     }
 
     public class MangaList
@@ -183,49 +208,49 @@ namespace MangaReader.Models
         public int type { get; set; }
         public bool updatedKeywords { get; set; }
 
-        public async Task<List<Chapter>> GetChaptersAsListAsync()
+        public async Task<ObservableCollection<Chapter>> GetChaptersAsListAsync()
         {
             var list = chapters.Select(chap => new Chapter
             {
-                Number = int.Parse(chap[0].ToString()),
+                Number = chap[0].ToString(),
                 Released = DateTimeOffset.FromUnixTimeSeconds(long.Parse(chap[1].ToString())).DateTime.ToLocalTime(),
-                Title = System.Net.WebUtility.HtmlDecode(chap[2].ToString()),
+                Title = chap[2] != null ? System.Net.WebUtility.HtmlDecode(chap[2].ToString()) : chap[0].ToString(),
                 Id = chap[3].ToString(),
             }).ToList();
-
-            foreach (var chap in list)
-            {
-                var buffer = await LoadPages(chap.Id);
-                chap.Pages = buffer;
-                chap.ChapterCover = buffer[0].Url;
-            }
-            return list;
+            list.Sort();
+            //foreach (var chap in list)
+            //{
+            //    var buffer = await LoadPages(chap.Id);
+            //    chap.Pages = buffer;
+            //    chap.ChapterCover = buffer[0].Url;
+            //}
+            return new ObservableCollection<Chapter>(list);
         }
 
-        private static async Task<List<MangaPage>> LoadPages(string id)
-        {
-            MangaEdenChapterPages chapterPages = null;
-            using (var httpClient = new HttpClient { BaseAddress = new Uri(MangaEdenRepository.Root) })
-            {
-                try
-                {
-                    var response = await httpClient.GetAsync(string.Format(MangaEdenRepository.ApiMangaChapterPages, id));
-                    var result = await response.Content.ReadAsStringAsync();
-                    if (response.IsSuccessStatusCode)
-                    {
-                        chapterPages = JsonConvert.DeserializeObject<MangaEdenChapterPages>(result);
-                    }
-                }
-                catch (HttpRequestException e)
-                {
-                    var dialog = new MessageDialog(e.Message);
-                    await dialog.ShowAsync();
-                }
-            }
-            if (chapterPages != null)
-                return chapterPages.GetPagesAsList();
-            return new List<MangaPage>();
-        }
+        //private static async Task<ObservableCollection<MangaPage>> LoadPages(Chapter chapter)
+        //{
+        //    MangaEdenChapterPages chapterPages = null;
+        //    using (var httpClient = new HttpClient { BaseAddress = new Uri(MangaEdenRepository.Root) })
+        //    {
+        //        try
+        //        {
+        //            var response = await httpClient.GetAsync(string.Format(MangaEdenRepository.ApiMangaChapterPages, chapter.Id));
+        //            var result = await response.Content.ReadAsStringAsync();
+        //            if (response.IsSuccessStatusCode)
+        //            {
+        //                chapterPages = JsonConvert.DeserializeObject<MangaEdenChapterPages>(result);
+        //            }
+        //        }
+        //        catch (HttpRequestException e)
+        //        {
+        //            var dialog = new MessageDialog(e.Message);
+        //            await dialog.ShowAsync();
+        //        }
+        //    }
+        //    if (chapterPages != null)
+        //        return chapterPages.GetPagesAsList();
+        //    return new ObservableCollection<MangaPage>();
+        //}
     }
 
     public class MangaEdenChapterPages
@@ -236,7 +261,7 @@ namespace MangaReader.Models
         {
             return images.Select(page => new MangaPage
             {
-                Number = int.Parse(page[0].ToString()),
+                Number = page[0].ToString(),
                 Url = "https://cdn.mangaeden.com/mangasimg/" + page[1].ToString(),
                 Width = int.Parse(page[2].ToString()),
                 Height = int.Parse(page[3].ToString())

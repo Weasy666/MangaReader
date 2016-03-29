@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -22,8 +23,9 @@ namespace MangaReader.Models
         public string Released { get; set; }
         public DateTime LastUpdated { get; set; }
         public string Status { get; set; }
-        public List<Chapter> Chapters { get; set; }
+        public ObservableCollection<Chapter> Chapters { get; set; }
         public int NumberOfChapters { get; set; }
+        public bool IsFavorit { get; set; }
 
         public int CompareTo(Manga comparePart)
         {
@@ -31,21 +33,34 @@ namespace MangaReader.Models
             return comparePart == null ? 1 : string.Compare(this.Title, comparePart.Title, StringComparison.Ordinal);
         }
     }
-    public class Chapter
+    public class Chapter : IComparable<Chapter>
     {
-        public int Number { get; set; }
+        public string Number { get; set; }
         public string Title { get; set; }
         public string Id { get; set; }
-        public List<MangaPage> Pages { get; set; }
-        public int NumberOfPages => Pages.Count;
+        public ObservableCollection<MangaPage> Pages { get; set; }
+        public int NumberOfPages => 0; //Pages.Count;
         public DateTime Released { get; set; }
         public string ChapterCover { get; set; }
+        public bool ReadOnce { get; set; }
+
+        public int CompareTo(Chapter comparePart)
+        {
+            // A null value means that this object is greater.
+            return comparePart == null ? 1 : string.Compare(this.Number, comparePart.Number, StringComparison.Ordinal);
+        }
     }
-    public class MangaPage
+    public class MangaPage : IComparable<MangaPage>
     {
-        public int Number { get; set; }
+        public string Number { get; set; }
         public string Url { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+
+        public int CompareTo(MangaPage comparePart)
+        {
+            // A null value means that this object is greater.
+            return comparePart == null ? 1 : string.Compare(this.Number, comparePart.Number, StringComparison.Ordinal);
+        }
     }
 }

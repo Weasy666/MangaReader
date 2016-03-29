@@ -61,14 +61,14 @@ namespace MangaReader
         public static MainPage Current;
         public  MangaManager MangaManager { get; set; }
 
-        private List<Manga> Mangas
+        private ObservableCollection<Manga> Mangas
         {
             get
             {
                 if (MangaManager.Loaded)
                     return MangaManager.GetListofMangasAsync().Result;
                 else
-                    return new List<Manga>();
+                    return new ObservableCollection<Manga>();
             }
         }
 
@@ -110,7 +110,7 @@ namespace MangaReader
 
         }
 
-         void LoadManga()
+         private void LoadManga()
          {
             MangaManager.LoadRepositoryAsync();
          }
