@@ -134,7 +134,11 @@ namespace MangaReader.Models
                 }
             }
             if (chapterPages != null)
-                return new ObservableCollection<MangaPage>(chapterPages.GetPagesAsList());
+            {
+                var pages = chapterPages.GetPagesAsList();
+                pages.Sort();
+                return new ObservableCollection<MangaPage>(pages);
+            }
             return new ObservableCollection<MangaPage>();
         }
     }

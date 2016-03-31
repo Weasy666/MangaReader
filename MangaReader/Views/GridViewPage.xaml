@@ -17,7 +17,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <CommandBar x:Name="topbar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
-            <AppBarToggleButton Icon="Sort" Label="Sort"/>
+            <AppBarToggleButton Icon="Sort" Label="Sort" Click="AppBarToggleButton_Checked"/>
             <AppBarSeparator/>
             <AppBarButton Icon="Refresh" Label="Reload" Click="AppBarReloadButton_Click"/>
             <CommandBar.Content>
@@ -43,7 +43,7 @@
 
         <GridView x:Name="MangaGridView" Grid.Row="1"
                   ItemsSource="{x:Bind _mangas}"
-                  Margin="10,4,0,0"
+                  Margin="10,0,0,0"
                   IsItemClickEnabled="True"
                   ItemClick="MangaGridView_ItemClick"
                   IncrementalLoadingThreshold="50"
@@ -56,7 +56,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Button x:Name="FavoriteButton"
-                                Content="&#xE1CE;"
+                                Content="{x:Bind FavoritAsSymbol}"
                                 FontFamily="Segoe UI Symbol"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"

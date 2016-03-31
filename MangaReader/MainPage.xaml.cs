@@ -33,46 +33,51 @@ namespace MangaReader
             {
                 new NavMenuItem()
                 {
+                    Arguments = "Latest Releases",
                     Symbol = Symbol.Sync,
                     Label = "Latest Releases",
                     DestPage = typeof(GridViewPage)
                 },
                 new NavMenuItem()
                 {
+                    Arguments = "Favorite",
                     Symbol = Symbol.Favorite,
                     Label = "Favorite",
                     DestPage = typeof(CommandBarPage)
                 },
                 new NavMenuItem()
                 {
+                    Arguments = "Manga Library",
                     Symbol = Symbol.Library,
                     Label = "Manga Library",
                     DestPage = typeof(SemanticPage)
                 },
                 new NavMenuItem()
                 {
+                    Arguments = "Settings",
                     Symbol = Symbol.Setting,
                     Label = "Settings",
                     DestPage = typeof(SettingsPage)
                 },
             });
-
-
         public static MainPage Current;
         public  MangaManager MangaManager { get; set; }
-
-        private ObservableCollection<Manga> Mangas
+        private static ObservableCollection<Manga> _mangas;
+        public ObservableCollection<Manga> Mangas
         {
             get
             {
                 if (MangaManager.Loaded)
-                    return MangaManager.GetListofMangasAsync().Result;
+                {
+                    return _mangas ?? (_mangas = MangaManager.GetListofMangasAsync().Result);
+                }
                 else
                     return new ObservableCollection<Manga>();
             }
+            set { _mangas = value; }
         }
 
-        //public static MangaEdenRepository MangaEden { get; set; }
+        private IEnumerable<Manga> Suggestions;
 
         /// <summary>
         /// Initializes a new instance of the AppShell, sets the static 'Current' reference,
@@ -324,6 +329,17 @@ namespace MangaReader
             {
                 args.ItemContainer.ClearValue(AutomationProperties.NameProperty);
             }
+        }
+
+        private void SearchAllManga_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            Suggestions = Mangas.Where(p => p.Title.StartsWith(sender.Text) && sender.Text != string.Empty);
+            SearchAllManga.ItemsSource = Suggestions;
+        }
+
+        private void SearchAllManga_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+
         }
     }
 }

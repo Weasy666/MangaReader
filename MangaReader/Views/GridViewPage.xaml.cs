@@ -86,6 +86,20 @@ namespace MangaReader.Views
             manga.IsFavorit = !manga.IsFavorit;
             icon.DataContext = manga;
             icon.Content = icon.Content.ToString() == "\uE1CF" ? "\uE1CE" : "\uE1CF";
+            //_mangas.Insert(_mangas.IndexOf(manga), manga);
+        }
+
+        private void AppBarToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+            _mangas = new ObservableCollection<Manga>(_mangas.Reverse<Manga>());
+            MangaGridView.ItemsSource = _mangas;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            Header.Text = e.Parameter.ToString();
+
+            base.OnNavigatedTo(e);
         }
     }
 }

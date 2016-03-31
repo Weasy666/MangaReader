@@ -26,11 +26,12 @@ namespace MangaReader.Models
         public ObservableCollection<Chapter> Chapters { get; set; }
         public int NumberOfChapters { get; set; }
         public bool IsFavorit { get; set; }
+        public string FavoritAsSymbol => IsFavorit ? "\uE1CF" : "\uE1CE";
 
         public int CompareTo(Manga comparePart)
         {
             // A null value means that this object is greater.
-            return comparePart == null ? 1 : string.Compare(this.Title, comparePart.Title, StringComparison.Ordinal);
+            return comparePart == null ? 1 : CompareNatural.Compare(this.Title, comparePart.Title);
         }
     }
     public class Chapter : IComparable<Chapter>
@@ -47,7 +48,7 @@ namespace MangaReader.Models
         public int CompareTo(Chapter comparePart)
         {
             // A null value means that this object is greater.
-            return comparePart == null ? 1 : string.Compare(this.Number, comparePart.Number, StringComparison.Ordinal);
+            return comparePart == null ? 1 : CompareNatural.Compare(this.Number, comparePart.Number);
         }
     }
     public class MangaPage : IComparable<MangaPage>
@@ -60,7 +61,7 @@ namespace MangaReader.Models
         public int CompareTo(MangaPage comparePart)
         {
             // A null value means that this object is greater.
-            return comparePart == null ? 1 : string.Compare(this.Number, comparePart.Number, StringComparison.Ordinal);
+            return comparePart == null ? 1 : CompareNatural.Compare(this.Number, comparePart.Number);
         }
     }
 }

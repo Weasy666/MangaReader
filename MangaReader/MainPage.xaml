@@ -71,22 +71,25 @@
                    IsTabStop="False">
             <SplitView.Pane>
                 <StackPanel >
-                    <AutoSuggestBox Margin="48,0,0,0"
+                    <AutoSuggestBox Name="SearchAllManga"
+                                    PlaceholderText="Search for Manga..."
+                                    Margin="48,0,0,0"
                                     Height="48"
                                     QueryIcon="Find"
-                                    ItemsSource="{x:Bind Mangas}">
+                                    ItemsSource="{x:Bind Mangas}"
+                                    TextChanged="SearchAllManga_TextChanged"
+                                    QuerySubmitted="SearchAllManga_QuerySubmitted" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    >
                         <AutoSuggestBox.ItemTemplate>
                             <DataTemplate x:DataType="models:Manga">
                                 <StackPanel Orientation="Horizontal" 
                                             HorizontalAlignment="Center"
-                                            Width="113">
-                                    <Image Source="{x:Bind MangaCover}" Width="34" Height="50" />
+                                            Width="226">
+                                    <Image Source="{x:Bind MangaCover}" Width="68" Height="100" />
                                     <StackPanel Orientation="Vertical" 
                                                 Margin="5,0,0,0" >
-                                        <TextBlock Text="{x:Bind Title}" FontSize="7" TextWrapping="WrapWholeWords"/>
-                                        <TextBlock Text="{x:Bind Category}" FontSize="5"/>
-                                        <TextBlock Text="{x:Bind Status}" FontSize="5"/>
-                                        <TextBlock Text="{x:Bind LastUpdated}" FontSize="5"/>
+                                        <TextBlock Text="{x:Bind Title}" FontSize="14" TextWrapping="WrapWholeWords"/>
+                                        <TextBlock Text="{x:Bind Category}" FontSize="10"/>
                                     </StackPanel>
                                 </StackPanel>
                             </DataTemplate>

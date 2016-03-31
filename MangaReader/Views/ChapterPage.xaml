@@ -24,8 +24,7 @@
                       Margin="0,0,0,0"
                       ItemsSource="{x:Bind _pages}"
                       VerticalContentAlignment="Stretch"
-                      IsItemClickEnabled="False"
-                      FlowDirection="RightToLeft">
+                      IsItemClickEnabled="False">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ItemsStackPanel IsHitTestVisible="False"
