@@ -79,17 +79,18 @@
                                     ItemsSource="{x:Bind Mangas}"
                                     TextChanged="SearchAllManga_TextChanged"
                                     QuerySubmitted="SearchAllManga_QuerySubmitted" ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                    >
+                                    Style="{StaticResource MyAutoSuggestBoxStyle}">
+                        
                         <AutoSuggestBox.ItemTemplate>
                             <DataTemplate x:DataType="models:Manga">
                                 <StackPanel Orientation="Horizontal" 
                                             HorizontalAlignment="Center"
-                                            Width="226">
-                                    <Image Source="{x:Bind MangaCover}" Width="68" Height="100" />
+                                            Width="208" >
+                                    <Image Source="{x:Bind MangaCover}" Width="68" Height="75" Stretch="UniformToFill"/>
                                     <StackPanel Orientation="Vertical" 
                                                 Margin="5,0,0,0" >
                                         <TextBlock Text="{x:Bind Title}" FontSize="14" TextWrapping="WrapWholeWords"/>
-                                        <TextBlock Text="{x:Bind Category}" FontSize="10"/>
+                                        <TextBlock Text="{x:Bind Category}" FontSize="10" TextWrapping="WrapWholeWords"/>
                                     </StackPanel>
                                 </StackPanel>
                             </DataTemplate>
