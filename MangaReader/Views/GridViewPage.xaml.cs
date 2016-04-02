@@ -26,7 +26,8 @@ namespace MangaReader.Views
     public sealed partial class GridViewPage : Page
     {
         private readonly MainPage _rootPage = MainPage.Current;
-        private ObservableCollection<Manga> _mangas; 
+        private ObservableCollection<Manga> _mangas;
+        private bool IsSearchResult;
                              
         public GridViewPage()
         {
@@ -63,20 +64,17 @@ namespace MangaReader.Views
                 await _rootPage.MangaManager.LoadRepositoryAsync();
                 _mangas = await _rootPage.MangaManager.GetListofMangasAsync();
 
-                MangaGridView.ItemsSource = _mangas;
-
                 StartupProgressRing.IsActive = false;
                 LoadingGrid.Visibility = Visibility.Collapsed;
             }
-            else
+            else if (!IsSearchResult)
             {
                 StartupProgressRing.IsActive = false;
                 LoadingGrid.Visibility = Visibility.Collapsed;
 
                 _mangas = await _rootPage.MangaManager.GetListofMangasAsync();
-
-                MangaGridView.ItemsSource = _mangas;
             }
+            MangaGridView.ItemsSource = _mangas;
         }
 
         private void FavoriteButton_Click(object sender, RoutedEventArgs e)
@@ -91,13 +89,25 @@ namespace MangaReader.Views
 
         private void AppBarToggleButton_Checked(object sender, RoutedEventArgs e)
         {
-            _mangas = new ObservableCollection<Manga>(_mangas.Reverse<Manga>());
+            _mangas = new ObservableCollection<Manga>(_mangas.Reverse());
             MangaGridView.ItemsSource = _mangas;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            Header.Text = e.Parameter.ToString();
+            if (e.Parameter is string)
+                Header.Text = e.Parameter.ToString();
+            else
+            {
+                var parameter = e.Parameter as ItemCollection;
+                if (parameter != null)
+                {
+                    Header.Text = "Search Result";
+                    IsSearchResult = true;
+                    var buffer = parameter.ToList().Select(p => p as Manga);
+                    _mangas = new ObservableCollection<Manga>(buffer);
+                }
+            }
 
             base.OnNavigatedTo(e);
         }

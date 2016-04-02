@@ -78,7 +78,8 @@
                                     QueryIcon="Find"
                                     ItemsSource="{x:Bind Mangas}"
                                     TextChanged="SearchAllManga_TextChanged"
-                                    QuerySubmitted="SearchAllManga_QuerySubmitted" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    QuerySubmitted="SearchAllManga_QuerySubmitted"
+                                    SuggestionChosen="SearchAllManga_SuggestionChosen"
                                     Style="{StaticResource MyAutoSuggestBoxStyle}">
                         
                         <AutoSuggestBox.ItemTemplate>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -51,13 +52,27 @@ namespace MangaReader.Views
         private async void Grid_Loaded(object sender, RoutedEventArgs e)
         {
             StartupProgressRing.IsActive = true;
+            LoadingGrid.Visibility = Visibility.Visible;
 
             Manga = await _rootPage.MangaManager.GetMangaInfoAsync(Manga);
 
             ChapterGridView.ItemsSource = null;
             ChapterGridView.ItemsSource = Manga.Chapters;
 
+            //Category.Text = Manga.Category;
+            //Status.Text = Manga.Status;
+            NumberOfChapters.Text = Manga.NumberOfChapters.ToString();
+            //LastUpdated.Text = Manga.LastUpdated.ToString();
+            Description.Text = Manga.Description;
+
             StartupProgressRing.IsActive = false;
+            LoadingGrid.Visibility = Visibility.Collapsed;
+        }
+
+        private void AppBarToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+            Manga.Chapters = new ObservableCollection<Chapter>(Manga.Chapters.Reverse());
+            ChapterGridView.ItemsSource = Manga.Chapters;
         }
     }
 }

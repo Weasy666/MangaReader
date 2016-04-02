@@ -19,33 +19,45 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         
-        <controls:PageHeader Grid.ColumnSpan="2">
-            <controls:PageHeader.HeaderContent>
-                <TextBlock Text="{x:Bind Manga.Title}" Style="{ThemeResource TitleTextBlockStyle}" Margin="12,8,12,8"  TextWrapping="NoWrap"/>
-            </controls:PageHeader.HeaderContent>
-        </controls:PageHeader>
-                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0"
-                            Margin="10,10,0,0">
-                    <StackPanel Orientation="Horizontal"
-                                Margin="0,0,0,4">
-                        <Image Source="{x:Bind Manga.MangaCover}" Width="206" Height="300" VerticalAlignment="Top"/>
-                        <StackPanel Orientation="Vertical"
-                                    Margin="12,0,0,0">
-                            <TextBlock Text="{x:Bind Manga.Category}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind Manga.Status}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind Manga.NumberOfChapters}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind Manga.LastUpdated}" FontSize="15"/>
-                        </StackPanel>
-                    </StackPanel>
-                    <TextBlock Text="{x:Bind Manga.Description}" TextWrapping="WrapWholeWords"/>
-                </StackPanel>
-        <ProgressRing x:Name="StartupProgressRing" Grid.Row="1" Grid.Column="1"
+        <CommandBar x:Name="topbar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Grid.ColumnSpan="2">
+            <AppBarSeparator/>
+            <AppBarToggleButton Icon="Sort" Label="Sort" Click="AppBarToggleButton_Checked"/>
+            <CommandBar.Content>
+                <controls:PageHeader>
+                    <controls:PageHeader.HeaderContent>
+                        <TextBlock x:Name="Header" Text="{x:Bind Manga.Title}" Style="{ThemeResource TitleTextBlockStyle}" Margin="12,8,12,8" TextWrapping="NoWrap"/>
+                    </controls:PageHeader.HeaderContent>
+                </controls:PageHeader>
+            </CommandBar.Content>
+        </CommandBar>
+        <ProgressRing x:Name="StartupProgressRing" Grid.Row="1" Grid.ColumnSpan="2"
                       IsActive="False"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Center"
                       Width="100"
                       Height="100"
-                      Canvas.ZIndex="1"/>        
+                      Canvas.ZIndex="2"/>
+        <Grid x:Name="LoadingGrid" Background="{ThemeResource SystemControlDisabledBaseLowBrush}"
+              Visibility="Collapsed"
+              Grid.Row="1" Grid.ColumnSpan="2"
+              Canvas.ZIndex="1"/>
+        
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0"
+                    Margin="10,10,0,0">
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,0,0,4">
+                        <Image Source="{x:Bind Manga.MangaCover}" Width="206" Height="300" VerticalAlignment="Top"/>
+                        <StackPanel Orientation="Vertical"
+                                    Margin="12,0,0,0">
+                            <TextBlock x:Name="Category"  Text="{x:Bind Manga.Category}" FontSize="15"/>
+                            <TextBlock x:Name="Status" Text="{x:Bind Manga.Status}" FontSize="15"/>
+                            <TextBlock x:Name="NumberOfChapters" Text="{x:Bind Manga.NumberOfChapters}" FontSize="15"/>
+                            <TextBlock x:Name="LastUpdated" Text="{x:Bind Manga.LastUpdated}" FontSize="15"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock x:Name="Description" Text="{x:Bind Manga.Description}" TextWrapping="WrapWholeWords"/>
+                </StackPanel>
+       
         <GridView x:Name="ChapterGridView" Grid.Row="1" Grid.Column="1"
                           ItemsSource="{x:Bind Manga.Chapters}"
                           Margin="12,10,0,0"
@@ -54,7 +66,7 @@
                           ItemClick="ChapterGridView_ItemClick" >
                     <GridView.ItemTemplate>
                         <DataTemplate x:DataType="models:Chapter">
-                            <Grid Width="250" >
+                            <Grid Width="250" Height="125">
                                 <!--<Image Source="{x:Bind ChapterCover}" Width="103" Height="150" />-->
                                 <StackPanel Orientation="Vertical" 
                                             Margin="5,0,0,0" 

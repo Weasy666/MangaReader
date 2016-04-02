@@ -339,7 +339,24 @@ namespace MangaReader
 
         private void SearchAllManga_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
+            sender.Text = "";
+            var suggestionChosen = args.ChosenSuggestion;
+            if (suggestionChosen != null)
+            {
+                this.AppFrame.Navigate(typeof (MangaOverviewPage), suggestionChosen as Manga);
+            }
+            else
+            {
+                var results = sender.Items;
+                this.AppFrame.Navigate(typeof (GridViewPage), results);
+            }
+        }
 
+        private void SearchAllManga_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            sender.Text = "";
+        //    var clickedItem = args.SelectedItem as Manga;
+        //    this.AppFrame.Navigate(typeof(MangaOverviewPage), clickedItem);
         }
     }
 }

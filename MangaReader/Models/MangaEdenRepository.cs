@@ -27,7 +27,7 @@ namespace MangaReader.Models
         static MangaEdenRepository()
         {
             Root = "http://www.mangaeden.com";
-            ApiAllManga = string.Format("/api/list/{0}/", Language);
+            ApiAllManga = $"/api/list/{Language}/";
             ApiMangaInfos = "/api/manga/{0}/";
             ApiMangaChapterPages = "/api/chapter/{0}";
         }

@@ -24,7 +24,7 @@ namespace MangaReader.Models
         }
 
         /// <summary>
-        /// Load Mangas from chosen online source
+        /// Load all Manga from chosen online source
         /// </summary>
         public async Task LoadRepositoryAsync()
         {
@@ -45,7 +45,7 @@ namespace MangaReader.Models
         }
 
         /// <summary>
-        /// Get a List of loaded Manga
+        /// Get a ObservableCollection of already loaded Manga
         /// </summary>
         /// <returns></returns>
         public async Task<ObservableCollection<Manga>> GetListofMangasAsync()
@@ -68,18 +68,35 @@ namespace MangaReader.Models
         }
 
         /// <summary>
-        /// Gets the info for a Manga
+        /// Get the Info for a Manga
         /// </summary>
         /// <param name="manga">Manga whichs Info will be loaded</param>
         /// <returns></returns>
         public async Task<Manga> GetMangaInfoAsync(Manga manga)
         {
-            return await MangaEden.LoadInfosAsync(manga);
+            switch (Source)
+            {
+                case MangaSources.MangaEden:
+                    return await MangaEden.LoadInfosAsync(manga);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(Source), Source, null);
+            }
         }
 
+        /// <summary>
+        /// Get the Pages for a Chapter
+        /// </summary>
+        /// <param name="chapter">Chapter whichs Pages will be loaded</param>
+        /// <returns></returns>
         public async Task<ObservableCollection<MangaPage>> LoadPagesAsync(Chapter chapter)
         {
-            return await MangaEden.LoadPagesAsync(chapter);
+            switch (Source)
+            {
+                case MangaSources.MangaEden:
+                    return await MangaEden.LoadPagesAsync(chapter);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(Source), Source, null);
+            }
         }
     }
 
