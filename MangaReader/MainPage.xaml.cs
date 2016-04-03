@@ -355,8 +355,6 @@ namespace MangaReader
         private void SearchAllManga_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
             sender.Text = "";
-        //    var clickedItem = args.SelectedItem as Manga;
-        //    this.AppFrame.Navigate(typeof(MangaOverviewPage), clickedItem);
         }
     }
 }

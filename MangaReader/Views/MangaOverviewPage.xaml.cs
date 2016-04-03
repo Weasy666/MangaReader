@@ -25,7 +25,7 @@ namespace MangaReader.Views
     public sealed partial class MangaOverviewPage : Page
     {
         private readonly MainPage _rootPage = MainPage.Current;
-        public Manga Manga { get; set; }
+        private Manga Manga { get; set; }
 
         public MangaOverviewPage()
         {
@@ -42,7 +42,9 @@ namespace MangaReader.Views
 
         private void ChapterGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var clickedItem = e.ClickedItem as Chapter;
+            var clickedItem = new List<object> {Manga, e.ClickedItem as Chapter};
+            //var clickedItem = e.ClickedItem as Chapter;
+
             this.Frame.Navigate(
                 typeof (ChapterPage),
                 clickedItem,

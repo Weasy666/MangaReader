@@ -25,6 +25,7 @@ namespace MangaReader.Views
     public sealed partial class ChapterPage : Page
     {
         private readonly MainPage _rootPage = MainPage.Current;
+        private Manga Mangas { get; set; }
         private ObservableCollection<MangaPage> _pages;
 
         public ChapterPage()
@@ -34,16 +35,29 @@ namespace MangaReader.Views
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            var parameter = e.Parameter as Chapter;
+            var parameter = e.Parameter as List<object>;
+            var chapter = parameter?[1] as Chapter;
+            Mangas = parameter?[0] as Manga;
 
             StartupProgressRing.IsActive = true;
+            _pages = null;
 
-            if (parameter != null) _pages = await _rootPage.MangaManager.LoadPagesAsync(parameter);
-            pageView.ItemsSource = _pages;
+            if (chapter != null) _pages = await _rootPage.MangaManager.LoadPagesAsync(chapter);
+            PageView.ItemsSource = _pages;
 
             StartupProgressRing.IsActive = false;
 
             base.OnNavigatedTo(e);
+        }
+
+        private void Page_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            TopBar.IsOpen = !TopBar.IsOpen;
+        }
+
+        private void FavoriteButton_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
