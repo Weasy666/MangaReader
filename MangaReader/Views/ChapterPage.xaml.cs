@@ -25,7 +25,7 @@ namespace MangaReader.Views
     public sealed partial class ChapterPage : Page
     {
         private readonly MainPage _rootPage = MainPage.Current;
-        private Manga Mangas { get; set; }
+        public Manga Manga { get; set; }
         private ObservableCollection<MangaPage> _pages;
 
         public ChapterPage()
@@ -37,10 +37,11 @@ namespace MangaReader.Views
         {
             var parameter = e.Parameter as List<object>;
             var chapter = parameter?[1] as Chapter;
-            Mangas = parameter?[0] as Manga;
+            Manga = parameter?[0] as Manga;
+
+            ChapterView.ItemsSource = Manga.Chapters;
 
             StartupProgressRing.IsActive = true;
-            _pages = null;
 
             if (chapter != null) _pages = await _rootPage.MangaManager.LoadPagesAsync(chapter);
             PageView.ItemsSource = _pages;

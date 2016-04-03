@@ -10,20 +10,16 @@
     RightTapped="Page_RightTapped">
     <Page.TopAppBar>
         <CommandBar x:Name="TopBar"
-                    ClosedDisplayMode="Hidden"
-                    >
+                    ClosedDisplayMode="Hidden" >
             <CommandBar.Content>
-                <StackPanel Width="350"
-                            Orientation="Horizontal"
-                            DataContext="Manga"
-                            >
+                <StackPanel Orientation="Horizontal" >
                     <Grid Width="350" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="103"/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Button x:Name="FavoriteButton"
-                                Content="{x:Bind Mangas.FavoritAsSymbol}"
+                                Content="{x:Bind Manga.FavoritAsSymbol}"
                                 FontFamily="Segoe UI Symbol"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"
@@ -32,15 +28,15 @@
                                 Grid.Column="1"
                                 Canvas.ZIndex="10"
                                 Click="FavoriteButton_Click" Padding="0" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/>
-                        <Image Source="{x:Bind Mangas.MangaCover}" Width="103" Height="150" Grid.Column="0"/>
+                        <Image Source="{x:Bind Manga.MangaCover}" Width="103" Height="150" Grid.Column="0"/>
                         <StackPanel Orientation="Vertical" 
                                     Margin="5,0,0,0"
                                     MaxWidth="247"
                                     Grid.Column="1">
-                            <TextBlock Text="{x:Bind Mangas.Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
-                            <TextBlock Text="{x:Bind Mangas.Status}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind Mangas.LastUpdated}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind Mangas.Category}" FontSize="15" TextWrapping="WrapWholeWords"/>
+                            <TextBlock Text="{x:Bind Manga.Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
+                            <TextBlock Text="{x:Bind Manga.Status}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind Manga.LastUpdated}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords"/>
                         </StackPanel>
                     </Grid>
                     <ScrollViewer Grid.Column="1"
@@ -50,19 +46,13 @@
                                   VerticalScrollBarVisibility="Disabled">
                         <GridView x:Name="ChapterView"
                                   Margin="0,0,0,0"
-                                  ItemsSource="{x:Bind Mangas}"
-                                  VerticalContentAlignment="Stretch"
-                                  IsItemClickEnabled="False">
+                                  ItemsSource="{x:Bind Manga.Chapters}"
+                                  VerticalContentAlignment="Stretch">
                             <GridView.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <ItemsStackPanel IsHitTestVisible="False"
-                                         IsTapEnabled="False"
-                                         IsDoubleTapEnabled="False"
-                                         IsHoldingEnabled="False"
-                                         IsRightTapEnabled="False"
-                                         Orientation="Horizontal"
-                                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                         ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                                    <ItemsStackPanel Orientation="Horizontal"
+                                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                                     ScrollViewer.VerticalScrollBarVisibility="Disabled" />
                                 </ItemsPanelTemplate>
                             </GridView.ItemsPanel>
                             <GridView.ItemTemplate>
