@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using Windows.Foundation;
 using Windows.Foundation.Metadata;
+using Windows.Storage;
 using Windows.UI.Xaml.Automation;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -28,6 +29,7 @@ namespace MangaReader
     public sealed partial class MainPage : Page
     {
         // Declare the top level nav items
+        #region <private List<NavMenuItem> navlist = new List<NavMenuItem>;>
         private List<NavMenuItem> navlist = new List<NavMenuItem>(
             new[]
             {
@@ -60,6 +62,7 @@ namespace MangaReader
                     DestPage = typeof(SettingsPage)
                 },
             });
+        #endregion
         public static MainPage Current;
         public  MangaManager MangaManager { get; set; }
         private static ObservableCollection<Manga> _mangas;
@@ -76,8 +79,8 @@ namespace MangaReader
             }
             set { _mangas = value; }
         }
-
         private IEnumerable<Manga> Suggestions;
+        public static ApplicationDataContainer LocalSettings = ApplicationData.Current.LocalSettings;
 
         /// <summary>
         /// Initializes a new instance of the AppShell, sets the static 'Current' reference,

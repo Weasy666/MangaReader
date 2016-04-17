@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.System.Profile;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -23,46 +24,49 @@ namespace MangaReader.Views
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
-        MainPage rootPage = MainPage.Current;
-        ApplicationDataContainer localSettings;
+        MainPage _rootPage = MainPage.Current;
+        ApplicationDataContainer _localSettings = MainPage.LocalSettings;
 
         public SettingsPage()
         {
             this.InitializeComponent();
 
-            //NOT WORKING
-            localSettings = ApplicationData.Current.LocalSettings;
-
-            //ThemeToggle.IsOn = localSettings.Values["ThemeToggleValue"] as string == "on";
-
-            //if (localSettings.Containers.ContainsKey("ThemeToggle"))
-            //    ThemeToggle = localSettings.Values["ThemeToggle"] as ToggleSwitch;
-            //else if (localSettings.Containers.ContainsKey("Settings"))
-            //    localSettings = localSettings.CreateContainer("Settings", ApplicationDataCreateDisposition.Always);
+            if (_localSettings.Containers.ContainsKey("cThemeToggle"))
+            {
+                var composite = _localSettings.Values["cThemeToggle"] as ApplicationDataCompositeValue;
+                ThemeToggle = composite["cThemeToggle"] as ToggleSwitch;
+            }
+            //else
+            //    _localSettings.CreateContainer("ThemeToggle", ApplicationDataCreateDisposition.Always);
         }
 
         private void ThemeToggle_Toggled(object sender, RoutedEventArgs e)
         {
-            //var requestedTheme = rootPage.RequestedTheme;
-            //if(requestedTheme == ElementTheme.Light)
+            var toggleSwitch = sender as ToggleSwitch;
+
+            if (toggleSwitch.RequestedTheme == ElementTheme.Light || (toggleSwitch.RequestedTheme == ElementTheme.Default && AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Desktop"))
+                _rootPage.RequestedTheme = ElementTheme.Dark;
+            else if(toggleSwitch.RequestedTheme == ElementTheme.Dark || (toggleSwitch.RequestedTheme == ElementTheme.Default && AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Mobile"))
+                _rootPage.RequestedTheme = ElementTheme.Light;
+            ApplicationDataCompositeValue themeToggle = new ApplicationDataCompositeValue
+            {
+                ["cThemeToggle"] = toggleSwitch
+            };
+            _localSettings.Values["cThemeToggle"] = themeToggle;
 
             //rootPage.RequestedTheme = (rootPage.RequestedTheme == ElementTheme.Light || rootPage.RequestedTheme == ElementTheme.Default) ? ElementTheme.Dark : ElementTheme.Light;
-            if (rootPage.RequestedTheme == ElementTheme.Light || rootPage.RequestedTheme == ElementTheme.Default)
-            {
-                rootPage.RequestedTheme = ElementTheme.Dark;
-                localSettings.Values["ThemeToggle"] = "Dark";
-                localSettings.Values["ThemeToggleValue"] = "on";
-            }
-            else
-            {
-                rootPage.RequestedTheme = ElementTheme.Light;
-                localSettings.Values["ThemeToggle"] = "Light";
-                localSettings.Values["ThemeToggleValue"] = "off";
-            }
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
+            //if (_rootPage.RequestedTheme == ElementTheme.Light || _rootPage.RequestedTheme == ElementTheme.Default)
+            //{
+            //    _rootPage.RequestedTheme = ElementTheme.Dark;
+            //    localSettings.Values["ThemeToggle"] = "Dark";
+            //    localSettings.Values["ThemeToggleValue"] = "on";
+            //}
+            //else
+            //{
+            //    _rootPage.RequestedTheme = ElementTheme.Light;
+            //    localSettings.Values["ThemeToggle"] = "Light";
+            //    localSettings.Values["ThemeToggleValue"] = "off";
+            //}
         }
     }
 }

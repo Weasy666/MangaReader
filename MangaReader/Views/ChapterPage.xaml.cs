@@ -27,10 +27,12 @@ namespace MangaReader.Views
         private readonly MainPage _rootPage = MainPage.Current;
         public Manga Manga { get; set; }
         private ObservableCollection<MangaPage> _pages;
+        private Collection<Grid> children;
 
         public ChapterPage()
         {
             this.InitializeComponent();
+            children = new Collection<Grid>();
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -58,7 +60,46 @@ namespace MangaReader.Views
 
         private void FavoriteButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            
+        }
+
+        private void Image_ImageOpened(object sender, RoutedEventArgs e)
+        {
+            var image = sender as Image;
+            var grid = image.Parent as Grid;
+            var progressRing = grid.Children[1] as ProgressRing;
+            progressRing.IsActive = false;
+
+            children.Add(grid);
+        }
+
+        private async void ScrollViewer_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var textBlock = e.OriginalSource as TextBlock;
+            var chapter = textBlock.DataContext as Chapter;
+
+            StartupProgressRing.IsActive = true;
+
+            if (chapter != null) _pages = await _rootPage.MangaManager.LoadPagesAsync(chapter);
+            PageView.ItemsSource = _pages;
+
+            StartupProgressRing.IsActive = false;
+        }
+
+        private void TopBar_Opening(object sender, object e)
+        {
+            foreach (var c in children)
+            {
+                c.Children[2].Visibility = Visibility.Visible;
+            }
+        }
+
+        private void TopBar_Closing(object sender, object e)
+        {
+            foreach (var c in children)
+            {
+                c.Children[2].Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

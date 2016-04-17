@@ -93,6 +93,14 @@ namespace MangaReader.Views
             MangaGridView.ItemsSource = _mangas;
         }
 
+        private void Image_ImageOpened(object sender, RoutedEventArgs e)
+        {
+            var image = sender as Image;
+            var grid = image.Parent as Grid;
+            var progressRing = grid.Children[2] as ProgressRing;
+            if (progressRing != null) progressRing.IsActive = false;
+        }
+        
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter is string)

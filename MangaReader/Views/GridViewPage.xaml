@@ -58,7 +58,6 @@
                         <Button x:Name="FavoriteButton"
                                 Content="{x:Bind FavoritAsSymbol}"
                                 FontFamily="Segoe UI Symbol"
-                                
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"
                                 Height="30" Width="30"
@@ -66,7 +65,15 @@
                                 Grid.Column="1"
                                 Canvas.ZIndex="10"
                                 Click="FavoriteButton_Click" Padding="0" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/>
-                        <Image Source="{x:Bind MangaCover}" Width="103" Height="150" Grid.Column="0"/>
+                        <Image Source="{x:Bind MangaCover}" Width="103" Height="150" Grid.Column="0" ImageOpened="Image_ImageOpened"/>
+                        <ProgressRing x:Name="ImageProgressRing"
+                                      Grid.Row="1"
+                                      IsActive="True"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Width="75"
+                                      Height="75"
+                                      Canvas.ZIndex="2"/>
                         <StackPanel Orientation="Vertical" 
                                     Margin="5,0,0,0"
                                     MaxWidth="247"
