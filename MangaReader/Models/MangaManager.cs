@@ -45,7 +45,7 @@ namespace MangaReader.Models
         }
 
         /// <summary>
-        /// Get a ObservableCollection of already loaded Manga
+        /// Get an ObservableCollection of already loaded Manga
         /// </summary>
         /// <returns></returns>
         public async Task<ObservableCollection<Manga>> GetListofMangasAsync()
@@ -60,6 +60,29 @@ namespace MangaReader.Models
                     {
                         await LoadRepositoryAsync();
                         ret = MangaEden.GetListOfManga();
+                    }
+                    return ret;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(Source), Source, null);
+            }
+        }
+
+        /// <summary>
+        /// Get an ObservableCollection of the latest releases of already loaded Manga
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ObservableCollection<Manga>> GetListofLatestReleasesAsync()
+        {
+            switch (Source)
+            {
+                case MangaSources.MangaEden:
+                    ObservableCollection<Manga> ret;
+                    if (MangaEden != null)
+                        ret = MangaEden.GetListOfLatestReleases();
+                    else
+                    {
+                        await LoadRepositoryAsync();
+                        ret = MangaEden.GetListOfLatestReleases();
                     }
                     return ret;
                 default:

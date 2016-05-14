@@ -79,6 +79,34 @@ namespace MangaReader.Models
         }
 
         /// <summary>
+        /// Returns an alphabetically sorted List of MangaEdenManga Latest Releases
+        /// </summary>
+        /// <returns></returns>
+        public ObservableCollection<Manga> GetListOfLatestReleases()
+        {
+            var mangaEdenMangas = Repository.manga.ToList();
+
+            mangaEdenMangas = mangaEdenMangas.Where(manga => manga.LastUpdated.AddDays(5) >= DateTime.Today).ToList();
+
+            var mangas = mangaEdenMangas.Select(manga => new Manga
+            {
+                Title = System.Net.WebUtility.HtmlDecode(manga.Title),
+                Alais = System.Net.WebUtility.HtmlDecode(manga.a),
+                Id = manga.i,
+                MangaCover = manga.Image,
+                Category = manga.Category,
+                Hits = manga.h,
+                LastUpdated = manga.LastUpdated,
+                Status = manga.Status
+            }).ToList();
+            mangas.Sort(delegate (Manga x, Manga y)
+            {
+                return y == null ? 1 : DateTime.Compare(x.LastUpdated, y.LastUpdated);
+            });
+            return new ObservableCollection<Manga>(mangas);
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         public async Task<Manga> LoadInfosAsync(Manga manga)

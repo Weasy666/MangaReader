@@ -126,8 +126,11 @@
     <Compile Include="Views\DrillInPage.xaml.cs">
       <DependentUpon>DrillInPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\GridViewPage.xaml.cs">
-      <DependentUpon>GridViewPage.xaml</DependentUpon>
+    <Compile Include="Views\NewestMangaPage.xaml.cs">
+      <DependentUpon>NewestMangaPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AllMangaPage.xaml.cs">
+      <DependentUpon>AllMangaPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LandingPage.xaml.cs">
       <DependentUpon>LandingPage.xaml</DependentUpon>
@@ -196,7 +199,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\GridViewPage.xaml">
+    <Page Include="Views\NewestMangaPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AllMangaPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

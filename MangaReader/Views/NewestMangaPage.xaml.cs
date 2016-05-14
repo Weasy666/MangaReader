@@ -23,13 +23,13 @@ namespace MangaReader.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class GridViewPage : Page
+    public sealed partial class NewestMangaPage : Page
     {
         private readonly MainPage _rootPage = MainPage.Current;
         private ObservableCollection<Manga> _mangas;
         private bool _isSearchResult;
                              
-        public GridViewPage()
+        public NewestMangaPage()
         {
             this.InitializeComponent();
         }
@@ -62,7 +62,7 @@ namespace MangaReader.Views
                 StartupProgressRing.IsActive = true;
 
                 await _rootPage.MangaManager.LoadRepositoryAsync();
-                _mangas = await _rootPage.MangaManager.GetListofMangasAsync();
+                _mangas = await _rootPage.MangaManager.GetListofLatestReleasesAsync();
 
                 StartupProgressRing.IsActive = false;
                 LoadingGrid.Visibility = Visibility.Collapsed;
@@ -72,7 +72,7 @@ namespace MangaReader.Views
                 StartupProgressRing.IsActive = false;
                 LoadingGrid.Visibility = Visibility.Collapsed;
 
-                _mangas = await _rootPage.MangaManager.GetListofMangasAsync();
+                _mangas = await _rootPage.MangaManager.GetListofLatestReleasesAsync();
             }
             MangaGridView.ItemsSource = _mangas;
         }

@@ -16,7 +16,9 @@
                 </GridView>
             </SemanticZoom.ZoomedInView>
             <SemanticZoom.ZoomedOutView>
-                <GridView ScrollViewer.IsHorizontalScrollChainingEnabled="False" ScrollViewer.IsVerticalScrollChainingEnabled="False"/>
+                <GridView ScrollViewer.IsHorizontalScrollChainingEnabled="False" ScrollViewer.IsVerticalScrollChainingEnabled="False">
+                    <TextBlock Text="Out" FontSize="48" Margin="20,20,0,0" />
+                </GridView>
             </SemanticZoom.ZoomedOutView>
         </SemanticZoom>
 

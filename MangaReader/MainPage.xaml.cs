@@ -38,7 +38,7 @@ namespace MangaReader
                     Arguments = "Latest Releases",
                     Symbol = Symbol.Sync,
                     Label = "Latest Releases",
-                    DestPage = typeof(GridViewPage)
+                    DestPage = typeof(NewestMangaPage)
                 },
                 new NavMenuItem()
                 {
@@ -52,7 +52,7 @@ namespace MangaReader
                     Arguments = "Manga Library",
                     Symbol = Symbol.Library,
                     Label = "Manga Library",
-                    DestPage = typeof(SemanticPage)
+                    DestPage = typeof(AllMangaPage)
                 },
             });
         #endregion
@@ -376,7 +376,7 @@ namespace MangaReader
             else
             {
                 var results = sender.Items;
-                this.AppFrame.Navigate(typeof (GridViewPage), results);
+                this.AppFrame.Navigate(typeof (AllMangaPage), results);
             }
         }
 
