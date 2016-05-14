@@ -70,7 +70,9 @@
                    OpenPaneLength="256"
                    IsTabStop="False">
             <SplitView.Pane>
-                <StackPanel >
+                <Grid>
+                <StackPanel Height="Auto"
+                            VerticalAlignment="Top">
                     <AutoSuggestBox Name="SearchAllManga"
                                     PlaceholderText="Search for Manga..."
                                     Margin="48,0,0,0"
@@ -106,6 +108,15 @@
                                               ItemTemplate="{StaticResource NavMenuItemTemplate}"
                                               ItemInvoked="NavMenuList_ItemInvoked" />
                 </StackPanel>
+                    <controls:NavMenuListView x:Name="SettingsMenuList"
+                                              TabIndex="4"
+                                              Margin="0,0,0,0"
+                                              VerticalAlignment="Bottom"
+                                              ContainerContentChanging="NavMenuItemContainerContentChanging"
+                                              ItemContainerStyle="{StaticResource NavMenuItemContainerStyle}"
+                                              ItemTemplate="{StaticResource NavMenuItemTemplate}"
+                                              ItemInvoked="NavMenuList_ItemInvoked" />
+                </Grid>
             </SplitView.Pane>
 
             <!-- OnNavigatingToPage we synchronize the selected item in the nav menu with the current page.

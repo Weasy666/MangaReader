@@ -24,49 +24,47 @@ namespace MangaReader.Views
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
-        MainPage _rootPage = MainPage.Current;
-        ApplicationDataContainer _localSettings = MainPage.LocalSettings;
-
+        private readonly MainPage _rootPage = MainPage.Current;
+        private bool _loaded;
+        
         public SettingsPage()
         {
             this.InitializeComponent();
-
-            if (_localSettings.Containers.ContainsKey("cThemeToggle"))
-            {
-                var composite = _localSettings.Values["cThemeToggle"] as ApplicationDataCompositeValue;
-                ThemeToggle = composite["cThemeToggle"] as ToggleSwitch;
-            }
-            //else
-            //    _localSettings.CreateContainer("ThemeToggle", ApplicationDataCreateDisposition.Always);
         }
 
         private void ThemeToggle_Toggled(object sender, RoutedEventArgs e)
         {
             var toggleSwitch = sender as ToggleSwitch;
 
-            if (toggleSwitch.RequestedTheme == ElementTheme.Light || (toggleSwitch.RequestedTheme == ElementTheme.Default && AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Desktop"))
-                _rootPage.RequestedTheme = ElementTheme.Dark;
-            else if(toggleSwitch.RequestedTheme == ElementTheme.Dark || (toggleSwitch.RequestedTheme == ElementTheme.Default && AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Mobile"))
-                _rootPage.RequestedTheme = ElementTheme.Light;
-            ApplicationDataCompositeValue themeToggle = new ApplicationDataCompositeValue
+            if (_loaded)
             {
-                ["cThemeToggle"] = toggleSwitch
-            };
-            _localSettings.Values["cThemeToggle"] = themeToggle;
+                if (_rootPage.RequestedTheme == ElementTheme.Light ||
+                    (_rootPage.RequestedTheme == ElementTheme.Default &&
+                     AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Desktop"))
+                {
+                    _rootPage.RequestedTheme = ElementTheme.Dark;
+                }
+                else if (_rootPage.RequestedTheme == ElementTheme.Dark ||
+                         (_rootPage.RequestedTheme == ElementTheme.Default &&
+                          AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Mobile"))
+                {
+                    _rootPage.RequestedTheme = ElementTheme.Light;
+                }
 
-            //rootPage.RequestedTheme = (rootPage.RequestedTheme == ElementTheme.Light || rootPage.RequestedTheme == ElementTheme.Default) ? ElementTheme.Dark : ElementTheme.Light;
-            //if (_rootPage.RequestedTheme == ElementTheme.Light || _rootPage.RequestedTheme == ElementTheme.Default)
-            //{
-            //    _rootPage.RequestedTheme = ElementTheme.Dark;
-            //    localSettings.Values["ThemeToggle"] = "Dark";
-            //    localSettings.Values["ThemeToggleValue"] = "on";
-            //}
-            //else
-            //{
-            //    _rootPage.RequestedTheme = ElementTheme.Light;
-            //    localSettings.Values["ThemeToggle"] = "Light";
-            //    localSettings.Values["ThemeToggleValue"] = "off";
-            //}
+                ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+                localSettings.Values["ThemeToggle"] = toggleSwitch?.IsOn;
+            }
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+
+            if (localSettings.Values.ContainsKey("ThemeToggle"))
+            {
+                ThemeToggle.IsOn = (bool)localSettings.Values["ThemeToggle"];
+            }
+            _loaded = true;
         }
     }
 }

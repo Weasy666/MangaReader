@@ -33,6 +33,7 @@
                     <!-- Sources -->
                     <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0,12,12,4">Sources</TextBlock>
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="0,4">Here you can select at which provider the app searches for mangas.</TextBlock>
+                    <ToggleSwitch x:Name="MangaEdenToggle" OffContent="MangaEden" OnContent="MangaEden"></ToggleSwitch>
                     <ToggleSwitch x:Name="MangaFoxToggle" OffContent="MangaFox" OnContent="MangaFox"></ToggleSwitch>
                     <ToggleSwitch x:Name="MangaReaderToggle" OffContent="MangaReader" OnContent="MangaReader"></ToggleSwitch>
                 </StackPanel>

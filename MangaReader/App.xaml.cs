@@ -7,6 +7,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -42,7 +43,7 @@ namespace MangaReader
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-
+            
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
@@ -79,6 +80,14 @@ namespace MangaReader
                 // suppressing the initial entrance animation.
                 rootPage.AppFrame.Navigate(typeof(Views.LandingPage), e.Arguments, new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo());
             }
+
+            // Get and Set Application Theme from local Settings
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+            if (localSettings.Values.ContainsKey("ThemeToggle"))
+            {
+                rootPage.RequestedTheme = (bool)localSettings.Values["ThemeToggle"] ? ElementTheme.Dark : ElementTheme.Light;
+            }
+
             // Ensure the current window is active
             Window.Current.Activate();
         }

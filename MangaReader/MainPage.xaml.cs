@@ -29,8 +29,8 @@ namespace MangaReader
     public sealed partial class MainPage : Page
     {
         // Declare the top level nav items
-        #region <private List<NavMenuItem> navlist = new List<NavMenuItem>;>
-        private List<NavMenuItem> navlist = new List<NavMenuItem>(
+        #region <private readonly List<NavMenuItem> _navlist = new List<NavMenuItem>;>
+        private readonly List<NavMenuItem> _navlist = new List<NavMenuItem>(
             new[]
             {
                 new NavMenuItem()
@@ -54,6 +54,12 @@ namespace MangaReader
                     Label = "Manga Library",
                     DestPage = typeof(SemanticPage)
                 },
+            });
+        #endregion
+        #region <private readonly List<NavMenuItem> _setlist = new List<NavMenuItem>;>
+        private readonly List<NavMenuItem> _setlist = new List<NavMenuItem>(
+            new[]
+            {
                 new NavMenuItem()
                 {
                     Arguments = "Settings",
@@ -79,8 +85,7 @@ namespace MangaReader
             }
             set { _mangas = value; }
         }
-        private IEnumerable<Manga> Suggestions;
-        public static ApplicationDataContainer LocalSettings = ApplicationData.Current.LocalSettings;
+        private IEnumerable<Manga> _suggestions;
 
         /// <summary>
         /// Initializes a new instance of the AppShell, sets the static 'Current' reference,
@@ -111,16 +116,17 @@ namespace MangaReader
 
             SystemNavigationManager.GetForCurrentView().BackRequested += SystemNavigationManager_BackRequested;
 
-            NavMenuList.ItemsSource = navlist;
+            NavMenuList.ItemsSource = _navlist;
+            SettingsMenuList.ItemsSource = _setlist;
 
             MangaManager = new MangaManager {Source = 0};
             LoadManga();
 
         }
 
-         private void LoadManga()
+         private async void LoadManga()
          {
-            MangaManager.LoadRepositoryAsync();
+            await MangaManager.LoadRepositoryAsync();
          }
 
         public Frame AppFrame => this.RootFrame;
@@ -198,8 +204,23 @@ namespace MangaReader
         {
             var item = (NavMenuItem)((NavMenuListView)sender).ItemFromContainer(listViewItem);
 
+            var item1 = (from p in this._navlist where p.DestPage == item.DestPage select p).SingleOrDefault() ??
+                        (from p in this._setlist where p.DestPage == item.DestPage select p).SingleOrDefault();
+
             if (item != null)
             {
+                var container = (ListViewItem)NavMenuList.ContainerFromItem(item1) ??
+                                (ListViewItem)SettingsMenuList.ContainerFromItem(item1);
+
+                // While updating the selection state of the item prevent it from taking keyboard focus.  If a
+                // user is invoking the back button via the keyboard causing the selected nav menu item to change
+                // then focus will remain on the back button.
+                if (container != null) container.IsTabStop = false;
+                NavMenuList.SetSelectedItem(container);
+                SettingsMenuList.SetSelectedItem(container);
+                if (container != null) container.IsTabStop = true;
+
+                // Navigate to selected Page
                 if (item.DestPage != null &&
                     item.DestPage != this.AppFrame.CurrentSourcePageType)
                 {
@@ -218,26 +239,30 @@ namespace MangaReader
         {
             if (e.NavigationMode == NavigationMode.Back)
             {
-                var item = (from p in this.navlist where p.DestPage == e.SourcePageType select p).SingleOrDefault();
+                var item = (from p in this._navlist where p.DestPage == e.SourcePageType select p).SingleOrDefault() ??
+                           (from p in this._setlist where p.DestPage == e.SourcePageType select p).SingleOrDefault();
                 if (item == null && this.AppFrame.BackStackDepth > 0)
                 {
                     // In cases where a page drills into sub-pages then we'll highlight the most recent
                     // navigation menu item that appears in the BackStack
                     foreach (var entry in this.AppFrame.BackStack.Reverse())
                     {
-                        item = (from p in this.navlist where p.DestPage == entry.SourcePageType select p).SingleOrDefault();
+                        item = (from p in this._navlist where p.DestPage == entry.SourcePageType select p).SingleOrDefault() ??
+                               (from p in this._setlist where p.DestPage == e.SourcePageType select p).SingleOrDefault();
                         if (item != null)
                             break;
                     }
                 }
 
-                var container = (ListViewItem)NavMenuList.ContainerFromItem(item);
+                var container = (ListViewItem) NavMenuList.ContainerFromItem(item) ??
+                                (ListViewItem) SettingsMenuList.ContainerFromItem(item);
 
                 // While updating the selection state of the item prevent it from taking keyboard focus.  If a
                 // user is invoking the back button via the keyboard causing the selected nav menu item to change
                 // then focus will remain on the back button.
                 if (container != null) container.IsTabStop = false;
                 NavMenuList.SetSelectedItem(container);
+                SettingsMenuList.SetSelectedItem(container);
                 if (container != null) container.IsTabStop = true;
             }
         }
@@ -336,8 +361,8 @@ namespace MangaReader
 
         private void SearchAllManga_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-            Suggestions = Mangas.Where(p => p.Title.StartsWith(sender.Text) && sender.Text != string.Empty);
-            SearchAllManga.ItemsSource = Suggestions;
+            _suggestions = Mangas.Where(p => p.Title.StartsWith(sender.Text) && sender.Text != string.Empty);
+            SearchAllManga.ItemsSource = _suggestions;
         }
 
         private void SearchAllManga_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)

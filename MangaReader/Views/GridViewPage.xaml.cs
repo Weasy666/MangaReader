@@ -27,7 +27,7 @@ namespace MangaReader.Views
     {
         private readonly MainPage _rootPage = MainPage.Current;
         private ObservableCollection<Manga> _mangas;
-        private bool IsSearchResult;
+        private bool _isSearchResult;
                              
         public GridViewPage()
         {
@@ -67,7 +67,7 @@ namespace MangaReader.Views
                 StartupProgressRing.IsActive = false;
                 LoadingGrid.Visibility = Visibility.Collapsed;
             }
-            else if (!IsSearchResult)
+            else if (!_isSearchResult)
             {
                 StartupProgressRing.IsActive = false;
                 LoadingGrid.Visibility = Visibility.Collapsed;
@@ -111,7 +111,7 @@ namespace MangaReader.Views
                 if (parameter != null)
                 {
                     Header.Text = "Search Result";
-                    IsSearchResult = true;
+                    _isSearchResult = true;
                     var buffer = parameter.ToList().Select(p => p as Manga);
                     _mangas = new ObservableCollection<Manga>(buffer);
                 }

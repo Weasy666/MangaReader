@@ -116,9 +116,7 @@
                                          IsDoubleTapEnabled="False"
                                          IsHoldingEnabled="False"
                                          IsRightTapEnabled="False"
-                                         Orientation="Horizontal"
-                                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                         ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                                         Orientation="Horizontal"/>
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
                 <GridView.ItemTemplate>
