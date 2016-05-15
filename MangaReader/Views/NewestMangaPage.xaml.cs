@@ -87,7 +87,7 @@ namespace MangaReader.Views
             //_mangas.Insert(_mangas.IndexOf(manga), manga);
         }
 
-        private void AppBarToggleButton_Checked(object sender, RoutedEventArgs e)
+        private void AppBarSortButton_Checked(object sender, RoutedEventArgs e)
         {
             _mangas = new ObservableCollection<Manga>(_mangas.Reverse());
             MangaGridView.ItemsSource = _mangas;

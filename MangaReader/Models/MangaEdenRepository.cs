@@ -82,11 +82,11 @@ namespace MangaReader.Models
         /// Returns an alphabetically sorted List of MangaEdenManga Latest Releases
         /// </summary>
         /// <returns></returns>
-        public ObservableCollection<Manga> GetListOfLatestReleases()
+        public ObservableCollection<Manga> GetListOfLatestReleases(double numberOfPastDays)
         {
             var mangaEdenMangas = Repository.manga.ToList();
 
-            mangaEdenMangas = mangaEdenMangas.Where(manga => manga.LastUpdated.AddDays(5) >= DateTime.Today).ToList();
+            mangaEdenMangas = mangaEdenMangas.Where(manga => manga.LastUpdated.AddDays(numberOfPastDays) >= DateTime.Today).ToList();
 
             var mangas = mangaEdenMangas.Select(manga => new Manga
             {
@@ -99,10 +99,7 @@ namespace MangaReader.Models
                 LastUpdated = manga.LastUpdated,
                 Status = manga.Status
             }).ToList();
-            mangas.Sort(delegate (Manga x, Manga y)
-            {
-                return y == null ? 1 : DateTime.Compare(x.LastUpdated, y.LastUpdated);
-            });
+            mangas.Sort((y, x) => y == null ? 1 : DateTime.Compare(x.LastUpdated, y.LastUpdated));
             return new ObservableCollection<Manga>(mangas);
         }
 
@@ -199,10 +196,10 @@ namespace MangaReader.Models
         //Title of Manga
         public string t { get; set; }
         //Renaming for consistent Binding between different Sources
-        public string Image => "https://cdn.mangaeden.com/mangasimg/" + im;
+        public string Image => im != null ? "https://cdn.mangaeden.com/mangasimg/" + im : @"/Assets/Square150x150Logo.scale-200.png";
         public string Title => t;
         public string Category => string.Join(", ", c);
-        public string Status => s != 0 ? "Ongoing" : "Completed";
+        public string Status => s == 1 ? "Ongoing" : "Completed";
         public DateTime LastUpdated => DateTimeOffset.FromUnixTimeSeconds((long)ld).DateTime.ToLocalTime(); //ToString(CultureInfo.CurrentCulture);
 
         public int CompareTo(MangaEdenManga comparePart)
@@ -250,6 +247,7 @@ namespace MangaReader.Models
                 Id = chap[3].ToString(),
             }).ToList();
             list.Sort();
+            list.Reverse();
             //foreach (var chap in list)
             //{
             //    var buffer = await LoadPages(chap.Id);

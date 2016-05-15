@@ -361,7 +361,7 @@ namespace MangaReader
 
         private void SearchAllManga_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-            _suggestions = Mangas.Where(p => p.Title.StartsWith(sender.Text) && sender.Text != string.Empty);
+            _suggestions = Mangas.Where(p => p.Title.ToLower().Contains(sender.Text.ToLower()) && sender.Text != string.Empty);
             SearchAllManga.ItemsSource = _suggestions;
         }
 

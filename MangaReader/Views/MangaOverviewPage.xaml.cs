@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using MangaReader.Models;
 
@@ -75,6 +76,11 @@ namespace MangaReader.Views
         {
             Manga.Chapters = new ObservableCollection<Chapter>(Manga.Chapters.Reverse());
             ChapterGridView.ItemsSource = Manga.Chapters;
+        }
+
+        private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            Cover.Source = new BitmapImage(new Uri(this.BaseUri, "Assets/Square150x150Logo.scale-200.png"));
         }
     }
 }

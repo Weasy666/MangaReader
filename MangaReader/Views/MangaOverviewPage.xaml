@@ -46,7 +46,7 @@
                     Margin="10,10,0,0">
                     <StackPanel Orientation="Horizontal"
                                 Margin="0,0,0,4">
-                        <Image Source="{x:Bind Manga.MangaCover}" Width="206" Height="300" VerticalAlignment="Top"/>
+                        <Image x:Name="Cover" Source="{x:Bind Manga.MangaCover}" Width="206" Height="300" VerticalAlignment="Top" />
                         <StackPanel Orientation="Vertical"
                                     Margin="12,0,0,0">
                             <TextBlock x:Name="Category"  Text="{x:Bind Manga.Category}" FontSize="15"/>

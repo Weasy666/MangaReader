@@ -71,18 +71,18 @@ namespace MangaReader.Models
         /// Get an ObservableCollection of the latest releases of already loaded Manga
         /// </summary>
         /// <returns></returns>
-        public async Task<ObservableCollection<Manga>> GetListofLatestReleasesAsync()
+        public async Task<ObservableCollection<Manga>> GetListofLatestReleasesAsync(double numberOfPastDays = 5)
         {
             switch (Source)
             {
                 case MangaSources.MangaEden:
                     ObservableCollection<Manga> ret;
                     if (MangaEden != null)
-                        ret = MangaEden.GetListOfLatestReleases();
+                        ret = MangaEden.GetListOfLatestReleases(numberOfPastDays);
                     else
                     {
                         await LoadRepositoryAsync();
-                        ret = MangaEden.GetListOfLatestReleases();
+                        ret = MangaEden.GetListOfLatestReleases(numberOfPastDays);
                     }
                     return ret;
                 default:

@@ -17,7 +17,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <CommandBar x:Name="topbar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
-            <AppBarToggleButton Icon="Sort" Label="Sort" Click="AppBarToggleButton_Checked"/>
+            <AppBarToggleButton Icon="Sort" Label="Sort" Click="AppBarSortButton_Checked"/>
             <AppBarSeparator/>
             <AppBarButton Icon="Refresh" Label="Reload" Click="AppBarReloadButton_Click"/>
             <CommandBar.Content>
