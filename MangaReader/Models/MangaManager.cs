@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
+using Newtonsoft.Json;
 
 namespace MangaReader.Models
 {
@@ -17,12 +19,6 @@ namespace MangaReader.Models
         public MangaSources Source { get; set; }
         public bool Loaded { get; set; }
         
-
-        public MangaManager()
-        {
-
-        }
-
         /// <summary>
         /// Load all Manga from chosen online source
         /// </summary>
@@ -45,6 +41,27 @@ namespace MangaReader.Models
         }
 
         /// <summary>
+        /// Load Favorit Status from RoamingSettings and add it to the given MangaList
+        /// </summary>
+        private static ObservableCollection<Manga> AddFavorits(ObservableCollection<Manga> mangas)
+        {
+            ApplicationDataContainer roamingSettings = ApplicationData.Current.RoamingSettings;
+            var roamingFavorits = roamingSettings.Containers["Favorits"].Values.ToList();
+
+            if (roamingFavorits != null)
+            {
+                foreach (KeyValuePair<string, object> fav in roamingFavorits)
+                {
+                    var favorit = fav.Key;
+                    var manga = mangas.FirstOrDefault(m => m.Title == favorit);
+                    if (manga != null)
+                        manga.IsFavorit = true;
+                }
+            }
+            return mangas;
+        }
+
+        /// <summary>
         /// Get an ObservableCollection of already loaded Manga
         /// </summary>
         /// <returns></returns>
@@ -61,7 +78,7 @@ namespace MangaReader.Models
                         await LoadRepositoryAsync();
                         ret = MangaEden.GetListOfManga();
                     }
-                    return ret;
+                    return AddFavorits(ret);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(Source), Source, null);
             }
@@ -84,7 +101,7 @@ namespace MangaReader.Models
                         await LoadRepositoryAsync();
                         ret = MangaEden.GetListOfLatestReleases(numberOfPastDays);
                     }
-                    return ret;
+                    return AddFavorits(ret);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(Source), Source, null);
             }

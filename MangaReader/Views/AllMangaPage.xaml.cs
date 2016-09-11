@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -84,6 +85,15 @@ namespace MangaReader.Views
             manga.IsFavorit = !manga.IsFavorit;
             icon.DataContext = manga;
             icon.Content = icon.Content.ToString() == "\uE1CF" ? "\uE1CE" : "\uE1CF";
+
+            ApplicationDataContainer roamingSettings = ApplicationData.Current.RoamingSettings;
+            roamingSettings.CreateContainer("Favorits", ApplicationDataCreateDisposition.Always);
+            bool hasContainer = roamingSettings.Containers.ContainsKey("Favorits");
+
+            if (hasContainer && roamingSettings.Containers["Favorits"].Values.ContainsKey(manga.Title))
+                roamingSettings.Containers["Favorits"].Values.Remove(manga.Title);
+            else if (hasContainer)
+                roamingSettings.Containers["Favorits"].Values[manga.Title] = true;
             //_mangas.Insert(_mangas.IndexOf(manga), manga);
         }
 
