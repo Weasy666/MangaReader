@@ -5,7 +5,7 @@
   <Properties>
     <DisplayName>MangaReader</DisplayName>
     <PublisherDisplayName>Weasy</PublisherDisplayName>
-    <Logo>Assets\StoreLogo.png</Logo>
+    <Logo>..\MangaReader_MVVM\Assets\NewStoreLogo.png</Logo>
   </Properties>
   <Dependencies>
     <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
@@ -15,10 +15,9 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="MangaReader.App">
-      <uap:VisualElements DisplayName="MangaReader" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="MangaReader" BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
-        </uap:DefaultTile>
-        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+      <uap:VisualElements DisplayName="MangaReader" Square150x150Logo="..\MangaReader_MVVM\Assets\Square150x150Logo.png" Square44x44Logo="..\MangaReader_MVVM\Assets\Square44x44Logo.png" Description="MangaReader" BackgroundColor="transparent">
+        <uap:DefaultTile Wide310x150Logo="..\MangaReader_MVVM\Assets\Wide310x150Logo.png" Square310x310Logo="..\MangaReader_MVVM\Assets\Square310x310Logo.png" Square71x71Logo="..\MangaReader_MVVM\Assets\Square71x71Logo.png"></uap:DefaultTile>
+        <uap:SplashScreen Image="..\MangaReader_MVVM\Assets\SplashScreen.png" />
       </uap:VisualElements>
     </Application>
   </Applications>
