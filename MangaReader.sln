@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaReader", "MangaReader\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaReader_MVVM", "MangaReader_MVVM\MangaReader_MVVM.csproj", "{AC1F64A3-9F2A-4F94-9BBB-BB7563E57E51}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaReader_Toolkit", "MangaReader_Toolkit\MangaReader_Toolkit.csproj", "{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -53,6 +55,24 @@ Global
 		{AC1F64A3-9F2A-4F94-9BBB-BB7563E57E51}.Release|x86.ActiveCfg = Release|x86
 		{AC1F64A3-9F2A-4F94-9BBB-BB7563E57E51}.Release|x86.Build.0 = Release|x86
 		{AC1F64A3-9F2A-4F94-9BBB-BB7563E57E51}.Release|x86.Deploy.0 = Release|x86
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Debug|ARM.ActiveCfg = Debug|ARM
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Debug|ARM.Build.0 = Debug|ARM
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Debug|ARM.Deploy.0 = Debug|ARM
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Debug|x64.ActiveCfg = Debug|x64
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Debug|x64.Build.0 = Debug|x64
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Debug|x64.Deploy.0 = Debug|x64
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Debug|x86.ActiveCfg = Debug|x86
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Debug|x86.Build.0 = Debug|x86
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Debug|x86.Deploy.0 = Debug|x86
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Release|ARM.ActiveCfg = Release|ARM
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Release|ARM.Build.0 = Release|ARM
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Release|ARM.Deploy.0 = Release|ARM
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Release|x64.ActiveCfg = Release|x64
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Release|x64.Build.0 = Release|x64
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Release|x64.Deploy.0 = Release|x64
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Release|x86.ActiveCfg = Release|x86
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Release|x86.Build.0 = Release|x86
+		{D82ACF76-4BF6-43BD-BB35-425066BAA5F4}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
