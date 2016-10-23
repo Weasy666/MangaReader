@@ -12,23 +12,37 @@
       mc:Ignorable="d">
 
     <Controls:HamburgerMenu x:Name="MyHamburgerMenu">
-
-        <Controls:HamburgerMenu.PrimaryButtons>
-            <!--  mainpage button  -->
-            <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:MainPage" 
-                                          AutomationProperties.Name="Jerry"
-                                          >
+        
+        <!--  MainPages buttons  -->
+        <Controls:HamburgerMenu.PrimaryButtons>            
+            <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:MainPage" AutomationProperties.Name="Jerry" >
                 <StackPanel Orientation="Horizontal">
-                    <SymbolIcon Width="48" Height="48"
-                                Symbol="Home" />
-                    <TextBlock Margin="12,0,0,0" VerticalAlignment="Center"
-                               Text="Home" />
+                    <SymbolIcon Symbol="Home" Width="48" Height="48" />
+                    <TextBlock Text="Home" Margin="12,0,0,0" VerticalAlignment="Center" />
+                </StackPanel>
+            </Controls:HamburgerButtonInfo>
+            <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:MainPage" AutomationProperties.Name="Jerry" >
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Sync" Width="48" Height="48" />
+                    <TextBlock Text="Latest Releases" Margin="12,0,0,0" VerticalAlignment="Center" />
+                </StackPanel>
+            </Controls:HamburgerButtonInfo>
+            <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:MainPage" AutomationProperties.Name="Jerry" >
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Favorite" Width="48" Height="48" />
+                    <TextBlock Text="Favorite" Margin="12,0,0,0" VerticalAlignment="Center" />
+                </StackPanel>
+            </Controls:HamburgerButtonInfo>
+            <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:MangasPage" AutomationProperties.Name="Jerry" >
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Library" Width="48" Height="48" />
+                    <TextBlock Text="Manga Library" Margin="12,0,0,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
         </Controls:HamburgerMenu.PrimaryButtons>
-
-        <Controls:HamburgerMenu.SecondaryButtons>
-            <!--  settingspage button  -->
+        
+        <!--  SettingsPages buttons  -->
+        <Controls:HamburgerMenu.SecondaryButtons>            
             <Controls:HamburgerButtonInfo x:Name="SettingsButton" PageParameter="0"
                                           PageType="views:SettingsPage">
                 <Controls:HamburgerButtonInfo.NavigationTransitionInfo>

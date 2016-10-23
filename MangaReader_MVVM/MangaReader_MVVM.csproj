@@ -101,7 +101,11 @@
     <Compile Include="Services\SettingsServices\SettingsService.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\DetailPageViewModel.cs" />
+    <Compile Include="ViewModels\MangasPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
+    <Compile Include="Views\MangasPage.xaml.cs">
+      <DependentUpon>MangasPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Busy.xaml.cs">
       <DependentUpon>Busy.xaml</DependentUpon>
     </Compile>
@@ -190,6 +194,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Views\MangasPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Busy.xaml">
       <Generator>MSBuild:Compile</Generator>
