@@ -5,19 +5,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Template10.Services.NavigationService;
 using Windows.UI.Xaml.Navigation;
-using System.Collections.ObjectModel;
 
 namespace MangaReader_MVVM.ViewModels
 {
-    public class MangasPageViewModel : ViewModelBase
+    public class ChapterViewModel : ViewModelBase
     {
-        public MangasPageViewModel()
+        public ChapterViewModel()
         {
 
         }
-
-        private ObservableCollection<Models.Manga> _mangas;
-        public ObservableCollection<Models.Manga> Mangas { get { return _mangas; } set { Set(ref _mangas, value); } }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
@@ -29,7 +25,7 @@ namespace MangaReader_MVVM.ViewModels
         {
             if (suspending)
             {
-                suspensionState[nameof(Mangas)] = Mangas;
+                //suspensionState[nameof(Mangas)] = Mangas;
             }
             await Task.CompletedTask;
         }
