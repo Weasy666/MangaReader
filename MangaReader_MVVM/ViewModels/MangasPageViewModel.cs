@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Template10.Services.NavigationService;
 using Windows.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
+using MangaScrapeLib.Repositories;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -16,11 +17,14 @@ namespace MangaReader_MVVM.ViewModels
 
         }
 
-        private ObservableCollection<Models.Manga> _mangas;
-        public ObservableCollection<Models.Manga> Mangas { get { return _mangas; } set { Set(ref _mangas, value); } }
+        private MangaScrapeLib.Models.ISeries[] _mangas;
+        public MangaScrapeLib.Models.ISeries[] Mangas { get { return _mangas; } set { Set(ref _mangas, value); } }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
+            var repository = MangaHereRepository.Instance;
+            Mangas = await repository.GetSeriesAsync();
+            
             //Mangas = (suspensionState.ContainsKey(nameof(Mangas))) ? suspensionState[nameof(Mangas)] : new ObservableCollection<Models.Manga>(parameter);
             await Task.CompletedTask;
         }

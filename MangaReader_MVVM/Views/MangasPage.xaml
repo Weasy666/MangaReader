@@ -8,6 +8,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:MangaReader_MVVM.Views"
       xmlns:models="using:MangaReader_MVVM.Models"
+      xmlns:mslmodels="using:MangaScrapeLib.Models"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:MangaReader_MVVM.ViewModels" mc:Ignorable="d">
     
@@ -43,14 +44,14 @@
                   IncrementalLoadingThreshold="50"
                   IncrementalLoadingTrigger="Edge" ><!--ItemClick="MangaGridView_ItemClick"-->
             <GridView.ItemTemplate>
-                <DataTemplate x:DataType="models:Manga">
+                <DataTemplate x:DataType="mslmodels:Series">
                     <Grid Width="350" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="103"/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Button x:Name="FavoriteButton"
-                                Content="{x:Bind FavoritAsSymbol}"
+                                Content="1"
                                 FontFamily="Segoe UI Symbol"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"
@@ -59,7 +60,7 @@
                                 Grid.Column="1"
                                 Canvas.ZIndex="10"
                                  Padding="0" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/><!--Click="FavoriteButton_Click"-->
-                        <Image Source="{x:Bind MangaCover}" Width="103" Height="150" Grid.Column="0" /><!--ImageOpened="Image_ImageOpened"-->
+                        <!--<Image Source="{x:Bind CoverImageUri}" Width="103" Height="150" Grid.Column="0" />--><!--ImageOpened="Image_ImageOpened"-->
                         <ProgressRing x:Name="ImageProgressRing"
                                       Grid.Row="1"
                                       IsActive="True"
@@ -73,9 +74,9 @@
                                     MaxWidth="247"
                                     Grid.Column="1">
                             <TextBlock Text="{x:Bind Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
-                            <TextBlock Text="{x:Bind Status}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind LastUpdated}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind Category}" FontSize="15" TextWrapping="WrapWholeWords"/>
+                            <TextBlock Text="{x:Bind Release}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind Updated}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind Tags}" FontSize="15" TextWrapping="WrapWholeWords"/>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>
