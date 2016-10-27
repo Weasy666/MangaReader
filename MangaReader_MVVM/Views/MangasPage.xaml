@@ -28,7 +28,7 @@
                 <AppBarButton Icon="Filter" Label="Filter" />
                 <AppBarButton Icon="Sort" Label="Sort" />
                 <AppBarSeparator />
-                <AppBarButton Icon="Refresh" Label="Reload" />
+                <AppBarButton Icon="Refresh" Label="Reload" Command="{Binding Path=ReloadGridCommand}"/>
             </controls:PageHeader.PrimaryCommands>
         </controls:PageHeader>
         

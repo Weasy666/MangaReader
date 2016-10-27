@@ -18,10 +18,7 @@ namespace MangaReader_MVVM.ViewModels
             //if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
                 // designtime
-                Mangas = new ObservableCollection<IManga>();
-
-                for (int i = 0; i < 100; i++)
-                    Mangas.Add(new Manga { Title = "Manga" + i, Cover = @"Assets\NewStoreLogo.scale-400.png", Released = DateTime.Now.Subtract(TimeSpan.FromDays(10)), LastUpdated = DateTime.Now, Category = "SciFi" });
+                Mangas = DesignTimeValues.GenerateMangaDummies();
             }
         }
 
@@ -50,6 +47,37 @@ namespace MangaReader_MVVM.ViewModels
         {
             args.Cancel = false;
             await Task.CompletedTask;
+        }
+
+        private DelegateCommand _reloadGridCommand;
+
+        public DelegateCommand ReloadGridCommand
+        {
+            get
+            {
+                if (_reloadGridCommand == null)
+                {
+                    _reloadGridCommand = new DelegateCommand(() =>
+                    {
+                        Mangas = DesignTimeValues.GenerateMangaDummies(100, 100);
+                    }, () => Mangas.Any());
+
+                }
+
+                return _reloadGridCommand;
+
+            }
+        }
+    }
+
+    public static class DesignTimeValues
+    {
+        public static ObservableCollection<IManga> GenerateMangaDummies(int number = 100, int offset = 0)
+        {
+            var mangaDummies = new ObservableCollection<IManga>();
+            for (int i = 0 + offset; i < number + offset; i++)
+                mangaDummies.Add(new Manga { Title = "Manga" + i, Cover = @"Assets\NewStoreLogo.scale-400.png", Released = DateTime.Now.Subtract(TimeSpan.FromDays(10)), LastUpdated = DateTime.Now, Category = "SciFi" });
+            return mangaDummies;
         }
     }
 }
