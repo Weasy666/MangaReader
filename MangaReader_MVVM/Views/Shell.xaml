@@ -21,19 +21,19 @@
                     <TextBlock Text="Home" Margin="12,0,0,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
-            <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:MainPage" AutomationProperties.Name="Jerry" >
+            <Controls:HamburgerButtonInfo PageType="views:MainPage" AutomationProperties.Name="Jerry" >
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Symbol="Sync" Width="48" Height="48" />
                     <TextBlock Text="Latest Releases" Margin="12,0,0,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
-            <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:MainPage" AutomationProperties.Name="Jerry" >
+            <Controls:HamburgerButtonInfo PageType="views:MainPage" AutomationProperties.Name="Jerry" >
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Symbol="Favorite" Width="48" Height="48" />
-                    <TextBlock Text="Favorite" Margin="12,0,0,0" VerticalAlignment="Center" />
+                    <TextBlock Text="Favorites" Margin="12,0,0,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
-            <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:MangasPage" AutomationProperties.Name="Jerry" >
+            <Controls:HamburgerButtonInfo PageType="views:MangasPage" AutomationProperties.Name="Jerry" >
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Symbol="Library" Width="48" Height="48" />
                     <TextBlock Text="Manga Library" Margin="12,0,0,0" VerticalAlignment="Center" />
@@ -49,10 +49,8 @@
                     <SuppressNavigationTransitionInfo />
                 </Controls:HamburgerButtonInfo.NavigationTransitionInfo>
                 <StackPanel Orientation="Horizontal">
-                    <SymbolIcon Width="48" Height="48"
-                                Symbol="Setting" />
-                    <TextBlock Margin="12,0,0,0" VerticalAlignment="Center"
-                               Text="Settings" />
+                    <SymbolIcon Width="48" Height="48" Symbol="Setting" />
+                    <TextBlock Text="Settings" Margin="12,0,0,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
         </Controls:HamburgerMenu.SecondaryButtons>

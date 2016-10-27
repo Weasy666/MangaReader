@@ -15,7 +15,7 @@
     <Page.DataContext>
         <vm:MangasPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
-
+    
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
         <!--Loaded="Grid_Loaded"-->
         <Grid.RowDefinitions>
@@ -23,6 +23,15 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
+        <controls:PageHeader Text="Manga Library" Frame="{x:Bind Frame}">
+            <controls:PageHeader.PrimaryCommands>
+                <AppBarButton Icon="Filter" Label="Filter" />
+                <AppBarButton Icon="Sort" Label="Sort" />
+                <AppBarSeparator />
+                <AppBarButton Icon="Refresh" Label="Reload" />
+            </controls:PageHeader.PrimaryCommands>
+        </controls:PageHeader>
+        
         <ProgressRing x:Name="StartupProgressRing"
                       Grid.Row="1"
                       IsActive="False"
@@ -44,14 +53,14 @@
                   IncrementalLoadingThreshold="50"
                   IncrementalLoadingTrigger="Edge" ><!--ItemClick="MangaGridView_ItemClick"-->
             <GridView.ItemTemplate>
-                <DataTemplate x:DataType="mslmodels:Series">
+                <DataTemplate x:DataType="models:IManga">
                     <Grid Width="350" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="103"/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Button x:Name="FavoriteButton"
-                                Content="1"
+                                Content="{x:Bind FavoritAsSymbol}"
                                 FontFamily="Segoe UI Symbol"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"
@@ -59,8 +68,8 @@
                                 Margin="0,0,5,5"
                                 Grid.Column="1"
                                 Canvas.ZIndex="10"
-                                 Padding="0" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/><!--Click="FavoriteButton_Click"-->
-                        <!--<Image Source="{x:Bind CoverImageUri}" Width="103" Height="150" Grid.Column="0" />--><!--ImageOpened="Image_ImageOpened"-->
+                                Padding="0" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/><!--Click="FavoriteButton_Click"-->
+                        <Image Source="{x:Bind Cover}" Width="103" Height="150" Grid.Column="0" /><!--ImageOpened="Image_ImageOpened"-->
                         <ProgressRing x:Name="ImageProgressRing"
                                       Grid.Row="1"
                                       IsActive="True"
@@ -74,9 +83,9 @@
                                     MaxWidth="247"
                                     Grid.Column="1">
                             <TextBlock Text="{x:Bind Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
-                            <TextBlock Text="{x:Bind Release}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind Updated}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind Tags}" FontSize="15" TextWrapping="WrapWholeWords"/>
+                            <TextBlock Text="{x:Bind Released}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind LastUpdated}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind Category}" FontSize="15" TextWrapping="WrapWholeWords"/>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>

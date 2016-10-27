@@ -15,7 +15,7 @@ namespace MangaReader_MVVM.Views
         public MangasPage()
         {
             InitializeComponent();
-            NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
+            NavigationCacheMode = NavigationCacheMode.Enabled;
         }
     }
 }
