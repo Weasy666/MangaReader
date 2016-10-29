@@ -17,18 +17,17 @@
     </Page.DataContext>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
-        <!--Loaded="Grid_Loaded"-->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <controls:PageHeader Text="Manga Library" Frame="{x:Bind Frame}">
+        <controls:PageHeader Text="Manga Library" Frame="{x:Bind Frame}" >
             <controls:PageHeader.PrimaryCommands>
-                <AppBarButton Icon="Filter" Label="Filter" />
-                <AppBarButton Icon="Sort" Label="Sort" />
+                <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />
+                <AppBarButton Icon="Sort" Label="Sort" Command="{Binding Path=SortGridCommand}"  />
                 <AppBarSeparator />
-                <AppBarButton Icon="Refresh" Label="Reload" Command="{Binding Path=ReloadGridCommand}"/>
+                <AppBarButton Icon="Refresh" Label="Reload" Command="{Binding Path=ReloadGridCommand}" />
             </controls:PageHeader.PrimaryCommands>
         </controls:PageHeader>
         
@@ -49,9 +48,8 @@
                   ItemsSource="{Binding Mangas}"
                   Margin="10,0,0,0"
                   IsItemClickEnabled="True"
-                  
                   IncrementalLoadingThreshold="50"
-                  IncrementalLoadingTrigger="Edge" ><!--ItemClick="MangaGridView_ItemClick"-->
+                  IncrementalLoadingTrigger="Edge" >
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="models:IManga">
                     <Grid Width="350" >
@@ -68,7 +66,8 @@
                                 Margin="0,0,5,5"
                                 Grid.Column="1"
                                 Canvas.ZIndex="10"
-                                Padding="0" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/><!--Click="FavoriteButton_Click"-->
+                                Padding="0" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" 
+                                Command=""/>
                         <Image Source="{x:Bind Cover}" Width="103" Height="150" Grid.Column="0" /><!--ImageOpened="Image_ImageOpened"-->
                         <ProgressRing x:Name="ImageProgressRing"
                                       Grid.Row="1"

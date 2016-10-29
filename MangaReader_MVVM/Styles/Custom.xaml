@@ -8,19 +8,19 @@
 
     <Color x:Key="CustomColor">SteelBlue</Color>
     <Color x:Key="ContrastColor">White</Color>
-    <Color x:Key="SystemAccentColor">SteelBlue</Color>
+    <!--<Color x:Key="SystemAccentColor">SteelBlue</Color>-->
 
     <ResourceDictionary.ThemeDictionaries>
 
         <ResourceDictionary x:Key="Light">
 
-            <SolidColorBrush x:Key="CustomColorBrush" Color="{StaticResource CustomColor}" />
+            <SolidColorBrush x:Key="CustomColorBrush" Color="{StaticResource SystemAccentColor}" />
             <SolidColorBrush x:Key="ContrastColorBrush" Color="{StaticResource ContrastColor}" />
-            <SolidColorBrush x:Key="ExtendedSplashBackground" Color="{StaticResource CustomColor}" />
+            <SolidColorBrush x:Key="ExtendedSplashBackground" Color="{StaticResource SystemAccentColor}" />
             <SolidColorBrush x:Key="ExtendedSplashForeground" Color="{StaticResource ContrastColor}" />
 
             <Style TargetType="controls:HamburgerMenu">
-                <Setter Property="AccentColor" Value="{StaticResource CustomColor}" />
+                <Setter Property="AccentColor" Value="{StaticResource SystemAccentColor}" />
                 <Setter Property="VisualStateNarrowMinWidth" Value="{StaticResource NarrowMinWidth}" />
                 <Setter Property="VisualStateNormalMinWidth" Value="{StaticResource NormalMinWidth}" />
                 <Setter Property="VisualStateWideMinWidth" Value="{StaticResource WideMinWidth}" />
@@ -33,6 +33,13 @@
                 <Setter Property="VisualStateNormalMinWidth" Value="{StaticResource NormalMinWidth}" />
             </Style>
 
+            <Style TargetType="AppBarButton">
+                <Setter Property="Foreground" Value="{ThemeResource ContrastColorBrush}" />
+            </Style>
+            <Style TargetType="AppBarSeparator">
+                <Setter Property="Foreground" Value="{ThemeResource ContrastColorBrush}" />
+            </Style>
+
             <Style TargetType="controls:Resizer">
                 <Setter Property="GrabberBrush" Value="{ThemeResource CustomColorBrush}" />
                 <Setter Property="GrabberVisibility" Value="Visible" />
@@ -40,11 +47,11 @@
 
         </ResourceDictionary>
 
-        <ResourceDictionary x:Key="Default">
+        <ResourceDictionary x:Key="Dark">
 
-            <SolidColorBrush x:Key="CustomColorBrush" Color="{StaticResource CustomColor}" />
+            <SolidColorBrush x:Key="CustomColorBrush" Color="{StaticResource SystemAccentColor}" />
             <SolidColorBrush x:Key="ContrastColorBrush" Color="{StaticResource ContrastColor}" />
-            <SolidColorBrush x:Key="ExtendedSplashBackground" Color="{StaticResource CustomColor}" />
+            <SolidColorBrush x:Key="ExtendedSplashBackground" Color="{StaticResource SystemAccentColor}" />
             <SolidColorBrush x:Key="ExtendedSplashForeground" Color="{StaticResource ContrastColor}" />
 
             <Style TargetType="controls:HamburgerMenu">
@@ -69,7 +76,7 @@
 
                 -->
 
-                <Setter Property="AccentColor" Value="{StaticResource CustomColor}" />
+                <Setter Property="AccentColor" Value="{StaticResource SystemAccentColor}" />
                 <Setter Property="VisualStateNarrowMinWidth" Value="{StaticResource NarrowMinWidth}" />
                 <Setter Property="VisualStateNormalMinWidth" Value="{StaticResource NormalMinWidth}" />
                 <Setter Property="VisualStateWideMinWidth" Value="{StaticResource WideMinWidth}" />
@@ -116,6 +123,7 @@
 
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
+
 </ResourceDictionary>
 
 

@@ -8,6 +8,7 @@ using Windows.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
 using MangaScrapeLib.Repositories;
 using MangaReader_MVVM.Models;
+using MangaReader_MVVM.Services;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -18,7 +19,7 @@ namespace MangaReader_MVVM.ViewModels
             //if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
                 // designtime
-                Mangas = DesignTimeValues.GenerateMangaDummies();
+                Mangas = DesignTimeService.GenerateMangaDummies();
             }
         }
 
@@ -30,7 +31,6 @@ namespace MangaReader_MVVM.ViewModels
             //var repository = MangaHereRepository.Instance;
             //Mangas = await repository.GetSeriesAsync();
             
-            //Mangas = (suspensionState.ContainsKey(nameof(Mangas))) ? suspensionState[nameof(Mangas)] : new ObservableCollection<Models.Manga>(parameter);
             await Task.CompletedTask;
         }
 
@@ -50,7 +50,6 @@ namespace MangaReader_MVVM.ViewModels
         }
 
         private DelegateCommand _reloadGridCommand;
-
         public DelegateCommand ReloadGridCommand
         {
             get
@@ -59,25 +58,49 @@ namespace MangaReader_MVVM.ViewModels
                 {
                     _reloadGridCommand = new DelegateCommand(() =>
                     {
-                        Mangas = DesignTimeValues.GenerateMangaDummies(100, 100);
+                        Mangas = DesignTimeService.GenerateMangaDummies(100, 100);
                     }, () => Mangas.Any());
 
                 }
 
                 return _reloadGridCommand;
-
             }
         }
-    }
 
-    public static class DesignTimeValues
-    {
-        public static ObservableCollection<IManga> GenerateMangaDummies(int number = 100, int offset = 0)
+        private DelegateCommand _sortGridCommand;
+        public DelegateCommand SortGridCommand
         {
-            var mangaDummies = new ObservableCollection<IManga>();
-            for (int i = 0 + offset; i < number + offset; i++)
-                mangaDummies.Add(new Manga { Title = "Manga" + i, Cover = @"Assets\NewStoreLogo.scale-400.png", Released = DateTime.Now.Subtract(TimeSpan.FromDays(10)), LastUpdated = DateTime.Now, Category = "SciFi" });
-            return mangaDummies;
+            get
+            {
+                if (_sortGridCommand == null)
+                {
+                    _sortGridCommand = new DelegateCommand(() =>
+                    {
+                        Mangas = new ObservableCollection<IManga>(Mangas.Reverse());
+                    }, () => Mangas.Any());
+
+                }
+
+                return _sortGridCommand;
+            }
+        }
+
+        private DelegateCommand _itemClickedGridCommand;
+        public DelegateCommand ItemClickedGridCommand
+        {
+            get
+            {
+                if (_itemClickedGridCommand == null)
+                {
+                    _itemClickedGridCommand = new DelegateCommand(() =>
+                    {
+                        Mangas = new ObservableCollection<IManga>(Mangas.Reverse());
+                    }, () => Mangas.Any());
+
+                }
+
+                return _itemClickedGridCommand;
+            }
         }
     }
 }
