@@ -79,11 +79,17 @@
                                       OffContent="Dark theme" OnContent="Light theme"
                                       RelativePanel.AlignLeftWithPanel="True"
                                       RelativePanel.Below="UseShellDrawnBackButtonToggleSwtich" />
+                        
+                        <ToggleSwitch x:Name="UseDetailedMangaItemSwitch" Header="Use Detailed MangaItem"
+                                      IsOn="{Binding UseDetailedMangaItem, Mode=TwoWay}"
+                                      OffContent="Only Cover" OnContent="Cover with Details"
+                                      RelativePanel.AlignLeftWithPanel="True"
+                                      RelativePanel.Below="UseLightThemeToggleSwitch" />
 
                         <TextBox x:Name="BusyTextTextBox" Width="200"
                                  Margin="0,12,0,0" HorizontalAlignment="Left"
                                  Header="Busy text" RelativePanel.AlignLeftWithPanel="True"
-                                 RelativePanel.Below="UseLightThemeToggleSwitch"
+                                 RelativePanel.Below="UseDetailedMangaItemSwitch"
                                  Text="{Binding BusyText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <Button Margin="12,0,0,0"

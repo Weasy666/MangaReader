@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Models
 {
@@ -15,7 +16,7 @@ namespace MangaReader_MVVM.Models
         public string Title { get; set; }
         public string Alais { get; set; }
         public string Id { get; set; }
-        public string Cover { get; set; }
+        public BitmapImage Cover { get; set; }
         public string Category { get; set; }
         public string Author { get; set; }
         public string Artist { get; set; }

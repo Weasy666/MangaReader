@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Models
 {
@@ -12,7 +13,7 @@ namespace MangaReader_MVVM.Models
         IMangaLibrary ParentLibrary { get;  }
         string Title { get; }
         string Id { get; }
-        string Cover { get; }
+        BitmapImage Cover { get; }
         string Category { get; }
         string Author { get; }
         string Artist { get; }

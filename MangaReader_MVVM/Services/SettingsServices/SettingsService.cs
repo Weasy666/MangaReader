@@ -54,6 +54,15 @@ namespace MangaReader_MVVM.Services.SettingsServices
                 BootStrapper.Current.CacheMaxDuration = value;
             }
         }
+
+        public string MangaGridLayout
+        {
+            get { return _helper.Read<string>(nameof(MangaGridLayout), "MangaItemWithDetails"); }
+            set
+            {
+                _helper.Write(nameof(MangaGridLayout), value);
+            }
+        }
     }
 }
 

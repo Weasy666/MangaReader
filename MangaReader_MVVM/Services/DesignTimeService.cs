@@ -14,7 +14,10 @@ namespace MangaReader_MVVM.Services
         {
             var mangaDummies = new ObservableCollection<IManga>();
             for (int i = 0 + offset; i < number + offset; i++)
-                mangaDummies.Add(new Manga { Title = "Manga" + i, Cover = @"Assets\NewStoreLogo.scale-400.png", Released = DateTime.Now.Subtract(TimeSpan.FromDays(10)), LastUpdated = DateTime.Now, Category = "SciFi" });
+                mangaDummies.Add(new Manga { Title = "Manga" + i,
+                                             Cover = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/NewStoreLogo.scale-400.png")),
+                                             Released = DateTime.Now.Subtract(TimeSpan.FromDays(10)),
+                                             LastUpdated = DateTime.Now, Category = "SciFi" });
             return mangaDummies;
         }
     }

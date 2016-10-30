@@ -41,6 +41,12 @@ namespace MangaReader_MVVM.ViewModels
             set { _settings.AppTheme = value ? ApplicationTheme.Light : ApplicationTheme.Dark; base.RaisePropertyChanged(); }
         }
 
+        public bool UseDetailedMangaItem
+        {
+            get { return _settings.MangaGridLayout.Equals("MangaItemWithDetails"); }
+            set { _settings.MangaGridLayout = value ? "MangaItemWithDetails" : "MangaItemWithoutDetails"; base.RaisePropertyChanged(); }
+        }
+
         private string _BusyText = "Please wait...";
         public string BusyText
         {

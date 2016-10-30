@@ -9,27 +9,17 @@ namespace MangaReader_MVVM.Models
 {
     class MangaLibrary : IMangaLibrary
     {
-
+        public static MangaLibrary Instance { get; } = new MangaLibrary();
         public byte[] Icon { get; private set; }
         public Uri MangaIndexPage { get; private set; }
         public ObservableCollection<IManga> Mangas { get; private set; }
         public string Name { get; private set; }
         public Uri RootUri { get; private set; }
-        private static MangaLibrary _instance;
 
-        public static MangaLibrary Instance
+        private MangaLibrary()
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new MangaLibrary();
-                }
-                return _instance;
-            }
+
         }
-
-
 
         public Task<ObservableCollection<IChapter>> GetChaptersAsync(Manga manga)
         {
