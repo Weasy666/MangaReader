@@ -52,6 +52,7 @@
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="50"
                   IncrementalLoadingTrigger="Edge"
+                  ItemTemplate="{StaticResource MangaItemWithDetails}"
                   ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}" >
         </GridView>
     </Grid>
