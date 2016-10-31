@@ -21,7 +21,7 @@ namespace MangaReader_MVVM.Models
         int Hits { get; }
         DateTime Released { get; }
         DateTime LastUpdated { get; }
-        string Status { get; }        
+        bool Ongoing { get; }        
         int NumberOfChapters { get; }
         bool IsFavorit { get; }
         string FavoritAsSymbol { get; }

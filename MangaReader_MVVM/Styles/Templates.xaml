@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="using:MangaReader_MVVM.Styles"
                     xmlns:services="using:MangaReader_MVVM.Services"
+                    xmlns:models="using:MangaReader_MVVM.Models"
                     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls" >
 
     <services:MangaItemTemplateSelector x:Key="MangaItemTemplateSelector"
@@ -26,22 +27,29 @@
                     Canvas.ZIndex="10"
                     Padding="0" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" />
             <controls:ImageEx x:Name="ImageExControl1" Width="103" Height="150" Grid.Column="0"
-                                IsCacheEnabled="False"
+                                IsCacheEnabled="True"
                                 Source="{Binding Cover}"
                                 Stretch="Uniform"
                                 PlaceholderSource="/Assets/404_whoopsies.jpg"
                                 PlaceholderStretch="Uniform"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center" />
-            <!--<Image Source="{x:Bind Cover, FallbackValue=ms-appx:///Assets/404_whoopsies.jpg, TargetNullValue=ms-appx:///Assets/404_whoopsies.jpg}" Width="103" Height="150" Grid.Column="0" />--><!--ImageOpened="Image_ImageOpened"-->
+            <!--<Image Source="{x:Bind Cover, FallbackValue=ms-appx:///Assets/404_whoopsies.jpg, TargetNullValue=ms-appx:///Assets/404_whoopsies.jpg}" Width="103" Height="150" Grid.Column="0" />-->
+            <!--ImageOpened="Image_ImageOpened"-->
             <!--<ProgressRing x:Name="ImageProgressRing"
                             Grid.Row="1"
-                            IsActive="false"
+                            IsActive="False"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Width="75"
                             Height="75"
-                            Canvas.ZIndex="2"/>-->
+                            Canvas.ZIndex="2">
+                    <Interactivity:Interaction.Behaviors>
+                        <Core:DataTriggerBehavior Binding="{Binding ImageOpened, ElementName=MCover}" Value="True">
+                            <Core:ChangePropertyAction TargetObject="{Binding ElementName=ImageProgressRing}" PropertyName="IsActive" Value="False" />
+                        </Core:DataTriggerBehavior>
+                    </Interactivity:Interaction.Behaviors>
+                </ProgressRing>-->
             <StackPanel Orientation="Vertical" Margin="5,0,0,0" MaxWidth="247" Grid.Column="1">
                 <TextBlock Text="{Binding Title}" FontSize="20" TextTrimming="CharacterEllipsis"/>
                 <TextBlock Text="{Binding Released}" FontSize="15"/>
@@ -54,14 +62,15 @@
     <DataTemplate x:Key="MangaItemWithoutDetails">
         <Grid Width="171" >
             <controls:ImageEx x:Name="ImageExControl1" Width="171" Height="250" 
-                                IsCacheEnabled="False"
+                                IsCacheEnabled="True"
                                 Source="{Binding Cover}"
                                 Stretch="Uniform"
                                 PlaceholderSource="/Assets/404_whoopsies.jpg"
                                 PlaceholderStretch="Uniform"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center" />
-            <!--<Image Source="{x:Bind Cover, FallbackValue=ms-appx:///Assets/404_whoopsies.jpg, TargetNullValue=ms-appx:///Assets/404_whoopsies.jpg}" Width="103" Height="150" Grid.Column="0" />--><!--ImageOpened="Image_ImageOpened"-->
+            <!--<Image Source="{x:Bind Cover, FallbackValue=ms-appx:///Assets/404_whoopsies.jpg, TargetNullValue=ms-appx:///Assets/404_whoopsies.jpg}" Width="103" Height="150" Grid.Column="0" />-->
+            <!--ImageOpened="Image_ImageOpened"-->
             <!--<ProgressRing x:Name="ImageProgressRing"
                             Grid.Row="1"
                             IsActive="false"
@@ -69,7 +78,13 @@
                             VerticalAlignment="Center"
                             Width="75"
                             Height="75"
-                            Canvas.ZIndex="2"/>-->
+                            Canvas.ZIndex="2">
+                    <Interactivity:Interaction.Behaviors>
+                        <Core:DataTriggerBehavior Binding="{Binding ImageOpened, ElementName=MCover}" Value="True">
+                            <Core:ChangePropertyAction TargetObject="{Binding ElementName=ImageProgressRing}" PropertyName="IsActive" Value="False" />
+                        </Core:DataTriggerBehavior>
+                    </Interactivity:Interaction.Behaviors>
+                </ProgressRing>-->
             <Grid Margin="0,0,0,0" Height="30"
                   VerticalAlignment="Bottom" 
                   Background="{ThemeResource SystemControlDisabledBaseLowBrush}" >
@@ -90,5 +105,25 @@
             </Grid>
         </Grid>
     </DataTemplate>
-    
+
+    <DataTemplate x:Key="ChapterItem">
+        <Grid Width="250" >
+            <!--<Image Source="{x:Bind ChapterCover}" Width="103" Height="150" />-->
+            <StackPanel Orientation="Vertical" Margin="5,0,0,0" MaxWidth="250">
+                <TextBlock Text="{Binding Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
+                <TextBlock Text="{Binding Number}" FontSize="15"/>
+                <!--<TextBlock Text="{Binding NumberOfPages}" FontSize="15"/>-->
+                <TextBlock Text="{Binding Released}" FontSize="15"/>
+            </StackPanel>
+            <Button x:Name="ReadStatus"
+                    Content="Read"
+                    Visibility="Collapsed"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="0,5,0,5"
+                    IsHitTestVisible="False"
+                    IsTapEnabled="False" />
+        </Grid>
+    </DataTemplate>
+
 </ResourceDictionary>

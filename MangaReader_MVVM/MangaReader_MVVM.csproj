@@ -113,8 +113,12 @@
     <Compile Include="ViewModels\ChapterViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\DetailPageViewModel.cs" />
+    <Compile Include="ViewModels\MangaDetailsPageViewModel.cs" />
     <Compile Include="ViewModels\MangasPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
+    <Compile Include="Views\MangaDetailsPage.xaml.cs">
+      <DependentUpon>MangaDetailsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MangasPage.xaml.cs">
       <DependentUpon>MangasPage.xaml</DependentUpon>
     </Compile>
@@ -218,6 +222,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Views\MangaDetailsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MangasPage.xaml">
       <Generator>MSBuild:Compile</Generator>

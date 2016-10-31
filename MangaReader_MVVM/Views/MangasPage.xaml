@@ -47,13 +47,14 @@
               Canvas.ZIndex="1"/>
 
         <GridView x:Name="MangaGridView" Grid.Row="1"
-                  ItemsSource="{Binding Mangas}"
+                  ItemsSource="{x:Bind ViewModel.Mangas}"
                   Margin="10,0,0,0"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="50"
                   IncrementalLoadingTrigger="Edge"
+                  ItemClick="{x:Bind ViewModel.MangaClicked}"
                   ItemTemplate="{StaticResource MangaItemWithDetails}"
-                  ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}" >
+                  ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}" >            
         </GridView>
     </Grid>
 </Page>

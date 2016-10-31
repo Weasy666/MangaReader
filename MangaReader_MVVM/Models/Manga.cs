@@ -14,7 +14,7 @@ namespace MangaReader_MVVM.Models
     {
         public IMangaLibrary ParentLibrary { get; internal set; }
         public string Title { get; set; }
-        public string Alais { get; set; }
+        public string Alias { get; set; }
         public string Id { get; set; }
         public BitmapImage Cover { get; set; }
         public string Category { get; set; }
@@ -24,7 +24,7 @@ namespace MangaReader_MVVM.Models
         public int Hits { get; set; }
         public DateTime Released { get; set; }
         public DateTime LastUpdated { get; set; }
-        public string Status { get; set; }
+        public bool Ongoing { get; set; }
         public int NumberOfChapters { get; set; }
         public bool IsFavorit { get; set; }
         public string FavoritAsSymbol => IsFavorit ? "\uE1CF" : "\uE1CE";

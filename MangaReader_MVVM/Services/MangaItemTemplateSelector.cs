@@ -26,6 +26,7 @@ namespace MangaReader_MVVM.Services
             }
         }
 
+        // http://www.wpftutorial.net/datatemplates.html
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
             switch (_settings.MangaGridLayout)

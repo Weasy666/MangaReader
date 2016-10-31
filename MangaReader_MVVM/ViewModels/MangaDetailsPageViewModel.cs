@@ -13,25 +13,29 @@ using Windows.UI.Xaml;
 
 namespace MangaReader_MVVM.ViewModels
 {
-    public class MangasPageViewModel : ViewModelBase
+    class MangaDetailsPageViewModel : ViewModelBase
     {
-        public MangasPageViewModel()
+        public MangaDetailsPageViewModel()
         {
             //if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
                 // designtime
-                Mangas = DesignTimeService.GenerateMangaDummies();
+                Manga = DesignTimeService.GenerateMangaDetailDummy();
+                Chapters = DesignTimeService.GenerateChapterDummies();
             }
         }
 
-        private ObservableCollection<IManga> _mangas;
-        public ObservableCollection<IManga> Mangas { get { return _mangas; } set { Set(ref _mangas, value); } }
+        private IManga _manga;
+        public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
+
+        private ObservableCollection<IChapter> _chapters;
+        public ObservableCollection<IChapter> Chapters { get { return _chapters; } set { Set(ref _chapters, value); } }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
             //var repository = MangaHereRepository.Instance;
             //Mangas = await repository.GetSeriesAsync();
-            
+
             await Task.CompletedTask;
         }
 
@@ -39,33 +43,9 @@ namespace MangaReader_MVVM.ViewModels
         {
             if (suspending)
             {
-                suspensionState[nameof(Mangas)] = Mangas;
+                suspensionState[nameof(Manga)] = Manga;
             }
             await Task.CompletedTask;
-        }
-
-        public override async Task OnNavigatingFromAsync(NavigatingEventArgs args)
-        {
-            args.Cancel = false;
-            await Task.CompletedTask;
-        }
-
-        private DelegateCommand _reloadGridCommand;
-        public DelegateCommand ReloadGridCommand
-        {
-            get
-            {
-                if (_reloadGridCommand == null)
-                {
-                    _reloadGridCommand = new DelegateCommand(() =>
-                    {
-                        Mangas = DesignTimeService.GenerateMangaDummies(100, 100);
-                    }, () => Mangas.Any());
-
-                }
-
-                return _reloadGridCommand;
-            }
         }
 
         private DelegateCommand _sortGridCommand;
@@ -77,8 +57,8 @@ namespace MangaReader_MVVM.ViewModels
                 {
                     _sortGridCommand = new DelegateCommand(() =>
                     {
-                        Mangas = new ObservableCollection<IManga>(Mangas.Reverse());
-                    }, () => Mangas.Any());
+                        Chapters = new ObservableCollection<IChapter>(Chapters.Reverse());
+                    }, () => Chapters.Any());
 
                 }
 
@@ -86,9 +66,9 @@ namespace MangaReader_MVVM.ViewModels
             }
         }
 
-        public void MangaClicked(object sender, RoutedEventArgs args)
+        public void ChapterClicked(object sender, RoutedEventArgs args)
         {
-            NavigationService.Navigate(typeof(Views.MangaDetailsPage), 1);
+            //NavigationService.Navigate(typeof(Views.ChapterPage), 1);
         }
     }
 }
