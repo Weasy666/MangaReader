@@ -11,11 +11,11 @@ namespace MangaReader_MVVM.Models
     {
         public string Number { get; set; }
         public string Title { get; set; }
-        public string Id { get; set; }
-        public ObservableCollection<IPage> Pages { get; set; }
+        public string Id { get; set; }        
         public int NumberOfPages => 0; //Pages.Count;
         public DateTime Released { get; set; }
-        public bool ReadOnce { get; set; }
+        public bool IsRead { get; set; }
+        public ObservableCollection<IPage> Pages { get; set; }
 
         public int CompareTo(Chapter comparePart)
         {

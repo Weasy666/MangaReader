@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Models
 {
     public class Page : IPage, IComparable<Page>
     {
         public string Number { get; set; }
-        public string Url { get; set; }
+        public BitmapImage Url { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
 

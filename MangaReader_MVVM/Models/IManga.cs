@@ -10,20 +10,20 @@ namespace MangaReader_MVVM.Models
 {
     public interface IManga
     {
-        IMangaLibrary ParentLibrary { get;  }
-        string Title { get; }
-        string Id { get; }
-        BitmapImage Cover { get; }
-        string Category { get; }
-        string Author { get; }
-        string Artist { get; }
-        string Description { get; }
-        int Hits { get; }
-        DateTime Released { get; }
-        DateTime LastUpdated { get; }
-        bool Ongoing { get; }        
-        int NumberOfChapters { get; }
-        bool IsFavorit { get; }
+        IMangaLibrary ParentLibrary { get; }
+        string Title { get; set; }
+        string Id { get; set; }
+        BitmapImage Cover { get; set; }
+        string Category { get; set; }
+        string Author { get; set; }
+        string Artist { get; set; }
+        string Description { get; set; }
+        int Hits { get; set; }
+        DateTime Released { get; set; }
+        DateTime LastUpdated { get; set; }
+        bool Ongoing { get; set; }        
+        int NumberOfChapters { get; set; }
+        bool IsFavorit { get; set; }
         string FavoritAsSymbol { get; }
 
         Task<ObservableCollection<IChapter>> GetChaptersAsynch();

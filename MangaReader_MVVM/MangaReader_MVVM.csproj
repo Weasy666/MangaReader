@@ -110,12 +110,15 @@
     <Compile Include="Services\MangaItemTemplateSelector.cs" />
     <Compile Include="Services\DesignTimeService.cs" />
     <Compile Include="Services\SettingsServices\SettingsService.cs" />
-    <Compile Include="ViewModels\ChapterViewModel.cs" />
+    <Compile Include="ViewModels\ChapterPageViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\DetailPageViewModel.cs" />
     <Compile Include="ViewModels\MangaDetailsPageViewModel.cs" />
     <Compile Include="ViewModels\MangasPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
+    <Compile Include="Views\ChapterPage.xaml.cs">
+      <DependentUpon>ChapterPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MangaDetailsPage.xaml.cs">
       <DependentUpon>MangaDetailsPage.xaml</DependentUpon>
     </Compile>
@@ -222,6 +225,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Views\ChapterPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MangaDetailsPage.xaml">
       <SubType>Designer</SubType>

@@ -1,0 +1,84 @@
+﻿<Page x:Class="MangaReader_MVVM.Views.ChapterPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:Behaviors="using:Template10.Behaviors"
+      xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
+      xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
+      xmlns:t10controls="using:Template10.Controls"
+      xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:MangaReader_MVVM.Views"
+      xmlns:models="using:MangaReader_MVVM.Models"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:vm="using:MangaReader_MVVM.ViewModels" mc:Ignorable="d">
+    <Page.DataContext>
+        <vm:ChapterPageViewModel x:Name="ViewModel" />
+    </Page.DataContext>
+    <Page.Resources>
+        <ResourceDictionary Source="..\Styles\Templates.xaml" />
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <ProgressRing x:Name="StartupProgressRing"
+                      IsActive="False"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Width="100"
+                      Height="100"
+                      Canvas.ZIndex="2"/>
+        <ScrollViewer HorizontalScrollMode="Auto"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollMode="Disabled"
+                      VerticalScrollBarVisibility="Disabled"
+                      >
+            <GridView x:Name="PageView"
+                      Margin="0,0,0,0"
+                      ItemsSource="{x:Bind ViewModel.Pages}"
+                      VerticalContentAlignment="Stretch"
+                      IsItemClickEnabled="False">
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsStackPanel IsHitTestVisible="False"
+                                         IsTapEnabled="False"
+                                         IsDoubleTapEnabled="False"
+                                         IsHoldingEnabled="False"
+                                         IsRightTapEnabled="False"
+                                         Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+                <GridView.ItemTemplate>
+                    <DataTemplate x:Name="PageTemplate" x:DataType="models:Page">
+                        <Grid x:Name="PageImage" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,0,10">
+                            <Image Source="{x:Bind Url}"
+                                   Stretch="UniformToFill"
+                                   IsTapEnabled="False"
+                                   ImageOpened="Image_ImageOpened"/>
+                            <ProgressRing x:Name="ImageProgressRing"
+                                          IsActive="True"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Width="100"
+                                          Height="100"
+                                          Canvas.ZIndex="2"/>
+                            <Grid x:Name="PageNumber"
+                                  Height="30"
+                                  Width="40"
+                                  Background="{ThemeResource SystemControlBackgroundAccentBrush}"
+                                  BorderBrush="{x:Null}"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Bottom"
+                                  Visibility="Collapsed" >
+                                <TextBlock Text="{x:Bind Number}"
+                                           FontSize="18"
+                                           Foreground="White"
+                                           Margin="0,0,8,0"
+                                           HorizontalAlignment="Right"
+                                           VerticalAlignment="Center">Page</TextBlock>
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+        </ScrollViewer>
+    </Grid>
+</Page>
