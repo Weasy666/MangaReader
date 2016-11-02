@@ -13,7 +13,7 @@ using Windows.UI.Xaml;
 
 namespace MangaReader_MVVM.ViewModels
 {
-    class MangaDetailsPageViewModel : ViewModelBase
+    public class MangaDetailsPageViewModel : ViewModelBase
     {
         public MangaDetailsPageViewModel()
         {
@@ -35,7 +35,14 @@ namespace MangaReader_MVVM.ViewModels
         {
             //var repository = MangaHereRepository.Instance;
             //Mangas = await repository.GetSeriesAsync();
-
+            if (mode == NavigationMode.New)
+            {
+                //this here is only for testing purposes
+                var test = Manga as Manga;
+                test.Id = parameter as string;
+                test.Title = test.Title + parameter as string;
+                Manga = test;
+            }
             await Task.CompletedTask;
         }
 
@@ -59,9 +66,7 @@ namespace MangaReader_MVVM.ViewModels
                     {
                         Chapters = new ObservableCollection<IChapter>(Chapters.Reverse());
                     }, () => Chapters.Any());
-
                 }
-
                 return _sortGridCommand;
             }
         }

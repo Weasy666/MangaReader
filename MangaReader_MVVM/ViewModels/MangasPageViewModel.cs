@@ -10,6 +10,8 @@ using MangaScrapeLib.Repositories;
 using MangaReader_MVVM.Models;
 using MangaReader_MVVM.Services;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Popups;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -61,9 +63,7 @@ namespace MangaReader_MVVM.ViewModels
                     {
                         Mangas = DesignTimeService.GenerateMangaDummies(100, 100);
                     }, () => Mangas.Any());
-
                 }
-
                 return _reloadGridCommand;
             }
         }
@@ -79,16 +79,22 @@ namespace MangaReader_MVVM.ViewModels
                     {
                         Mangas = new ObservableCollection<IManga>(Mangas.Reverse());
                     }, () => Mangas.Any());
-
                 }
-
                 return _sortGridCommand;
             }
         }
 
-        public void MangaClicked(object sender, RoutedEventArgs args)
+        public async void MangaClicked(object sender, ItemClickEventArgs e)
         {
-            NavigationService.Navigate(typeof(Views.MangaDetailsPage), 1);
+            var clickedManga = e.ClickedItem as Manga;
+            if (clickedManga != null)
+                NavigationService.Navigate(typeof(Views.MangaDetailsPage), clickedManga.Id);
+            else
+            {
+                //TODO
+                var dialog = new MessageDialog("This Manga doesn't exist");
+                await dialog.ShowAsync();
+            }
         }
     }
 }
