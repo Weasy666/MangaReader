@@ -16,8 +16,7 @@
                     Opening="TopBar_Opening"
                     Closing="TopBar_Closing">
             <CommandBar.Content>
-                <StackPanel Orientation="Horizontal" 
-                             >
+                <StackPanel Orientation="Horizontal" >
                     <Grid Width="350" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="103"/>

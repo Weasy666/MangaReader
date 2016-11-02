@@ -33,8 +33,6 @@ namespace MangaReader_MVVM.ViewModels
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            //var repository = MangaHereRepository.Instance;
-            //Mangas = await repository.GetSeriesAsync();
             if (mode == NavigationMode.New)
             {
                 //this here is only for testing purposes
