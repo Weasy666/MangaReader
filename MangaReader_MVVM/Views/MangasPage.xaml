@@ -52,7 +52,7 @@
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="50"
                   IncrementalLoadingTrigger="Edge"
-                  ItemClick="{x:Bind ViewModel.MangaClicked}"
+                  ItemClick="{x:Bind ViewModel.MangaClickedAsync}"
                   ItemTemplate="{StaticResource MangaItemWithDetails}"
                   ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}" >            
         </GridView>

@@ -10,6 +10,8 @@ using MangaScrapeLib.Repositories;
 using MangaReader_MVVM.Models;
 using MangaReader_MVVM.Services;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Popups;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -22,6 +24,8 @@ namespace MangaReader_MVVM.ViewModels
                 // designtime
                 Chapter = DesignTimeService.GenerateChapterDummies(1).FirstOrDefault();
                 Pages = DesignTimeService.GeneratePageDummies();
+                Manga = DesignTimeService.GenerateMangaDetailDummy();
+                Chapters = DesignTimeService.GenerateChapterDummies();
             }
         }
 
@@ -30,6 +34,12 @@ namespace MangaReader_MVVM.ViewModels
 
         private ObservableCollection<IPage> _pages;
         public ObservableCollection<IPage> Pages { get { return _pages; } set { Set(ref _pages, value); } }
+
+        private IManga _manga;
+        public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
+
+        private ObservableCollection<IChapter> _chapters;
+        public ObservableCollection<IChapter> Chapters { get { return _chapters; } set { Set(ref _chapters, value); } }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
@@ -64,6 +74,19 @@ namespace MangaReader_MVVM.ViewModels
                     }, () => Pages.Any());
                 }
                 return _sortGridCommand;
+            }
+        }
+
+        public async Task ChapterClickedAsync(object sender, ItemClickEventArgs e)
+        {
+            var clickedChapter = e.ClickedItem as Chapter;
+            if (clickedChapter != null)
+                NavigationService.Navigate(typeof(Views.ChapterPage), clickedChapter.Id);
+            else
+            {
+                //TODO
+                var dialog = new MessageDialog("This Manga doesn't exist");
+                await dialog.ShowAsync();
             }
         }
     }

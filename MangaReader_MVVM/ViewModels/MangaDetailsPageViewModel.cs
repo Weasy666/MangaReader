@@ -10,6 +10,8 @@ using MangaScrapeLib.Repositories;
 using MangaReader_MVVM.Models;
 using MangaReader_MVVM.Services;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Popups;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -69,9 +71,17 @@ namespace MangaReader_MVVM.ViewModels
             }
         }
 
-        public void ChapterClicked(object sender, RoutedEventArgs args)
+        public async Task ChapterClickedAsync(object sender, ItemClickEventArgs e)
         {
-            NavigationService.Navigate(typeof(Views.ChapterPage), 1);
+            var clickedChapter = e.ClickedItem as Chapter;
+            if (clickedChapter != null)
+                NavigationService.Navigate(typeof(Views.ChapterPage), clickedChapter.Id);
+            else
+            {
+                //TODO
+                var dialog = new MessageDialog("This Manga doesn't exist");
+                await dialog.ShowAsync();
+            }
         }
     }
 }

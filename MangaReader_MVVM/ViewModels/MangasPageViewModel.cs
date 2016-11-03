@@ -84,7 +84,7 @@ namespace MangaReader_MVVM.ViewModels
             }
         }
 
-        public async void MangaClicked(object sender, ItemClickEventArgs e)
+        public async void MangaClickedAsync(object sender, ItemClickEventArgs e)
         {
             var clickedManga = e.ClickedItem as Manga;
             if (clickedManga != null)

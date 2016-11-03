@@ -24,7 +24,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <t10controls:PageHeader x:Name="ChaptersBar" Text="Placeholder" Frame="{x:Bind Frame}" ClosedDisplayMode="Hidden" IsOpen="True" >
+        <t10controls:PageHeader x:Name="ChaptersBar" Frame="{x:Bind Frame}" ClosedDisplayMode="Hidden" IsOpen="True" >
             <t10controls:PageHeader.Content>
                 <StackPanel Orientation="Horizontal" >
                     <Grid Width="350" >
@@ -41,11 +41,11 @@
                                 Margin="0,0,5,5"
                                 Grid.Column="0"
                                 Canvas.ZIndex="10"
-                                Click="FavoriteButton_Click" Padding="0" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                                CPadding="0" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/>
                         <controls:ImageEx x:Name="ImageExControl2"
                                           Width="103" Height="150" Grid.Column="0"
                                           IsCacheEnabled="True"
-                                          Source="{x:Bind}"
+                                          Source="{x:Bind ViewModel.Manga.Cover}"
                                           Stretch="UniformToFill"
                                           IsTapEnabled="False"
                                           PlaceholderSource="/Assets/404_whoopsies.jpg"
@@ -54,20 +54,20 @@
                                     Margin="5,0,0,0"
                                     MaxWidth="247"
                                     Grid.Column="1">
-                            <TextBlock Text="Title" FontSize="20" TextWrapping="WrapWholeWords"/>
-                            <TextBlock Text="Status" FontSize="15"/>
-                            <TextBlock Text="LastUpdated" FontSize="15"/>
-                            <TextBlock Text="Category" FontSize="15" TextWrapping="WrapWholeWords"/>
+                            <TextBlock Text="{x:Bind ViewModel.Manga.Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
+                            <TextBlock Text="{x:Bind ViewModel.Manga.Ongoing}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind ViewModel.Manga.LastUpdated}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords"/>
                         </StackPanel>
                     </Grid>
                     <ScrollViewer HorizontalScrollMode="Enabled"
                                   HorizontalScrollBarVisibility="Auto"
                                   VerticalScrollMode="Disabled"
                                   VerticalScrollBarVisibility="Disabled"
-                                  Tapped="ScrollViewer_Tapped" >
+                                  Tapped="{x:Bind ViewModel.ChapterClickedAsync}" >
                         <GridView x:Name="ChapterView"
                                   Margin="0,0,0,0"
-                                  ItemsSource="{x:Bind Manga.Chapters}"
+                                  ItemsSource="{x:Bind ViewModel.Chapters}"
                                   VerticalContentAlignment="Stretch" >
                             <GridView.ItemsPanel>
                                 <ItemsPanelTemplate>

@@ -72,7 +72,7 @@
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="20"
                   ItemTemplate="{StaticResource ChapterItem}"
-                  ItemClick="{x:Bind ViewModel.ChapterClicked}" >
+                  ItemClick="{x:Bind ViewModel.ChapterClickedAsync}" >
         </GridView>
     </Grid>
 </Page>

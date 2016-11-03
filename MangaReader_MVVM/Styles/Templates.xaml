@@ -126,4 +126,8 @@
         </Grid>
     </DataTemplate>
 
+    <DataTemplate x:Key="ChaptersBarItem">
+        
+    </DataTemplate>
+
 </ResourceDictionary>
