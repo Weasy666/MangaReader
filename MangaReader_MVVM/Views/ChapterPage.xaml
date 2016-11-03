@@ -19,12 +19,12 @@
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.RowDefinitions>
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />
-        </Grid.RowDefinitions>
+        </Grid.RowDefinitions>-->
 
-        <t10controls:PageHeader x:Name="ChaptersBar" Frame="{x:Bind Frame}" ClosedDisplayMode="Hidden" IsOpen="True" >
+        <t10controls:PageHeader x:Name="ChaptersBar" Frame="{x:Bind Frame}" ClosedDisplayMode="Hidden" IsOpen="True" Height="150" IsSticky="True" >
             <t10controls:PageHeader.Content>
                 <StackPanel Orientation="Horizontal" >
                     <Grid Width="350" >
@@ -41,7 +41,7 @@
                                 Margin="0,0,5,5"
                                 Grid.Column="0"
                                 Canvas.ZIndex="10"
-                                CPadding="0" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                                Padding="0" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/>
                         <controls:ImageEx x:Name="ImageExControl2"
                                           Width="103" Height="150" Grid.Column="0"
                                           IsCacheEnabled="True"
@@ -68,7 +68,8 @@
                         <GridView x:Name="ChapterView"
                                   Margin="0,0,0,0"
                                   ItemsSource="{x:Bind ViewModel.Chapters}"
-                                  VerticalContentAlignment="Stretch" >
+                                  VerticalContentAlignment="Stretch"
+                                  ItemTemplate="{StaticResource ChapterItem}" >
                             <GridView.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <ItemsStackPanel Orientation="Horizontal"
@@ -76,43 +77,12 @@
                                                      ScrollViewer.VerticalScrollBarVisibility="Disabled" />
                                 </ItemsPanelTemplate>
                             </GridView.ItemsPanel>
-                            <GridView.ItemTemplate>
-                                <DataTemplate x:DataType="models:Chapter">
-                                    <Grid Width="250" Height="125">
-                                        <!--<Image Source="{x:Bind ChapterCover}" Width="103" Height="150" />-->
-                                        <StackPanel Orientation="Vertical" 
-                                            Margin="5,0,0,0" 
-                                            MaxWidth="250">
-                                            <TextBlock Text="{x:Bind Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
-                                            <TextBlock Text="{x:Bind Number}" FontSize="15"/>
-                                            <TextBlock Text="{x:Bind NumberOfPages}" FontSize="15"/>
-                                            <TextBlock Text="{x:Bind Released}" FontSize="15"/>
-                                        </StackPanel>
-                                        <Button x:Name="ReadStatus"
-                                                Content="Read"
-                                                Visibility="Collapsed"
-                                                HorizontalAlignment="Right"
-                                                VerticalAlignment="Top"
-                                                Margin="0,5,0,5"
-                                                IsHitTestVisible="False"
-                                                IsTapEnabled="False"
-                                        />
-                                    </Grid>
-                                </DataTemplate>
-                            </GridView.ItemTemplate>
                         </GridView>
                     </ScrollViewer>
                 </StackPanel>
             </t10controls:PageHeader.Content>
         </t10controls:PageHeader>
 
-        <ProgressRing x:Name="StartupProgressRing"
-                      IsActive="False"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Center"
-                      Width="100"
-                      Height="100"
-                      Canvas.ZIndex="2"/>
         <ScrollViewer HorizontalScrollMode="Auto"
                       HorizontalScrollBarVisibility="Auto"
                       VerticalScrollMode="Disabled"

@@ -12,7 +12,7 @@ namespace MangaReader_MVVM.Models
 {
     public class Manga : IManga, IComparable<Manga>
     {
-        public IMangaLibrary ParentLibrary { get; internal set; }
+        public IMangaSource ParentLibrary { get; internal set; }
         public string Title { get; set; }
         public string Alias { get; set; }
         public string Id { get; set; }

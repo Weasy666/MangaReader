@@ -10,7 +10,7 @@ namespace MangaReader_MVVM.Models
 {
     public interface IManga
     {
-        IMangaLibrary ParentLibrary { get; }
+        IMangaSource ParentLibrary { get; }
         string Title { get; set; }
         string Id { get; set; }
         BitmapImage Cover { get; set; }

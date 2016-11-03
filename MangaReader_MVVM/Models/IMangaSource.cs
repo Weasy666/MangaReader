@@ -7,16 +7,17 @@ using System.Threading.Tasks;
 
 namespace MangaReader_MVVM.Models
 {
-    public interface IMangaLibrary
+    public interface IMangaSource
     {
         byte[] Icon { get; }
-        Uri MangaIndexPage { get; }
-        string Name { get; }
+        string Name { get; }       
         Uri RootUri { get; }
-        ObservableCollection<IManga> Mangas { get; }
+        Uri MangaIndexPage { get; }
 
         Task<ObservableCollection<IManga>> GetMangasAsync();
-        Task<ObservableCollection<IManga>> SearchMangaAsync(string query);
+        Task<IManga> GetMangaAsync(Manga manga);
         Task<ObservableCollection<IChapter>> GetChaptersAsync(Manga manga);
+        Task<IChapter> GetChapterAsync(Chapter chapter);
+        Task<ObservableCollection<IManga>> SearchMangaAsync(string query);        
     }
 }
