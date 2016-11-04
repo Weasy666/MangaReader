@@ -4,15 +4,16 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Models
 {
     public interface IMangaSource
     {
-        byte[] Icon { get; }
+        BitmapImage Icon { get; }
         string Name { get; }       
         Uri RootUri { get; }
-        Uri MangaIndexPage { get; }
+        Uri MangasListPage { get; }
 
         Task<ObservableCollection<IManga>> GetMangasAsync();
         Task<IManga> GetMangaAsync(Manga manga);

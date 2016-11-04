@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Models
 {
@@ -35,7 +36,7 @@ namespace MangaReader_MVVM.Models
             }
         }
 
-        public byte[] Icon => _mangaSource.Icon;
+        public BitmapImage Icon => _mangaSource.Icon;
         public Task<ObservableCollection<IManga>> GetMangasAsync() => _mangaSource.GetMangasAsync();
         public Task<IManga> GetMangaAsync(Manga manga) => _mangaSource.GetMangaAsync(manga);
         public Task<ObservableCollection<IChapter>> GetChaptersAsync(Manga manga) => _mangaSource.GetChaptersAsync(manga);
