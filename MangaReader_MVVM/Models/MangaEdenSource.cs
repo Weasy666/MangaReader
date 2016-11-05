@@ -35,31 +35,33 @@ namespace MangaReader_MVVM.Models
 
         public async Task<ObservableCollection<IManga>> GetMangasAsync()
         {
-            using (var httpClient = new HttpClient { BaseAddress = RootUri })
+            if (_mangas == null || _mangas.Count == 0)
             {
-                try
+                using (var httpClient = new HttpClient { BaseAddress = RootUri })
                 {
-                    var response = await httpClient.GetAsync(MangasListPage);
-                    var result = await response.Content.ReadAsStringAsync();
-                    if (response.IsSuccessStatusCode)
+                    try
                     {
-                        JsonSerializerSettings settings = new JsonSerializerSettings();
-                        settings.Converters.Add(new MangaConverter());
+                        var response = await httpClient.GetAsync(MangasListPage);
+                        var result = await response.Content.ReadAsStringAsync();
+                        if (response.IsSuccessStatusCode)
+                        {
+                            JsonSerializerSettings settings = new JsonSerializerSettings();
+                            settings.Converters.Add(new MangaConverter());
 
-                        var manga = JsonConvert.DeserializeObject<Manga[]>(result, settings);
+                            _mangas = await JsonConvert.DeserializeObjectAsync<ObservableCollection<IManga>>(result, settings);
 
-                        //var test = await JsonConvert.DeserializeObjectAsync(result) as JObject;
-                        //var test2 = test["manga"].First.ToList();
+                            //var test = await JsonConvert.DeserializeObjectAsync(result) as JObject;
+                            //var test2 = test["manga"].First.ToList();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        var dialog = new MessageDialog(e.Message);
+                        await dialog.ShowAsync();
                     }
                 }
-                catch (Exception e)
-                {
-                    var dialog = new MessageDialog(e.Message);
-                    await dialog.ShowAsync();
-                }
             }
-            var back = new ObservableCollection<IManga>();
-            return new ObservableCollection<IManga>(back.Where(m => m.Artist == "a").ToList());
+            return _mangas;
         }
 
         public async Task<IManga> GetMangaAsync(Manga manga)

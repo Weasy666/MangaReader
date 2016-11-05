@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Models
 {
-    public interface IManga
+    public interface IManga : IComparable<IManga>
     {
         IMangaSource ParentLibrary { get; }
         string Title { get; set; }

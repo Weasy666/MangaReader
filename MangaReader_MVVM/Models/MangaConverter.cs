@@ -14,7 +14,7 @@ namespace MangaReader_MVVM.Models
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(ObservableCollection<Manga>));
+            return (objectType == typeof(ObservableCollection<IManga>));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -28,7 +28,7 @@ namespace MangaReader_MVVM.Models
                 Title = System.Net.WebUtility.HtmlDecode(manga["t"].ToString()),
                 Alias = System.Net.WebUtility.HtmlDecode(manga["a"].ToString()),
                 Id = manga["i"].ToString(),
-                Cover = new BitmapImage(new Uri(manga["im"].ToString())),
+                Cover = new BitmapImage(new Uri(MangaLibrary.Instance.RootUri, manga["im"].ToString())),
                 Category = manga["c"].ToString(),
                 Hits = (int)manga["h"],
                 LastUpdated = DateTimeOffset.FromUnixTimeSeconds((long)manga["ld"]).DateTime.ToLocalTime(),
@@ -39,7 +39,7 @@ namespace MangaReader_MVVM.Models
             // (If anything else needs to be populated on the result object, do that here)
 
             // Return the result
-            return new ObservableCollection<Manga>(mangas);
+            return new ObservableCollection<IManga>(mangas);
         }
 
         public override bool CanWrite => false;

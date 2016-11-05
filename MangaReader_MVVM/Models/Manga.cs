@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Models
 {
-    public class Manga : IManga, IComparable<Manga>
+    public class Manga : IManga
     {
         public IMangaSource ParentLibrary { get; internal set; }
         public string Title { get; set; }
@@ -34,7 +34,7 @@ namespace MangaReader_MVVM.Models
             return ParentLibrary.GetChaptersAsync(this);
         }
 
-        public int CompareTo(Manga comparePart)
+        public int CompareTo(IManga comparePart)
         {
             // A null value means that this object is greater.
             return comparePart == null ? 1 : CompareNatural.Compare(this.Title, comparePart.Title);

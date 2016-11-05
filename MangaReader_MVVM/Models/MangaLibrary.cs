@@ -10,11 +10,11 @@ namespace MangaReader_MVVM.Models
 {
     class MangaLibrary
     {
-        public static readonly MangaLibrary instance = new MangaLibrary();
+        private static readonly MangaLibrary instance = new MangaLibrary();
         public static MangaLibrary Instance { get { return instance; } }
         private MangaLibrary() {}
 
-        public IMangaSource _mangaSource = new MangaEdenSource();
+        private IMangaSource _mangaSource = new MangaEdenSource();
         public MangaSource MangaSource
         {
             set
@@ -36,6 +36,7 @@ namespace MangaReader_MVVM.Models
             }
         }
 
+        public Uri RootUri => _mangaSource.RootUri;
         public BitmapImage Icon => _mangaSource.Icon;
         public Task<ObservableCollection<IManga>> GetMangasAsync() => _mangaSource.GetMangasAsync();
         public Task<IManga> GetMangaAsync(Manga manga) => _mangaSource.GetMangaAsync(manga);

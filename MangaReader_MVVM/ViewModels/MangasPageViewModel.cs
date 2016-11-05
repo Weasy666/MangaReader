@@ -19,7 +19,7 @@ namespace MangaReader_MVVM.ViewModels
     {
         public MangasPageViewModel()
         {
-            //if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
+            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
                 // designtime
                 Mangas = DesignTimeService.GenerateMangaDummies();
@@ -31,8 +31,7 @@ namespace MangaReader_MVVM.ViewModels
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            //var repository = MangaHereRepository.Instance;
-            //Mangas = await repository.GetSeriesAsync();
+            Mangas = await MangaLibrary.Instance.GetMangasAsync();
             
             await Task.CompletedTask;
         }
