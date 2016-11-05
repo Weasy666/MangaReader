@@ -11,7 +11,7 @@ namespace MangaReader_MVVM.Models
     class MangaLibrary
     {
         public static readonly MangaLibrary instance = new MangaLibrary();
-        public static MangaLibrary Instance { get; }
+        public static MangaLibrary Instance { get { return instance; } }
         private MangaLibrary() {}
 
         public IMangaSource _mangaSource = new MangaEdenSource();

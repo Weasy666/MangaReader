@@ -104,6 +104,7 @@
     <Compile Include="Models\IMangaSource.cs" />
     <Compile Include="Models\IPage.cs" />
     <Compile Include="Models\Manga.cs" />
+    <Compile Include="Models\MangaConverter.cs" />
     <Compile Include="Models\MangaEdenSource.cs" />
     <Compile Include="Models\MangaLibrary.cs" />
     <Compile Include="Models\MangaSource.cs" />
@@ -219,6 +220,11 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Styles\Converters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
     <Page Include="Styles\Custom.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
