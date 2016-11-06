@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Models
 {
-    class MangaConverter : JsonConverter
+    class MangaEdenMangasListConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
@@ -28,15 +28,13 @@ namespace MangaReader_MVVM.Models
                 Title = System.Net.WebUtility.HtmlDecode(manga["t"].ToString()),
                 Alias = System.Net.WebUtility.HtmlDecode(manga["a"].ToString()),
                 Id = manga["i"].ToString(),
-                Cover = new BitmapImage(new Uri(MangaLibrary.Instance.RootUri, manga["im"].ToString())),
+                Cover = new BitmapImage(new Uri(new Uri("https://cdn.mangaeden.com/mangasimg/"), manga["im"].ToString())),
                 Category = manga["c"].ToString(),
                 Hits = (int)manga["h"],
-                LastUpdated = DateTimeOffset.FromUnixTimeSeconds((long)manga["ld"]).DateTime.ToLocalTime(),
+                LastUpdated = DateTimeOffset.FromUnixTimeSeconds(manga["ld"] != null ? (long)manga["ld"] : 0).DateTime.ToLocalTime(),
                 Ongoing = (int)manga["s"] == 1
             }).ToList();
-            mangas.Sort(); 
-
-            // (If anything else needs to be populated on the result object, do that here)
+            mangas.Sort();
 
             // Return the result
             return new ObservableCollection<IManga>(mangas);

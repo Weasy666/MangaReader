@@ -52,8 +52,7 @@ namespace MangaReader_MVVM
         public override async Task OnStartAsync(StartKind startKind, IActivatedEventArgs args)
         {
             // long-running startup tasks go here
-            var test = Models.MangaLibrary.Instance;
-            await test.GetMangasAsync();
+            await Models.MangaLibrary.Instance.GetMangasAsync();
 
             NavigationService.Navigate(typeof(Views.MainPage));
             await Task.CompletedTask;

@@ -32,19 +32,6 @@
                 <AppBarButton Icon="Refresh" Label="Reload" Command="{Binding Path=ReloadGridCommand}" />
             </t10controls:PageHeader.PrimaryCommands>
         </t10controls:PageHeader>
-        
-        <ProgressRing x:Name="StartupProgressRing"
-                      Grid.Row="1"
-                      IsActive="False"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Center"
-                      Width="100"
-                      Height="100"
-                      Canvas.ZIndex="2"/>
-        <Grid x:Name="LoadingGrid" Background="{ThemeResource SystemControlDisabledBaseLowBrush}"
-              Visibility="Collapsed"
-              Grid.Row="1"
-              Canvas.ZIndex="1"/>
 
         <GridView x:Name="MangaGridView" Grid.Row="1"
                   ItemsSource="{x:Bind ViewModel.Mangas}"

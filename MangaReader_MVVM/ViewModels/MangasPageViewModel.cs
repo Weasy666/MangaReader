@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Template10.Services.NavigationService;
 using Windows.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
-using MangaScrapeLib.Repositories;
 using MangaReader_MVVM.Models;
 using MangaReader_MVVM.Services;
 using Windows.UI.Xaml;
@@ -24,15 +23,17 @@ namespace MangaReader_MVVM.ViewModels
                 // designtime
                 Mangas = DesignTimeService.GenerateMangaDummies();
             }
+            else
+            {
+                Mangas = MangaLibrary.Instance.GetMangasAsync().Result;
+            }
         }
 
-        private ObservableCollection<IManga> _mangas;
+        private ObservableCollection<IManga> _mangas = new ObservableCollection<IManga>();
         public ObservableCollection<IManga> Mangas { get { return _mangas; } set { Set(ref _mangas, value); } }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            Mangas = await MangaLibrary.Instance.GetMangasAsync();
-            
             await Task.CompletedTask;
         }
 
@@ -53,35 +54,20 @@ namespace MangaReader_MVVM.ViewModels
 
         private DelegateCommand _reloadGridCommand;
         public DelegateCommand ReloadGridCommand
-        {
-            get
+            => _reloadGridCommand ?? (_reloadGridCommand = new DelegateCommand(async () =>
             {
-                if (_reloadGridCommand == null)
-                {
-                    _reloadGridCommand = new DelegateCommand(() =>
-                    {
-                        Mangas = DesignTimeService.GenerateMangaDummies(100, 100);
-                    }, () => Mangas.Any());
-                }
-                return _reloadGridCommand;
-            }
-        }
+                Views.Busy.SetBusy(true, "Loading Mangas...");
+                Mangas = await MangaLibrary.Instance.GetMangasAsync();
+
+                Views.Busy.SetBusy(false);
+            }, () => Mangas.Any()));
 
         private DelegateCommand _sortGridCommand;
         public DelegateCommand SortGridCommand
-        {
-            get
+            => _sortGridCommand ?? (_sortGridCommand = new DelegateCommand(() =>
             {
-                if (_sortGridCommand == null)
-                {
-                    _sortGridCommand = new DelegateCommand(() =>
-                    {
-                        Mangas = new ObservableCollection<IManga>(Mangas.Reverse());
-                    }, () => Mangas.Any());
-                }
-                return _sortGridCommand;
-            }
-        }
+                Mangas = new ObservableCollection<IManga>(Mangas.Reverse());
+            }, () => Mangas.Any()));
 
         public async void MangaClickedAsync(object sender, ItemClickEventArgs e)
         {

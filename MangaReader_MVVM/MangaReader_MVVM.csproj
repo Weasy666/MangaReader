@@ -104,7 +104,7 @@
     <Compile Include="Models\IMangaSource.cs" />
     <Compile Include="Models\IPage.cs" />
     <Compile Include="Models\Manga.cs" />
-    <Compile Include="Models\MangaConverter.cs" />
+    <Compile Include="Models\MangaEdenMangasListConverter.cs" />
     <Compile Include="Models\MangaEdenSource.cs" />
     <Compile Include="Models\MangaLibrary.cs" />
     <Compile Include="Models\MangaSource.cs" />

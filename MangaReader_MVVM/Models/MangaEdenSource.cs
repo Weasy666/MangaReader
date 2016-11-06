@@ -35,7 +35,7 @@ namespace MangaReader_MVVM.Models
 
         public async Task<ObservableCollection<IManga>> GetMangasAsync()
         {
-            if (_mangas == null || _mangas.Count == 0)
+            if (_mangas == null || !_mangas.Any())
             {
                 using (var httpClient = new HttpClient { BaseAddress = RootUri })
                 {
@@ -46,12 +46,9 @@ namespace MangaReader_MVVM.Models
                         if (response.IsSuccessStatusCode)
                         {
                             JsonSerializerSettings settings = new JsonSerializerSettings();
-                            settings.Converters.Add(new MangaConverter());
+                            settings.Converters.Add(new MangaEdenMangasListConverter());
 
-                            _mangas = await JsonConvert.DeserializeObjectAsync<ObservableCollection<IManga>>(result, settings);
-
-                            //var test = await JsonConvert.DeserializeObjectAsync(result) as JObject;
-                            //var test2 = test["manga"].First.ToList();
+                            _mangas = JsonConvert.DeserializeObject<ObservableCollection<IManga>>(result, settings);
                         }
                     }
                     catch (Exception e)

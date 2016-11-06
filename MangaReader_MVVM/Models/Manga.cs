@@ -29,15 +29,9 @@ namespace MangaReader_MVVM.Models
         public bool IsFavorit { get; set; }
         public string FavoritAsSymbol => IsFavorit ? "\uE1CF" : "\uE1CE";
 
-        public Task<ObservableCollection<IChapter>> GetChaptersAsynch()
-        {
-            return ParentLibrary.GetChaptersAsync(this);
-        }
+        public Task<ObservableCollection<IChapter>> GetChaptersAsynch() => ParentLibrary.GetChaptersAsync(this);
 
-        public int CompareTo(IManga comparePart)
-        {
-            // A null value means that this object is greater.
-            return comparePart == null ? 1 : CompareNatural.Compare(this.Title, comparePart.Title);
-        }
+        public int CompareTo(IManga comparePart) => comparePart == null ? 1 : CompareNatural.Compare(this.Title, comparePart.Title);
+        
     }
 }
