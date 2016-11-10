@@ -29,8 +29,8 @@ namespace MangaReader_MVVM.Models
         {
             RootUri = new Uri("http://www.mangaeden.com/api/");
             MangasListPage = new Uri($"list/{Language}/", UriKind.Relative);
-            MangaDetails = new Uri("manga/{0}/", UriKind.Relative);
-            MangaChapterPages = new Uri("chapter/{0}", UriKind.Relative);
+            MangaDetails = new Uri("manga/", UriKind.Relative);
+            MangaChapterPages = new Uri("chapter/", UriKind.Relative);
         }
 
         public async Task<ObservableCollection<IManga>> GetMangasAsync()
@@ -63,7 +63,28 @@ namespace MangaReader_MVVM.Models
 
         public async Task<IManga> GetMangaAsync(Manga manga)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClient { BaseAddress = RootUri })
+            {
+                try
+                {
+                    var mangaDetailsUri = new Uri(RootUri, MangaDetails);
+                    var response = await httpClient.GetAsync(new Uri(mangaDetailsUri, manga.Id));
+                    var result = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        JsonSerializerSettings settings = new JsonSerializerSettings();
+                        settings.Converters.Add(new MangaEdenMangaDetailsConverter());
+
+                        manga = JsonConvert.DeserializeObject<IManga>(result, settings) as Manga;
+                    }
+                }
+                catch (Exception e)
+                {
+                    var dialog = new MessageDialog(e.Message);
+                    await dialog.ShowAsync();
+                }
+            }
+            return manga;
         }
 
         public async Task<ObservableCollection<IChapter>> GetChaptersAsync(Manga manga)
@@ -73,7 +94,28 @@ namespace MangaReader_MVVM.Models
 
         public async Task<IChapter> GetChapterAsync(Chapter chapter)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClient { BaseAddress = RootUri })
+            {
+                try
+                {
+                    var chapterUri = new Uri(RootUri, MangaChapterPages);
+                    var response = await httpClient.GetAsync(new Uri(chapterUri, chapter.Id));
+                    var result = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        JsonSerializerSettings settings = new JsonSerializerSettings();
+                        settings.Converters.Add(new MangaEdenChapterPagesConverter());
+
+                        chapter.Pages = JsonConvert.DeserializeObject<ObservableCollection<IPage>>(result, settings);
+                    }
+                }
+                catch (HttpRequestException e)
+                {
+                    var dialog = new MessageDialog(e.Message);
+                    await dialog.ShowAsync();
+                }
+            }
+            return chapter;
         }
 
         public async Task<ObservableCollection<IManga>> SearchMangaAsync(string query)

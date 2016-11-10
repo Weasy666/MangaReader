@@ -27,25 +27,13 @@
             <ColumnDefinition MaxWidth="600"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        
+
         <t10controls:PageHeader x:Name="PageHeader" Text="{x:Bind ViewModel.Manga.Title}" Frame="{x:Bind Frame}" Grid.ColumnSpan="2">
             <t10controls:PageHeader.PrimaryCommands>
                 <AppBarSeparator />
-                <AppBarButton Icon="Sort" Label="Sort" Command="{Binding Path=SortGridCommand}"  />
+                <AppBarButton Icon="Sort" Label="Sort" Command="{x:Bind ViewModel.SortGridCommand}"  />
             </t10controls:PageHeader.PrimaryCommands>
         </t10controls:PageHeader>
-
-        <ProgressRing x:Name="StartupProgressRing" Grid.Row="1" Grid.ColumnSpan="2"
-                      IsActive="False"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Center"
-                      Width="100"
-                      Height="100"
-                      Canvas.ZIndex="2"/>
-        <Grid x:Name="LoadingGrid" Background="{ThemeResource SystemControlDisabledBaseLowBrush}"
-              Visibility="Collapsed"
-              Grid.Row="1" Grid.ColumnSpan="2"
-              Canvas.ZIndex="1"/>
 
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="10,10,0,0">
             <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
@@ -57,6 +45,7 @@
                                   PlaceholderStretch="Uniform"
                                   VerticalAlignment="Top" />
                 <StackPanel Orientation="Vertical" Margin="12,0,0,0">
+                    <TextBlock x:Name="Alias"  Text="{x:Bind ViewModel.Manga.Alias}" FontSize="15" MaxWidth="378" TextWrapping="WrapWholeWords"/>
                     <TextBlock x:Name="Category"  Text="{x:Bind ViewModel.Manga.Category}" FontSize="15"/>
                     <TextBlock x:Name="Status" Text="{x:Bind ViewModel.Manga.Ongoing}" FontSize="15"/>
                     <TextBlock x:Name="NumberOfChapters" Text="{x:Bind ViewModel.Manga.NumberOfChapters}" FontSize="15"/>

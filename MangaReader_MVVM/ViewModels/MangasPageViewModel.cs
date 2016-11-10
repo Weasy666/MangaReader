@@ -73,7 +73,9 @@ namespace MangaReader_MVVM.ViewModels
         {
             var clickedManga = e.ClickedItem as Manga;
             if (clickedManga != null)
-                NavigationService.Navigate(typeof(Views.MangaDetailsPage), clickedManga.Id);
+            {
+                NavigationService.Navigate(typeof(Views.MangaDetailsPage), clickedManga);
+            }
             else
             {
                 //TODO

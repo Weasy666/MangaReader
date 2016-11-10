@@ -9,7 +9,7 @@ namespace MangaReader_MVVM.Models
 {
     public interface IPage
     {
-        string Number { get; set; }
+        int Number { get; set; }
         BitmapImage Url { get; set; }
         int Width { get; set; }
         int Height { get; set; }

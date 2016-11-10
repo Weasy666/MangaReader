@@ -9,7 +9,8 @@ namespace MangaReader_MVVM.Models
 {
     public class Chapter : IChapter, IComparable<Chapter>
     {
-        public string Number { get; set; }
+        public IManga ParentManga { get; set; }
+        public int Number { get; set; }
         public string Title { get; set; }
         public string Id { get; set; }        
         public int NumberOfPages => 0; //Pages.Count;
@@ -20,7 +21,7 @@ namespace MangaReader_MVVM.Models
         public int CompareTo(Chapter comparePart)
         {
             // A null value means that this object is greater.
-            return comparePart == null ? 1 : CompareNatural.Compare(this.Number, comparePart.Number);
+            return comparePart == null ? 1 : this.Number.CompareTo(comparePart.Number);
         }
     }
 }

@@ -20,35 +20,32 @@ namespace MangaReader_MVVM.ViewModels
     {
         public ChapterPageViewModel()
         {
-            //if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
+            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
                 // designtime
                 Chapter = DesignTimeService.GenerateChapterDummies(1).FirstOrDefault();
-                Pages = DesignTimeService.GeneratePageDummies();
-                Manga = DesignTimeService.GenerateMangaDetailDummy();
-                Chapters = DesignTimeService.GenerateChapterDummies();
+                Chapter.Pages = DesignTimeService.GeneratePageDummies();
+                Chapter.ParentManga = DesignTimeService.GenerateMangaDetailDummy();
+                Chapter.ParentManga.Chapters = DesignTimeService.GenerateChapterDummies();
             }
         }
 
-        private IChapter _chapter;
+        private IChapter _chapter = new Chapter();
         public IChapter Chapter { get { return _chapter; } set { Set(ref _chapter, value); } }
+        public ObservableCollection<IPage> Pages => Chapter.Pages;
 
-        private ObservableCollection<IPage> _pages;
-        public ObservableCollection<IPage> Pages { get { return _pages; } set { Set(ref _pages, value); } }
+        //private IManga _manga;
+        //public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
 
-        private IManga _manga;
-        public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
-
-        private ObservableCollection<IChapter> _chapters;
-        public ObservableCollection<IChapter> Chapters { get { return _chapters; } set { Set(ref _chapters, value); } }
+        //private ObservableCollection<IChapter> _chapters;
+        public ObservableCollection<IChapter> Chapters { get { return Chapter.ParentManga.Chapters; } }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            if (mode == NavigationMode.New)
+            var chapter = parameter as Chapter;
+            if (mode == NavigationMode.New && chapter != null)
             {
-                //this here is only for testing purposes
-                Chapter.Id = parameter as string;
-                Chapter.Title = "ChapterPages" + parameter as string;
+                Chapter = await MangaLibrary.Instance.GetChapterAsync(chapter);
             }
             await Task.CompletedTask;
         }
@@ -71,7 +68,7 @@ namespace MangaReader_MVVM.ViewModels
                 {
                     _sortGridCommand = new DelegateCommand(() =>
                     {
-                        Pages = new ObservableCollection<IPage>(Pages.Reverse());
+                        Chapter.Pages = new ObservableCollection<IPage>(Pages.Reverse());
                     }, () => Pages.Any());
                 }
                 return _sortGridCommand;

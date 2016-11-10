@@ -17,6 +17,7 @@ namespace MangaReader_MVVM.Models
             return (objectType == typeof(ObservableCollection<IManga>));
         }
 
+        // TODO: cleaner, maybe more generic and performant way to deserialize mangaList
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             // Load the JSON for the Result into a JObject
@@ -29,7 +30,7 @@ namespace MangaReader_MVVM.Models
                 Alias = System.Net.WebUtility.HtmlDecode(manga["a"].ToString()),
                 Id = manga["i"].ToString(),
                 Cover = new BitmapImage(new Uri(new Uri("https://cdn.mangaeden.com/mangasimg/"), manga["im"].ToString())),
-                Category = manga["c"].ToString(),
+                Category = string.Join(", ", manga["c"].AsEnumerable().Select(item => item.ToString()).ToArray()),
                 Hits = (int)manga["h"],
                 LastUpdated = DateTimeOffset.FromUnixTimeSeconds(manga["ld"] != null ? (long)manga["ld"] : 0).DateTime.ToLocalTime(),
                 Ongoing = (int)manga["s"] == 1

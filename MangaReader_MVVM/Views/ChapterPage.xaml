@@ -45,7 +45,7 @@
                         <controls:ImageEx x:Name="ImageExControl2"
                                           Width="103" Height="150" Grid.Column="0"
                                           IsCacheEnabled="True"
-                                          Source="{x:Bind ViewModel.Manga.Cover}"
+                                          Source="{x:Bind ViewModel.Chapter.ParentManga.Cover}"
                                           Stretch="UniformToFill"
                                           IsTapEnabled="False"
                                           PlaceholderSource="/Assets/404_whoopsies.jpg"
@@ -54,10 +54,10 @@
                                     Margin="5,0,0,0"
                                     MaxWidth="247"
                                     Grid.Column="1">
-                            <TextBlock Text="{x:Bind ViewModel.Manga.Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
-                            <TextBlock Text="{x:Bind ViewModel.Manga.Ongoing}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind ViewModel.Manga.LastUpdated}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords"/>
+                            <TextBlock Text="{x:Bind ViewModel.Chapter.ParentManga.Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
+                            <TextBlock Text="{x:Bind ViewModel.Chapter.ParentManga.Ongoing}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind ViewModel.Chapter.ParentManga.LastUpdated}" FontSize="15"/>
+                            <TextBlock Text="{x:Bind ViewModel.Chapter.ParentManga.Category}" FontSize="15" TextWrapping="WrapWholeWords"/>
                         </StackPanel>
                     </Grid>
                     <ScrollViewer HorizontalScrollMode="Enabled"
@@ -67,7 +67,7 @@
                                   Tapped="{x:Bind ViewModel.ChapterClickedAsync}" >
                         <GridView x:Name="ChapterView"
                                   Margin="0,0,0,0"
-                                  ItemsSource="{x:Bind ViewModel.Chapters}"
+                                  ItemsSource="{x:Bind ViewModel.Chapter.ParentManga.Chapters}"
                                   VerticalContentAlignment="Stretch"
                                   ItemTemplate="{StaticResource ChapterItem}" >
                             <GridView.ItemsPanel>

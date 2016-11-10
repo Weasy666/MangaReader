@@ -12,6 +12,7 @@ namespace MangaReader_MVVM.Models
     {
         IMangaSource ParentLibrary { get; }
         string Title { get; set; }
+        string Alias { get; set; }
         string Id { get; set; }
         BitmapImage Cover { get; set; }
         string Category { get; set; }
@@ -21,11 +22,10 @@ namespace MangaReader_MVVM.Models
         int Hits { get; set; }
         DateTime Released { get; set; }
         DateTime LastUpdated { get; set; }
-        bool Ongoing { get; set; }        
+        bool Ongoing { get; set; }
+        ObservableCollection<IChapter> Chapters { get; set; }
         int NumberOfChapters { get; set; }
         bool IsFavorit { get; set; }
         string FavoritAsSymbol { get; }
-
-        Task<ObservableCollection<IChapter>> GetChaptersAsynch();
     }
 }

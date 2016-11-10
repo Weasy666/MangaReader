@@ -19,29 +19,25 @@ namespace MangaReader_MVVM.ViewModels
     {
         public MangaDetailsPageViewModel()
         {
-            //if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
+            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
                 // designtime
                 Manga = DesignTimeService.GenerateMangaDetailDummy();
-                Chapters = DesignTimeService.GenerateChapterDummies();
+                Manga.Chapters = DesignTimeService.GenerateChapterDummies();
             }
+            //Manga.Chapters = new ObservableCollection<IChapter>();
         }
 
-        private IManga _manga;
+        private IManga _manga = new Manga();
         public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
-
-        private ObservableCollection<IChapter> _chapters;
-        public ObservableCollection<IChapter> Chapters { get { return _chapters; } set { Set(ref _chapters, value); } }
+        public ObservableCollection<IChapter> Chapters => Manga.Chapters;
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            //var repository = MangaHereRepository.Instance;
-            //Mangas = await repository.GetSeriesAsync();
-            if (mode == NavigationMode.New)
+            var manga = parameter as Manga;
+            if (mode == NavigationMode.New && manga != null)
             {
-                //this here is only for testing purposes
-                Manga.Id = parameter as string;
-                Manga.Title = Manga.Title + parameter as string;
+                Manga = await MangaLibrary.Instance.GetMangaAsync(manga);
             }
             await Task.CompletedTask;
         }
@@ -60,26 +56,32 @@ namespace MangaReader_MVVM.ViewModels
         {
             get
             {
+                if (Chapters == null)
+                    Manga.Chapters = new ObservableCollection<IChapter>();
                 if (_sortGridCommand == null)
                 {
                     _sortGridCommand = new DelegateCommand(() =>
                     {
-                        Chapters = new ObservableCollection<IChapter>(Chapters.Reverse());
+                        Manga.Chapters = new ObservableCollection<IChapter>(Chapters.Reverse());
                     }, () => Chapters.Any());
                 }
                 return _sortGridCommand;
             }
         }
+        //=> _sortGridCommand ?? (_sortGridCommand = new DelegateCommand(() =>
+        //{
+        //    Manga.Chapters = new ObservableCollection<IChapter>(Chapters.Reverse());
+        //}, () => Chapters.Any()));
 
         public async Task ChapterClickedAsync(object sender, ItemClickEventArgs e)
         {
             var clickedChapter = e.ClickedItem as Chapter;
             if (clickedChapter != null)
-                NavigationService.Navigate(typeof(Views.ChapterPage), clickedChapter.Id);
+                NavigationService.Navigate(typeof(Views.ChapterPage), clickedChapter);
             else
             {
                 //TODO
-                var dialog = new MessageDialog("This Manga doesn't exist");
+                var dialog = new MessageDialog("This Chapter doesn't exist");
                 await dialog.ShowAsync();
             }
         }

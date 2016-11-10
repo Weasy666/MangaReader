@@ -25,13 +25,11 @@ namespace MangaReader_MVVM.Models
         public DateTime Released { get; set; }
         public DateTime LastUpdated { get; set; }
         public bool Ongoing { get; set; }
+        public ObservableCollection<IChapter> Chapters { get; set; } /*= new ObservableCollection<IChapter>();*/
         public int NumberOfChapters { get; set; }
         public bool IsFavorit { get; set; }
         public string FavoritAsSymbol => IsFavorit ? "\uE1CF" : "\uE1CE";
 
-        public Task<ObservableCollection<IChapter>> GetChaptersAsynch() => ParentLibrary.GetChaptersAsync(this);
-
         public int CompareTo(IManga comparePart) => comparePart == null ? 1 : CompareNatural.Compare(this.Title, comparePart.Title);
-        
     }
 }

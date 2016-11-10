@@ -40,7 +40,7 @@ namespace MangaReader_MVVM.Services
             var chapterDummies = new ObservableCollection<IChapter>();
             for (int i = 0 + offset; i < number + offset; i++)
                 chapterDummies.Add(new Chapter { Title = "Chapter" + i,
-                                                 Number = (i + 1).ToString(),
+                                                 Number = (i + 1),
                                                  Id = i.ToString(),
                                                  Released = DateTime.Now.Subtract(TimeSpan.FromDays(10))
                                                });
@@ -51,7 +51,7 @@ namespace MangaReader_MVVM.Services
         {
             var pageDummies = new ObservableCollection<IPage>();
             for (int i = 0 + offset; i < number + offset; i++)
-                pageDummies.Add(new Page { Number = i.ToString(),
+                pageDummies.Add(new Page { Number = i,
                                            Url = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/NewStoreLogo.scale-400.png"))
                                          });
             return pageDummies;

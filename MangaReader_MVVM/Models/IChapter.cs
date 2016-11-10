@@ -9,7 +9,8 @@ namespace MangaReader_MVVM.Models
 {
     public interface IChapter
     {
-        string Number { get; set; }
+        IManga ParentManga { get; set; }
+        int Number { get; set; }
         string Title { get; set; }
         string Id { get; set; }
         DateTime Released { get; set; }
