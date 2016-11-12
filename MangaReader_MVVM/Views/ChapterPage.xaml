@@ -109,12 +109,15 @@
                     <DataTemplate x:Name="PageTemplate" x:DataType="models:Page" >
                         <Grid x:Name="PageImage" >
                             <controls:ImageEx x:Name="ImageExControl1"
+                                  Foreground="Red"
                                   IsCacheEnabled="True"
                                   Source="{x:Bind Url}"
                                   Stretch="UniformToFill"
                                   IsTapEnabled="False"
                                   PlaceholderSource="/Assets/404_whoopsies.jpg"
-                                  PlaceholderStretch="Uniform" />
+                                  PlaceholderStretch="Uniform"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center" />
                             <Grid x:Name="PageNumber"
                                   Height="30"
                                   Width="40"
@@ -122,7 +125,7 @@
                                   BorderBrush="{x:Null}"
                                   HorizontalAlignment="Right"
                                   VerticalAlignment="Bottom"
-                                  Visibility="Collapsed" >
+                                  Visibility="{Binding Path=PageOverlayIsVisible, Mode=TwoWay}" >
                                 <TextBlock Text="{x:Bind Number}"
                                            FontSize="18"
                                            Foreground="White"

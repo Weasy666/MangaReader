@@ -25,12 +25,28 @@ namespace MangaReader_MVVM.ViewModels
                 Manga = DesignTimeService.GenerateMangaDetailDummy();
                 Manga.Chapters = DesignTimeService.GenerateChapterDummies();
             }
-            //Manga.Chapters = new ObservableCollection<IChapter>();
+            Manga.Chapters = new ObservableCollection<IChapter>();
         }
 
         private IManga _manga = new Manga();
         public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
         public ObservableCollection<IChapter> Chapters => Manga.Chapters;
+
+        //private ObservableCollection<IChapter> _chapters = new ObservableCollection<IChapter>();
+        //public ObservableCollection<IChapter> Chapters
+        //{
+        //    get
+        //    {
+        //        if (Manga.Chapters != _chapters)
+        //            Manga.Chapters = _chapters;
+        //        return _chapters;
+        //    }
+        //    set
+        //    {
+        //        Manga.Chapters = value;
+        //        Set(ref _chapters, value);
+        //    }
+        //}
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
@@ -56,8 +72,6 @@ namespace MangaReader_MVVM.ViewModels
         {
             get
             {
-                if (Chapters == null)
-                    Manga.Chapters = new ObservableCollection<IChapter>();
                 if (_sortGridCommand == null)
                 {
                     _sortGridCommand = new DelegateCommand(() =>
