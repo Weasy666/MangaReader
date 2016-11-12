@@ -37,7 +37,7 @@
 
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="10,10,0,0">
             <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                <controls:ImageEx x:Name="ImageExControl1" Width="206" Height="300"
+                <controls:ImageEx x:Name="Cover" Width="206" Height="300"
                                   IsCacheEnabled="True"
                                   Source="{x:Bind ViewModel.Manga.Cover}"
                                   Stretch="Uniform"
@@ -45,8 +45,8 @@
                                   PlaceholderStretch="Uniform"
                                   VerticalAlignment="Top" />
                 <StackPanel Orientation="Vertical" Margin="12,0,0,0">
-                    <TextBlock x:Name="Alias"  Text="{x:Bind ViewModel.Manga.Alias}" FontSize="15" MaxWidth="378" TextWrapping="WrapWholeWords"/>
-                    <TextBlock x:Name="Category"  Text="{x:Bind ViewModel.Manga.Category}" FontSize="15"/>
+                    <TextBlock x:Name="Alias" Text="{x:Bind ViewModel.Manga.Alias}" FontSize="15" Width="372" TextWrapping="WrapWholeWords"/>
+                    <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15"/>
                     <TextBlock x:Name="Status" Text="{x:Bind ViewModel.Manga.Ongoing}" FontSize="15"/>
                     <TextBlock x:Name="NumberOfChapters" Text="{x:Bind ViewModel.Manga.NumberOfChapters}" FontSize="15"/>
                     <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Manga.LastUpdated}" FontSize="15"/>
@@ -57,11 +57,16 @@
 
         <GridView x:Name="ChapterGridView" Grid.Row="1" Grid.Column="1"
                   ItemsSource="{x:Bind ViewModel.Chapters}"
-                  Margin="12,0,0,0"
+                  Margin="12,10,0,0"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="20"
                   ItemTemplate="{StaticResource ChapterItem}"
                   ItemClick="{x:Bind ViewModel.ChapterClickedAsync}" >
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem">
+                    <Setter Property="Margin" Value="0,0,10,10" />
+                </Style>
+            </GridView.ItemContainerStyle>
         </GridView>
     </Grid>
 </Page>

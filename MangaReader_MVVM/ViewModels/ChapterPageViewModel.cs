@@ -30,12 +30,10 @@ namespace MangaReader_MVVM.ViewModels
             }
         }
 
+        private bool _showPageOverlay = false;
         private IChapter _chapter = new Chapter();
         public IChapter Chapter { get { return _chapter; } set { Set(ref _chapter, value); } }
         public ObservableCollection<IPage> Pages => Chapter.Pages;
-
-        //private IManga _manga;
-        //public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
 
         //private ObservableCollection<IChapter> _chapters;
         public ObservableCollection<IChapter> Chapters { get { return Chapter.ParentManga.Chapters; } }
@@ -75,18 +73,41 @@ namespace MangaReader_MVVM.ViewModels
             }
         }
 
+        public void Page_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            var chaptersPageBar = (sender as Grid).Children[0] as Template10.Controls.PageHeader;
+            chaptersPageBar.IsOpen = !chaptersPageBar.IsOpen;
+        }
+
+        private DelegateCommand _showCommand;
+        public DelegateCommand ShowCommand
+        {
+            get
+            {
+                if (_showCommand == null)
+                {
+                    _showCommand = new DelegateCommand(() =>
+                    {
+                        ;
+                    }, () => _showPageOverlay);
+                }
+                return _showCommand;
+            }
+        }
+
         public async Task ChapterClickedAsync(object sender, TappedRoutedEventArgs args)
         {
-            var test = args;
-            //var clickedChapter = args. .ClickedItem as Chapter;
-            //if (clickedChapter != null)
-            //    NavigationService.Navigate(typeof(Views.ChapterPage), clickedChapter.Id);
-            //else
-            //{
-            //    //TODO
-            //    var dialog = new MessageDialog("This Manga doesn't exist");
-            //    await dialog.ShowAsync();
-            //}
+            var gridView = (sender as ScrollViewer).Content as GridView;
+            var chapter = gridView.SelectedItem as Chapter;
+
+            if (chapter != null)
+                Chapter = await MangaLibrary.Instance.GetChapterAsync(chapter);
+            else
+            {
+                //TODO
+                var dialog = new MessageDialog("This Manga doesn't exist");
+                await dialog.ShowAsync();
+            }
         }
     }
 }

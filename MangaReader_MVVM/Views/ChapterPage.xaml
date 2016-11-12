@@ -18,31 +18,32 @@
         <ResourceDictionary Source="..\Styles\Templates.xaml" />
     </Page.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition />
-        </Grid.RowDefinitions>-->
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+          RightTapped="{x:Bind ViewModel.Page_RightTapped}" >
 
-        <t10controls:PageHeader x:Name="ChaptersBar" Frame="{x:Bind Frame}" ClosedDisplayMode="Hidden" IsOpen="True" Height="150" IsSticky="True" >
+        <t10controls:PageHeader x:Name="ChaptersBar" Frame="{x:Bind Frame}" ClosedDisplayMode="Hidden" Height="150" IsSticky="True" >
             <t10controls:PageHeader.Content>
-                <StackPanel Orientation="Horizontal" >
-                    <Grid Width="350" >
+                <Grid Margin="-16,0,0,-102" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid x:Name="MangaDetails" Width="350" Grid.Column="0" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="103"/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Button x:Name="FavoriteButton"
-                                Content="0"
+                                Content="{x:Bind ViewModel.Chapter.ParentManga.FavoritAsSymbol}"
                                 FontFamily="Segoe UI Symbol"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"
                                 Height="30" Width="30"
                                 Margin="0,0,5,5"
-                                Grid.Column="0"
+                                Grid.Column="1"
                                 Canvas.ZIndex="10"
                                 Padding="0" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/>
-                        <controls:ImageEx x:Name="ImageExControl2"
+                        <controls:ImageEx x:Name="Cover"
                                           Width="103" Height="150" Grid.Column="0"
                                           IsCacheEnabled="True"
                                           Source="{x:Bind ViewModel.Chapter.ParentManga.Cover}"
@@ -60,52 +61,53 @@
                             <TextBlock Text="{x:Bind ViewModel.Chapter.ParentManga.Category}" FontSize="15" TextWrapping="WrapWholeWords"/>
                         </StackPanel>
                     </Grid>
-                    <ScrollViewer HorizontalScrollMode="Enabled"
+                    <ScrollViewer x:Name="Chapters" HorizontalScrollMode="Enabled"
                                   HorizontalScrollBarVisibility="Auto"
-                                  VerticalScrollMode="Disabled"
+                                  VerticalScrollMode="Disabled" Grid.Column="1"
                                   VerticalScrollBarVisibility="Disabled"
                                   Tapped="{x:Bind ViewModel.ChapterClickedAsync}" >
                         <GridView x:Name="ChapterView"
-                                  Margin="0,0,0,0"
                                   ItemsSource="{x:Bind ViewModel.Chapter.ParentManga.Chapters}"
                                   VerticalContentAlignment="Stretch"
                                   ItemTemplate="{StaticResource ChapterItem}" >
                             <GridView.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <ItemsStackPanel Orientation="Horizontal"
-                                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                                     ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                                    <ItemsWrapGrid />
                                 </ItemsPanelTemplate>
                             </GridView.ItemsPanel>
+                            <GridView.ItemContainerStyle>
+                                <Style TargetType="GridViewItem">
+                                    <Setter Property="Margin" Value="0,0,10,0" />
+                                    <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
+                                    <Setter Property="Foreground" Value="{ThemeResource ContrastColorBrush}" />
+                                </Style>
+                            </GridView.ItemContainerStyle>
                         </GridView>
                     </ScrollViewer>
-                </StackPanel>
+                </Grid>
             </t10controls:PageHeader.Content>
         </t10controls:PageHeader>
 
         <ScrollViewer HorizontalScrollMode="Auto"
                       HorizontalScrollBarVisibility="Auto"
                       VerticalScrollMode="Disabled"
-                      VerticalScrollBarVisibility="Disabled"
-                      >
-            <GridView x:Name="PageView"
-                      Margin="0,0,0,0"
-                      ItemsSource="{x:Bind ViewModel.Pages}"
-                      VerticalContentAlignment="Stretch"
-                      IsItemClickEnabled="False">
+                      VerticalScrollBarVisibility="Disabled" >
+            <GridView x:Name="PageView" 
+                      ItemsSource="{x:Bind ViewModel.Pages}"                      
+                      IsHitTestVisible="False" >
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <ItemsStackPanel IsHitTestVisible="False"
-                                         IsTapEnabled="False"
-                                         IsDoubleTapEnabled="False"
-                                         IsHoldingEnabled="False"
-                                         IsRightTapEnabled="False"
-                                         Orientation="Horizontal"/>
+                        <ItemsWrapGrid Margin="0,0,0,-10"/>
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
+                <GridView.ItemContainerStyle>
+                    <Style TargetType="GridViewItem">
+                        <Setter Property="Margin" Value="0,0,10,0" />
+                    </Style>
+                </GridView.ItemContainerStyle>
                 <GridView.ItemTemplate>
                     <DataTemplate x:Name="PageTemplate" x:DataType="models:Page" >
-                        <Grid x:Name="PageImage" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,0,10">
+                        <Grid x:Name="PageImage" >
                             <controls:ImageEx x:Name="ImageExControl1"
                                   IsCacheEnabled="True"
                                   Source="{x:Bind Url}"

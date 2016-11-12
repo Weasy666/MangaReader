@@ -11,7 +11,7 @@
     </services:MangaItemTemplateSelector>
     
     <DataTemplate x:Key="MangaItemWithDetails">
-        <Grid Width="350" >
+        <Grid Width="350" Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="103" />
                 <ColumnDefinition />
@@ -107,13 +107,12 @@
     </DataTemplate>
 
     <DataTemplate x:Key="ChapterItem">
-        <Grid Width="250" >
-            <!--<Image Source="{x:Bind ChapterCover}" Width="103" Height="150" />-->
+        <Grid Width="250" Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" >
             <StackPanel Orientation="Vertical" Margin="5,0,0,0" MaxWidth="250">
                 <TextBlock Text="{Binding Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
                 <TextBlock Text="{Binding Number}" FontSize="15"/>
                 <!--<TextBlock Text="{Binding NumberOfPages}" FontSize="15"/>-->
-                <TextBlock Text="{Binding Released}" FontSize="15"/>
+                <TextBlock Text="{Binding Released}" FontSize="15" Margin="0,0,0,5"/>
             </StackPanel>
             <Button x:Name="ReadStatus"
                     Content="Read"
@@ -124,10 +123,6 @@
                     IsHitTestVisible="False"
                     IsTapEnabled="False" />
         </Grid>
-    </DataTemplate>
-
-    <DataTemplate x:Key="ChaptersBarItem">
-        
     </DataTemplate>
 
 </ResourceDictionary>

@@ -27,7 +27,7 @@
         <t10controls:PageHeader Text="Manga Library" Frame="{x:Bind Frame}" >
             <t10controls:PageHeader.PrimaryCommands>
                 <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />
-                <AppBarButton Icon="Sort" Label="Sort" Command="{Binding Path=SortGridCommand}"  />
+                <AppBarButton Icon="Sort" Label="Sort" Command="{Binding Path=SortGridCommand}" />
                 <AppBarSeparator />
                 <AppBarButton Icon="Refresh" Label="Reload" Command="{Binding Path=ReloadGridCommand}" />
             </t10controls:PageHeader.PrimaryCommands>
@@ -41,7 +41,12 @@
                   IncrementalLoadingTrigger="Edge"
                   ItemClick="{x:Bind ViewModel.MangaClickedAsync}"
                   ItemTemplate="{StaticResource MangaItemWithDetails}"
-                  ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}" >            
+                  ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}" >  
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem">
+                    <Setter Property="Margin" Value="0,0,10,10" />
+                </Style>
+            </GridView.ItemContainerStyle>
         </GridView>
     </Grid>
 </Page>
