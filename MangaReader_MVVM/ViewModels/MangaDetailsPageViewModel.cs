@@ -25,28 +25,32 @@ namespace MangaReader_MVVM.ViewModels
                 Manga = DesignTimeService.GenerateMangaDetailDummy();
                 Manga.Chapters = DesignTimeService.GenerateChapterDummies();
             }
-            Manga.Chapters = new ObservableCollection<IChapter>();
+            else
+            {
+                Manga = new Manga();
+                Manga.Chapters = new ObservableCollection<IChapter>();
+            }
         }
 
-        private IManga _manga = new Manga();
+        private IManga _manga;
         public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
-        public ObservableCollection<IChapter> Chapters => Manga.Chapters;
+        //public ObservableCollection<IChapter> Chapters => Manga.Chapters;
 
-        //private ObservableCollection<IChapter> _chapters = new ObservableCollection<IChapter>();
-        //public ObservableCollection<IChapter> Chapters
-        //{
-        //    get
-        //    {
-        //        if (Manga.Chapters != _chapters)
-        //            Manga.Chapters = _chapters;
-        //        return _chapters;
-        //    }
-        //    set
-        //    {
-        //        Manga.Chapters = value;
-        //        Set(ref _chapters, value);
-        //    }
-        //}
+        private ObservableCollection<IChapter> _chapters;
+        public ObservableCollection<IChapter> Chapters
+        {
+            get
+            {
+                if (Manga.Chapters != _chapters)
+                    _chapters = Manga.Chapters;
+                return _chapters;
+            }
+            set
+            {
+                Manga.Chapters = value;
+                Set(ref _chapters, value);
+            }
+        }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
@@ -76,8 +80,8 @@ namespace MangaReader_MVVM.ViewModels
                 {
                     _sortGridCommand = new DelegateCommand(() =>
                     {
-                        Manga.Chapters = new ObservableCollection<IChapter>(Chapters.Reverse());
-                    }, () => Chapters.Any());
+                        Manga.Chapters = new ObservableCollection<IChapter>(Manga.Chapters.Reverse());
+                    }, () => Manga.Chapters.Any());
                 }
                 return _sortGridCommand;
             }

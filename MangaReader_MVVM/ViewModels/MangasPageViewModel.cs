@@ -58,7 +58,7 @@ namespace MangaReader_MVVM.ViewModels
             {
                 Views.Busy.SetBusy(true, "Loading Mangas...");
                 Mangas = await MangaLibrary.Instance.GetMangasAsync();
-
+                await Task.Delay(5000);
                 Views.Busy.SetBusy(false);
             }, () => Mangas.Any()));
 

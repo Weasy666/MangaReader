@@ -34,7 +34,7 @@
         </t10controls:PageHeader>
 
         <GridView x:Name="MangaGridView" Grid.Row="1"
-                  ItemsSource="{x:Bind Path=ViewModel.Mangas, Mode=TwoWay}"
+                  ItemsSource="{Binding Path=Mangas, Mode=TwoWay}"
                   Margin="10,0,0,0"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="50"
