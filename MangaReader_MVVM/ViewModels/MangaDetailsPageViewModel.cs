@@ -57,7 +57,8 @@ namespace MangaReader_MVVM.ViewModels
             var manga = parameter as Manga;
             if (mode == NavigationMode.New && manga != null)
             {
-                Manga = await MangaLibrary.Instance.GetMangaAsync(manga);
+                Manga = await  MangaLibrary.Instance.GetMangaAsync(manga);
+                Chapters = Manga.Chapters;
             }
             await Task.CompletedTask;
         }
@@ -81,7 +82,7 @@ namespace MangaReader_MVVM.ViewModels
                     _sortGridCommand = new DelegateCommand(() =>
                     {
                         Manga.Chapters = new ObservableCollection<IChapter>(Manga.Chapters.Reverse());
-                    }, () => Manga.Chapters.Any());
+                    }, () => (Manga.Chapters != null || Manga.Chapters.Any()));
                 }
                 return _sortGridCommand;
             }

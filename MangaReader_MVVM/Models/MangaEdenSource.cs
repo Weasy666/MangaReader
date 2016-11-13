@@ -109,7 +109,7 @@ namespace MangaReader_MVVM.Models
                         chapter.Pages = JsonConvert.DeserializeObject<ObservableCollection<IPage>>(result, settings);
                     }
                 }
-                catch (HttpRequestException e)
+                catch (Exception e)
                 {
                     var dialog = new MessageDialog(e.Message);
                     await dialog.ShowAsync();
