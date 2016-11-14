@@ -33,9 +33,9 @@ namespace MangaReader_MVVM.Models
             MangaChapterPages = new Uri("chapter/", UriKind.Relative);
         }
 
-        public async Task<ObservableCollection<IManga>> GetMangasAsync()
+        public async Task<ObservableCollection<IManga>> GetMangasAsync(ReloadMode mode)
         {
-            if (_mangas == null || !_mangas.Any())
+            if (_mangas == null || !_mangas.Any() || mode == ReloadMode.FromSource)
             {
                 using (var httpClient = new HttpClient { BaseAddress = RootUri })
                 {

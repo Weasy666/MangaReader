@@ -12,4 +12,10 @@ namespace MangaReader_MVVM.Models
         MangaFox,
         MangaReader
     }
+    
+    public enum ReloadMode
+    {
+        Default,
+        FromSource
+    }
 }

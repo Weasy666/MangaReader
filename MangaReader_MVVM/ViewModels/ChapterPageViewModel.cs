@@ -30,8 +30,8 @@ namespace MangaReader_MVVM.ViewModels
             }
         }
 
-        public Visibility Overlay = Visibility.Collapsed;
-        public Visibility PageOverlayIsVisible { get; set; } = Visibility.Collapsed;
+        private Visibility _pageOverlayVisibility = Visibility.Collapsed;
+        public Visibility PageOverlayVisibility { get { return _pageOverlayVisibility; } set { Set(ref _pageOverlayVisibility, value); } }
         private IChapter _chapter = new Chapter();
         public IChapter Chapter { get { return _chapter; } set { Set(ref _chapter, value); } }
         public ObservableCollection<IPage> Pages => Chapter.Pages;
@@ -78,8 +78,8 @@ namespace MangaReader_MVVM.ViewModels
         {
             var chaptersPageBar = (sender as Grid).Children[0] as Template10.Controls.PageHeader;
             chaptersPageBar.IsOpen = !chaptersPageBar.IsOpen;
-            PageOverlayIsVisible = PageOverlayIsVisible == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
-            RaisePropertyChanged("PageOverlayIsVisible");
+            PageOverlayVisibility = PageOverlayVisibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
+            base.RaisePropertyChanged("PageOverlayVisibility");
         }
 
         private DelegateCommand _showCommand;
@@ -91,7 +91,7 @@ namespace MangaReader_MVVM.ViewModels
                 {
                     _showCommand = new DelegateCommand(() =>
                     {
-                        ;
+                        PageOverlayVisibility = PageOverlayVisibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
                     }, () => true);
                 }
                 return _showCommand;

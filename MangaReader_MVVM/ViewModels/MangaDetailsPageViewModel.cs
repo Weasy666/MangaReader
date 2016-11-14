@@ -74,23 +74,10 @@ namespace MangaReader_MVVM.ViewModels
 
         private DelegateCommand _sortGridCommand;
         public DelegateCommand SortGridCommand
-        {
-            get
+            => _sortGridCommand ?? (_sortGridCommand = new DelegateCommand(() =>
             {
-                if (_sortGridCommand == null)
-                {
-                    _sortGridCommand = new DelegateCommand(() =>
-                    {
-                        Manga.Chapters = new ObservableCollection<IChapter>(Manga.Chapters.Reverse());
-                    }, () => (Manga.Chapters != null || Manga.Chapters.Any()));
-                }
-                return _sortGridCommand;
-            }
-        }
-        //=> _sortGridCommand ?? (_sortGridCommand = new DelegateCommand(() =>
-        //{
-        //    Manga.Chapters = new ObservableCollection<IChapter>(Chapters.Reverse());
-        //}, () => Chapters.Any()));
+                Chapters = new ObservableCollection<IChapter>(Chapters.Reverse());
+            }, () => Chapters != null || Chapters.Any()));
 
         public async Task ChapterClickedAsync(object sender, ItemClickEventArgs e)
         {
