@@ -9,6 +9,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:MangaReader_MVVM.Views"
       xmlns:models="using:MangaReader_MVVM.Models"
+      xmlns:converters="using:MangaReader_MVVM.Converters"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:MangaReader_MVVM.ViewModels" mc:Ignorable="d">
     <Page.DataContext>
@@ -96,6 +97,9 @@
             <GridView x:Name="PageView" 
                       ItemsSource="{x:Bind ViewModel.Pages}"                      
                       IsHitTestVisible="False" >
+                <GridView.Resources>
+                    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+                </GridView.Resources>
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ItemsWrapGrid Margin="0,0,0,-10"/>
@@ -126,7 +130,8 @@
                                   BorderBrush="{x:Null}"
                                   HorizontalAlignment="Right"
                                   VerticalAlignment="Bottom"
-                                  Visibility="{Binding Path=PageOverlayVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                                  Visibility="{Binding Path=PageOverlayVisibility, ElementName=PageTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
+                                  >
                                 <TextBlock Text="{x:Bind Number}"
                                            FontSize="18"
                                            Foreground="White"

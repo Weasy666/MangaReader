@@ -97,6 +97,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Models\Chapter.cs" />
     <Compile Include="Models\CompareNatural.cs" />
     <Compile Include="Models\IChapter.cs" />
@@ -104,9 +105,9 @@
     <Compile Include="Models\IMangaSource.cs" />
     <Compile Include="Models\IPage.cs" />
     <Compile Include="Models\Manga.cs" />
-    <Compile Include="Models\MangaEdenChapterPagesConverter.cs" />
-    <Compile Include="Models\MangaEdenMangaDetailsConverter.cs" />
-    <Compile Include="Models\MangaEdenMangasListConverter.cs" />
+    <Compile Include="Converters\MangaEdenChapterPagesConverter.cs" />
+    <Compile Include="Converters\MangaEdenMangaDetailsConverter.cs" />
+    <Compile Include="Converters\MangaEdenMangasListConverter.cs" />
     <Compile Include="Models\MangaEdenSource.cs" />
     <Compile Include="Models\MangaLibrary.cs" />
     <Compile Include="Models\MangaSource.cs" />
