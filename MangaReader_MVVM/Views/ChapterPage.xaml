@@ -71,7 +71,8 @@
                         <GridView x:Name="ChapterView"
                                   ItemsSource="{x:Bind ViewModel.Chapter.ParentManga.Chapters}"
                                   VerticalContentAlignment="Stretch"
-                                  ItemTemplate="{StaticResource ChapterItem}" >
+                                  ItemTemplate="{StaticResource ChapterItem}"
+                                  SelectedIndex="{x:Bind ViewModel.SelectedChapterIndex}">
                             <GridView.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <ItemsWrapGrid />
@@ -95,14 +96,14 @@
                       VerticalScrollMode="Disabled"
                       VerticalScrollBarVisibility="Disabled" >
             <GridView x:Name="PageView" 
-                      ItemsSource="{x:Bind ViewModel.Pages}"                      
+                      ItemsSource="{x:Bind Path=ViewModel.Pages, Mode=OneWay}"                      
                       IsHitTestVisible="False" >
                 <GridView.Resources>
                     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
                 </GridView.Resources>
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <ItemsWrapGrid Margin="0,0,0,-10"/>
+                        <ItemsStackPanel Orientation="Horizontal" Margin="0,0,0,-10"/>
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
                 <GridView.ItemContainerStyle>
@@ -112,27 +113,26 @@
                 </GridView.ItemContainerStyle>
                 <GridView.ItemTemplate>
                     <DataTemplate x:Name="PageTemplate" x:DataType="models:Page" >
-                        <Grid x:Name="PageImage" >
-                            <controls:ImageEx x:Name="ImageExControl1"
-                                  Foreground="Red"
-                                  IsCacheEnabled="True"
-                                  Source="{x:Bind Url}"
-                                  Stretch="UniformToFill"
-                                  IsTapEnabled="False"
-                                  PlaceholderSource="/Assets/404_whoopsies.jpg"
-                                  PlaceholderStretch="Uniform"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center" />
-                            <Grid x:Name="PageNumber"
+                        <Grid x:Name="PageGrid" >
+                            <controls:ImageEx x:Name="PageImage"
+                                              IsCacheEnabled="False"
+                                              Source="{x:Bind Url}"
+                                              Stretch="UniformToFill"
+                                              IsTapEnabled="False"
+                                              PlaceholderSource="/Assets/404_whoopsies.jpg"
+                                              PlaceholderStretch="None"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                            <Grid x:Name="PageNumberGrid"
                                   Height="30"
                                   Width="40"
                                   Background="{ThemeResource SystemControlBackgroundAccentBrush}"
                                   BorderBrush="{x:Null}"
                                   HorizontalAlignment="Right"
                                   VerticalAlignment="Bottom"
-                                  Visibility="{Binding Path=PageOverlayVisibility, ElementName=PageTemplate, Converter={StaticResource BoolToVisibilityConverter}}"
-                                  >
-                                <TextBlock Text="{x:Bind Number}"
+                                  Visibility="{x:Bind Path=OverlayVisibility, Mode=OneWay}">
+                                <TextBlock x:Name="PageNumber"
+                                           Text="{x:Bind Number}"
                                            FontSize="18"
                                            Foreground="White"
                                            Margin="0,0,8,0"

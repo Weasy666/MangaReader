@@ -8,9 +8,21 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Models
 {
-    public class Page : IPage, IComparable<Page>
+    public class Page : Template10.Mvvm.ViewModelBase, IPage, IComparable<Page>
     {
-        //public Visibility OverlayVisibility { get; set; }
+        private Visibility _overlayVisibility = Visibility.Collapsed;
+        public Visibility OverlayVisibility
+        {
+            get
+            {
+                return _overlayVisibility;
+            }
+            set
+            {
+                _overlayVisibility = value;
+                base.RaisePropertyChanged();
+            }
+        }
         public int Number { get; set; }
         public BitmapImage Url { get; set; }
         public int Width { get; set; }

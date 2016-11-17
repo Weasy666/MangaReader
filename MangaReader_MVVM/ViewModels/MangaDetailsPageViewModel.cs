@@ -27,8 +27,10 @@ namespace MangaReader_MVVM.ViewModels
             }
             else
             {
-                Manga = new Manga();
-                Manga.Chapters = new ObservableCollection<IChapter>();
+                Manga = new Manga()
+                {
+                    Chapters = new ObservableCollection<IChapter>()
+                };
             }
         }
 

@@ -10,7 +10,7 @@ namespace MangaReader_MVVM.Models
 {
     public interface IPage
     {
-        //Visibility OverlayVisibility { get; set; }
+        Visibility OverlayVisibility { get; set; }
         int Number { get; set; }
         BitmapImage Url { get; set; }
         int Width { get; set; }

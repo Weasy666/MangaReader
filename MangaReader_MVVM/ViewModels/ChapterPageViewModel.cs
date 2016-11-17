@@ -28,13 +28,39 @@ namespace MangaReader_MVVM.ViewModels
                 Chapter.ParentManga = DesignTimeService.GenerateMangaDetailDummy();
                 Chapter.ParentManga.Chapters = DesignTimeService.GenerateChapterDummies();
             }
+            else
+            {
+                Chapter = new Chapter()
+                {
+                    Pages = new ObservableCollection<IPage>()
+                };
+            }
         }
 
-        private bool _pageOverlayVisibility = false;
-        public bool PageOverlayVisibility { get { return _pageOverlayVisibility; } set { Set(ref _pageOverlayVisibility, value); } }
-        private IChapter _chapter = new Chapter();
+        public int _selectedChapterIndex = -1;
+        public int SelectedChapterIndex { get { return _selectedChapterIndex; } set { Set(ref _selectedChapterIndex, value); } }
+
+        public Visibility _pageOverlayVisibility = Visibility.Collapsed;
+
+        private IChapter _chapter;
         public IChapter Chapter { get { return _chapter; } set { Set(ref _chapter, value); } }
-        public ObservableCollection<IPage> Pages => Chapter.Pages;
+        //public ObservableCollection<IPage> Pages => Chapter.Pages;
+
+        private ObservableCollection<IPage> _pages;
+        public ObservableCollection<IPage> Pages
+        {
+            get
+            {
+                if (Chapter.Pages != _pages)
+                    _pages = Chapter.Pages;
+                return _pages;
+            }
+            set
+            {
+                Chapter.Pages = value;
+                Set(ref _pages, value);
+            }
+        }
 
         //private ObservableCollection<IChapter> _chapters;
         public ObservableCollection<IChapter> Chapters { get { return Chapter.ParentManga.Chapters; } }
@@ -44,7 +70,9 @@ namespace MangaReader_MVVM.ViewModels
             var chapter = parameter as Chapter;
             if (mode == NavigationMode.New && chapter != null)
             {
+                Pages.Clear();
                 Chapter = await MangaLibrary.Instance.GetChapterAsync(chapter);
+                SelectedChapterIndex = chapter.ParentManga.Chapters.IndexOf(chapter);
             }
             await Task.CompletedTask;
         }
@@ -58,57 +86,56 @@ namespace MangaReader_MVVM.ViewModels
             await Task.CompletedTask;
         }
 
-        private DelegateCommand _sortGridCommand;
-        public DelegateCommand SortGridCommand
-        {
-            get
-            {
-                if (_sortGridCommand == null)
-                {
-                    _sortGridCommand = new DelegateCommand(() =>
-                    {
-                        Chapter.Pages = new ObservableCollection<IPage>(Pages.Reverse());
-                    }, () => Pages.Any());
-                }
-                return _sortGridCommand;
-            }
-        }
+        //private DelegateCommand _sortGridCommand;
+        //public DelegateCommand SortGridCommand
+        //{
+        //    get
+        //    {
+        //        if (_sortGridCommand == null)
+        //        {
+        //            _sortGridCommand = new DelegateCommand(() =>
+        //            {
+        //                Chapter.Pages = new ObservableCollection<IPage>(Pages.Reverse());
+        //            }, () => Pages.Any());
+        //        }
+        //        return _sortGridCommand;
+        //    }
+        //}
 
         public void Page_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            var chaptersPageBar = (sender as Grid).Children[0] as Template10.Controls.PageHeader;
-            chaptersPageBar.IsOpen = !chaptersPageBar.IsOpen;
-            PageOverlayVisibility = !PageOverlayVisibility;
-            base.RaisePropertyChanged("PageOverlayVisibility");
-        }
-
-        private DelegateCommand _showCommand;
-        public DelegateCommand ShowCommand
-        {
-            get
+            var grid = sender as Grid;
+            if (grid != null)
             {
-                if (_showCommand == null)
+                var chaptersPageHeader = grid.Children[0] as Template10.Controls.PageHeader;
+                chaptersPageHeader.IsOpen = !chaptersPageHeader.IsOpen;
+
+                _pageOverlayVisibility = _pageOverlayVisibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
+                foreach (var page in Pages)
                 {
-                    _showCommand = new DelegateCommand(() =>
-                    {
-                        PageOverlayVisibility = !PageOverlayVisibility;
-                    }, () => true);
+                    page.OverlayVisibility = _pageOverlayVisibility;
                 }
-                return _showCommand;
             }
         }
 
         public async Task ChapterClickedAsync(object sender, TappedRoutedEventArgs args)
         {
             var gridView = (sender as ScrollViewer).Content as GridView;
-            var chapter = gridView.SelectedItem as Chapter;
+            var clickedChapter = gridView.SelectedItem as Chapter;
 
-            if (chapter != null)
-                Chapter = await MangaLibrary.Instance.GetChapterAsync(chapter);
+            if (clickedChapter != null)
+            {
+                if (clickedChapter != Chapter)
+                {
+                    Chapter = await MangaLibrary.Instance.GetChapterAsync(clickedChapter);
+                    Pages = new ObservableCollection<IPage>(Chapter.Pages);
+                    //NavigationService.Navigate(typeof(Views.ChapterPage), clickedChapter);
+                }                
+            }
             else
             {
                 //TODO
-                var dialog = new MessageDialog("This Manga doesn't exist");
+                var dialog = new MessageDialog("This Chapter doesn't exist");
                 await dialog.ShowAsync();
             }
         }
