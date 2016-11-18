@@ -87,6 +87,34 @@ namespace MangaReader_MVVM.Models
             return manga;
         }
 
+        public Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode)
+        {
+            ApplicationDataContainer roamingSettings = ApplicationData.Current.RoamingSettings;
+            var roamingFavorits = roamingSettings.Containers["Favorits"].Values.ToList();
+
+            if (roamingFavorits != null)
+            {
+                foreach (KeyValuePair<string, object> fav in roamingFavorits)
+                {
+                    var favorit = fav.Key;
+                    var manga = mangas.FirstOrDefault(m => m.Title == favorit);
+                    if (manga != null)
+                        manga.IsFavorit = true;
+                }
+            }
+            return mangas;
+        }
+
+        public void AddFavorit(IManga manga)
+        {
+
+        }
+
+        public void AddFavorit(ObservableCollection<IManga> mangas)
+        {
+
+        }
+
         public async Task<ObservableCollection<IChapter>> GetChaptersAsync(Manga manga)
         {
             throw new NotImplementedException();
