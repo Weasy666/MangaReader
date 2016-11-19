@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Models
 {
-    public class Manga : IManga
+    public class Manga : Template10.Mvvm.ViewModelBase, IManga
     {
         public IMangaSource ParentLibrary { get; internal set; }
         public string Title { get; set; }
@@ -27,7 +27,19 @@ namespace MangaReader_MVVM.Models
         public bool Ongoing { get; set; }
         public ObservableCollection<IChapter> Chapters { get; set; } /*= new ObservableCollection<IChapter>();*/
         public int NumberOfChapters { get; set; }
-        public bool IsFavorit { get; set; }
+        private bool _isFavorit = false;
+        public bool IsFavorit
+        {
+            get
+            {
+                return _isFavorit;
+            }
+            set
+            {
+                _isFavorit = value;
+                base.RaisePropertyChanged();
+            }
+        }
         public string FavoritAsSymbol => IsFavorit ? "\uE1CF" : "\uE1CE";
 
         public int CompareTo(IManga comparePart) => comparePart == null ? 1 : CompareNatural.Compare(this.Title, comparePart.Title);

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Toolkit.Uwp;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace MangaReader_MVVM.Models
     class MangaEdenSource : IMangaSource
     {
         private ObservableCollection<IManga> _mangas;
+        private ObservableCollection<IManga> _favorits;
 
         public BitmapImage Icon { get; } = new BitmapImage(new Uri("ms-appx:///Assets/Icons/icon-mangaeden.png"));
         public string Name { get; } = MangaSource.MangaEden.ToString();
@@ -87,25 +89,25 @@ namespace MangaReader_MVVM.Models
             return manga;
         }
 
-        public Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode)
-        {
-            ApplicationDataContainer roamingSettings = ApplicationData.Current.RoamingSettings;
-            var roamingFavorits = roamingSettings.Containers["Favorits"].Values.ToList();
+        //TODO private method for loading and merging favorits with existing _mangas Collection
 
-            if (roamingFavorits != null)
+        public async Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode)
+        {
+            var helper = new RoamingObjectStorageHelper();
+            if (await helper.FileExistsAsync("favorits") && (_favorits == null || !_favorits.Any() || mode == ReloadMode.FromSource))
             {
-                foreach (KeyValuePair<string, object> fav in roamingFavorits)
+                var favorits = await helper.ReadFileAsync<Dictionary<string, IManga>>("favorits");
+                foreach (var manga in _mangas)
                 {
-                    var favorit = fav.Key;
-                    var manga = mangas.FirstOrDefault(m => m.Title == favorit);
-                    if (manga != null)
-                        manga.IsFavorit = true;
+
                 }
             }
+
+
             return mangas;
         }
 
-        public void AddFavorit(IManga manga)
+        public async void AddFavorit(IManga manga)
         {
 
         }
