@@ -93,16 +93,18 @@ namespace MangaReader_MVVM.Models
 
         public async Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode)
         {
-            var helper = new RoamingObjectStorageHelper();
-            if (await helper.FileExistsAsync("favorits") && (_favorits == null || !_favorits.Any() || mode == ReloadMode.FromSource))
-            {
-                var favorits = await helper.ReadFileAsync<Dictionary<string, IManga>>("favorits");
-                foreach (var manga in _mangas)
-                {
+            
 
+            if (roamingFavorits != null)
+            {
+                foreach (KeyValuePair<string, object> fav in roamingFavorits)
+                {
+                    var favorit = fav.Key;
+                    var manga = mangas.FirstOrDefault(m => m.Title == favorit);
+                    if (manga != null)
+                        manga.IsFavorit = true;
                 }
             }
-
 
             return mangas;
         }

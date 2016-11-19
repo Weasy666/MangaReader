@@ -23,6 +23,14 @@ namespace MangaReader_MVVM.Models
             // Load the JSON for the Result into a JObject
             JToken jo = JObject.Load(reader).GetValue("manga");
 
+            var helper = new Microsoft.Toolkit.Uwp.RoamingObjectStorageHelper();
+            var favoritsExist = helper.FileExistsAsync(MangaSource.MangaEden.ToString() + "_Favorits").Result;
+            List<string> favorits;
+            if (favoritsExist)
+            {
+                favorits = helper.ReadFileAsync<List<string>>(MangaSource.MangaEden.ToString() + "_Favorits").Result;
+            }
+
             // Construct the Result object using the non-default constructor
             var mangas = jo.Select(manga => new Manga
             {
@@ -33,7 +41,8 @@ namespace MangaReader_MVVM.Models
                 Category = string.Join(", ", manga["c"].AsEnumerable().Select(item => item.ToString()).ToArray()),
                 Hits = (int)manga["h"],
                 LastUpdated = DateTimeOffset.FromUnixTimeSeconds(manga["ld"] != null ? (long)manga["ld"] : 0).DateTime.ToLocalTime(),
-                Ongoing = (int)manga["s"] == 1
+                Ongoing = (int)manga["s"] == 1,
+                IsFavorit = favoritsExist ?? favorits.Contains(this.Title)
             }).ToList();
             mangas.Sort();
 
