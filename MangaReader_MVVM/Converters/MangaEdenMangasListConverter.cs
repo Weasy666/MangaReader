@@ -25,11 +25,12 @@ namespace MangaReader_MVVM.Models
 
             var helper = new Microsoft.Toolkit.Uwp.RoamingObjectStorageHelper();
             var favoritsExist = helper.FileExistsAsync(MangaSource.MangaEden.ToString() + "_Favorits").Result;
-            List<string> favorits;
+            Dictionary<string, IManga> favorits = new Dictionary<string, IManga>();
             if (favoritsExist)
             {
-                favorits = helper.ReadFileAsync<List<string>>(MangaSource.MangaEden.ToString() + "_Favorits").Result;
+                favorits = helper.ReadFileAsync<Dictionary<string, IManga>>(MangaSource.MangaEden.ToString() + "_Favorits").Result;
             }
+
 
             // Construct the Result object using the non-default constructor
             var mangas = jo.Select(manga => new Manga
@@ -42,7 +43,7 @@ namespace MangaReader_MVVM.Models
                 Hits = (int)manga["h"],
                 LastUpdated = DateTimeOffset.FromUnixTimeSeconds(manga["ld"] != null ? (long)manga["ld"] : 0).DateTime.ToLocalTime(),
                 Ongoing = (int)manga["s"] == 1,
-                IsFavorit = favoritsExist ?? favorits.Contains(this.Title)
+                IsFavorit = favoritsExist ? (favorits.ContainsKey(System.Net.WebUtility.HtmlDecode(manga["t"].ToString())) ? favorits[System.Net.WebUtility.HtmlDecode(manga["t"].ToString())].IsFavorit : false ) : false
             }).ToList();
             mangas.Sort();
 

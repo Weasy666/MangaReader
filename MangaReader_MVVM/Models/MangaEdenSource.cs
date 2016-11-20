@@ -90,33 +90,43 @@ namespace MangaReader_MVVM.Models
         }
 
         //TODO private method for loading and merging favorits with existing _mangas Collection
-
         public async Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode)
         {
-            
-
-            if (roamingFavorits != null)
+            if (_mangas != null && _mangas.Any() && (_favorits == null || !_favorits.Any() || mode == ReloadMode.FromSource))
             {
-                foreach (KeyValuePair<string, object> fav in roamingFavorits)
+                _favorits = new ObservableCollection<IManga>(_mangas.Where(manga => manga.IsFavorit).ToList());
+                return _favorits;
+            }
+            else
+            {
+                return _favorits;
+            }
+        }
+
+        public async void AddFavorit(IManga newFavorit)
+        {
+            if (_mangas != null && _mangas.Any())
+            {
+                var fav = _mangas.FirstOrDefault(manga => manga.Title == newFavorit.Title);
+                if (fav != null)
                 {
-                    var favorit = fav.Key;
-                    var manga = mangas.FirstOrDefault(m => m.Title == favorit);
-                    if (manga != null)
-                        manga.IsFavorit = true;
+                    fav.IsFavorit = true;
+                    if (_favorits == null)
+                        _favorits = new ObservableCollection<IManga>();
+                    _favorits.Add(fav);
                 }
             }
-
-            return mangas;
         }
 
-        public async void AddFavorit(IManga manga)
+        public async void AddFavorit(ObservableCollection<IManga> newFavorits)
         {
-
-        }
-
-        public void AddFavorit(ObservableCollection<IManga> mangas)
-        {
-
+            if (newFavorits != null && newFavorits.Any())
+            {
+                foreach (var fav in newFavorits)
+                {
+                    AddFavorit(fav);
+                }
+            }
         }
 
         public async Task<ObservableCollection<IChapter>> GetChaptersAsync(Manga manga)

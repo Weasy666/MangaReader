@@ -25,7 +25,7 @@ namespace MangaReader_MVVM.Models
         public DateTime Released { get; set; }
         public DateTime LastUpdated { get; set; }
         public bool Ongoing { get; set; }
-        public ObservableCollection<IChapter> Chapters { get; set; } /*= new ObservableCollection<IChapter>();*/
+        public ObservableCollection<IChapter> Chapters { get; set; }
         public int NumberOfChapters { get; set; }
         private bool _isFavorit = false;
         public bool IsFavorit

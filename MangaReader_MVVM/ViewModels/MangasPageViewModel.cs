@@ -68,6 +68,14 @@ namespace MangaReader_MVVM.ViewModels
                 Mangas = new ObservableCollection<IManga>(Mangas.Reverse());
             }, () => Mangas.Any()));
 
+        private DelegateCommand _favoritCommand;
+        public DelegateCommand FavoritCommand (object parameter)
+            => _favoritCommand ?? (_favoritCommand = new DelegateCommand(() =>
+            {
+                var manga = parameter as Manga;
+                MangaLibrary.Instance.AddFavorit(manga);
+            }, () => Mangas.Any()));
+
         public async void MangaClickedAsync(object sender, ItemClickEventArgs e)
         {
             var clickedManga = e.ClickedItem as Manga;
@@ -81,6 +89,11 @@ namespace MangaReader_MVVM.ViewModels
                 var dialog = new MessageDialog("This Manga doesn't exist");
                 await dialog.ShowAsync();
             }
+        }
+
+        public async void Favorit_Click(object sender, ItemClickEventArgs e)
+        {
+
         }
     }
 }

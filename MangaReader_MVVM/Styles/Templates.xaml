@@ -17,6 +17,7 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Button x:Name="FavoriteButton"
+                    Click="{Binding Path=Favorit_Click}"
                     Content="{Binding FavoritAsSymbol}"
                     FontFamily="Segoe UI Symbol"
                     HorizontalAlignment="Right"
@@ -25,7 +26,8 @@
                     Margin="0,0,5,5"
                     Grid.Column="1"
                     Canvas.ZIndex="10"
-                    Padding="0" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" />
+                    Padding="0"
+                    Foreground="{ThemeResource SystemControlForegroundAccentBrush}" />
             <controls:ImageEx x:Name="ImageExControl1" Width="103" Height="150" Grid.Column="0"
                                 IsCacheEnabled="True"
                                 Source="{Binding Cover}"
