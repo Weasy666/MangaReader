@@ -101,6 +101,13 @@ namespace MangaReader_MVVM.ViewModels
         //        return _sortGridCommand;
         //    }
         //}
+        private DelegateCommand<IManga> _favoritCommand;
+        public DelegateCommand<IManga> FavoritCommand
+            => _favoritCommand ?? (_favoritCommand = new DelegateCommand<IManga>((manga) =>
+            {
+                //manga.IsFavorit = !manga.IsFavorit;
+                MangaLibrary.Instance.AddFavorit(manga);
+            }));
 
         public void Page_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {

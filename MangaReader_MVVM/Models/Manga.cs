@@ -40,7 +40,6 @@ namespace MangaReader_MVVM.Models
                 base.RaisePropertyChanged();
             }
         }
-        public string FavoritAsSymbol => IsFavorit ? "\uE1CF" : "\uE1CE";
 
         public int CompareTo(IManga comparePart) => comparePart == null ? 1 : CompareNatural.Compare(this.Title, comparePart.Title);
     }

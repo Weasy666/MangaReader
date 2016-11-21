@@ -107,10 +107,10 @@ namespace MangaReader_MVVM.Models
         {
             if (_mangas != null && _mangas.Any())
             {
-                var fav = _mangas.FirstOrDefault(manga => manga.Title == newFavorit.Title);
+                var fav = _mangas.FirstOrDefault(manga => manga.Id == newFavorit.Id);
                 if (fav != null)
                 {
-                    fav.IsFavorit = true;
+                    fav.IsFavorit = !fav.IsFavorit;
                     if (_favorits == null)
                         _favorits = new ObservableCollection<IManga>();
                     _favorits.Add(fav);

@@ -19,7 +19,7 @@
         <ResourceDictionary Source="..\Styles\Templates.xaml" />
     </Page.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    <Grid x:Name="PageGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
           RightTapped="{x:Bind ViewModel.Page_RightTapped}" >
 
         <t10controls:PageHeader x:Name="ChaptersBar" Frame="{x:Bind Frame}" ClosedDisplayMode="Hidden" Height="150" IsSticky="True" >
@@ -34,8 +34,11 @@
                             <ColumnDefinition Width="103"/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
+                        <Grid.Resources>
+                            <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
+                        </Grid.Resources>
                         <Button x:Name="FavoriteButton"
-                                Content="{x:Bind ViewModel.Chapter.ParentManga.FavoritAsSymbol}"
+                                Content="{x:Bind ViewModel.Chapter.ParentManga.IsFavorit,Mode=OneWay, Converter={StaticResource BoolToFavoritSymbolConverter}}"
                                 FontFamily="Segoe UI Symbol"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"

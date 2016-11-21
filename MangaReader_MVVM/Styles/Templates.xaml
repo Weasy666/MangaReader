@@ -3,22 +3,27 @@
                     xmlns:local="using:MangaReader_MVVM.Styles"
                     xmlns:services="using:MangaReader_MVVM.Services"
                     xmlns:models="using:MangaReader_MVVM.Models"
+                    xmlns:converters="using:MangaReader_MVVM.Converters"
                     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls" >
 
     <services:MangaItemTemplateSelector x:Key="MangaItemTemplateSelector"
         MangaItemWithDetailsTemplate="{StaticResource MangaItemWithDetails}"
         MangaItemWithoutDetailsTemplate="{StaticResource MangaItemWithoutDetails}">
     </services:MangaItemTemplateSelector>
-    
+
     <DataTemplate x:Key="MangaItemWithDetails">
         <Grid Width="350" Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="103" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
+            <Grid.Resources>
+                <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
+            </Grid.Resources>
             <Button x:Name="FavoriteButton"
-                    Click="{Binding Path=Favorit_Click}"
-                    Content="{Binding FavoritAsSymbol}"
+                    Command="{Binding DataContext.FavoritCommand, ElementName=PageGrid}"
+                    CommandParameter="{Binding}"
+                    Content="{Binding IsFavorit, Mode=OneWay, Converter={StaticResource BoolToFavoritSymbolConverter}}"
                     FontFamily="Segoe UI Symbol"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
@@ -62,7 +67,7 @@
     </DataTemplate>
     
     <DataTemplate x:Key="MangaItemWithoutDetails">
-        <Grid Width="171" >
+        <Grid Width="171" >            
             <controls:ImageEx x:Name="ImageExControl1" Width="171" Height="250" 
                                 IsCacheEnabled="True"
                                 Source="{Binding Cover}"
@@ -94,8 +99,13 @@
                     <ColumnDefinition Width="30" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
+                <Grid.Resources>
+                    <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
+                </Grid.Resources>
                 <Button x:Name="FavoriteButton"
-                        Content="{Binding FavoritAsSymbol}"
+                        Command="{Binding DataContext.FavoritCommand, ElementName=PageGrid}"
+                        CommandParameter="{Binding}"
+                        Content="{Binding IsFavorit, Mode=OneWay, Converter={StaticResource BoolToFavoritSymbolConverter}}"
                         FontFamily="Segoe UI Symbol"
                         Height="30" Width="30" Padding="0"
                         Foreground="{ThemeResource SystemControlForegroundAccentBrush}" Background="Transparent"/>

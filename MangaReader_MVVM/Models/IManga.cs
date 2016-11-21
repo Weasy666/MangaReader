@@ -26,6 +26,5 @@ namespace MangaReader_MVVM.Models
         ObservableCollection<IChapter> Chapters { get; set; }
         int NumberOfChapters { get; set; }
         bool IsFavorit { get; set; }
-        string FavoritAsSymbol { get; }
     }
 }
