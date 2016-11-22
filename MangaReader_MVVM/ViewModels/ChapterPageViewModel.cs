@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Template10.Services.NavigationService;
 using Windows.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
-using MangaScrapeLib.Repositories;
 using MangaReader_MVVM.Models;
 using MangaReader_MVVM.Services;
 using Windows.UI.Xaml;
@@ -101,13 +100,13 @@ namespace MangaReader_MVVM.ViewModels
         //        return _sortGridCommand;
         //    }
         //}
-        private DelegateCommand<IManga> _favoritCommand;
-        public DelegateCommand<IManga> FavoritCommand
-            => _favoritCommand ?? (_favoritCommand = new DelegateCommand<IManga>((manga) =>
+        private DelegateCommand _favoritCommand;
+        public DelegateCommand FavoritCommand
+            => _favoritCommand ?? (_favoritCommand = new DelegateCommand(() =>
             {
-                //manga.IsFavorit = !manga.IsFavorit;
-                MangaLibrary.Instance.AddFavorit(manga);
-            }));
+                MangaLibrary.Instance.AddFavorit(Chapter.ParentManga);
+                Chapter.ParentManga.IsFavorit = !Chapter.ParentManga.IsFavorit;
+            }, () => Chapter.ParentManga != null));
 
         public void Page_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {

@@ -29,16 +29,17 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
+                    <Grid.Resources>
+                        <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
+                    </Grid.Resources>
                     <Grid x:Name="MangaDetails" Width="350" Grid.Column="0" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="103"/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Grid.Resources>
-                            <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
-                        </Grid.Resources>
                         <Button x:Name="FavoriteButton"
-                                Content="{x:Bind ViewModel.Chapter.ParentManga.IsFavorit,Mode=OneWay, Converter={StaticResource BoolToFavoritSymbolConverter}}"
+                                Command="{x:Bind ViewModel.FavoritCommand}"
+                                Content="{Binding Chapter.ParentManga.IsFavorit, Mode=TwoWay, Converter={StaticResource BoolToFavoritSymbolConverter}, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Symbol"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"
@@ -46,7 +47,7 @@
                                 Margin="0,0,5,5"
                                 Grid.Column="1"
                                 Canvas.ZIndex="10"
-                                Padding="0" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                                Padding="0" Foreground="{ThemeResource ContrastColorBrush}"/>
                         <controls:ImageEx x:Name="Cover"
                                           Width="103" Height="150" Grid.Column="0"
                                           IsCacheEnabled="True"

@@ -76,8 +76,10 @@ namespace MangaReader_MVVM.Models
                     {
                         JsonSerializerSettings settings = new JsonSerializerSettings();
                         settings.Converters.Add(new MangaEdenMangaDetailsConverter());
+                        
+                        var details = JsonConvert.DeserializeObject<IManga>(result, settings) as Manga;
 
-                        manga = JsonConvert.DeserializeObject<IManga>(result, settings) as Manga;
+                        MergeMangaWithDetails(manga, details);
                     }
                 }
                 catch (Exception e)
@@ -87,6 +89,20 @@ namespace MangaReader_MVVM.Models
                 }
             }
             return manga;
+        }
+
+        private void MergeMangaWithDetails(IManga manga, IManga details)
+        {
+            manga.Alias = details.Alias;
+            manga.Artist = details.Artist;
+            manga.Author = details.Author;
+            manga.Chapters = details.Chapters;
+            manga.Description = details.Description;
+            manga.NumberOfChapters = details.NumberOfChapters;
+            manga.Released = details.Released;
+
+            foreach (var chapter in manga.Chapters)
+                chapter.ParentManga = manga;
         }
 
         //TODO private method for loading and merging favorits with existing _mangas Collection

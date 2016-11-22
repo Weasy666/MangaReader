@@ -1,7 +1,6 @@
 ﻿{
   "dependencies": {
     "AngleSharp": "0.9.9",
-    "MangaScrapeLib": "2.0.36",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
     "Microsoft.Toolkit.Uwp": "1.2.0",
     "Microsoft.Toolkit.Uwp.UI": "1.2.0",

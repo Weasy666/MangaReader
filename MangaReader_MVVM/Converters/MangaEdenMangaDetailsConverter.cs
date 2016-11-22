@@ -42,7 +42,6 @@ namespace MangaReader_MVVM.Models
 
             var chapters = jo["chapters"].AsEnumerable().Select(chapter => new Chapter
             {
-                ParentManga = manga,
                 Number = (int)chapter[0],
                 Title = chapter[2].ToString(),
                 Id = chapter[3].ToString(),

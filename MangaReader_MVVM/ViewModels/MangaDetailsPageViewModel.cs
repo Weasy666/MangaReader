@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Template10.Services.NavigationService;
 using Windows.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
-using MangaScrapeLib.Repositories;
 using MangaReader_MVVM.Models;
 using MangaReader_MVVM.Services;
 using Windows.UI.Xaml;
