@@ -55,10 +55,11 @@ namespace MangaReader_MVVM.ViewModels
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
+            var test = MangaLibrary.Instance.GetMangasAsync();
             var manga = parameter as Manga;
             if (mode == NavigationMode.New && manga != null)
             {
-                Manga = await  MangaLibrary.Instance.GetMangaAsync(manga);
+                Manga = await MangaLibrary.Instance.GetMangaAsync(manga);
                 Chapters = Manga.Chapters;
             }
             await Task.CompletedTask;
@@ -79,6 +80,14 @@ namespace MangaReader_MVVM.ViewModels
             {
                 Chapters = new ObservableCollection<IChapter>(Chapters.Reverse());
             }, () => Chapters != null || Chapters.Any()));
+
+        private DelegateCommand<IManga> _favoritCommand;
+        public DelegateCommand<IManga> FavoritCommand
+            => _favoritCommand ?? (_favoritCommand = new DelegateCommand<IManga>((manga) =>
+            {
+                var test = MangaLibrary.Instance.GetMangasAsync();
+                MangaLibrary.Instance.AddFavorit(manga);
+            }));
 
         public async Task ChapterClickedAsync(object sender, ItemClickEventArgs e)
         {

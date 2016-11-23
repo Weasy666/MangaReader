@@ -9,6 +9,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:MangaReader_MVVM.Views"
       xmlns:models="using:MangaReader_MVVM.Models"
+      xmlns:converters="using:MangaReader_MVVM.Converters"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:MangaReader_MVVM.ViewModels" mc:Ignorable="d">
     <Page.DataContext>
@@ -37,13 +38,31 @@
 
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="10,10,0,0">
             <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                <controls:ImageEx x:Name="Cover" Width="206" Height="300"
-                                  IsCacheEnabled="True"
-                                  Source="{x:Bind ViewModel.Manga.Cover}"
-                                  Stretch="Uniform"
-                                  PlaceholderSource="/Assets/404_whoopsies.jpg"
-                                  PlaceholderStretch="Uniform"
-                                  VerticalAlignment="Top" />
+                <StackPanel>
+                    <controls:ImageEx x:Name="Cover" Width="206" Height="300"
+                                      IsCacheEnabled="True"
+                                      Source="{x:Bind ViewModel.Manga.Cover}"
+                                      Stretch="Uniform"
+                                      PlaceholderSource="/Assets/404_whoopsies.jpg"
+                                      PlaceholderStretch="Uniform"
+                                      VerticalAlignment="Top" />
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0" FlowDirection="RightToLeft">
+                        <StackPanel.Resources>
+                            <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
+                        </StackPanel.Resources>
+                        <Button x:Name="FavoriteButton"
+                                Command="{x:Bind ViewModel.FavoritCommand}"
+                                Content="{Binding Manga.IsFavorit, Mode=TwoWay, Converter={StaticResource BoolToFavoritSymbolConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Symbol"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Height="30" Width="30"
+                                Margin="0,0,5,5"
+                                Grid.Column="1"
+                                Canvas.ZIndex="10"
+                                Padding="0" />
+                    </StackPanel>
+                </StackPanel>
                 <StackPanel Orientation="Vertical" Margin="12,0,0,0">
                     <TextBlock x:Name="Alias" Text="{x:Bind ViewModel.Manga.Alias}" FontSize="15" Width="372" TextWrapping="WrapWholeWords"/>
                     <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15"/>

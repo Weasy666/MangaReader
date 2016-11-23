@@ -66,6 +66,7 @@ namespace MangaReader_MVVM.ViewModels
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
+            var test = MangaLibrary.Instance.GetMangasAsync();
             var chapter = parameter as Chapter;
             if (mode == NavigationMode.New && chapter != null)
             {

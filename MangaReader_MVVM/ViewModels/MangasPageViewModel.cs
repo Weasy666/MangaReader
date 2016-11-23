@@ -56,7 +56,7 @@ namespace MangaReader_MVVM.ViewModels
         public DelegateCommand ReloadGridCommand
             => _reloadGridCommand ?? (_reloadGridCommand = new DelegateCommand(async () =>
             {
-                Views.Busy.SetBusy(true, "Picking up the freshly printed Manga Books...");
+                Views.Busy.SetBusy(true, "Picking up the freshly printed books...");
                 Mangas = await MangaLibrary.Instance.GetMangasAsync(Utils.ReloadMode.FromSource);
                 Views.Busy.SetBusy(false);
             }, () => Mangas.Any()));
@@ -73,6 +73,7 @@ namespace MangaReader_MVVM.ViewModels
             => _favoritCommand ?? (_favoritCommand = new DelegateCommand<IManga>((manga) =>
             {
                 var before = Mangas;
+                var test = MangaLibrary.Instance.GetMangasAsync();
                 MangaLibrary.Instance.AddFavorit(manga);
             }));
 

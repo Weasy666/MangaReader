@@ -78,7 +78,7 @@ namespace MangaReader_MVVM.Services
                         JsonSerializerSettings settings = new JsonSerializerSettings();
                         settings.Converters.Add(new MangaEdenMangaDetailsConverter());
                         
-                        var details = JsonConvert.DeserializeObject<IManga>(result, settings) as Manga;
+                        var details = JsonConvert.DeserializeObject<IManga>(result, settings);
 
                         MergeMangaWithDetails(manga, details);
                     }
@@ -157,7 +157,9 @@ namespace MangaReader_MVVM.Services
                         JsonSerializerSettings settings = new JsonSerializerSettings();
                         settings.Converters.Add(new MangaEdenChapterPagesConverter());
 
-                        chapter.Pages = JsonConvert.DeserializeObject<ObservableCollection<IPage>>(result, settings);
+                        var pages = JsonConvert.DeserializeObject<ObservableCollection<IPage>>(result, settings);
+
+                        chapter.Pages = pages;
                     }
                 }
                 catch (Exception e)
