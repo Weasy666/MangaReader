@@ -57,7 +57,7 @@ namespace MangaReader_MVVM.ViewModels
             => _reloadGridCommand ?? (_reloadGridCommand = new DelegateCommand(async () =>
             {
                 Views.Busy.SetBusy(true, "Picking up the freshly printed Manga Books...");
-                Mangas = await MangaLibrary.Instance.GetMangasAsync(ReloadMode.FromSource);
+                Mangas = await MangaLibrary.Instance.GetMangasAsync(Utils.ReloadMode.FromSource);
                 Views.Busy.SetBusy(false);
             }, () => Mangas.Any()));
 

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MangaReader_MVVM.Models
+namespace MangaReader_MVVM.Utils
 {
     //Author of this Algorithm is J.D. from http://stackoverflow.com/questions/248603/natural-sort-order-in-c-sharp/7048016#7048016
     class CompareNatural

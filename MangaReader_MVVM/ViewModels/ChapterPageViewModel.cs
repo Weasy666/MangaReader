@@ -104,8 +104,8 @@ namespace MangaReader_MVVM.ViewModels
         public DelegateCommand FavoritCommand
             => _favoritCommand ?? (_favoritCommand = new DelegateCommand(() =>
             {
+                var test = MangaLibrary.Instance.GetMangasAsync();
                 MangaLibrary.Instance.AddFavorit(Chapter.ParentManga);
-                Chapter.ParentManga.IsFavorit = !Chapter.ParentManga.IsFavorit;
             }, () => Chapter.ParentManga != null));
 
         public void Page_RightTapped(object sender, RightTappedRoutedEventArgs e)

@@ -41,6 +41,6 @@ namespace MangaReader_MVVM.Models
             }
         }
 
-        public int CompareTo(IManga comparePart) => comparePart == null ? 1 : CompareNatural.Compare(this.Title, comparePart.Title);
+        public int CompareTo(IManga comparePart) => comparePart == null ? 1 : Utils.CompareNatural.Compare(this.Title, comparePart.Title);
     }
 }

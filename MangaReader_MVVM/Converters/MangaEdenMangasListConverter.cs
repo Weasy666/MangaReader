@@ -24,11 +24,11 @@ namespace MangaReader_MVVM.Models
             JToken jo = JObject.Load(reader).GetValue("manga");
 
             var helper = new Microsoft.Toolkit.Uwp.RoamingObjectStorageHelper();
-            var favoritsExist = helper.FileExistsAsync(MangaSource.MangaEden.ToString() + "_Favorits").Result;
+            var favoritsExist = helper.FileExistsAsync(Utils.MangaSource.MangaEden.ToString() + "_Favorits").Result;
             Dictionary<string, IManga> favorits = new Dictionary<string, IManga>();
             if (favoritsExist)
             {
-                favorits = helper.ReadFileAsync<Dictionary<string, IManga>>(MangaSource.MangaEden.ToString() + "_Favorits").Result;
+                favorits = helper.ReadFileAsync<Dictionary<string, IManga>>(Utils.MangaSource.MangaEden.ToString() + "_Favorits").Result;
             }
 
 

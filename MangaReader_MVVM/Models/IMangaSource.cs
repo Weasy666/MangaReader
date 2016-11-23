@@ -15,8 +15,8 @@ namespace MangaReader_MVVM.Models
         Uri RootUri { get; }
         Uri MangasListPage { get; }
 
-        Task<ObservableCollection<IManga>> GetMangasAsync(ReloadMode mode);
-        Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode);
+        Task<ObservableCollection<IManga>> GetMangasAsync(Utils.ReloadMode mode);
+        Task<ObservableCollection<IManga>> GetFavoritMangasAsync(Utils.ReloadMode mode);
         void AddFavorit(IManga manga);
         void AddFavorit(ObservableCollection<IManga> mangas);
         Task<IManga> GetMangaAsync(Manga manga);

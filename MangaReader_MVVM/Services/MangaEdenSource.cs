@@ -11,8 +11,9 @@ using System.Threading.Tasks;
 using Windows.Globalization;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
+using MangaReader_MVVM.Models;
 
-namespace MangaReader_MVVM.Models
+namespace MangaReader_MVVM.Services
 {
     class MangaEdenSource : IMangaSource
     {
@@ -20,7 +21,7 @@ namespace MangaReader_MVVM.Models
         private ObservableCollection<IManga> _favorits;
 
         public BitmapImage Icon { get; } = new BitmapImage(new Uri("ms-appx:///Assets/Icons/icon-mangaeden.png"));
-        public string Name { get; } = MangaSource.MangaEden.ToString();
+        public string Name { get; } = Utils.MangaSource.MangaEden.ToString();
         private int Language { get; } = 0;
         public Uri RootUri { get; }
         public Uri MangasListPage { get; }
@@ -35,9 +36,9 @@ namespace MangaReader_MVVM.Models
             MangaChapterPages = new Uri("chapter/", UriKind.Relative);
         }
 
-        public async Task<ObservableCollection<IManga>> GetMangasAsync(ReloadMode mode)
+        public async Task<ObservableCollection<IManga>> GetMangasAsync(Utils.ReloadMode mode)
         {
-            if (_mangas == null || !_mangas.Any() || mode == ReloadMode.FromSource)
+            if (_mangas == null || !_mangas.Any() || mode == Utils.ReloadMode.FromSource)
             {
                 using (var httpClient = new HttpClient { BaseAddress = RootUri })
                 {
@@ -106,31 +107,23 @@ namespace MangaReader_MVVM.Models
         }
 
         //TODO private method for loading and merging favorits with existing _mangas Collection
-        public async Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode)
+        public async Task<ObservableCollection<IManga>> GetFavoritMangasAsync(Utils.ReloadMode mode)
         {
-            if (_mangas != null && _mangas.Any() && (_favorits == null || !_favorits.Any() || mode == ReloadMode.FromSource))
+            if (_mangas != null && _mangas.Any() && (_favorits == null || !_favorits.Any() || mode == Utils.ReloadMode.FromSource))
             {
                 _favorits = new ObservableCollection<IManga>(_mangas.Where(manga => manga.IsFavorit).ToList());
-                return _favorits;
             }
-            else
-            {
-                return _favorits;
-            }
+            return _favorits;
         }
 
-        public async void AddFavorit(IManga newFavorit)
+        public async void AddFavorit(IManga favorit)
         {
-            if (_mangas != null && _mangas.Any())
+            if (favorit != null)
             {
-                var fav = _mangas.FirstOrDefault(manga => manga.Id == newFavorit.Id);
-                if (fav != null)
-                {
-                    fav.IsFavorit = !fav.IsFavorit;
-                    if (_favorits == null)
-                        _favorits = new ObservableCollection<IManga>();
-                    _favorits.Add(fav);
-                }
+                favorit.IsFavorit = !favorit.IsFavorit;
+                if (_favorits == null)
+                    _favorits = new ObservableCollection<IManga>();
+                _favorits.Add(favorit);
             }
         }
 

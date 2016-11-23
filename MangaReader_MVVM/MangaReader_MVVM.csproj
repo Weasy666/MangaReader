@@ -100,7 +100,7 @@
     <Compile Include="Converters\BoolToFavoritSymbolConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Models\Chapter.cs" />
-    <Compile Include="Models\CompareNatural.cs" />
+    <Compile Include="Utils\CompareNatural.cs" />
     <Compile Include="Models\IChapter.cs" />
     <Compile Include="Models\IManga.cs" />
     <Compile Include="Models\IMangaSource.cs" />
@@ -109,9 +109,9 @@
     <Compile Include="Converters\MangaEdenChapterPagesConverter.cs" />
     <Compile Include="Converters\MangaEdenMangaDetailsConverter.cs" />
     <Compile Include="Converters\MangaEdenMangasListConverter.cs" />
-    <Compile Include="Models\MangaEdenSource.cs" />
-    <Compile Include="Models\MangaLibrary.cs" />
-    <Compile Include="Models\MangaSource.cs" />
+    <Compile Include="Services\MangaEdenSource.cs" />
+    <Compile Include="Services\MangaLibrary.cs" />
+    <Compile Include="Utils\MangaSource.cs" />
     <Compile Include="Models\Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\MangaItemTemplateSelector.cs" />
