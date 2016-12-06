@@ -1,5 +1,4 @@
-﻿using Microsoft.Toolkit.Uwp;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -11,12 +10,15 @@ using System.Threading.Tasks;
 using Windows.Globalization;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
+using Template10.Services.SettingsService;
 using MangaReader_MVVM.Models;
 
 namespace MangaReader_MVVM.Services
 {
     class MangaEdenSource : IMangaSource
     {
+        private static readonly ISettingsHelper _helper = new SettingsHelper();
+
         private ObservableCollection<IManga> _mangas;
         private ObservableCollection<IManga> _favorits;
 
@@ -61,6 +63,9 @@ namespace MangaReader_MVVM.Services
                     }
                 }
             }
+
+            LoadAndMergeFavorits();
+
             return _mangas;
         }
 
@@ -92,26 +97,34 @@ namespace MangaReader_MVVM.Services
             return manga;
         }
 
+        //TODO somehow the added chapters are not linked to the manga in the _mangas list
         private void MergeMangaWithDetails(IManga manga, IManga details)
         {
             manga.Alias = details.Alias;
             manga.Artist = details.Artist;
             manga.Author = details.Author;
-            manga.Chapters = details.Chapters;
+            foreach (var chapter in details.Chapters)
+            {
+                manga.AddChapter(chapter);
+            }
             manga.Description = details.Description;
             manga.NumberOfChapters = details.NumberOfChapters;
             manga.Released = details.Released;
-
-            foreach (var chapter in manga.Chapters)
-                chapter.ParentManga = manga;
         }
 
         //TODO private method for loading and merging favorits with existing _mangas Collection
         public async Task<ObservableCollection<IManga>> GetFavoritMangasAsync(Utils.ReloadMode mode)
         {
-            if (_mangas != null && _mangas.Any() && (_favorits == null || !_favorits.Any() || mode == Utils.ReloadMode.FromSource))
+            if (_mangas != null && _mangas.Any())
             {
-                _favorits = new ObservableCollection<IManga>(_mangas.Where(manga => manga.IsFavorit).ToList());
+                if (_favorits == null || !_favorits.Any() || mode == Utils.ReloadMode.FromSource)
+                {
+                    _favorits = new ObservableCollection<IManga>(_mangas.Where(manga => manga.IsFavorit).ToList());
+                }
+            }
+            else
+            {
+                await GetMangasAsync(Utils.ReloadMode.Default);
             }
             return _favorits;
         }
@@ -121,9 +134,16 @@ namespace MangaReader_MVVM.Services
             if (favorit != null)
             {
                 favorit.IsFavorit = !favorit.IsFavorit;
-                if (_favorits == null)
-                    _favorits = new ObservableCollection<IManga>();
-                _favorits.Add(favorit);
+                var favorits = _helper.Read("favorits_" + this.Name, new List<string>(), SettingsStrategies.Roam);
+                if (favorits.Any() && !favorit.IsFavorit)
+                {
+                    favorits.Remove(favorit.Id);                    
+                }
+                else
+                {
+                    favorits.Add(favorit.Id);
+                }
+                _helper.Write("favorits_" + this.Name, favorits, SettingsStrategies.Roam);
             }
         }
 
@@ -174,6 +194,17 @@ namespace MangaReader_MVVM.Services
         public async Task<ObservableCollection<IManga>> SearchMangaAsync(string query)
         {
             throw new NotImplementedException();
+        }
+
+        private void LoadAndMergeFavorits()
+        {
+            var favorits = _helper.Read("favorits_" + this.Name, new List<string>(), SettingsStrategies.Roam);
+            foreach (var id in favorits)
+            {
+                var manga = _mangas.FirstOrDefault(m => m.Id == id);
+                if (manga != null)
+                    manga.IsFavorit = true;
+            }
         }
     }
 }

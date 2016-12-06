@@ -25,7 +25,19 @@ namespace MangaReader_MVVM.Models
         public DateTime Released { get; set; }
         public DateTime LastUpdated { get; set; }
         public bool Ongoing { get; set; }
-        public ObservableCollection<IChapter> Chapters { get; set; }
+        public ObservableCollection<IChapter> _chapters { get; set; } = new ObservableCollection<IChapter>();
+        public ObservableCollection<IChapter> Chapters
+        {
+            get
+            {
+                return _chapters;
+            }
+            set
+            {
+                _chapters = value;
+                base.RaisePropertyChanged();
+            }
+        }
         public int NumberOfChapters { get; set; }
         private bool _isFavorit = false;
         public bool IsFavorit
@@ -39,6 +51,23 @@ namespace MangaReader_MVVM.Models
                 _isFavorit = value;
                 base.RaisePropertyChanged();
             }
+        }
+
+        public void AddChapter(IChapter chapter)
+        {
+            chapter.ParentManga = this;
+            this.Chapters.Add(chapter);
+        }
+
+        public void RemoveChapter(IChapter chapter)
+        {
+            this.Chapters.Remove(chapter);
+            chapter.ParentManga = null;
+        }
+
+        public void ReverseChapters()
+        {
+            this.Chapters = new ObservableCollection<IChapter>(Chapters.Reverse());
         }
 
         public int CompareTo(IManga comparePart) => comparePart == null ? 1 : Utils.CompareNatural.Compare(this.Title, comparePart.Title);

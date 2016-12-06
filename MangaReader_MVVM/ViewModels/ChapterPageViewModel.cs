@@ -66,13 +66,15 @@ namespace MangaReader_MVVM.ViewModels
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            var test = MangaLibrary.Instance.GetMangasAsync();
             var chapter = parameter as Chapter;
-            if (mode == NavigationMode.New && chapter != null)
+            
+            if (mode == NavigationMode.New && parameter != null)
             {
                 Pages.Clear();
+                var manga = chapter.ParentManga;
+                var chapterIndex = manga.Chapters.IndexOf(chapter);
                 Chapter = await MangaLibrary.Instance.GetChapterAsync(chapter);
-                SelectedChapterIndex = chapter.ParentManga.Chapters.IndexOf(chapter);
+                SelectedChapterIndex = chapterIndex;//chapter.ParentManga.Chapters.IndexOf(chapter);
             }
             await Task.CompletedTask;
         }
@@ -105,7 +107,6 @@ namespace MangaReader_MVVM.ViewModels
         public DelegateCommand FavoritCommand
             => _favoritCommand ?? (_favoritCommand = new DelegateCommand(() =>
             {
-                var test = MangaLibrary.Instance.GetMangasAsync();
                 MangaLibrary.Instance.AddFavorit(Chapter.ParentManga);
             }, () => Chapter.ParentManga != null));
 

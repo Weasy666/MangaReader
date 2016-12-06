@@ -72,8 +72,6 @@ namespace MangaReader_MVVM.ViewModels
         public DelegateCommand<IManga> FavoritCommand
             => _favoritCommand ?? (_favoritCommand = new DelegateCommand<IManga>((manga) =>
             {
-                var before = Mangas;
-                var test = MangaLibrary.Instance.GetMangasAsync();
                 MangaLibrary.Instance.AddFavorit(manga);
             }));
 

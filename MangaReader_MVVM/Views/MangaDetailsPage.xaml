@@ -75,7 +75,7 @@
         </StackPanel>
 
         <GridView x:Name="ChapterGridView" Grid.Row="1" Grid.Column="1"
-                  ItemsSource="{Binding Path=Chapters, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding Path=Manga.Chapters, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                   Margin="12,10,0,0"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="20"

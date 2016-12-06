@@ -26,5 +26,10 @@ namespace MangaReader_MVVM.Models
         ObservableCollection<IChapter> Chapters { get; set; }
         int NumberOfChapters { get; set; }
         bool IsFavorit { get; set; }
+
+        void AddChapter(IChapter chapter);
+        void RemoveChapter(IChapter chapter);
+        void ReverseChapters();
+        int CompareTo(IManga comparePart);
     }
 }

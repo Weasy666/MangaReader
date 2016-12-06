@@ -24,43 +24,18 @@ namespace MangaReader_MVVM.ViewModels
                 Manga = DesignTimeService.GenerateMangaDetailDummy();
                 Manga.Chapters = DesignTimeService.GenerateChapterDummies();
             }
-            else
-            {
-                Manga = new Manga()
-                {
-                    Chapters = new ObservableCollection<IChapter>()
-                };
-            }
         }
 
-        private IManga _manga;
+        private IManga _manga = new Manga();
         public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
-        //public ObservableCollection<IChapter> Chapters => Manga.Chapters;
-
-        private ObservableCollection<IChapter> _chapters;
-        public ObservableCollection<IChapter> Chapters
-        {
-            get
-            {
-                if (Manga.Chapters != _chapters)
-                    _chapters = Manga.Chapters;
-                return _chapters;
-            }
-            set
-            {
-                Manga.Chapters = value;
-                Set(ref _chapters, value);
-            }
-        }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            var test = MangaLibrary.Instance.GetMangasAsync();
             var manga = parameter as Manga;
+            
             if (mode == NavigationMode.New && manga != null)
             {
                 Manga = await MangaLibrary.Instance.GetMangaAsync(manga);
-                Chapters = Manga.Chapters;
             }
             await Task.CompletedTask;
         }
@@ -78,15 +53,14 @@ namespace MangaReader_MVVM.ViewModels
         public DelegateCommand SortGridCommand
             => _sortGridCommand ?? (_sortGridCommand = new DelegateCommand(() =>
             {
-                Chapters = new ObservableCollection<IChapter>(Chapters.Reverse());
-            }, () => Chapters != null || Chapters.Any()));
+                Manga.ReverseChapters();
+            }, () => Manga.Chapters != null || Manga.Chapters.Any()));
 
-        private DelegateCommand<IManga> _favoritCommand;
-        public DelegateCommand<IManga> FavoritCommand
-            => _favoritCommand ?? (_favoritCommand = new DelegateCommand<IManga>((manga) =>
+        private DelegateCommand _favoritCommand;
+        public DelegateCommand FavoritCommand
+            => _favoritCommand ?? (_favoritCommand = new DelegateCommand(() =>
             {
-                var test = MangaLibrary.Instance.GetMangasAsync();
-                MangaLibrary.Instance.AddFavorit(manga);
+                MangaLibrary.Instance.AddFavorit(Manga);
             }));
 
         public async Task ChapterClickedAsync(object sender, ItemClickEventArgs e)
