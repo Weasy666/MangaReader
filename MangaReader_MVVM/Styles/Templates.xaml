@@ -6,11 +6,6 @@
                     xmlns:converters="using:MangaReader_MVVM.Converters"
                     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls" >
 
-    <services:MangaItemTemplateSelector x:Key="MangaItemTemplateSelector"
-        MangaItemWithDetailsTemplate="{StaticResource MangaItemWithDetails}"
-        MangaItemWithoutDetailsTemplate="{StaticResource MangaItemWithoutDetails}">
-    </services:MangaItemTemplateSelector>
-
     <DataTemplate x:Key="MangaItemWithDetails">
         <Grid Width="350" Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" >
             <Grid.ColumnDefinitions>
@@ -117,6 +112,11 @@
             </Grid>
         </Grid>
     </DataTemplate>
+
+    <services:MangaItemTemplateSelector x:Key="MangaItemTemplateSelector"
+        MangaItemWithDetailsTemplate="{StaticResource MangaItemWithDetails}"
+        MangaItemWithoutDetailsTemplate="{StaticResource MangaItemWithoutDetails}">
+    </services:MangaItemTemplateSelector>
 
     <DataTemplate x:Key="ChapterItem">
         <Grid Width="250" Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" >

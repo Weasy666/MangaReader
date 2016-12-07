@@ -121,6 +121,8 @@
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\DetailPageViewModel.cs" />
     <Compile Include="ViewModels\MangaDetailsPageViewModel.cs" />
+    <Compile Include="ViewModels\FavoritsPageViewModel.cs" />
+    <Compile Include="ViewModels\LatestReleasesPageViewModel.cs" />
     <Compile Include="ViewModels\MangasPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="Views\ChapterPage.xaml.cs">
@@ -128,6 +130,12 @@
     </Compile>
     <Compile Include="Views\MangaDetailsPage.xaml.cs">
       <DependentUpon>MangaDetailsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FavoritsPage.xaml.cs">
+      <DependentUpon>FavoritsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LatestReleasesPage.xaml.cs">
+      <DependentUpon>LatestReleasesPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MangasPage.xaml.cs">
       <DependentUpon>MangasPage.xaml</DependentUpon>
@@ -246,6 +254,14 @@
     <Page Include="Views\MangaDetailsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FavoritsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LatestReleasesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MangasPage.xaml">
       <Generator>MSBuild:Compile</Generator>

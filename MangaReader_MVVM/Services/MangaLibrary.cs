@@ -41,6 +41,7 @@ namespace MangaReader_MVVM.Services
         public BitmapImage Icon => _mangaSource.Icon;
         public Task<ObservableCollection<IManga>> GetMangasAsync(Utils.ReloadMode mode = Utils.ReloadMode.Default) => _mangaSource.GetMangasAsync(mode);
         public Task<ObservableCollection<IManga>> GetFavoritMangasAsync(Utils.ReloadMode mode = Utils.ReloadMode.Default) => _mangaSource.GetFavoritMangasAsync(mode);
+        public Task<ObservableCollection<IManga>> GetLatestReleasesAsync(int numberOfPastDays = 7, Utils.ReloadMode mode = Utils.ReloadMode.Default) => _mangaSource.GetLatestReleasesAsync(numberOfPastDays, mode);
         public void AddFavorit(IManga manga) { _mangaSource.AddFavorit(manga); }
         public void AddFavorit(ObservableCollection<IManga> mangas) { _mangaSource.AddFavorit(mangas); }
         public Task<IManga> GetMangaAsync(Manga manga) => _mangaSource.GetMangaAsync(manga);

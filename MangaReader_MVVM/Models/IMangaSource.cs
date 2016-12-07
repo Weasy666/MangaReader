@@ -17,6 +17,7 @@ namespace MangaReader_MVVM.Models
 
         Task<ObservableCollection<IManga>> GetMangasAsync(Utils.ReloadMode mode);
         Task<ObservableCollection<IManga>> GetFavoritMangasAsync(Utils.ReloadMode mode);
+        Task<ObservableCollection<IManga>> GetLatestReleasesAsync(int numberOfPastDays, Utils.ReloadMode mode);
         void AddFavorit(IManga manga);
         void AddFavorit(ObservableCollection<IManga> mangas);
         Task<IManga> GetMangaAsync(Manga manga);

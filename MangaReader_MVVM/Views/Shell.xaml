@@ -21,13 +21,13 @@
                     <TextBlock Text="Home" Margin="12,0,0,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
-            <Controls:HamburgerButtonInfo PageType="views:MainPage" AutomationProperties.Name="Jerry" >
+            <Controls:HamburgerButtonInfo PageType="views:LatestReleasesPage" AutomationProperties.Name="Jerry" >
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Symbol="Sync" Width="48" Height="48" />
                     <TextBlock Text="Latest Releases" Margin="12,0,0,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
-            <Controls:HamburgerButtonInfo PageType="views:MainPage" AutomationProperties.Name="Jerry" >
+            <Controls:HamburgerButtonInfo PageType="views:FavoritsPage" AutomationProperties.Name="Jerry" >
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Symbol="Favorite" Width="48" Height="48" />
                     <TextBlock Text="Favorites" Margin="12,0,0,0" VerticalAlignment="Center" />

@@ -69,6 +69,18 @@ namespace MangaReader_MVVM.Services
             return _mangas;
         }
 
+        public async Task<ObservableCollection<IManga>> GetLatestReleasesAsync(int numberOfPastDays, Utils.ReloadMode mode)
+        {
+            if (_mangas == null || !_mangas.Any() || mode == Utils.ReloadMode.FromSource)
+            {
+                await GetMangasAsync(Utils.ReloadMode.Default);
+            }
+            var latestReleases = _mangas.Where(manga => manga.LastUpdated.AddDays(numberOfPastDays) >= DateTime.Today).ToList();
+            latestReleases.Sort((y, x) => y == null ? 1 : DateTime.Compare(x.LastUpdated, y.LastUpdated));
+
+            return new ObservableCollection<IManga>(latestReleases);
+        }
+
         public async Task<IManga> GetMangaAsync(Manga manga)
         {
             using (var httpClient = new HttpClient { BaseAddress = RootUri })
@@ -115,17 +127,17 @@ namespace MangaReader_MVVM.Services
         //TODO private method for loading and merging favorits with existing _mangas Collection
         public async Task<ObservableCollection<IManga>> GetFavoritMangasAsync(Utils.ReloadMode mode)
         {
-            if (_mangas != null && _mangas.Any())
-            {
-                if (_favorits == null || !_favorits.Any() || mode == Utils.ReloadMode.FromSource)
-                {
-                    _favorits = new ObservableCollection<IManga>(_mangas.Where(manga => manga.IsFavorit).ToList());
-                }
-            }
-            else
+            if (_mangas == null || !_mangas.Any() || mode == Utils.ReloadMode.FromSource)
             {
                 await GetMangasAsync(Utils.ReloadMode.Default);
+                _favorits = new ObservableCollection<IManga>(_mangas.Where(manga => manga.IsFavorit).ToList());
             }
+
+            if (_favorits == null || !_favorits.Any())
+            {
+                _favorits = new ObservableCollection<IManga>(_mangas.Where(manga => manga.IsFavorit).ToList());
+            }
+
             return _favorits;
         }
 

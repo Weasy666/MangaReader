@@ -1,4 +1,4 @@
-﻿<Page x:Class="MangaReader_MVVM.Views.MangasPage"
+﻿<Page x:Class="MangaReader_MVVM.Views.LatestReleasesPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:Behaviors="using:Template10.Behaviors"
@@ -13,7 +13,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:MangaReader_MVVM.ViewModels" mc:Ignorable="d" >    
     <Page.DataContext>
-        <vm:MangasPageViewModel x:Name="ViewModel" />
+        <vm:LatestReleasesPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
     <Page.Resources>
         <ResourceDictionary Source="..\Styles\Templates.xaml" />
@@ -25,9 +25,13 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <t10controls:PageHeader Text="Manga Library" Frame="{x:Bind Frame}" >
+        <t10controls:PageHeader Text="Latest Releases" Frame="{x:Bind Frame}" >
             <t10controls:PageHeader.PrimaryCommands>
-                <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />
+                <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False">
+                    <Flyout>
+                    
+                    </Flyout>
+                </AppBarButton>
                 <AppBarButton Icon="Sort" Label="Sort" Command="{Binding Path=SortGridCommand}" />
                 <AppBarSeparator />
                 <AppBarButton Icon="Refresh" Label="Reload" Command="{Binding Path=ReloadGridCommand}" />
