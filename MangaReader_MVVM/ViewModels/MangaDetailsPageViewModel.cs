@@ -67,7 +67,10 @@ namespace MangaReader_MVVM.ViewModels
         {
             var clickedChapter = e.ClickedItem as Chapter;
             if (clickedChapter != null)
+            {
+                MangaLibrary.Instance.
                 NavigationService.Navigate(typeof(Views.ChapterPage), clickedChapter);
+            }
             else
             {
                 //TODO

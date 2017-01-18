@@ -45,7 +45,8 @@ namespace MangaReader_MVVM.Models
                 Number = (int)chapter[0],
                 Title = chapter[2].ToString(),
                 Id = chapter[3].ToString(),
-                Released = DateTimeOffset.FromUnixTimeSeconds(chapter[1] != null ? (long)chapter[1] : 0).DateTime.ToLocalTime()
+                Released = DateTimeOffset.FromUnixTimeSeconds(chapter[1] != null ? (long)chapter[1] : 0).DateTime.ToLocalTime(),
+                IsRead = false
             }).ToList();
             chapters.Sort();
             manga.Chapters = new ObservableCollection<IChapter>(chapters);

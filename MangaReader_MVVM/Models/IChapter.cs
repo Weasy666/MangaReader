@@ -8,7 +8,7 @@ using Windows.UI.Xaml;
 
 namespace MangaReader_MVVM.Models
 {
-    public interface IChapter
+    public interface IChapter : IComparable<Chapter>
     {
         IManga ParentManga { get; set; }
         int Number { get; set; }

@@ -8,7 +8,7 @@ using Windows.UI.Xaml;
 
 namespace MangaReader_MVVM.Models
 {
-    public class Chapter : IChapter, IComparable<Chapter>
+    public class Chapter : Template10.Mvvm.ViewModelBase, IChapter
     {
         public IManga ParentManga { get; set; }
         public int Number { get; set; }
@@ -16,7 +16,19 @@ namespace MangaReader_MVVM.Models
         public string Id { get; set; }        
         public int NumberOfPages => 0; //Pages.Count;
         public DateTime Released { get; set; }
-        public bool IsRead { get; set; }
+        private bool _isRead = false;
+        public bool IsRead
+        {
+            get
+            {
+                return _isRead;
+            }
+            set
+            {
+                _isRead = value;
+                base.RaisePropertyChanged();
+            }
+        }
         public ObservableCollection<IPage> Pages { get; set; }
 
         public int CompareTo(Chapter comparePart)

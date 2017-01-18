@@ -16,19 +16,19 @@ namespace MangaReader_MVVM.Services
         private MangaLibrary() {}
 
         private IMangaSource _mangaSource = new MangaEdenSource();
-        public Utils.MangaSource MangaSource
+        public MangaSource MangaSource
         {
             set
             {
                 switch (value)
                 {
-                    case Utils.MangaSource.MangaEden:
+                    case MangaSource.MangaEden:
                         _mangaSource = new MangaEdenSource();
                         break;
-                    case Utils.MangaSource.MangaFox:
+                    case MangaSource.MangaFox:
                         throw new NotImplementedException("MangaFox Source is not implemented right now");
                         break;
-                    case Utils.MangaSource.MangaReader:
+                    case MangaSource.MangaReader:
                         throw new NotImplementedException("MangaReader Source is not implemented right now");
                         break;
                     default:
@@ -39,11 +39,11 @@ namespace MangaReader_MVVM.Services
 
         public Uri RootUri => _mangaSource.RootUri;
         public BitmapImage Icon => _mangaSource.Icon;
-        public Task<ObservableCollection<IManga>> GetMangasAsync(Utils.ReloadMode mode = Utils.ReloadMode.Default) => _mangaSource.GetMangasAsync(mode);
-        public Task<ObservableCollection<IManga>> GetFavoritMangasAsync(Utils.ReloadMode mode = Utils.ReloadMode.Default) => _mangaSource.GetFavoritMangasAsync(mode);
-        public Task<ObservableCollection<IManga>> GetLatestReleasesAsync(int numberOfPastDays = 7, Utils.ReloadMode mode = Utils.ReloadMode.Default) => _mangaSource.GetLatestReleasesAsync(numberOfPastDays, mode);
-        public void AddFavorit(IManga manga) { _mangaSource.AddFavorit(manga); }
-        public void AddFavorit(ObservableCollection<IManga> mangas) { _mangaSource.AddFavorit(mangas); }
+        public Task<ObservableCollection<IManga>> GetMangasAsync(ReloadMode mode = ReloadMode.Default) => _mangaSource.GetMangasAsync(mode);
+        public Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode = ReloadMode.Default) => _mangaSource.GetFavoritMangasAsync(mode);
+        public Task<ObservableCollection<IManga>> GetLatestReleasesAsync(int numberOfPastDays = 7, ReloadMode mode = ReloadMode.Default) => _mangaSource.GetLatestReleasesAsync(numberOfPastDays, mode);
+        public void AddFavorit(IManga manga, List<string> favorits = null) => _mangaSource.AddFavorit(manga, favorits);
+        public void AddFavorit(ObservableCollection<IManga> mangas) => _mangaSource.AddFavorit(mangas);
         public Task<IManga> GetMangaAsync(Manga manga) => _mangaSource.GetMangaAsync(manga);
         public Task<ObservableCollection<IChapter>> GetChaptersAsync(Manga manga) => _mangaSource.GetChaptersAsync(manga);
         public Task<IChapter> GetChapterAsync(Chapter chapter) => _mangaSource.GetChapterAsync(chapter);

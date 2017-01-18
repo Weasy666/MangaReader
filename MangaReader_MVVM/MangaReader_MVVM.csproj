@@ -123,6 +123,7 @@
     <Compile Include="ViewModels\MangaDetailsPageViewModel.cs" />
     <Compile Include="ViewModels\FavoritsPageViewModel.cs" />
     <Compile Include="ViewModels\LatestReleasesPageViewModel.cs" />
+    <Compile Include="ViewModels\SearchResultPageViewModel.cs" />
     <Compile Include="ViewModels\MangasPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="Views\ChapterPage.xaml.cs">
@@ -136,6 +137,9 @@
     </Compile>
     <Compile Include="Views\LatestReleasesPage.xaml.cs">
       <DependentUpon>LatestReleasesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchResultPage.xaml.cs">
+      <DependentUpon>SearchResultPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MangasPage.xaml.cs">
       <DependentUpon>MangasPage.xaml</DependentUpon>
@@ -260,6 +264,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\LatestReleasesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SearchResultPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

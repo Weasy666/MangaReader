@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MangaReader_MVVM.Utils
+namespace MangaReader_MVVM
 {
     public enum MangaSource
     {

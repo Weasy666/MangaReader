@@ -14,9 +14,9 @@ using Windows.UI.Popups;
 
 namespace MangaReader_MVVM.ViewModels
 {
-    public class LatestReleasesPageViewModel : ViewModelBase
+    public class SearchResultPageViewModel : ViewModelBase
     {
-        public LatestReleasesPageViewModel()
+        public SearchResultPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
@@ -25,7 +25,7 @@ namespace MangaReader_MVVM.ViewModels
             }
             else
             {
-                Mangas = MangaLibrary.Instance.GetLatestReleasesAsync().Result;
+                Mangas = MangaLibrary.Instance.GetMangasAsync().Result;
             }
         }
 
@@ -57,7 +57,7 @@ namespace MangaReader_MVVM.ViewModels
             => _reloadGridCommand ?? (_reloadGridCommand = new DelegateCommand(async () =>
             {
                 Views.Busy.SetBusy(true, "Picking up the freshly printed books...");
-                Mangas = await MangaLibrary.Instance.GetLatestReleasesAsync(7, ReloadMode.FromSource);
+                Mangas = await MangaLibrary.Instance.GetMangasAsync(ReloadMode.FromSource);
                 Views.Busy.SetBusy(false);
             }, () => Mangas.Any()));
 
