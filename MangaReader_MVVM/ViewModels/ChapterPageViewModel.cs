@@ -136,6 +136,7 @@ namespace MangaReader_MVVM.ViewModels
                 if (clickedChapter != Chapter)
                 {
                     Chapter = await MangaLibrary.Instance.GetChapterAsync(clickedChapter);
+                    MangaLibrary.Instance.AddAsRead(clickedChapter.ParentManga.Id, clickedChapter);
                     Pages = new ObservableCollection<IPage>(Chapter.Pages);
                     //NavigationService.Navigate(typeof(Views.ChapterPage), clickedChapter);
                 }                

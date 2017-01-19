@@ -173,6 +173,54 @@ namespace MangaReader_MVVM.Services
             }
         }
 
+        public async void AddAsRead(string mangaId, IChapter chapter)
+        {
+            if (mangaId != null && chapter != null)
+            {
+                chapter.IsRead = !chapter.IsRead;
+                var mangasWithStatus = _helper.Read("readStatus_" + this.Name, new Dictionary<string, List<string>>(), SettingsStrategies.Roam);
+                if (mangasWithStatus.ContainsKey(mangaId))
+                {
+                    var mangaChaptersWithStatus = mangasWithStatus[mangaId];
+                    var chapterWithStatus = mangaChaptersWithStatus.FirstOrDefault(c => c == chapter.Id);
+                    if (chapterWithStatus != null && chapterWithStatus.Any())
+                    {
+                        //mangaChaptersWithStatus.Remove(chapter.Id);
+                    }                        
+                    else
+                    {
+                        mangaChaptersWithStatus.Add(chapter.Id); 
+                        mangasWithStatus[mangaId] = mangaChaptersWithStatus;                       
+                    }                    
+                }
+                else
+                {
+                    mangasWithStatus[mangaId] = new List<string>() { chapter.Id };
+                }
+                _helper.Write("readStatus_" + this.Name, mangasWithStatus, SettingsStrategies.Roam);
+            }
+        }
+
+        public async void RemoveAsRead(string mangaId, IChapter chapter)
+        {
+            if (mangaId != null && chapter != null)
+            {
+                chapter.IsRead = !chapter.IsRead;
+                var mangasWithStatus = _helper.Read("readStatus_" + this.Name, new Dictionary<string, List<string>>(), SettingsStrategies.Roam);
+                if (mangasWithStatus.ContainsKey(mangaId))
+                {
+                    var mangaChaptersWithStatus = mangasWithStatus[mangaId];
+                    var chapterWithStatus = mangaChaptersWithStatus.FirstOrDefault(c => c == chapter.Id);
+                    if (chapterWithStatus != null && chapterWithStatus.Any())
+                    {
+                        mangaChaptersWithStatus.Remove(chapter.Id);
+                        mangasWithStatus[mangaId] = mangaChaptersWithStatus;
+                    }
+                }
+                _helper.Write("readStatus_" + this.Name, mangasWithStatus, SettingsStrategies.Roam);
+            }
+        }
+
         public async Task<ObservableCollection<IChapter>> GetChaptersAsync(Manga manga)
         {
             throw new NotImplementedException();

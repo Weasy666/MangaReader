@@ -120,6 +120,9 @@
 
     <DataTemplate x:Key="ChapterItem">
         <Grid Width="250" Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" >
+            <Grid.Resources>
+                <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            </Grid.Resources>
             <StackPanel Orientation="Vertical" Margin="5,0,0,0" MaxWidth="250">
                 <TextBlock Text="{Binding Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
                 <TextBlock Text="{Binding Number}" FontSize="15"/>
@@ -127,11 +130,13 @@
                 <TextBlock Text="{Binding Released}" FontSize="15" Margin="0,0,0,5"/>
             </StackPanel>
             <Button x:Name="ReadStatus"
+                    Command="{Binding DataContext.FavoritCommand, ElementName=PageGrid}"
+                    CommandParameter="{Binding}"
                     Content="Read"
-                    Visibility="Collapsed"
+                    Visibility="{Binding IsRead, Converter={StaticResource BoolToVisibilityConverter}}"
                     HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Margin="0,5,0,5"
+                    VerticalAlignment="Bottom"
+                    Margin="0,0,5,5"
                     IsHitTestVisible="False"
                     IsTapEnabled="False" />
         </Grid>
