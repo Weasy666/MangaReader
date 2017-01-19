@@ -34,6 +34,10 @@ namespace MangaReader_MVVM.ViewModels
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
+            if (mode == NavigationMode.Back)
+            {
+                base.RaisePropertyChanged();
+            }
             await Task.CompletedTask;
         }
 

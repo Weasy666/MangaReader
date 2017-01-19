@@ -15,7 +15,7 @@ namespace MangaReader_MVVM.Views
         public FavoritsPage()
         {
             InitializeComponent();
-            NavigationCacheMode = NavigationCacheMode.Enabled;
+            //NavigationCacheMode = NavigationCacheMode.Enabled;
         }
     }
 }
