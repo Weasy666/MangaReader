@@ -71,6 +71,13 @@ namespace MangaReader_MVVM.ViewModels
                 MangaLibrary.Instance.AddFavorit(Manga);
             }));
 
+        private DelegateCommand _downloadCommand;
+        public DelegateCommand DownloadCommand
+            => _downloadCommand ?? (_downloadCommand = new DelegateCommand(() =>
+            {
+                //TODO implement download function for offline reading
+            }));
+
         public async Task ChapterClickedAsync(object sender, ItemClickEventArgs e)
         {
             var clickedChapter = e.ClickedItem as Chapter;
@@ -81,7 +88,7 @@ namespace MangaReader_MVVM.ViewModels
             }
             else
             {
-                //TODO
+                //TODO change to PopupService
                 var dialog = new MessageDialog("This Chapter doesn't exist");
                 await dialog.ShowAsync();
             }

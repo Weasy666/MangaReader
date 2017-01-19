@@ -31,6 +31,7 @@
 
         <t10controls:PageHeader x:Name="PageHeader" Text="{x:Bind ViewModel.Manga.Title}" Frame="{x:Bind Frame}" Grid.ColumnSpan="2">
             <t10controls:PageHeader.PrimaryCommands>
+                <AppBarButton Icon="SelectAll" Label="Select All" IsEnabled="False"/>
                 <AppBarSeparator />
                 <AppBarButton Icon="Sort" Label="Sort" Command="{Binding Path=SortGridCommand}"  />
             </t10controls:PageHeader.PrimaryCommands>
@@ -53,7 +54,20 @@
                         <Button x:Name="FavoriteButton"
                                 Command="{x:Bind ViewModel.FavoritCommand}"
                                 Content="{Binding Manga.IsFavorit, Mode=TwoWay, Converter={StaticResource BoolToFavoritSymbolConverter}, UpdateSourceTrigger=PropertyChanged}"
-                                FontFamily="Segoe UI Symbol"
+                                FontFamily="Segoe MDL2 Assets"
+                                FontSize="20"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Height="30" Width="30"
+                                Margin="0,0,10,5"
+                                Grid.Column="1"
+                                Canvas.ZIndex="10"
+                                Padding="0" />
+                        <Button x:Name="Download" IsEnabled="False"
+                                Command="{x:Bind ViewModel.DownloadCommand}"
+                                Content="&#xE118;"
+                                FontFamily="Segoe MDL2 Assets"
+                                FontSize="20"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"
                                 Height="30" Width="30"
@@ -64,11 +78,14 @@
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Margin="12,0,0,0">
+                    <StackPanel.Resources>
+                        <converters:BoolToMangaStatusConverter x:Key="BoolToMangaStatusConverter"/>
+                    </StackPanel.Resources>
                     <TextBlock x:Name="Alias" Text="{x:Bind ViewModel.Manga.Alias}" FontSize="15" Width="372" TextWrapping="WrapWholeWords"/>
-                    <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15"/>
-                    <TextBlock x:Name="Status" Text="{x:Bind ViewModel.Manga.Ongoing}" FontSize="15"/>
+                    <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords"/>
+                    <TextBlock x:Name="Status" Text="{Binding Manga.Ongoing, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15" />
                     <TextBlock x:Name="NumberOfChapters" Text="{x:Bind ViewModel.Manga.NumberOfChapters}" FontSize="15"/>
-                    <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Manga.LastUpdated}" FontSize="15"/>
+                    <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Manga.LastUpdated}" FontSize="15" />
                 </StackPanel>
             </StackPanel>
             <TextBlock x:Name="Description" Text="{x:Bind ViewModel.Manga.Description}" TextWrapping="WrapWholeWords"/>

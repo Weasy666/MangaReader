@@ -88,7 +88,7 @@ namespace MangaReader_MVVM.ViewModels
             }
             else
             {
-                //TODO
+                //TODO change to PopupService
                 var dialog = new MessageDialog("This Manga doesn't exist");
                 await dialog.ShowAsync();
             }

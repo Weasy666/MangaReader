@@ -43,7 +43,7 @@ namespace MangaReader_MVVM.Models
             var chapters = jo["chapters"].AsEnumerable().Select(chapter => new Chapter
             {
                 Number = (int)chapter[0],
-                Title = chapter[2].ToString(),
+                Title = chapter[2].ToString().Any() ? chapter[2].ToString() : ((int)chapter[0]).ToString(),
                 Id = chapter[3].ToString(),
                 Released = DateTimeOffset.FromUnixTimeSeconds(chapter[1] != null ? (long)chapter[1] : 0).DateTime.ToLocalTime(),
                 IsRead = false

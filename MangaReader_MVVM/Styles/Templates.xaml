@@ -19,7 +19,8 @@
                     Command="{Binding DataContext.FavoritCommand, ElementName=PageGrid}"
                     CommandParameter="{Binding}"
                     Content="{Binding IsFavorit, Mode=OneWay, Converter={StaticResource BoolToFavoritSymbolConverter}}"
-                    FontFamily="Segoe UI Symbol"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="20"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Height="30" Width="30"
@@ -87,9 +88,9 @@
                         </Core:DataTriggerBehavior>
                     </Interactivity:Interaction.Behaviors>
                 </ProgressRing>-->
-            <Grid Margin="0,0,0,0" Height="30"
+            <Grid Margin="0,0,0,0" 
                   VerticalAlignment="Bottom" 
-                  Background="{ThemeResource SystemControlDisabledBaseLowBrush}" >
+                  Background="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="30" />
                     <ColumnDefinition />
@@ -101,13 +102,16 @@
                         Command="{Binding DataContext.FavoritCommand, ElementName=PageGrid}"
                         CommandParameter="{Binding}"
                         Content="{Binding IsFavorit, Mode=OneWay, Converter={StaticResource BoolToFavoritSymbolConverter}}"
-                        FontFamily="Segoe UI Symbol"
+                        FontFamily="Segoe MDL2 Assets"
+                        FontSize="20"
                         Height="30" Width="30" Padding="0"
+                        VerticalAlignment="Bottom"
                         Foreground="{ThemeResource SystemControlForegroundAccentBrush}" Background="Transparent"/>
                 <TextBlock Text="{Binding Title}"
-                           FontSize="20"
-                           TextTrimming="CharacterEllipsis"
-                           HorizontalAlignment="Center"
+                           FontSize="15"
+                           VerticalAlignment="Center"
+                           TextWrapping="WrapWholeWords"
+                           Foreground="{ThemeResource ContrastColor}"
                            Grid.Column="1"/>
             </Grid>
         </Grid>
@@ -136,7 +140,8 @@
                     Visibility="{Binding IsRead, Converter={StaticResource BoolToVisibilityConverter}}"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
-                    Margin="0,0,5,5"
+                    Margin="0,0,0,0"
+                    Background="{ThemeResource SystemControlBackgroundAccentBrush}"
                     IsHitTestVisible="False"
                     IsTapEnabled="False" />
         </Grid>

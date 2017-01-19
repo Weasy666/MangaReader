@@ -60,8 +60,11 @@
                                     Margin="5,0,0,0"
                                     MaxWidth="247"
                                     Grid.Column="1">
+                            <StackPanel.Resources>
+                                <converters:BoolToMangaStatusConverter x:Key="BoolToMangaStatusConverter"/>
+                            </StackPanel.Resources>
                             <TextBlock Text="{x:Bind ViewModel.Chapter.ParentManga.Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
-                            <TextBlock Text="{x:Bind ViewModel.Chapter.ParentManga.Ongoing}" FontSize="15"/>
+                            <TextBlock Text="{Binding Chapter.ParentManga.Ongoing, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15"/>
                             <TextBlock Text="{x:Bind ViewModel.Chapter.ParentManga.LastUpdated}" FontSize="15"/>
                             <TextBlock Text="{x:Bind ViewModel.Chapter.ParentManga.Category}" FontSize="15" TextWrapping="WrapWholeWords"/>
                         </StackPanel>
