@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Template10.Mvvm;
 using Template10.Services.SettingsService;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -16,6 +19,8 @@ namespace MangaReader_MVVM.ViewModels
     public class SettingsPartViewModel : ViewModelBase
     {
         Services.SettingsServices.SettingsService _settings;
+        ObservableCollection<Uri> _sourcesWithIcons;
+        public ObservableCollection<Uri> SourcesWithIcons => _sourcesWithIcons;
 
         public SettingsPartViewModel()
         {
@@ -26,6 +31,7 @@ namespace MangaReader_MVVM.ViewModels
             else
             {
                 _settings = Services.SettingsServices.SettingsService.Instance;
+                _sourcesWithIcons = LoadMangaSourceIcons();
             }
         }
 
@@ -45,6 +51,21 @@ namespace MangaReader_MVVM.ViewModels
         {
             get { return _settings.MangaGridLayout.Equals("MangaItemWithDetails"); }
             set { _settings.MangaGridLayout = value ? "MangaItemWithDetails" : "MangaItemWithoutDetails"; base.RaisePropertyChanged(); }
+        }
+
+        public int SelectedMangaSource
+        {
+            get { return SourcesWithIcons.IndexOf(SourcesWithIcons.Where(source => source.ToString().Contains(_settings.UsedMangaSource.ToString().ToLower())).First()); }
+        }
+        public ObservableCollection<Uri> LoadMangaSourceIcons()
+        {
+            var sources = Enum.GetValues(typeof(MangaSource)).Cast<MangaSource>().ToList();
+            var sourcesWithIcons = new ObservableCollection<Uri>();
+            foreach (var source in sources)
+            {
+                sourcesWithIcons.Add(new Uri("ms-appx:///Assets/Icons/icon-" + source.ToString().ToLower() + ".png"));
+            }
+            return sourcesWithIcons;
         }
 
         private string _BusyText = "Please wait...";

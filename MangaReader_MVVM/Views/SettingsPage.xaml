@@ -86,10 +86,22 @@
                                       RelativePanel.AlignLeftWithPanel="True"
                                       RelativePanel.Below="UseLightThemeToggleSwitch" />
 
+                        <ComboBox x:Name="MangaSourceComboBox" Header="Manga Source"
+                                  ItemsSource="{Binding SourcesWithIcons}"
+                                  Width="270" SelectedIndex="{Binding SelectedMangaSource}"
+                                  RelativePanel.AlignLeftWithPanel="True"
+                                  RelativePanel.Below="UseDetailedMangaItemSwitch" >
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding}" MaxHeight="28"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
                         <TextBox x:Name="BusyTextTextBox" Width="200"
                                  Margin="0,12,0,0" HorizontalAlignment="Left"
                                  Header="Busy text" RelativePanel.AlignLeftWithPanel="True"
-                                 RelativePanel.Below="UseDetailedMangaItemSwitch"
+                                 RelativePanel.Below="MangaSourceComboBox"
                                  Text="{Binding BusyText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <Button Margin="12,0,0,0"

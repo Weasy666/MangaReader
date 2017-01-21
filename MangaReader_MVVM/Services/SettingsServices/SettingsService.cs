@@ -63,6 +63,21 @@ namespace MangaReader_MVVM.Services.SettingsServices
                 _helper.Write(nameof(MangaGridLayout), value);
             }
         }
+
+        public MangaSource UsedMangaSource
+        {
+            get
+            {
+                var source = MangaSource.MangaEden;
+                var value = _helper.Read<string>(nameof(UsedMangaSource), source.ToString());
+                return Enum.TryParse<MangaSource>(value, out source) ? source : MangaSource.MangaEden;
+            }
+            set
+            {
+                _helper.Write(nameof(UsedMangaSource), value.ToString());
+                MangaLibrary.Instance.MangaSource = value;
+            }
+        }
     }
 }
 

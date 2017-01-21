@@ -52,6 +52,8 @@ namespace MangaReader_MVVM
         public override async Task OnStartAsync(StartKind startKind, IActivatedEventArgs args)
         {
             // long-running startup tasks go here
+            var source = SettingsService.Instance.UsedMangaSource;
+            Services.MangaLibrary.Instance.MangaSource = source;
             await Services.MangaLibrary.Instance.GetMangasAsync();
 
             NavigationService.Navigate(typeof(Views.MainPage));

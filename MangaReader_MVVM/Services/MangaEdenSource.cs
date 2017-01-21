@@ -177,7 +177,7 @@ namespace MangaReader_MVVM.Services
         {
             if (mangaId != null && chapter != null)
             {
-                chapter.IsRead = !chapter.IsRead;
+                chapter.IsRead = true;
                 var mangasWithStatus = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, StorageStrategies.Roaming) ?? new Dictionary<string, List<string>>();
                 if (mangasWithStatus.ContainsKey(mangaId))
                 {

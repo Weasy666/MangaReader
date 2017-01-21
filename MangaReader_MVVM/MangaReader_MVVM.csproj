@@ -179,6 +179,8 @@
     <Content Include="Assets\BadgeLogo.scale-200.png" />
     <Content Include="Assets\BadgeLogo.scale-400.png" />
     <Content Include="Assets\Icons\icon-mangaeden.png" />
+    <Content Include="Assets\Icons\icon-mangafox.png" />
+    <Content Include="Assets\Icons\icon-mangareader.png" />
     <Content Include="Assets\MangaReader Logo.png" />
     <Content Include="Assets\MangaReader Logo.svg" />
     <Content Include="Assets\NewStoreLogo.scale-100.png" />
