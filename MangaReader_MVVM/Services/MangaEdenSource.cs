@@ -114,16 +114,16 @@ namespace MangaReader_MVVM.Services
         {
             manga.Alias = details.Alias;
             manga.Artist = details.Artist;
-            manga.Author = details.Author;
+            manga.Author = details.Author;            
+            manga.Description = details.Description;
+            manga.NumberOfChapters = details.NumberOfChapters;
+            manga.Released = details.Released;
             var mangasWithStatus = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, StorageStrategies.Roaming);
             foreach (var chapter in details.Chapters)
             {
                 LoadAndMergeReadStatus(mangasWithStatus, manga.Id, chapter);
                 manga.AddChapter(chapter);
             }
-            manga.Description = details.Description;
-            manga.NumberOfChapters = details.NumberOfChapters;
-            manga.Released = details.Released;
         }
 
         //TODO private method for loading and merging favorits with existing _mangas Collection

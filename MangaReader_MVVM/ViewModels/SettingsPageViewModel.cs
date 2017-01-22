@@ -19,8 +19,8 @@ namespace MangaReader_MVVM.ViewModels
     public class SettingsPartViewModel : ViewModelBase
     {
         Services.SettingsServices.SettingsService _settings;
-        ObservableCollection<Uri> _sourcesWithIcons;
-        public ObservableCollection<Uri> SourcesWithIcons => _sourcesWithIcons;
+        ObservableCollection<BitmapImage> _sourcesWithIcons;
+        public ObservableCollection<BitmapImage> SourcesWithIcons => _sourcesWithIcons;
 
         public SettingsPartViewModel()
         {
@@ -55,17 +55,23 @@ namespace MangaReader_MVVM.ViewModels
 
         public int SelectedMangaSource
         {
-            get { return SourcesWithIcons.IndexOf(SourcesWithIcons.Where(source => source.ToString().Contains(_settings.UsedMangaSource.ToString().ToLower())).First()); }
+            get { return SourcesWithIcons.IndexOf(SourcesWithIcons.Where(source => source.UriSource.ToString().Contains(_settings.UsedMangaSource.ToString().ToLower())).First()); }
         }
-        public ObservableCollection<Uri> LoadMangaSourceIcons()
+        private ObservableCollection<BitmapImage> LoadMangaSourceIcons()
         {
             var sources = Enum.GetValues(typeof(MangaSource)).Cast<MangaSource>().ToList();
-            var sourcesWithIcons = new ObservableCollection<Uri>();
+            var sourcesWithIcons = new ObservableCollection<BitmapImage>();
             foreach (var source in sources)
             {
-                sourcesWithIcons.Add(new Uri("ms-appx:///Assets/Icons/icon-" + source.ToString().ToLower() + ".png"));
+                sourcesWithIcons.Add(new BitmapImage(new Uri("ms-appx:///Assets/Icons/icon-" + source.ToString().ToLower() + ".png")));
             }
             return sourcesWithIcons;
+        }
+
+        public int DaysOfLatestReleases
+        {
+            get { return _settings.DaysOfLatestReleases; }
+            set { _settings.DaysOfLatestReleases = value; base.RaisePropertyChanged(); }
         }
 
         private string _BusyText = "Please wait...";

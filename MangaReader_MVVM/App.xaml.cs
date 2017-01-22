@@ -7,6 +7,8 @@ using Template10.Common;
 using System;
 using System.Linq;
 using Windows.UI.Xaml.Data;
+using Windows.UI;
+using Windows.UI.Xaml.Media;
 
 namespace MangaReader_MVVM
 {
@@ -46,6 +48,31 @@ namespace MangaReader_MVVM
                     ModalContent = new Views.Busy(),
                 };
             }
+
+            //Computer TitelBar customization
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView"))
+            {
+                var titleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
+                if (titleBar != null)
+                {
+                    titleBar.BackgroundColor = (Color)Resources["SystemAccentColor"];
+                    titleBar.ButtonBackgroundColor = (Color)Resources["SystemAccentColor"];
+                }
+            }
+            //Mobile customization
+            //reference to "Windows Mobile Extensions for the UWP" is needed
+            //if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            //{
+
+            //    var statusBar = StatusBar.GetForCurrentView();
+            //    if (statusBar != null)
+            //    {
+            //        statusBar.BackgroundOpacity = 1;
+            //        statusBar.BackgroundColor = Colors.DarkBlue;
+            //        statusBar.ForegroundColor = Colors.White;
+            //    }
+            //}
+
             await Task.CompletedTask;
         }
 

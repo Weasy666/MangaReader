@@ -41,7 +41,7 @@
             <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                 <StackPanel>
                     <controls:ImageEx x:Name="Cover" Width="206" Height="300"
-                                      IsCacheEnabled="True"
+                                      IsCacheEnabled="True" 
                                       Source="{x:Bind ViewModel.Manga.Cover}"
                                       Stretch="Uniform"
                                       PlaceholderSource="/Assets/404_whoopsies.jpg"
@@ -61,7 +61,6 @@
                                 Height="30" Width="30"
                                 Margin="0,0,10,5"
                                 Grid.Column="1"
-                                Canvas.ZIndex="10"
                                 Padding="0" />
                         <Button x:Name="Download" IsEnabled="False"
                                 Command="{x:Bind ViewModel.DownloadCommand}"
@@ -73,7 +72,6 @@
                                 Height="30" Width="30"
                                 Margin="0,0,5,5"
                                 Grid.Column="1"
-                                Canvas.ZIndex="10"
                                 Padding="0" />
                     </StackPanel>
                 </StackPanel>
@@ -82,7 +80,7 @@
                         <converters:BoolToMangaStatusConverter x:Key="BoolToMangaStatusConverter"/>
                     </StackPanel.Resources>
                     <TextBlock x:Name="Alias" Text="{x:Bind ViewModel.Manga.Alias}" FontSize="15" Width="372" TextWrapping="WrapWholeWords"/>
-                    <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords"/>
+                    <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" Width="372" TextWrapping="WrapWholeWords"/>
                     <TextBlock x:Name="Status" Text="{Binding Manga.Ongoing, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15" />
                     <TextBlock x:Name="NumberOfChapters" Text="{x:Bind ViewModel.Manga.NumberOfChapters}" FontSize="15"/>
                     <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Manga.LastUpdated}" FontSize="15" />
@@ -92,7 +90,7 @@
         </StackPanel>
 
         <GridView x:Name="ChapterGridView" Grid.Row="1" Grid.Column="1"
-                  ItemsSource="{Binding Path=Manga.Chapters, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding Path=Manga.Chapters, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   Margin="12,10,0,0"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="20"

@@ -78,6 +78,12 @@ namespace MangaReader_MVVM.Services.SettingsServices
                 MangaLibrary.Instance.MangaSource = value;
             }
         }
+
+        public int DaysOfLatestReleases
+        {
+            get { return _helper.Read<int>(nameof(DaysOfLatestReleases), 7); }
+            set { _helper.Write(nameof(DaysOfLatestReleases), value); }
+        }
     }
 }
 

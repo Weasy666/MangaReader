@@ -80,7 +80,7 @@
                                       RelativePanel.AlignLeftWithPanel="True"
                                       RelativePanel.Below="UseShellDrawnBackButtonToggleSwtich" />
                         
-                        <ToggleSwitch x:Name="UseDetailedMangaItemSwitch" Header="Use Detailed MangaItem"
+                        <ToggleSwitch x:Name="UseDetailedMangaItemSwitch" Header="Choose Manga Item Style"
                                       IsOn="{Binding UseDetailedMangaItem, Mode=TwoWay}"
                                       OffContent="Only Cover" OnContent="Cover with Details"
                                       RelativePanel.AlignLeftWithPanel="True"
@@ -88,20 +88,33 @@
 
                         <ComboBox x:Name="MangaSourceComboBox" Header="Manga Source"
                                   ItemsSource="{Binding SourcesWithIcons}"
-                                  Width="270" SelectedIndex="{Binding SelectedMangaSource}"
+                                  Width="270" SelectedIndex="{Binding SelectedMangaSource, Mode=TwoWay}"
                                   RelativePanel.AlignLeftWithPanel="True"
                                   RelativePanel.Below="UseDetailedMangaItemSwitch" >
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding}" MaxHeight="28"/>
+                                    <Image Source="{Binding}" Height="28"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
+                        <Slider x:Name="LatestReleasesDays" Header="Range of Latest Releases"
+                                Width="270" IsThumbToolTipEnabled="False"
+                                Margin="0,10,0,0" 
+                                Minimum="1" Maximum="14"
+                                Value="{Binding DaysOfLatestReleases, Mode=TwoWay}"
+                                RelativePanel.AlignLeftWithPanel="True"
+                                RelativePanel.Below="MangaSourceComboBox" />
+
+                        <TextBlock x:Name="LatestReleasesDaysTextBox" Text="{Binding Value, ElementName=LatestReleasesDays}"
+                                   Margin="10,38,0,0"
+                                   RelativePanel.AlignTopWith="LatestReleasesDays"
+                                   RelativePanel.RightOf="LatestReleasesDays" />
+
                         <TextBox x:Name="BusyTextTextBox" Width="200"
                                  Margin="0,12,0,0" HorizontalAlignment="Left"
                                  Header="Busy text" RelativePanel.AlignLeftWithPanel="True"
-                                 RelativePanel.Below="MangaSourceComboBox"
+                                 RelativePanel.Below="LatestReleasesDays"
                                  Text="{Binding BusyText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <Button Margin="12,0,0,0"

@@ -16,6 +16,7 @@ namespace MangaReader_MVVM.ViewModels
 {
     public class LatestReleasesPageViewModel : ViewModelBase
     {
+        public int DaysOfLatestReleases { get; set; }
         public LatestReleasesPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
@@ -25,7 +26,8 @@ namespace MangaReader_MVVM.ViewModels
             }
             else
             {
-                Mangas = MangaLibrary.Instance.GetLatestReleasesAsync().Result;
+                DaysOfLatestReleases = Services.SettingsServices.SettingsService.Instance.DaysOfLatestReleases;
+                Mangas = MangaLibrary.Instance.GetLatestReleasesAsync(DaysOfLatestReleases).Result;
             }
         }
 
@@ -34,6 +36,13 @@ namespace MangaReader_MVVM.ViewModels
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
+            var daysOfLatestReleases = Services.SettingsServices.SettingsService.Instance.DaysOfLatestReleases;
+            if (DaysOfLatestReleases != daysOfLatestReleases)
+            {
+                DaysOfLatestReleases = daysOfLatestReleases;
+                Mangas = MangaLibrary.Instance.GetLatestReleasesAsync(DaysOfLatestReleases).Result;
+            }
+
             await Task.CompletedTask;
         }
 
@@ -57,7 +66,7 @@ namespace MangaReader_MVVM.ViewModels
             => _reloadGridCommand ?? (_reloadGridCommand = new DelegateCommand(async () =>
             {
                 Views.Busy.SetBusy(true, "Picking up the freshly printed books...");
-                Mangas = await MangaLibrary.Instance.GetLatestReleasesAsync(7, ReloadMode.FromSource);
+                Mangas = await MangaLibrary.Instance.GetLatestReleasesAsync(DaysOfLatestReleases, ReloadMode.FromSource);
                 Views.Busy.SetBusy(false);
             }, () => Mangas.Any()));
 
