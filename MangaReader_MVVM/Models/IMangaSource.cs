@@ -22,7 +22,7 @@ namespace MangaReader_MVVM.Models
         void AddFavorit(ObservableCollection<IManga> mangas);
         void AddAsRead(string mangaId, IChapter chapter);
         void RemoveAsRead(string mangaId, IChapter chapter);
-        Task<IManga> GetMangaAsync(Manga manga);
+        Task<IManga> GetMangaAsync(string mangaId);
         Task<ObservableCollection<IChapter>> GetChaptersAsync(Manga manga);
         Task<IChapter> GetChapterAsync(Chapter chapter);
         Task<ObservableCollection<IManga>> SearchMangaAsync(string query);        

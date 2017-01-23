@@ -35,11 +35,11 @@ namespace MangaReader_MVVM.ViewModels
             
             if (mode == NavigationMode.New && manga != null)
             {
-                Manga = await MangaLibrary.Instance.GetMangaAsync(manga);
+                Manga = await MangaLibrary.Instance.GetMangaAsync(manga.Id);
             }
             else if (mode == NavigationMode.Back)
             {
-                base.RaisePropertyChanged();
+                //base.RaisePropertyChanged();
             }
             else if (mode == NavigationMode.Forward)
             {

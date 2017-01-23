@@ -36,7 +36,7 @@ namespace MangaReader_MVVM.ViewModels
         {
             if (mode == NavigationMode.Back)
             {
-                base.RaisePropertyChanged();
+                var test = BindableBase.ReferenceEquals(Mangas, MangaLibrary.Instance.GetFavoritMangasAsync().Result);
             }
             await Task.CompletedTask;
         }

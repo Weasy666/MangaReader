@@ -81,14 +81,15 @@ namespace MangaReader_MVVM.Services
             return new ObservableCollection<IManga>(latestReleases);
         }
 
-        public async Task<IManga> GetMangaAsync(Manga manga)
+        public async Task<IManga> GetMangaAsync(string mangaId)
         {
+            var manga = _mangas.Where(m => m.Id == mangaId).First();
             using (var httpClient = new HttpClient { BaseAddress = RootUri })
             {
                 try
                 {
                     var mangaDetailsUri = new Uri(RootUri, MangaDetails);
-                    var response = await httpClient.GetAsync(new Uri(mangaDetailsUri, manga.Id));
+                    var response = await httpClient.GetAsync(new Uri(mangaDetailsUri, mangaId));
                     var result = await response.Content.ReadAsStringAsync();
                     if (response.IsSuccessStatusCode)
                     {
@@ -96,8 +97,10 @@ namespace MangaReader_MVVM.Services
                         settings.Converters.Add(new MangaEdenMangaDetailsConverter());
                         
                         var details = JsonConvert.DeserializeObject<IManga>(result, settings);
-
+                        
                         MergeMangaWithDetails(manga, details);
+                        int i = _mangas.IndexOf(manga);
+                        _mangas[i] = manga;
                     }
                 }
                 catch (Exception e)
@@ -146,8 +149,16 @@ namespace MangaReader_MVVM.Services
         public async void AddFavorit(IManga favorit, List<string> favorits)
         {
             if (favorit != null)
-            {
+            { 
                 favorit.IsFavorit = !favorit.IsFavorit;
+
+                if (_favorits.Contains(favorit))
+                {
+                    _favorits.Remove(favorit);
+                    if (favorit.IsFavorit)
+                        _favorits.Add(favorit);
+                }
+                
                 favorits = favorits ?? await FileHelper.ReadFileAsync<List<string>>("favorits_" + this.Name, StorageStrategies.Roaming) ?? new List<string>();
                 if (favorits.Any() && !favorit.IsFavorit)
                 {
