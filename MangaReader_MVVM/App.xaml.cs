@@ -59,6 +59,7 @@ namespace MangaReader_MVVM
                     titleBar.ButtonBackgroundColor = (Color)Resources["SystemAccentColor"];
                 }
             }
+
             //Mobile customization
             //reference to "Windows Mobile Extensions for the UWP" is needed
             //if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))

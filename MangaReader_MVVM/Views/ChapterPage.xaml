@@ -51,10 +51,10 @@
                         <controls:ImageEx x:Name="Cover"
                                           Width="103" Height="150" Grid.Column="0"
                                           IsCacheEnabled="True"
-                                          Source="{x:Bind ViewModel.Chapter.ParentManga.Cover}"
+                                          Source="{x:Bind ViewModel.Chapter.ParentManga.Cover, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
                                           Stretch="UniformToFill"
                                           IsTapEnabled="False"
-                                          PlaceholderSource="/Assets/404_whoopsies.jpg"
+                                          PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
                                           PlaceholderStretch="Uniform" />
                         <StackPanel Orientation="Vertical" 
                                     Margin="5,0,0,0"
@@ -122,10 +122,10 @@
                         <Grid x:Name="PageGrid" >
                             <controls:ImageEx x:Name="PageImage"
                                               IsCacheEnabled="False"
-                                              Source="{x:Bind Url}"
+                                              Source="{x:Bind Url, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
                                               Stretch="UniformToFill"
                                               IsTapEnabled="False"
-                                              PlaceholderSource="/Assets/404_whoopsies.jpg"
+                                              PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
                                               PlaceholderStretch="None"
                                               HorizontalAlignment="Center"
                                               VerticalAlignment="Center" />

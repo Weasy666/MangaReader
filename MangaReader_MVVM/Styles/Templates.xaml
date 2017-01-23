@@ -31,13 +31,13 @@
                     Foreground="{ThemeResource SystemControlForegroundAccentBrush}" />
             <controls:ImageEx x:Name="ImageExControl1" Width="103" Height="150" Grid.Column="0"
                                 IsCacheEnabled="True"
-                                Source="{Binding Cover}"
+                                Source="{Binding Cover, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg, TargetNullValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
                                 Stretch="Uniform"
-                                PlaceholderSource="/Assets/404_whoopsies.jpg"
-                                PlaceholderStretch="Uniform"
+                                PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
+                                PlaceholderStretch="Uniform"  
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center" />
-            <!--<Image Source="{x:Bind Cover, FallbackValue=ms-appx:///Assets/404_whoopsies.jpg, TargetNullValue=ms-appx:///Assets/404_whoopsies.jpg}" Width="103" Height="150" Grid.Column="0" />-->
+            <!--<Image Source="{x:Bind Cover, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg, TargetNullValue=ms-appx:///Assets/Images/404_whoopsies.jpg}" Width="103" Height="150" Grid.Column="0" />-->
             <!--ImageOpened="Image_ImageOpened"-->
             <!--<ProgressRing x:Name="ImageProgressRing"
                             Grid.Row="1"
@@ -66,13 +66,13 @@
         <Grid Width="171" >            
             <controls:ImageEx x:Name="ImageExControl1" Width="171" Height="250" 
                                 IsCacheEnabled="True"
-                                Source="{Binding Cover}"
+                                Source="{Binding Cover, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
                                 Stretch="Uniform"
-                                PlaceholderSource="/Assets/404_whoopsies.jpg"
+                                PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
                                 PlaceholderStretch="Uniform"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center" />
-            <!--<Image Source="{x:Bind Cover, FallbackValue=ms-appx:///Assets/404_whoopsies.jpg, TargetNullValue=ms-appx:///Assets/404_whoopsies.jpg}" Width="103" Height="150" Grid.Column="0" />-->
+            <!--<Image Source="{x:Bind Cover, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg, TargetNullValue=ms-appx:///Assets/Images/404_whoopsies.jpg}" Width="103" Height="150" Grid.Column="0" />-->
             <!--ImageOpened="Image_ImageOpened"-->
             <!--<ProgressRing x:Name="ImageProgressRing"
                             Grid.Row="1"

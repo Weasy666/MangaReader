@@ -170,9 +170,9 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\404.png" />
-    <Content Include="Assets\404_not_found_u_u.jpg" />
-    <Content Include="Assets\404_whoopsies.jpg" />
+    <Content Include="Assets\Images\404.png" />
+    <Content Include="Assets\Images\404_not_found_u_u.jpg" />
+    <Content Include="Assets\Images\404_whoopsies.jpg" />
     <Content Include="Assets\BadgeLogo.scale-100.png" />
     <Content Include="Assets\BadgeLogo.scale-125.png" />
     <Content Include="Assets\BadgeLogo.scale-150.png" />
