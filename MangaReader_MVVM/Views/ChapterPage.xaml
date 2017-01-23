@@ -69,14 +69,14 @@
                             <TextBlock Text="{x:Bind ViewModel.Chapter.ParentManga.Category}" FontSize="15" TextWrapping="WrapWholeWords"/>
                         </StackPanel>
                     </Grid>
-                    <ScrollViewer x:Name="Chapters" Grid.Column="1" Margin="0,10,0,0"
+                    <ScrollViewer x:Name="Chapters" Grid.Column="1" Margin="0,40,0,0"
                                   HorizontalScrollMode="Enabled"
                                   HorizontalScrollBarVisibility="Auto"
                                   VerticalScrollMode="Disabled"
                                   VerticalScrollBarVisibility="Disabled"
                                   Tapped="{x:Bind ViewModel.ChapterClickedAsync}" >
                         <GridView x:Name="ChapterView"
-                                  ItemsSource="{x:Bind ViewModel.Chapter.ParentManga.Chapters}"
+                                  ItemsSource="{x:Bind ViewModel.Chapter.ParentManga.Chapters, Mode=OneWay}"
                                   VerticalContentAlignment="Stretch"
                                   ItemTemplate="{StaticResource ChapterItem}"
                                   SelectedIndex="{x:Bind ViewModel.SelectedChapterIndex}">
@@ -133,6 +133,7 @@
                             <Grid x:Name="PageNumberGrid"
                                   Height="30"
                                   Width="40"
+                                  Margin="0,0,0,10"
                                   Background="{ThemeResource SystemControlBackgroundAccentBrush}"
                                   BorderBrush="{x:Null}"
                                   HorizontalAlignment="Right"

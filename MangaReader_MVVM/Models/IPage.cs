@@ -8,11 +8,11 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Models
 {
-    public interface IPage
+    public interface IPage : IComparable<IPage>
     {
         Visibility OverlayVisibility { get; set; }
         int Number { get; set; }
-        BitmapImage Url { get; set; }
+        Uri Url { get; set; }
         int Width { get; set; }
         int Height { get; set; }
     }

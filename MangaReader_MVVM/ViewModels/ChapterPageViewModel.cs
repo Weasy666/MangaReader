@@ -76,10 +76,6 @@ namespace MangaReader_MVVM.ViewModels
                 Chapter = await MangaLibrary.Instance.GetChapterAsync(chapter);
                 SelectedChapterIndex = chapterIndex;//chapter.ParentManga.Chapters.IndexOf(chapter);
             }
-            else if (mode == NavigationMode.Back)
-            {
-                base.RaisePropertyChanged();
-            }
             await Task.CompletedTask;
         }
 

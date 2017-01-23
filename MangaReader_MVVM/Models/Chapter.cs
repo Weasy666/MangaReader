@@ -11,7 +11,7 @@ namespace MangaReader_MVVM.Models
     public class Chapter : Template10.Mvvm.ViewModelBase, IChapter
     {
         public IManga ParentManga { get; set; }
-        public int Number { get; set; }
+        public float Number { get; set; }
         public string Title { get; set; }
         public string Id { get; set; }        
         public int NumberOfPages => 0; //Pages.Count;
@@ -19,22 +19,20 @@ namespace MangaReader_MVVM.Models
         private bool _isRead = false;
         public bool IsRead
         {
-            get
-            {
-                return _isRead;
-            }
-            set
-            {
-                _isRead = value;
-                base.RaisePropertyChanged();
-            }
+            get { return _isRead; }
+            set { Set(ref _isRead, value); }
         }
         public ObservableCollection<IPage> Pages { get; set; }
 
-        public int CompareTo(Chapter comparePart)
+        public int CompareTo(IChapter comparePart)
         {
             // A null value means that this object is greater.
             return comparePart == null ? 1 : this.Number.CompareTo(comparePart.Number);
+        }
+
+        public bool Equals(IChapter other)
+        {
+            return Id == other.Id;
         }
     }
 }

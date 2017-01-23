@@ -30,6 +30,6 @@ namespace MangaReader_MVVM.Models
         void AddChapter(IChapter chapter);
         void RemoveChapter(IChapter chapter);
         void ReverseChapters();
-        int CompareTo(IManga comparePart);
+        //int CompareTo(IManga comparePart);
     }
 }

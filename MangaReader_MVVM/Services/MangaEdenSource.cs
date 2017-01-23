@@ -287,11 +287,11 @@ namespace MangaReader_MVVM.Services
             }
         }
 
-        private void LoadAndMergeReadStatus(Dictionary<string, List<string>> mangasWithStatus, string id, IChapter chapter)
+        private void LoadAndMergeReadStatus(Dictionary<string, List<string>> mangasWithStatus, string mangaId, IChapter chapter)
         {
-            if (mangasWithStatus != null && mangasWithStatus.ContainsKey(id))
+            if (mangasWithStatus != null && mangasWithStatus.ContainsKey(mangaId))
             {
-                var chapterWithStatus = mangasWithStatus[id].FirstOrDefault(c => c == chapter.Id);
+                var chapterWithStatus = mangasWithStatus[mangaId].FirstOrDefault(c => c == chapter.Id);
                 if (chapterWithStatus != null)
                     chapter.IsRead = true;
             }

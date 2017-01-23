@@ -52,7 +52,7 @@ namespace MangaReader_MVVM.Services
             var pageDummies = new ObservableCollection<IPage>();
             for (int i = 0 + offset; i < number + offset; i++)
                 pageDummies.Add(new Page { Number = i,
-                                           Url = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/NewStoreLogo.scale-400.png"))
+                                           Url = new Uri("ms-appx:///Assets/NewStoreLogo.scale-400.png")
                                          });
             return pageDummies;
         }

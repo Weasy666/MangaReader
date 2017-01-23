@@ -27,7 +27,7 @@ namespace MangaReader_MVVM.Models
             var pages = jo.Select(page => new Page
             {
                 Number = (int)page[0],
-                Url = new BitmapImage(new Uri(new Uri("https://cdn.mangaeden.com/mangasimg/"), page[1].ToString())),
+                Url = new Uri(new Uri("https://cdn.mangaeden.com/mangasimg/"), page[1].ToString()),
                 Width = (int)page[2],
                 Height = (int)page[3]
             }).ToList();

@@ -25,38 +25,27 @@ namespace MangaReader_MVVM.Models
         public DateTime Released { get; set; }
         public DateTime LastUpdated { get; set; }
         public bool Ongoing { get; set; }
-        public ObservableCollection<IChapter> _chapters { get; set; } = new ObservableCollection<IChapter>();
+        private ObservableCollection<IChapter> _chapters = new ObservableCollection<IChapter>();
         public ObservableCollection<IChapter> Chapters
         {
-            get
-            {
-                return _chapters;
-            }
-            set
-            {
-                _chapters = value;
-                base.RaisePropertyChanged();
-            }
+            get { return _chapters; }
+            set { Set(ref _chapters, value); }
         }
         public int NumberOfChapters { get; set; }
         private bool _isFavorit = false;
         public bool IsFavorit
         {
-            get
-            {
-                return _isFavorit;
-            }
-            set
-            {
-                _isFavorit = value;
-                base.RaisePropertyChanged();
-            }
+            get { return _isFavorit; }
+            set {Set(ref _isFavorit, value); }
         }
 
         public void AddChapter(IChapter chapter)
-        {
-            chapter.ParentManga = this;
-            this.Chapters.Add(chapter);
+        {            
+            if (!this.Chapters.Contains(chapter))
+            {
+                chapter.ParentManga = this;
+                this.Chapters.Add(chapter);
+            }            
         }
 
         public void RemoveChapter(IChapter chapter)
