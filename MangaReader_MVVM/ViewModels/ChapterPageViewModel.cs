@@ -128,8 +128,8 @@ namespace MangaReader_MVVM.ViewModels
 
         public async Task ChapterClickedAsync(object sender, TappedRoutedEventArgs args)
         {
-            var gridView = (sender as ScrollViewer).Content as GridView;
-            var clickedChapter = gridView.SelectedItem as Chapter;
+            var listView = sender as ListView;
+            var clickedChapter = listView.SelectedItem as Chapter;
 
             if (clickedChapter != null)
             {
@@ -147,6 +147,12 @@ namespace MangaReader_MVVM.ViewModels
                 var dialog = new MessageDialog("This Chapter doesn't exist");
                 await dialog.ShowAsync();
             }
+        }
+
+        public void ScrollToSelectedItem(object sender, SelectionChangedEventArgs e)
+        {
+            var listView = sender as ListView;
+            listView.ScrollIntoView(listView.SelectedItem, ScrollIntoViewAlignment.Leading);
         }
     }
 }
