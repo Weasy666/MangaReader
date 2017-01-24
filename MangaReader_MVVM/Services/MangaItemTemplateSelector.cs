@@ -29,6 +29,11 @@ namespace MangaReader_MVVM.Services
         // http://www.wpftutorial.net/datatemplates.html
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
+            return SelectTemplateCore(item);
+        }
+
+        protected override DataTemplate SelectTemplateCore(object item)
+        {
             switch (_settings.MangaGridLayout)
             {
                 case "MangaItemWithDetails":
@@ -36,7 +41,7 @@ namespace MangaReader_MVVM.Services
                 case "MangaItemWithoutDetails":
                     return MangaItemWithoutDetailsTemplate;
                 default:
-                    return base.SelectTemplateCore(item, container);
+                    return MangaItemWithDetailsTemplate;
             }
         }
     }

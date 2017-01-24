@@ -21,6 +21,7 @@
 
             <Style TargetType="t10controls:HamburgerMenu">
                 <Setter Property="AccentColor" Value="{StaticResource SystemAccentColor}" />
+                <Setter Property="NavButtonCheckedIndicatorBrush" Value="{StaticResource SystemAccentColor}" />
                 <Setter Property="VisualStateNarrowMinWidth" Value="{StaticResource NarrowMinWidth}" />
                 <Setter Property="VisualStateNormalMinWidth" Value="{StaticResource NormalMinWidth}" />
                 <Setter Property="VisualStateWideMinWidth" Value="{StaticResource WideMinWidth}" />
@@ -53,7 +54,7 @@
             <SolidColorBrush x:Key="ContrastColorBrush" Color="{StaticResource ContrastColor}" />
             <SolidColorBrush x:Key="ExtendedSplashBackground" Color="{StaticResource SystemAccentColor}" />
             <SolidColorBrush x:Key="ExtendedSplashForeground" Color="{StaticResource ContrastColor}" />
-
+            
             <Style TargetType="t10controls:HamburgerMenu">
 
                 <!--
@@ -77,6 +78,7 @@
                 -->
 
                 <Setter Property="AccentColor" Value="{StaticResource SystemAccentColor}" />
+                <Setter Property="NavButtonCheckedIndicatorBrush" Value="{StaticResource SystemAccentColor}" />
                 <Setter Property="VisualStateNarrowMinWidth" Value="{StaticResource NarrowMinWidth}" />
                 <Setter Property="VisualStateNormalMinWidth" Value="{StaticResource NormalMinWidth}" />
                 <Setter Property="VisualStateWideMinWidth" Value="{StaticResource WideMinWidth}" />

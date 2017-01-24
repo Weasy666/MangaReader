@@ -152,7 +152,10 @@ namespace MangaReader_MVVM.ViewModels
         public void ScrollToSelectedItem(object sender, SelectionChangedEventArgs e)
         {
             var listView = sender as ListView;
-            listView.ScrollIntoView(listView.SelectedItem, ScrollIntoViewAlignment.Leading);
+            if (listView.SelectedItem != null)
+            {
+                listView.ScrollIntoView(listView.SelectedItem, ScrollIntoViewAlignment.Leading);
+            }
         }
     }
 }

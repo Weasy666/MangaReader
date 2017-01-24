@@ -134,7 +134,15 @@
                 <ScrollViewer Margin="0,0,-12,0" VerticalScrollBarVisibility="Auto">
                     <TextBlock Margin="0,12,24,12" LineHeight="24"
                                TextWrapping="Wrap">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pharetra dictum nibh vel ornare. Donec sem urna, rhoncus sed cursus ac, aliquet at nisl. Pellentesque cursus et lacus vel porta. Morbi iaculis efficitur volutpat. Curabitur sit amet cursus nisl, ac suscipit mauris. Nulla a tellus a odio tincidunt maximus. Maecenas non eros lacus. Donec aliquam libero nec ex ullamcorper, in lobortis nibh dapibus. Mauris vehicula, tellus quis congue tincidunt, neque massa auctor ante, ut laoreet felis nisi id tellus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nunc sed dapibus quam, in viverra arcu. Vivamus ut metus non magna viverra porttitor a ultrices dui.
+                        <Bold>ToDo</Bold>
+                        <LineBreak />
+                        - change color of ImageEx Progress Ring
+                        <LineBreak />
+                        - get GridView to update Items after changing ItemTemplate with ItemSelector
+                        <LineBreak />
+                        - check why Read Status was lost and why Favorits are not Syncing to Surface
+                        <LineBreak />
+                        - finish restructure, so that Favorit button in ChapterPage updates every other button correctly
                         <LineBreak />
                         <LineBreak />
                         <Bold>Section</Bold>

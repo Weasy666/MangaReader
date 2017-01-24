@@ -19,7 +19,7 @@
         <ResourceDictionary Source="..\Styles\Templates.xaml" />
     </Page.Resources>
 
-    <Grid x:Name="PageGrid" Background="#FF000000"
+    <Grid x:Name="PageGrid" Background="#FF171717"
           RightTapped="{x:Bind ViewModel.Page_RightTapped}" >
 
         <t10controls:PageHeader x:Name="ChaptersBar" Frame="{x:Bind Frame}" ClosedDisplayMode="Hidden" Height="150" IsSticky="True" >
@@ -56,21 +56,35 @@
                                           IsTapEnabled="False"
                                           PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
                                           PlaceholderStretch="Uniform" />
-                        <StackPanel Orientation="Vertical" 
-                                    Margin="5,0,0,0"
-                                    MaxWidth="247"
-                                    Grid.Column="1">
-                            <StackPanel.Resources>
+                        <Grid Margin="5,0,0,0"
+                              MaxWidth="247"
+                              Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.Resources>
                                 <converters:BoolToMangaStatusConverter x:Key="BoolToMangaStatusConverter"/>
-                            </StackPanel.Resources>
-                            <TextBlock Text="{x:Bind ViewModel.Chapter.ParentManga.Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
-                            <TextBlock Text="{Binding Chapter.ParentManga.Ongoing, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind ViewModel.Chapter.ParentManga.LastUpdated}" FontSize="15"/>
-                            <TextBlock Text="{x:Bind ViewModel.Chapter.ParentManga.Category}" FontSize="15" TextWrapping="WrapWholeWords"/>
-                        </StackPanel>
+                            </Grid.Resources>
+                            <TextBlock x:Name="Title" Text="{x:Bind ViewModel.Chapter.ParentManga.Title}" FontSize="20" TextWrapping="WrapWholeWords" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"/>
+                            
+                            <TextBlock x:Name="StatusHeader" Text="Status" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="1" FontWeight="SemiBold"/>
+                            <TextBlock x:Name="Status" Text="{Binding Chapter.ParentManga.Ongoing, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15" Grid.Column="1" Grid.Row="1"/>
+                            
+                            <TextBlock x:Name="LastUpdatedHeader" Margin="0,0,10,0" Text="Last Updated" FontSize="15" Grid.Column="0" Grid.Row="2" FontWeight="SemiBold"/>
+                            <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Chapter.ParentManga.LastUpdated}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
+                            
+                            <TextBlock x:Name="CategoryHeader" Text="Category" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="3" FontWeight="SemiBold"/>
+                            <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Chapter.ParentManga.Category}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="3"/>
+                        </Grid>
                     </Grid>
-
-                    <ListView x:Name="ChapterView" Grid.Column="1" Margin="0,40,0,0"
+                    <ListView x:Name="ChaptersView" Grid.Column="1" Margin="0,40,0,0"
                                   ItemsSource="{x:Bind ViewModel.Chapter.ParentManga.Chapters, Mode=OneWay}"
                                   ScrollViewer.HorizontalScrollMode="Enabled"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -101,7 +115,7 @@
                       HorizontalScrollBarVisibility="Auto"
                       VerticalScrollMode="Disabled"
                       VerticalScrollBarVisibility="Disabled" >
-            <GridView x:Name="PageView" 
+            <GridView x:Name="PagesView" 
                       ItemsSource="{x:Bind Path=ViewModel.Pages, Mode=OneWay}"                      
                       IsHitTestVisible="False" >
                 <GridView.Resources>

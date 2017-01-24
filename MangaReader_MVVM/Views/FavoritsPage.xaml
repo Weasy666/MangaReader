@@ -36,11 +36,10 @@
 
         <GridView x:Name="GridView" Grid.Row="1"
                   ItemsSource="{Binding Path=Mangas, Mode=OneWay}"
-                  Margin="10,0,0,0"
+                  Margin="10,0,0,0" Padding="0,10,0,0"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="50"
                   IncrementalLoadingTrigger="Edge"
-                  DataContext="{Binding}"
                   ItemClick="{x:Bind ViewModel.MangaClickedAsync}"
                   ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}" >
             <GridView.ItemContainerStyle>

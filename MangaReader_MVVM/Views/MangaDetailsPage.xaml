@@ -33,7 +33,7 @@
             <t10controls:PageHeader.PrimaryCommands>
                 <AppBarButton Icon="SelectAll" Label="Select All" IsEnabled="False"/>
                 <AppBarSeparator />
-                <AppBarButton Icon="Sort" Label="Sort" Command="{Binding Path=SortGridCommand}"  />
+                <AppBarButton Icon="Switch" Label="Sort" Command="{Binding Path=SortGridCommand}"  />
             </t10controls:PageHeader.PrimaryCommands>
         </t10controls:PageHeader>
 
@@ -75,32 +75,231 @@
                                 Padding="0" />
                     </StackPanel>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" Margin="12,0,0,0">
-                    <StackPanel.Resources>
+                <Grid Margin="12,0,0,0" Width="372">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.Resources>
                         <converters:BoolToMangaStatusConverter x:Key="BoolToMangaStatusConverter"/>
-                    </StackPanel.Resources>
-                    <TextBlock x:Name="Alias" Text="{x:Bind ViewModel.Manga.Alias}" FontSize="15" Width="372" TextWrapping="WrapWholeWords"/>
-                    <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" Width="372" TextWrapping="WrapWholeWords"/>
-                    <TextBlock x:Name="Status" Text="{Binding Manga.Ongoing, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15" />
-                    <TextBlock x:Name="NumberOfChapters" Text="{x:Bind ViewModel.Manga.NumberOfChapters}" FontSize="15"/>
-                    <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Manga.LastUpdated}" FontSize="15" />
-                </StackPanel>
+                    </Grid.Resources>
+                    <TextBlock x:Name="AliasHeader" Text="Alias" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="0" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="Alias" Text="{x:Bind ViewModel.Manga.Alias}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="0"/>
+
+                    <TextBlock x:Name="StatusHeader" Text="Status" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="1" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="Status" Text="{Binding Manga.Ongoing, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15" Grid.Column="1" Grid.Row="1"/>
+
+                    <TextBlock x:Name="NumberOfChaptersHeader" Margin="0,0,10,0" Text="Chapters" FontSize="15" Grid.Column="0" Grid.Row="2" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="NumberOfChapters" Text="{x:Bind ViewModel.Manga.NumberOfChapters}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
+
+                    <TextBlock x:Name="LastUpdatedHeader" Margin="0,0,10,0" Text="Last Updated" FontSize="15" Grid.Column="0" Grid.Row="3" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Manga.LastUpdated}" FontSize="15" Grid.Column="1" Grid.Row="3"/>
+
+                    <TextBlock x:Name="CategoryHeader" Text="Category" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="4" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="4"/>
+                </Grid>
             </StackPanel>
+            <!--<TextBlock x:Name="DescriptionHeader" Margin="0,0,0,0" Text="Description" FontSize="15" FontWeight="Bold"/>-->
             <TextBlock x:Name="Description" Text="{x:Bind ViewModel.Manga.Description}" TextWrapping="WrapWholeWords"/>
         </StackPanel>
 
         <GridView x:Name="ChapterGridView" Grid.Row="1" Grid.Column="1"
                   ItemsSource="{Binding Path=Manga.Chapters, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                  Margin="12,10,0,0"
+                  Margin="12,0,0,0" Padding="0,6,0,0"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="20"
                   ItemTemplate="{StaticResource ChapterItem}"
-                  ItemClick="{x:Bind ViewModel.ChapterClickedAsync}" >
+                  ItemClick="{x:Bind ViewModel.ChapterClickedAsync}"
+                  ScrollViewer.HorizontalScrollMode="Enabled"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  ScrollViewer.VerticalScrollMode="Disabled" >
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapGrid Orientation="Vertical" /> <!--VerticalAlignment="Center"/>-->
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem">
                     <Setter Property="Margin" Value="0,0,10,10" />
                 </Style>
-            </GridView.ItemContainerStyle>
+            </GridView.ItemContainerStyle>            
         </GridView>
     </Grid>
 </Page>
+
+<!--<Page x:Class="MangaReader_MVVM.Views.MangaDetailsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:Behaviors="using:Template10.Behaviors"
+      xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
+      xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
+      xmlns:t10controls="using:Template10.Controls"
+      xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:MangaReader_MVVM.Views"
+      xmlns:models="using:MangaReader_MVVM.Models"
+      xmlns:converters="using:MangaReader_MVVM.Converters"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:vm="using:MangaReader_MVVM.ViewModels" mc:Ignorable="d">
+    <Page.DataContext>
+        <vm:MangaDetailsPageViewModel x:Name="ViewModel" />
+    </Page.DataContext>
+    <Page.Resources>
+        <ResourceDictionary Source="..\Styles\Templates.xaml" />
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+
+        <t10controls:PageHeader x:Name="PageHeader" Text="{x:Bind ViewModel.Manga.Title}" Frame="{x:Bind Frame}" Grid.ColumnSpan="2">
+            <t10controls:PageHeader.PrimaryCommands>
+                <AppBarButton Icon="SelectAll" Label="Select All" IsEnabled="False"/>
+                <AppBarSeparator />
+                <AppBarButton Icon="Switch" Label="Sort" Command="{Binding Path=SortGridCommand}"  />
+            </t10controls:PageHeader.PrimaryCommands>
+        </t10controls:PageHeader>
+
+        <RelativePanel Grid.Row="1" Margin="10,10,0,0">
+            <StackPanel x:Name="MangaDetails" Orientation="Vertical" MaxWidth="600">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                    <StackPanel>
+                        <controls:ImageEx x:Name="Cover" Width="206" Height="300"
+                                      IsCacheEnabled="True" 
+                                      Source="{x:Bind ViewModel.Manga.Cover}"
+                                      Stretch="Uniform"
+                                      PlaceholderSource="/Assets/404_whoopsies.jpg"
+                                      PlaceholderStretch="Uniform"
+                                      VerticalAlignment="Top" />
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0" FlowDirection="RightToLeft">
+                            <StackPanel.Resources>
+                                <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
+                            </StackPanel.Resources>
+                            <Button x:Name="FavoriteButton"
+                                Command="{x:Bind ViewModel.FavoritCommand}"
+                                Content="{Binding Manga.IsFavorit, Mode=TwoWay, Converter={StaticResource BoolToFavoritSymbolConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe MDL2 Assets"
+                                FontSize="20"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Height="30" Width="30"
+                                Margin="0,0,10,5"
+                                Grid.Column="1"
+                                Padding="0" />
+                            <Button x:Name="Download" IsEnabled="False"
+                                Command="{x:Bind ViewModel.DownloadCommand}"
+                                Content="&#xE118;"
+                                FontFamily="Segoe MDL2 Assets"
+                                FontSize="20"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Height="30" Width="30"
+                                Margin="0,0,5,5"
+                                Grid.Column="1"
+                                Padding="0" />
+                        </StackPanel>
+                    </StackPanel>
+                    <Grid Name="DetailsGrid" Margin="12,0,0,0" Width="372">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.Resources>
+                            <converters:BoolToMangaStatusConverter x:Key="BoolToMangaStatusConverter"/>
+                        </Grid.Resources>
+                        <TextBlock x:Name="AliasHeader" Text="Alias" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="0" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="Alias" Text="{x:Bind ViewModel.Manga.Alias}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="0"/>
+
+                        <TextBlock x:Name="StatusHeader" Text="Status" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="1" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="Status" Text="{Binding Manga.Ongoing, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15" Grid.Column="1" Grid.Row="1"/>
+
+                        <TextBlock x:Name="NumberOfChaptersHeader" Margin="0,0,10,0" Text="Chapters" FontSize="15" Grid.Column="0" Grid.Row="2" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="NumberOfChapters" Text="{x:Bind ViewModel.Manga.NumberOfChapters}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
+
+                        <TextBlock x:Name="LastUpdatedHeader" Margin="0,0,10,0" Text="Last Updated" FontSize="15" Grid.Column="0" Grid.Row="3" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Manga.LastUpdated}" FontSize="15" Grid.Column="1" Grid.Row="3"/>
+
+                        <TextBlock x:Name="CategoryHeader" Text="Category" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="4" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="4"/>
+                    </Grid>
+                </StackPanel>
+                --><!--<TextBlock x:Name="DescriptionHeader" Margin="0,0,0,0" Text="Description" FontSize="15" FontWeight="Bold"/>--><!--
+                <TextBlock x:Name="Description" Text="{x:Bind ViewModel.Manga.Description}" TextWrapping="WrapWholeWords"/>
+            </StackPanel>
+
+            <GridView Name="ChapterGridView"
+                      ItemsSource="{Binding Path=Manga.Chapters, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Margin="12,0,0,0" Padding="0,0,0,0"
+                      IsItemClickEnabled="True"
+                      IncrementalLoadingThreshold="20"
+                      ItemTemplate="{StaticResource ChapterItem}"
+                      ItemClick="{x:Bind ViewModel.ChapterClickedAsync}"
+                      ScrollViewer.HorizontalScrollMode="Enabled"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      ScrollViewer.VerticalScrollMode="Disabled" >
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid Orientation="Vertical" VerticalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+                <GridView.ItemContainerStyle>
+                    <Style TargetType="GridViewItem">
+                        <Setter Property="Margin" Value="0,0,10,10" />
+                    </Style>
+                </GridView.ItemContainerStyle>
+            </GridView>
+
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup>
+                    <VisualState x:Name="VisualStateNarrow">
+                        <VisualState.StateTriggers>
+                            <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
+                        </VisualState.StateTriggers>
+                        <VisualState.Setters>
+                            <Setter Target="ChapterGridView.(RelativePanel.Below)" Value="MangaDetails"/>
+                            <Setter Target="ChapterGridView.(RelativePanel.AlignTopWithPanel)" Value="false"/>
+                            <Setter Target="ChapterGridView.(RelativePanel.AlignBottomWithPanel)" Value="true"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="VisualStateNormal">
+                        <VisualState.StateTriggers>
+                            <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
+                        </VisualState.StateTriggers>
+                        <VisualState.Setters>
+                            <Setter Target="ChapterGridView.(RelativePanel.Below)" Value="MangaDetails"/>
+                            <Setter Target="ChapterGridView.(RelativePanel.AlignTopWithPanel)" Value="false"/>
+                            <Setter Target="ChapterGridView.(RelativePanel.AlignBottomWithPanel)" Value="true"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="VisualStateWide">
+                        <VisualState.StateTriggers>
+                            <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
+                        </VisualState.StateTriggers>
+                        <VisualState.Setters>
+                            <Setter Target="ChapterGridView.(RelativePanel.RightOf)" Value="MangaDetails"/>
+                            <Setter Target="ChapterGridView.(RelativePanel.AlignTopWithPanel)" Value="true"/>
+                            <Setter Target="ChapterGridView.(RelativePanel.AlignBottomWithPanel)" Value="true"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </RelativePanel>
+    </Grid>
+</Page>-->
