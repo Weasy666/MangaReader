@@ -16,6 +16,7 @@ namespace MangaReader_MVVM.ViewModels
 {
     public class MangaDetailsPageViewModel : ViewModelBase
     {
+        public MangaLibrary _library = MangaLibrary.Instance;
         public MangaDetailsPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
@@ -35,11 +36,11 @@ namespace MangaReader_MVVM.ViewModels
             
             if (mode == NavigationMode.New && manga != null)
             {
-                Manga = await MangaLibrary.Instance.GetMangaAsync(manga.Id);
+                Manga = await _library.GetMangaAsync(manga.Id);
             }
             if (mode == NavigationMode.Back)
             {
-                base.RaisePropertyChanged();
+                base.RaisePropertyChanged("Manga");
             }
             await Task.CompletedTask;
         }
@@ -57,14 +58,16 @@ namespace MangaReader_MVVM.ViewModels
         public DelegateCommand SortGridCommand
             => _sortGridCommand ?? (_sortGridCommand = new DelegateCommand(() =>
             {
-                Manga.ReverseChapters();
+                Manga.Chapters.Reverse();
+                base.RaisePropertyChanged("Manga");
             }, () => Manga.Chapters != null || Manga.Chapters.Any()));
 
         private DelegateCommand _favoritCommand;
         public DelegateCommand FavoritCommand
             => _favoritCommand ?? (_favoritCommand = new DelegateCommand(() =>
             {
-                MangaLibrary.Instance.AddFavorit(Manga);
+                _library.AddFavorit(Manga);
+                //base.RaisePropertyChanged("Mangas");
             }));
 
         private DelegateCommand _downloadCommand;
@@ -79,9 +82,9 @@ namespace MangaReader_MVVM.ViewModels
             var clickedChapter = e.ClickedItem as Chapter;
             if (clickedChapter != null)
             {
-                MangaLibrary.Instance.AddAsRead(Manga.Id, clickedChapter);
-                var parameters = new object[] { Manga, clickedChapter.Id };
-                NavigationService.Navigate(typeof(Views.ChapterPage), parameters);
+                _library.AddAsRead(Manga.Id, clickedChapter);
+                var parameters = clickedChapter.Id;
+                NavigationService.Navigate(typeof(Views.ChapterPage), clickedChapter);
             }
             else
             {

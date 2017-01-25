@@ -10,7 +10,7 @@ namespace MangaReader_MVVM.Services
 {
     public class MangaItemTemplateSelector : DataTemplateSelector
     {
-        Services.SettingsServices.SettingsService _settings;
+        SettingsServices.SettingsService _settings;
         public DataTemplate MangaItemWithDetailsTemplate { get; set; }
         public DataTemplate MangaItemWithoutDetailsTemplate { get; set; }
 
@@ -22,7 +22,7 @@ namespace MangaReader_MVVM.Services
             }
             else
             {
-                _settings = Services.SettingsServices.SettingsService.Instance;
+                _settings = SettingsServices.SettingsService.Instance;
             }
         }
 

@@ -17,7 +17,7 @@ namespace MangaReader_MVVM.Models
             get { return _isRead; }
             set { Set(ref _isRead, value); }
         }
-        public ObservableCollection<IPage> Pages { get; set; }
+        public ObservableCollection<IPage> Pages { get; set; } = new ObservableCollection<IPage>();
         public int CompareTo(IChapter other) => other == null ? 1 : Number.CompareTo(other.Number);
         public bool Equals(IChapter other) => Id == other.Id;        
     }

@@ -21,6 +21,7 @@ namespace MangaReader_MVVM.Services
 
         private ObservableCollection<IManga> _mangas;
         private ObservableCollection<IManga> _favorits;
+        private Dictionary<string, List<string>> _readStatus;
 
         public BitmapImage Icon { get; } = new BitmapImage(new Uri("ms-appx:///Assets/Icons/icon-mangaeden.png"));
         public MangaSource Name { get; } = MangaSource.MangaEden;
@@ -120,16 +121,14 @@ namespace MangaReader_MVVM.Services
             manga.Author = details.Author;            
             manga.Description = details.Description;
             manga.NumberOfChapters = details.NumberOfChapters;
-            manga.Released = details.Released;
-            var mangasWithStatus = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, StorageStrategies.Roaming);
+            manga.Released = details.Released;            
             foreach (var chapter in details.Chapters)
             {
-                LoadAndMergeReadStatus(mangasWithStatus, manga.Id, chapter);
+                LoadAndMergeReadStatus(manga.Id, chapter);
                 manga.AddChapter(chapter);
             }
         }
-
-        //TODO private method for loading and merging favorits with existing _mangas Collection
+        
         public async Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode)
         {
             if (_mangas == null || !_mangas.Any() || mode == ReloadMode.FromSource)
@@ -151,7 +150,10 @@ namespace MangaReader_MVVM.Services
             if (favorit != null)
             { 
                 favorit.IsFavorit = !favorit.IsFavorit;
-
+                if (_favorits == null)
+                {
+                    await GetFavoritMangasAsync(ReloadMode.Default);
+                }
                 if (_favorits.Contains(favorit))
                 {
                     _favorits.Remove(favorit);
@@ -189,10 +191,10 @@ namespace MangaReader_MVVM.Services
             if (mangaId != null && chapter != null)
             {
                 chapter.IsRead = true;
-                var mangasWithStatus = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, StorageStrategies.Roaming) ?? new Dictionary<string, List<string>>();
-                if (mangasWithStatus.ContainsKey(mangaId))
+                _readStatus = _readStatus ?? await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, StorageStrategies.Roaming) ?? new Dictionary<string, List<string>>();
+                if (_readStatus.ContainsKey(mangaId))
                 {
-                    var mangaChaptersWithStatus = mangasWithStatus[mangaId];
+                    var mangaChaptersWithStatus = _readStatus[mangaId];
                     var chapterWithStatus = mangaChaptersWithStatus.FirstOrDefault(c => c == chapter.Id);
                     if (chapterWithStatus != null && chapterWithStatus.Any())
                     {
@@ -200,15 +202,16 @@ namespace MangaReader_MVVM.Services
                     }                        
                     else
                     {
-                        mangaChaptersWithStatus.Add(chapter.Id); 
-                        mangasWithStatus[mangaId] = mangaChaptersWithStatus;                       
+                        mangaChaptersWithStatus.Add(chapter.Id);
+                        _readStatus[mangaId] = mangaChaptersWithStatus;   
+                        // evtl noch das chapter in _mangas und _favorits liste ersetzen                    
                     }                    
                 }
                 else
                 {
-                    mangasWithStatus[mangaId] = new List<string>() { chapter.Id };
+                    _readStatus[mangaId] = new List<string>() { chapter.Id };
                 }
-                await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, mangasWithStatus, StorageStrategies.Roaming);
+                await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, _readStatus, StorageStrategies.Roaming);
             }
         }
 
@@ -287,11 +290,12 @@ namespace MangaReader_MVVM.Services
             }
         }
 
-        private void LoadAndMergeReadStatus(Dictionary<string, List<string>> mangasWithStatus, string mangaId, IChapter chapter)
+        private async void LoadAndMergeReadStatus(string mangaId, IChapter chapter)
         {
-            if (mangasWithStatus != null && mangasWithStatus.ContainsKey(mangaId))
+            _readStatus = _readStatus ?? await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, StorageStrategies.Roaming);
+            if (_readStatus.ContainsKey(mangaId))
             {
-                var chapterWithStatus = mangasWithStatus[mangaId].FirstOrDefault(c => c == chapter.Id);
+                var chapterWithStatus = _readStatus[mangaId].FirstOrDefault(c => c == chapter.Id);
                 if (chapterWithStatus != null)
                     chapter.IsRead = true;
             }

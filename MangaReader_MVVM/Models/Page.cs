@@ -21,10 +21,6 @@ namespace MangaReader_MVVM.Models
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public int CompareTo(IPage comparePart)
-        {
-            // A null value means that this object is greater.
-            return comparePart == null ? 1 : this.Number.CompareTo(comparePart.Number);
-        }
+        public int CompareTo(IPage other) => other == null ? 1 : this.Number.CompareTo(other.Number);
     }
 }

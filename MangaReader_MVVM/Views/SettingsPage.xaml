@@ -141,9 +141,11 @@
                         <LineBreak />
                         - DONE -> check why Read Status was lost and why Favorits are not Syncing to Surface -> a sync for Roaming Data only takes place after user logs out of windows -> in the future need to sync status with using the App Folder concept in the OneDrive API
                         <LineBreak />
-                        - finish restructure, so that Favorit button in ChapterPage updates every other button correctly
+                        - DONE -> finish restructure, so that Favorit button in ChapterPage updates every other button correctly
                         <LineBreak />
                         - add ItemClicked handling for MangaSources in SettingsPage
+                        <LineBreak />
+                        - take a look at MangaEdenSource _favorits list...maybe it's not needed when Favorits are searched with a LINQ expression in the FavoritsPageViewModel, everytime they are needed
                         <LineBreak />
 
                     </TextBlock>

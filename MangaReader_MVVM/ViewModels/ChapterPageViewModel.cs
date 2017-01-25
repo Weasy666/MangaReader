@@ -17,6 +17,7 @@ namespace MangaReader_MVVM.ViewModels
 {
     public class ChapterPageViewModel : ViewModelBase
     {
+        public MangaLibrary _library = MangaLibrary.Instance;
         public ChapterPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
@@ -29,6 +30,10 @@ namespace MangaReader_MVVM.ViewModels
             }
             else
             {
+                Manga = new Manga()
+                {
+                    
+                };
                 Chapter = new Chapter()
                 {
                     Pages = new ObservableCollection<IPage>()
@@ -62,21 +67,22 @@ namespace MangaReader_MVVM.ViewModels
         }
 
         //private ObservableCollection<IChapter> _chapters;
-        public ObservableCollection<IChapter> Chapters { get { return Chapter.ParentManga.Chapters; } }
+        public ObservableCollection<IChapter> Chapters { get { return Manga.Chapters; } }
 
         private IManga _manga;
         public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            var parameters = parameter as object[];
-            Manga = parameters[0] as IManga;
-            var chapterId = parameters[1] as string;
-            
+            var chapter = parameter as Chapter;
+
             if (mode == NavigationMode.New && parameter != null)
             {
-                var chapterIndex = Manga.Chapters.IndexOf(Manga.Chapters.Where(c => c.Id == chapterId).FirstOrDefault());
-                Chapter = await MangaLibrary.Instance.GetChapterAsync(Manga.Chapters[chapterIndex] as Chapter);
+                Pages.Clear();
+                Manga = await _library.GetMangaAsync(chapter.ParentManga.Id);
+                
+                var chapterIndex = Manga.Chapters.IndexOf(chapter);
+                Chapter = await _library.GetChapterAsync(chapter);
                 SelectedChapterIndex = chapterIndex;
             }
             await Task.CompletedTask;
@@ -95,8 +101,8 @@ namespace MangaReader_MVVM.ViewModels
         public DelegateCommand FavoritCommand
             => _favoritCommand ?? (_favoritCommand = new DelegateCommand(() =>
             {
-                MangaLibrary.Instance.AddFavorit(Chapter.ParentManga);
-            }, () => Chapter.ParentManga != null));
+                MangaLibrary.Instance.AddFavorit(Manga);
+            }, () => Manga != null));
 
         public void Page_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {

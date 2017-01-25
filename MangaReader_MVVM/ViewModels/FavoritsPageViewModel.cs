@@ -26,18 +26,18 @@ namespace MangaReader_MVVM.ViewModels
             }
             else
             {
-                Mangas = MangaLibrary.Instance.GetFavoritMangasAsync().Result;
+                Mangas = _library.GetFavoritMangasAsync().Result;
             }
         }
 
-        private ObservableCollection<IManga> _mangas = new ObservableCollection<IManga>();
+        private ObservableCollection<IManga> _mangas;
         public ObservableCollection<IManga> Mangas { get { return _mangas; } set { Set(ref _mangas, value); } }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            if (mode == NavigationMode.Back)
+            if (mode == NavigationMode.New)
             {
-                
+                //Mangas = await _library.GetFavoritMangasAsync();
             }
             await Task.CompletedTask;
         }
@@ -62,7 +62,7 @@ namespace MangaReader_MVVM.ViewModels
             => _reloadGridCommand ?? (_reloadGridCommand = new DelegateCommand(async () =>
             {
                 Views.Busy.SetBusy(true, "Picking up the freshly printed books...");
-                Mangas = await MangaLibrary.Instance.GetFavoritMangasAsync(ReloadMode.FromSource);
+                Mangas = await _library.GetFavoritMangasAsync(ReloadMode.FromSource);
                 Views.Busy.SetBusy(false);
             }, () => Mangas.Any()));
 
@@ -70,14 +70,16 @@ namespace MangaReader_MVVM.ViewModels
         public DelegateCommand SortGridCommand
             => _sortGridCommand ?? (_sortGridCommand = new DelegateCommand(() =>
             {
-                Mangas = new ObservableCollection<IManga>(Mangas.Reverse());
+                //Mangas = new ObservableCollection<IManga>(Mangas.Reverse());
+                Mangas.Reverse();
+                base.RaisePropertyChanged("Mangas");
             }, () => Mangas.Any()));
 
         private DelegateCommand<IManga> _favoritCommand;
         public DelegateCommand<IManga> FavoritCommand
             => _favoritCommand ?? (_favoritCommand = new DelegateCommand<IManga>((manga) =>
             {
-                MangaLibrary.Instance.AddFavorit(manga);
+                _library.AddFavorit(manga);
             }));
 
         public async void MangaClickedAsync(object sender, ItemClickEventArgs e)

@@ -35,7 +35,7 @@
                         </Grid.ColumnDefinitions>
                         <Button x:Name="FavoriteButton"
                                 Command="{x:Bind ViewModel.FavoritCommand}"
-                                Content="{Binding Chapter.ParentManga.IsFavorit, Mode=TwoWay, Converter={StaticResource BoolToFavoritSymbolConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding Manga.IsFavorit, Mode=TwoWay, Converter={StaticResource BoolToFavoritSymbolConverter}, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Symbol"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"
@@ -47,7 +47,7 @@
                         <controls:ImageEx x:Name="Cover" Foreground="{ThemeResource ContrastColorBrush}"
                                           Width="103" Height="150" Grid.Column="0"
                                           IsCacheEnabled="True"
-                                          Source="{x:Bind ViewModel.Chapter.ParentManga.Cover, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
+                                          Source="{x:Bind ViewModel.Manga.Cover, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
                                           Stretch="UniformToFill"
                                           IsTapEnabled="False"
                                           PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
@@ -68,20 +68,20 @@
                             <Grid.Resources>
                                 <converters:BoolToMangaStatusConverter x:Key="BoolToMangaStatusConverter"/>
                             </Grid.Resources>
-                            <TextBlock x:Name="Title" Text="{x:Bind ViewModel.Chapter.ParentManga.Title}" FontSize="20" TextWrapping="WrapWholeWords" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"/>
+                            <TextBlock x:Name="Title" Text="{x:Bind ViewModel.Manga.Title}" FontSize="20" TextWrapping="WrapWholeWords" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"/>
                             
                             <TextBlock x:Name="StatusHeader" Text="Status" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="1" FontWeight="SemiBold"/>
-                            <TextBlock x:Name="Status" Text="{Binding Chapter.ParentManga.Ongoing, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15" Grid.Column="1" Grid.Row="1"/>
+                            <TextBlock x:Name="Status" Text="{Binding Manga.Ongoing, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15" Grid.Column="1" Grid.Row="1"/>
                             
                             <TextBlock x:Name="LastUpdatedHeader" Margin="0,0,10,0" Text="Last Updated" FontSize="15" Grid.Column="0" Grid.Row="2" FontWeight="SemiBold"/>
-                            <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Chapter.ParentManga.LastUpdated}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
+                            <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Manga.LastUpdated}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
                             
                             <TextBlock x:Name="CategoryHeader" Text="Category" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="3" FontWeight="SemiBold"/>
-                            <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Chapter.ParentManga.Category}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="3"/>
+                            <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="3"/>
                         </Grid>
                     </Grid>
                     <ListView x:Name="ChaptersView" Grid.Column="1" Margin="0,40,0,0"
-                                  ItemsSource="{x:Bind ViewModel.Chapter.ParentManga.Chapters}"
+                                  ItemsSource="{x:Bind ViewModel.Manga.Chapters}"
                                   ScrollViewer.HorizontalScrollMode="Enabled"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   ScrollViewer.VerticalScrollMode="Disabled"
@@ -130,10 +130,9 @@
                 <GridView.ItemTemplate>
                     <DataTemplate x:Name="PageTemplate" x:DataType="models:Page" >
                         <Grid x:Name="PageGrid" >
-                            <controls:ImageEx x:Name="PageImage"
+                            <controls:ImageEx x:Name="PageImage" Style="{ThemeResource BigImages}"
                                               IsCacheEnabled="False"
                                               Source="{x:Bind Url, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
-                                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
                                               Stretch="UniformToFill"
                                               IsTapEnabled="False"
                                               PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
