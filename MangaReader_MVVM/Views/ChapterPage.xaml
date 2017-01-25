@@ -48,7 +48,7 @@
                                 Grid.Column="1"
                                 Canvas.ZIndex="10"
                                 Padding="0" Foreground="{ThemeResource ContrastColorBrush}"/>
-                        <controls:ImageEx x:Name="Cover"
+                        <controls:ImageEx x:Name="Cover" Foreground="{ThemeResource ContrastColorBrush}"
                                           Width="103" Height="150" Grid.Column="0"
                                           IsCacheEnabled="True"
                                           Source="{x:Bind ViewModel.Chapter.ParentManga.Cover, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
@@ -85,7 +85,7 @@
                         </Grid>
                     </Grid>
                     <ListView x:Name="ChaptersView" Grid.Column="1" Margin="0,40,0,0"
-                                  ItemsSource="{x:Bind ViewModel.Chapter.ParentManga.Chapters, Mode=OneWay}"
+                                  ItemsSource="{x:Bind ViewModel.Chapter.ParentManga.Chapters}"
                                   ScrollViewer.HorizontalScrollMode="Enabled"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   ScrollViewer.VerticalScrollMode="Disabled"
@@ -137,6 +137,7 @@
                             <controls:ImageEx x:Name="PageImage"
                                               IsCacheEnabled="False"
                                               Source="{x:Bind Url, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
+                                              Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
                                               Stretch="UniformToFill"
                                               IsTapEnabled="False"
                                               PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
