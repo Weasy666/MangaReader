@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Models
 {
-    public interface IManga : IComparable<IManga>
+    public interface IManga : IComparable<IManga>, IEquatable<IManga>
     {
         IMangaSource ParentLibrary { get; }
         string Title { get; set; }
@@ -29,7 +29,6 @@ namespace MangaReader_MVVM.Models
 
         void AddChapter(IChapter chapter);
         void RemoveChapter(IChapter chapter);
-        void ReverseChapters();
-        //int CompareTo(IManga comparePart);
+        ObservableCollection<IChapter> ReverseChapters();
     }
 }

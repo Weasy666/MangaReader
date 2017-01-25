@@ -34,6 +34,7 @@ namespace MangaReader_MVVM.Services
 
         protected override DataTemplate SelectTemplateCore(object item)
         {
+            //_settings = _settings ?? SettingsServices.SettingsService.Instance;
             switch (_settings.MangaGridLayout)
             {
                 case "MangaItemWithDetails":

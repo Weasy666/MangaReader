@@ -9,7 +9,7 @@ using MangaReader_MVVM.Models;
 
 namespace MangaReader_MVVM.Services
 {
-    class MangaLibrary
+    public class MangaLibrary
     {
         private static readonly MangaLibrary instance = new MangaLibrary();
         public static MangaLibrary Instance { get { return instance; } }
@@ -35,6 +35,7 @@ namespace MangaReader_MVVM.Services
                         break;
                 }
             }
+            get => _mangaSource.Name;
         }
 
         public Uri RootUri => _mangaSource.RootUri;

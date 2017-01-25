@@ -19,8 +19,6 @@ namespace MangaReader_MVVM.ViewModels
     public class SettingsPartViewModel : ViewModelBase
     {
         Services.SettingsServices.SettingsService _settings;
-        ObservableCollection<BitmapImage> _sourcesWithIcons;
-        public ObservableCollection<BitmapImage> SourcesWithIcons => _sourcesWithIcons;
 
         public SettingsPartViewModel()
         {
@@ -53,10 +51,10 @@ namespace MangaReader_MVVM.ViewModels
             set { _settings.MangaGridLayout = value ? "MangaItemWithDetails" : "MangaItemWithoutDetails"; base.RaisePropertyChanged(); }
         }
 
-        public int SelectedMangaSource
-        {
-            get { return SourcesWithIcons.IndexOf(SourcesWithIcons.Where(source => source.UriSource.ToString().Contains(_settings.UsedMangaSource.ToString().ToLower())).First()); }
-        }
+        ObservableCollection<BitmapImage> _sourcesWithIcons;
+        public ObservableCollection<BitmapImage> SourcesWithIcons => _sourcesWithIcons;
+        public int SelectedMangaSource => SourcesWithIcons.IndexOf(SourcesWithIcons.Where(source => source.UriSource.ToString().Contains(_settings.UsedMangaSource.ToString().ToLower())).First());
+        
         private ObservableCollection<BitmapImage> LoadMangaSourceIcons()
         {
             var sources = Enum.GetValues(typeof(MangaSource)).Cast<MangaSource>().ToList();

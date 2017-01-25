@@ -8,7 +8,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles\Custom.xaml" />
+                <ResourceDictionary Source="Styles\T10_Controls.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="t10controls:CustomTitleBar">
                 <Setter Property="BackgroundColor" Value="{StaticResource SystemAccentColor}" />

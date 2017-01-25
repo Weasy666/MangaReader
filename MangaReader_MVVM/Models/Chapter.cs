@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml;
 
 namespace MangaReader_MVVM.Models
 {
@@ -14,7 +9,7 @@ namespace MangaReader_MVVM.Models
         public float Number { get; set; }
         public string Title { get; set; }
         public string Id { get; set; }        
-        public int NumberOfPages => 0; //Pages.Count;
+        public int NumberOfPages => Pages?.Count ?? 0;
         public DateTime Released { get; set; }
         private bool _isRead = false;
         public bool IsRead
@@ -23,16 +18,7 @@ namespace MangaReader_MVVM.Models
             set { Set(ref _isRead, value); }
         }
         public ObservableCollection<IPage> Pages { get; set; }
-
-        public int CompareTo(IChapter comparePart)
-        {
-            // A null value means that this object is greater.
-            return comparePart == null ? 1 : this.Number.CompareTo(comparePart.Number);
-        }
-
-        public bool Equals(IChapter other)
-        {
-            return Id == other.Id;
-        }
+        public int CompareTo(IChapter other) => other == null ? 1 : Number.CompareTo(other.Number);
+        public bool Equals(IChapter other) => Id == other.Id;        
     }
 }

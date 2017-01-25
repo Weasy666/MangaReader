@@ -11,7 +11,7 @@ namespace MangaReader_MVVM.Models
     public interface IMangaSource
     {
         BitmapImage Icon { get; }
-        string Name { get; }       
+        MangaSource Name { get; }       
         Uri RootUri { get; }
         Uri MangasListPage { get; }
 

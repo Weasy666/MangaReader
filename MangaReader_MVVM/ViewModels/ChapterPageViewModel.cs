@@ -64,17 +64,20 @@ namespace MangaReader_MVVM.ViewModels
         //private ObservableCollection<IChapter> _chapters;
         public ObservableCollection<IChapter> Chapters { get { return Chapter.ParentManga.Chapters; } }
 
+        private IManga _manga;
+        public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
+
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            var chapter = parameter as Chapter;
+            var parameters = parameter as object[];
+            Manga = parameters[0] as IManga;
+            var chapterId = parameters[1] as string;
             
             if (mode == NavigationMode.New && parameter != null)
             {
-                Pages.Clear();
-                var manga = chapter.ParentManga;
-                var chapterIndex = manga.Chapters.IndexOf(chapter);
-                Chapter = await MangaLibrary.Instance.GetChapterAsync(chapter);
-                SelectedChapterIndex = chapterIndex;//chapter.ParentManga.Chapters.IndexOf(chapter);
+                var chapterIndex = Manga.Chapters.IndexOf(Manga.Chapters.Where(c => c.Id == chapterId).FirstOrDefault());
+                Chapter = await MangaLibrary.Instance.GetChapterAsync(Manga.Chapters[chapterIndex] as Chapter);
+                SelectedChapterIndex = chapterIndex;
             }
             await Task.CompletedTask;
         }
@@ -87,22 +90,7 @@ namespace MangaReader_MVVM.ViewModels
             }
             await Task.CompletedTask;
         }
-
-        //private DelegateCommand _sortGridCommand;
-        //public DelegateCommand SortGridCommand
-        //{
-        //    get
-        //    {
-        //        if (_sortGridCommand == null)
-        //        {
-        //            _sortGridCommand = new DelegateCommand(() =>
-        //            {
-        //                Chapter.Pages = new ObservableCollection<IPage>(Pages.Reverse());
-        //            }, () => Pages.Any());
-        //        }
-        //        return _sortGridCommand;
-        //    }
-        //}
+        
         private DelegateCommand _favoritCommand;
         public DelegateCommand FavoritCommand
             => _favoritCommand ?? (_favoritCommand = new DelegateCommand(() =>

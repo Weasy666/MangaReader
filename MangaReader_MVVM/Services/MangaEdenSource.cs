@@ -23,7 +23,7 @@ namespace MangaReader_MVVM.Services
         private ObservableCollection<IManga> _favorits;
 
         public BitmapImage Icon { get; } = new BitmapImage(new Uri("ms-appx:///Assets/Icons/icon-mangaeden.png"));
-        public string Name { get; } = MangaSource.MangaEden.ToString();
+        public MangaSource Name { get; } = MangaSource.MangaEden;
         private int Language { get; } = 0;
         public Uri RootUri { get; }
         public Uri MangasListPage { get; }

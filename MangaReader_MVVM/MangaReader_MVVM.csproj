@@ -112,7 +112,7 @@
     <Compile Include="Converters\MangaEdenMangasListConverter.cs" />
     <Compile Include="Services\MangaEdenSource.cs" />
     <Compile Include="Services\MangaLibrary.cs" />
-    <Compile Include="Utils\MangaSource.cs" />
+    <Compile Include="Utils\Enums.cs" />
     <Compile Include="Models\Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\MangaItemTemplateSelector.cs" />
@@ -239,7 +239,7 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Styles\Custom.xaml">
+    <Page Include="Styles\T10_Controls.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -5,7 +5,7 @@ using Windows.UI.Xaml;
 
 namespace MangaReader_MVVM.Services.SettingsServices
 {
-    public class SettingsService
+    public class SettingsService : Template10.Mvvm.ViewModelBase
     {
         public static SettingsService Instance { get; } = new SettingsService();
         Template10.Services.SettingsService.ISettingsHelper _helper;
@@ -61,7 +61,23 @@ namespace MangaReader_MVVM.Services.SettingsServices
             set
             {
                 _helper.Write(nameof(MangaGridLayout), value);
+                TestSelector = new MangaItemTemplateSelector()
+                {
+                    MangaItemWithDetailsTemplate = TestSelector.MangaItemWithDetailsTemplate,
+                    MangaItemWithoutDetailsTemplate = TestSelector.MangaItemWithoutDetailsTemplate
+                };
             }
+        }
+
+        private MangaItemTemplateSelector _testSelector = new MangaItemTemplateSelector()
+        {
+            MangaItemWithDetailsTemplate = XamlUtils.GetResource<DataTemplate>("MangaItemWithDetailsTemplate", null),
+            MangaItemWithoutDetailsTemplate = XamlUtils.GetResource<DataTemplate>("MangaItemWithoutDetailsTemplate", null)
+        };
+        public MangaItemTemplateSelector TestSelector
+        {
+            get => _testSelector;
+            set { _testSelector = value; base.RaisePropertyChanged(); }
         }
 
         public MangaSource UsedMangaSource

@@ -16,6 +16,7 @@ namespace MangaReader_MVVM.ViewModels
 {
     public class FavoritsPageViewModel : ViewModelBase
     {
+        public MangaLibrary _library = MangaLibrary.Instance;
         public FavoritsPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
@@ -36,7 +37,7 @@ namespace MangaReader_MVVM.ViewModels
         {
             if (mode == NavigationMode.Back)
             {
-                var test = BindableBase.ReferenceEquals(Mangas, MangaLibrary.Instance.GetFavoritMangasAsync().Result);
+                
             }
             await Task.CompletedTask;
         }

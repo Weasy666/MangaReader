@@ -80,7 +80,8 @@ namespace MangaReader_MVVM.ViewModels
             if (clickedChapter != null)
             {
                 MangaLibrary.Instance.AddAsRead(Manga.Id, clickedChapter);
-                NavigationService.Navigate(typeof(Views.ChapterPage), clickedChapter);
+                var parameters = new object[] { Manga, clickedChapter.Id };
+                NavigationService.Navigate(typeof(Views.ChapterPage), parameters);
             }
             else
             {
