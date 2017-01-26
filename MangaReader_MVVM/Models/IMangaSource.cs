@@ -15,6 +15,7 @@ namespace MangaReader_MVVM.Models
         Uri RootUri { get; }
         Uri MangasListPage { get; }
         ObservableCollection<IManga> Mangas { get; }
+        ObservableCollection<IManga> Favorits { get; }
 
         Task<ObservableCollection<IManga>> GetMangasAsync(ReloadMode mode);
         Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode);

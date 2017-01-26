@@ -12,6 +12,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
 using Template10.Services.FileService;
 using MangaReader_MVVM.Models;
+using MangaReader_MVVM.Utils;
 using Template10.Mvvm;
 
 namespace MangaReader_MVVM.Services
@@ -30,7 +31,7 @@ namespace MangaReader_MVVM.Services
         private ObservableCollection<IManga> _favorits;
         public ObservableCollection<IManga> Favorits
         {
-            get { return _favorits; }
+            get { return _favorits = _favorits ?? GetFavoritMangasAsync().Result; }
             internal set { Set(ref _favorits, value); }
         }
 
@@ -141,51 +142,19 @@ namespace MangaReader_MVVM.Services
             }
         }
         
-        public async Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode)
+        public async Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode = ReloadMode.Default)
         {
             if (!Mangas.Any() || mode == ReloadMode.FromSource)
             {
                 await GetMangasAsync(ReloadMode.Default);
-                _favorits = new ObservableCollection<IManga>(Mangas.Where(manga => manga.IsFavorit).ToList());
+                Favorits = new ObservableCollection<IManga>(Mangas.Where(manga => manga.IsFavorit).ToList());
             }
-
-            if (_favorits == null || !_favorits.Any())
+            else if (_favorits == null || !Favorits.Any())
             {
-                _favorits = new ObservableCollection<IManga>(Mangas.Where(manga => manga.IsFavorit).ToList());
+                Favorits = new ObservableCollection<IManga>(Mangas.Where(manga => manga.IsFavorit).ToList());
             }
 
-            return _favorits;
-        }
-
-        public async void AddFavorit(IManga favorit, List<string> favorits)
-        {
-            if (favorit != null)
-            { 
-                favorit.IsFavorit = !favorit.IsFavorit;
-                if (_favorits == null)
-                {
-                    await GetFavoritMangasAsync(ReloadMode.Default);
-                }
-                if (_favorits.Contains(favorit))
-                {
-                    _favorits.Remove(favorit);
-                    if (favorit.IsFavorit)
-                        _favorits.Add(favorit);
-                }
-                
-                favorits = favorits ?? await FileHelper.ReadFileAsync<List<string>>("favorits_" + this.Name, StorageStrategies.Roaming) ?? new List<string>();
-                if (favorits.Any() && !favorit.IsFavorit)
-                {
-                    favorits.Remove(favorit.Id);                    
-                }
-                else
-                {
-                    favorits.Add(favorit.Id);
-                    _favorits.Add(favorit);
-                    _favorits.OrderBy(m => m.Title);
-                }
-                await FileHelper.WriteFileAsync<List<string>>("favorits_" + this.Name, favorits, StorageStrategies.Roaming);
-            }
+            return Favorits;
         }
 
         public async void AddFavorit(ObservableCollection<IManga> newFavorits)
@@ -197,6 +166,34 @@ namespace MangaReader_MVVM.Services
                 {
                     AddFavorit(fav, favorits);
                 }
+            }
+        }
+
+        public async void AddFavorit(IManga favorit, List<string> favorits)
+        {
+            if (favorit != null)
+            { 
+                favorit.IsFavorit = !favorit.IsFavorit;
+                favorits = favorits ?? await FileHelper.ReadFileAsync<List<string>>("favorits_" + this.Name, StorageStrategies.Roaming) ?? new List<string>();
+
+                if (Favorits.Contains(favorit))
+                {
+                    favorits?.Remove(favorit.Id);
+                    Favorits.Remove(favorit);
+
+                    if (favorit.IsFavorit)
+                        Favorits.AddSorted(favorit);
+                }
+                else
+                {
+                    favorits.Add(favorit.Id);
+                    Favorits.AddSorted(favorit);
+                    //var toSort = Favorits.ToList();
+                    //toSort.Sort();
+                    //Favorits = new ObservableCollection<IManga>(toSort);
+                }
+
+                await FileHelper.WriteFileAsync<List<string>>("favorits_" + this.Name, favorits, StorageStrategies.Roaming);
             }
         }
 

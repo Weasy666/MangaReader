@@ -39,6 +39,7 @@ namespace MangaReader_MVVM.Services
         }
 
         public ObservableCollection<IManga> Mangas => _mangaSource.Mangas;
+        public ObservableCollection<IManga> Favorits => _mangaSource.Favorits;
         public Uri RootUri => _mangaSource.RootUri;
         public BitmapImage Icon => _mangaSource.Icon;
         public Task<ObservableCollection<IManga>> GetMangasAsync(ReloadMode mode = ReloadMode.Default) => _mangaSource.GetMangasAsync(mode);

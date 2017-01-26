@@ -22,14 +22,14 @@
         <t10controls:PageHeader Text="Your Favorit Mangas" Frame="{x:Bind Frame}" >
             <t10controls:PageHeader.PrimaryCommands>
                 <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />
-                <AppBarButton Icon="Sort" Label="Sort" Command="{Binding Path=SortGridCommand}" />
+                <!--<AppBarButton Icon="Sort" Label="Sort" Command="{Binding Path=SortGridCommand}" />-->
                 <AppBarSeparator />
                 <AppBarButton Icon="Refresh" Label="Reload" Command="{Binding Path=ReloadGridCommand}" />
             </t10controls:PageHeader.PrimaryCommands>
         </t10controls:PageHeader>
 
         <GridView x:Name="GridView" Grid.Row="1"
-                  ItemsSource="{Binding Path=Mangas, Mode=TwoWay}"
+                  ItemsSource="{Binding Path=Favorits, Mode=TwoWay}"
                   Margin="10,0,0,0" Padding="0,10,0,0"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="50"

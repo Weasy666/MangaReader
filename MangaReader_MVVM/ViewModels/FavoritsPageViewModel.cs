@@ -22,16 +22,16 @@ namespace MangaReader_MVVM.ViewModels
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
                 // designtime
-                Mangas = DesignTimeService.GenerateMangaDummies();
+                Favorits = DesignTimeService.GenerateMangaDummies();
             }
             else
             {
-                Mangas = _library.GetFavoritMangasAsync().Result;
+                //Mangas = _library.GetFavoritMangasAsync().Result;
             }
         }
 
-        private ObservableCollection<IManga> _mangas;
-        public ObservableCollection<IManga> Mangas { get { return _mangas; } set { Set(ref _mangas, value); } }
+        private ObservableCollection<IManga> _favorits;
+        public ObservableCollection<IManga> Favorits { get { return _favorits = _favorits ?? _library.Favorits; } set { Set(ref _favorits, value); } }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
@@ -41,7 +41,7 @@ namespace MangaReader_MVVM.ViewModels
             }
             else
             {
-                Mangas = await _library.GetFavoritMangasAsync();
+                //Favorits = await _library.GetFavoritMangasAsync();
             }
             await Task.CompletedTask;
         }
@@ -50,7 +50,7 @@ namespace MangaReader_MVVM.ViewModels
         {
             if (suspending)
             {
-                suspensionState[nameof(Mangas)] = Mangas;
+                suspensionState[nameof(Favorits)] = Favorits;
             }
             await Task.CompletedTask;
         }
@@ -66,18 +66,16 @@ namespace MangaReader_MVVM.ViewModels
             => _reloadGridCommand ?? (_reloadGridCommand = new DelegateCommand(async () =>
             {
                 Views.Busy.SetBusy(true, "Picking up the freshly printed books...");
-                Mangas = await _library.GetFavoritMangasAsync(ReloadMode.FromSource);
+                Favorits = await _library.GetFavoritMangasAsync(ReloadMode.FromSource);
                 Views.Busy.SetBusy(false);
-            }, () => Mangas.Any()));
+            }, () => Favorits.Any()));
 
-        private DelegateCommand _sortGridCommand;
-        public DelegateCommand SortGridCommand
-            => _sortGridCommand ?? (_sortGridCommand = new DelegateCommand(() =>
-            {
-                //Mangas = new ObservableCollection<IManga>(Mangas.Reverse());
-                Mangas.Reverse();
-                base.RaisePropertyChanged("Mangas");
-            }, () => Mangas.Any()));
+        //private DelegateCommand _sortGridCommand;
+        //public DelegateCommand SortGridCommand
+        //    => _sortGridCommand ?? (_sortGridCommand = new DelegateCommand(() =>
+        //    {
+        //        Favorits = new ObservableCollection<IManga>(Favorits.Reverse());
+        //    }, () => Favorits.Any()));
 
         private DelegateCommand<IManga> _favoritCommand;
         public DelegateCommand<IManga> FavoritCommand
