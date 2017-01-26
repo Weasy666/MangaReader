@@ -39,6 +39,10 @@ namespace MangaReader_MVVM.ViewModels
             {
                 //Mangas = await _library.GetFavoritMangasAsync();
             }
+            else
+            {
+                Mangas = await _library.GetFavoritMangasAsync();
+            }
             await Task.CompletedTask;
         }
 

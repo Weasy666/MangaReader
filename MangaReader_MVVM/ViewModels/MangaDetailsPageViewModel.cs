@@ -37,10 +37,11 @@ namespace MangaReader_MVVM.ViewModels
             if (mode == NavigationMode.New && manga != null)
             {
                 Manga = await _library.GetMangaAsync(manga.Id);
+                Chapters = Manga.Chapters;
             }
             if (mode == NavigationMode.Back)
             {
-                base.RaisePropertyChanged("Manga");
+                //base.RaisePropertyChanged("Manga");
             }
             await Task.CompletedTask;
         }
@@ -54,13 +55,22 @@ namespace MangaReader_MVVM.ViewModels
             await Task.CompletedTask;
         }
 
+        private ObservableCollection<IChapter> _chapters = new ObservableCollection<IChapter>();
+        public ObservableCollection<IChapter> Chapters { get { return _chapters; } set { Set(ref _chapters, value); } }
+
         private DelegateCommand _sortGridCommand;
         public DelegateCommand SortGridCommand
             => _sortGridCommand ?? (_sortGridCommand = new DelegateCommand(() =>
             {
-                Manga.Chapters.Reverse();
-                base.RaisePropertyChanged("Manga");
+                Chapters = new ObservableCollection<IChapter>(Chapters.Reverse());
             }, () => Manga.Chapters != null || Manga.Chapters.Any()));
+
+        private DelegateCommand _multiSelectCommand;
+        public DelegateCommand MultiSelectCommand
+            => _multiSelectCommand ?? (_multiSelectCommand = new DelegateCommand(() =>
+            {
+                
+            }, () => Manga.Chapters != null && Manga.Chapters.Count > 1));
 
         private DelegateCommand _favoritCommand;
         public DelegateCommand FavoritCommand

@@ -12,15 +12,28 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
 using Template10.Services.FileService;
 using MangaReader_MVVM.Models;
+using Template10.Mvvm;
 
 namespace MangaReader_MVVM.Services
 {
-    class MangaEdenSource : IMangaSource
+    class MangaEdenSource : ViewModelBase, IMangaSource
     {
         
 
         private ObservableCollection<IManga> _mangas;
+        public ObservableCollection<IManga> Mangas
+        {
+            get { return _mangas = _mangas ?? new ObservableCollection<IManga>(); }
+            internal set { Set(ref _mangas, value); }
+        }
+
         private ObservableCollection<IManga> _favorits;
+        public ObservableCollection<IManga> Favorits
+        {
+            get { return _favorits; }
+            internal set { Set(ref _favorits, value); }
+        }
+
         private Dictionary<string, List<string>> _readStatus;
 
         public BitmapImage Icon { get; } = new BitmapImage(new Uri("ms-appx:///Assets/Icons/icon-mangaeden.png"));
@@ -39,9 +52,9 @@ namespace MangaReader_MVVM.Services
             MangaChapterPages = new Uri("chapter/", UriKind.Relative);
         }
 
-        public async Task<ObservableCollection<IManga>> GetMangasAsync(ReloadMode mode)
+        public async Task<ObservableCollection<IManga>> GetMangasAsync(ReloadMode mode = ReloadMode.Default)
         {
-            if (_mangas == null || !_mangas.Any() || mode == ReloadMode.FromSource)
+            if (!Mangas.Any() || mode == ReloadMode.FromSource)
             {
                 using (var httpClient = new HttpClient { BaseAddress = RootUri })
                 {
@@ -54,7 +67,7 @@ namespace MangaReader_MVVM.Services
                             JsonSerializerSettings settings = new JsonSerializerSettings();
                             settings.Converters.Add(new MangaEdenMangasListConverter());
 
-                            _mangas = JsonConvert.DeserializeObject<ObservableCollection<IManga>>(result, settings);
+                            Mangas = JsonConvert.DeserializeObject<ObservableCollection<IManga>>(result, settings);
                         }
                     }
                     catch (Exception e)
@@ -67,16 +80,16 @@ namespace MangaReader_MVVM.Services
 
             LoadAndMergeFavorits();
 
-            return _mangas;
+            return Mangas;
         }
 
         public async Task<ObservableCollection<IManga>> GetLatestReleasesAsync(int numberOfPastDays, ReloadMode mode)
         {
-            if (_mangas == null || !_mangas.Any() || mode == ReloadMode.FromSource)
+            if (!Mangas.Any() || mode == ReloadMode.FromSource)
             {
                 await GetMangasAsync(ReloadMode.Default);
             }
-            var latestReleases = _mangas.Where(manga => manga.LastUpdated.AddDays(numberOfPastDays) >= DateTime.Today).ToList();
+            var latestReleases = Mangas.Where(manga => manga.LastUpdated.AddDays(numberOfPastDays) >= DateTime.Today).ToList();
             latestReleases.Sort((y, x) => y == null ? 1 : DateTime.Compare(x.LastUpdated, y.LastUpdated));
 
             return new ObservableCollection<IManga>(latestReleases);
@@ -84,7 +97,7 @@ namespace MangaReader_MVVM.Services
 
         public async Task<IManga> GetMangaAsync(string mangaId)
         {
-            var manga = _mangas.Where(m => m.Id == mangaId).First();
+            var manga = Mangas.Where(m => m.Id == mangaId).First();
             using (var httpClient = new HttpClient { BaseAddress = RootUri })
             {
                 try
@@ -100,8 +113,8 @@ namespace MangaReader_MVVM.Services
                         var details = JsonConvert.DeserializeObject<IManga>(result, settings);
                         
                         MergeMangaWithDetails(manga, details);
-                        int i = _mangas.IndexOf(manga);
-                        _mangas[i] = manga;
+                        int i = Mangas.IndexOf(manga);
+                        Mangas[i] = manga;
                     }
                 }
                 catch (Exception e)
@@ -112,9 +125,8 @@ namespace MangaReader_MVVM.Services
             }
             return manga;
         }
-
-        //TODO somehow the added chapters are not linked to the manga in the _mangas list
-        private async void MergeMangaWithDetails(IManga manga, IManga details)
+        
+        private void MergeMangaWithDetails(IManga manga, IManga details)
         {
             manga.Alias = details.Alias;
             manga.Artist = details.Artist;
@@ -131,15 +143,15 @@ namespace MangaReader_MVVM.Services
         
         public async Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode)
         {
-            if (_mangas == null || !_mangas.Any() || mode == ReloadMode.FromSource)
+            if (!Mangas.Any() || mode == ReloadMode.FromSource)
             {
                 await GetMangasAsync(ReloadMode.Default);
-                _favorits = new ObservableCollection<IManga>(_mangas.Where(manga => manga.IsFavorit).ToList());
+                _favorits = new ObservableCollection<IManga>(Mangas.Where(manga => manga.IsFavorit).ToList());
             }
 
             if (_favorits == null || !_favorits.Any())
             {
-                _favorits = new ObservableCollection<IManga>(_mangas.Where(manga => manga.IsFavorit).ToList());
+                _favorits = new ObservableCollection<IManga>(Mangas.Where(manga => manga.IsFavorit).ToList());
             }
 
             return _favorits;
@@ -169,6 +181,8 @@ namespace MangaReader_MVVM.Services
                 else
                 {
                     favorits.Add(favorit.Id);
+                    _favorits.Add(favorit);
+                    _favorits.OrderBy(m => m.Title);
                 }
                 await FileHelper.WriteFileAsync<List<string>>("favorits_" + this.Name, favorits, StorageStrategies.Roaming);
             }
@@ -283,7 +297,7 @@ namespace MangaReader_MVVM.Services
                 var favorits = await FileHelper.ReadFileAsync<List<string>>("favorits_" + this.Name, StorageStrategies.Roaming);
                 foreach (var id in favorits)
                 {
-                    var manga = _mangas.FirstOrDefault(m => m.Id == id);
+                    var manga = Mangas.FirstOrDefault(m => m.Id == id);
                     if (manga != null)
                         manga.IsFavorit = true;
                 }

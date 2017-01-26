@@ -36,7 +36,7 @@ namespace MangaReader_MVVM.ViewModels
         {
             if (mode == NavigationMode.Back)
             {
-                base.RaisePropertyChanged();
+
             }
             await Task.CompletedTask;
         }

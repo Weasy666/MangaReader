@@ -26,7 +26,7 @@
 
         <t10controls:PageHeader x:Name="PageHeader" Text="{x:Bind ViewModel.Manga.Title}" Frame="{x:Bind Frame}" Grid.ColumnSpan="2">
             <t10controls:PageHeader.PrimaryCommands>
-                <AppBarButton Icon="SelectAll" Label="Select All" IsEnabled="False"/>
+                <AppBarButton Icon="Bullets" Label="Select All" Command="{Binding Path=MultiSelectCommand}"/>
                 <AppBarSeparator />
                 <AppBarButton Icon="Switch" Label="Sort" Command="{Binding Path=SortGridCommand}"  />
             </t10controls:PageHeader.PrimaryCommands>
@@ -107,8 +107,9 @@
         </StackPanel>
 
         <GridView x:Name="ChapterGridView" Grid.Row="1" Grid.Column="1"
-                  ItemsSource="{Binding Path=Manga.Chapters, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding Path=Chapters, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                   Margin="12,0,0,0" Padding="0,6,0,0"
+                  SelectionMode="None"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="20"
                   ItemTemplate="{StaticResource ChapterItem}"
