@@ -11,6 +11,7 @@ using MangaReader_MVVM.Services;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Popups;
+using Windows.UI.Xaml.Input;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -30,6 +31,9 @@ namespace MangaReader_MVVM.ViewModels
         private IManga _manga = new Manga();
         public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
 
+        private ObservableCollection<IChapter> _chapters = new ObservableCollection<IChapter>();
+        public ObservableCollection<IChapter> Chapters { get { return _chapters; } set { Set(ref _chapters, value); } }
+
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
             var manga = parameter as Manga;
@@ -39,10 +43,7 @@ namespace MangaReader_MVVM.ViewModels
                 Manga = await _library.GetMangaAsync(manga.Id);
                 Chapters = Manga.Chapters;
             }
-            if (mode == NavigationMode.Back)
-            {
-                //base.RaisePropertyChanged("Manga");
-            }
+            MultiSelectCommand.RaiseCanExecuteChanged();
             await Task.CompletedTask;
         }
 
@@ -55,9 +56,6 @@ namespace MangaReader_MVVM.ViewModels
             await Task.CompletedTask;
         }
 
-        private ObservableCollection<IChapter> _chapters = new ObservableCollection<IChapter>();
-        public ObservableCollection<IChapter> Chapters { get { return _chapters; } set { Set(ref _chapters, value); } }
-
         private DelegateCommand _sortGridCommand;
         public DelegateCommand SortGridCommand
             => _sortGridCommand ?? (_sortGridCommand = new DelegateCommand(() =>
@@ -65,19 +63,32 @@ namespace MangaReader_MVVM.ViewModels
                 Chapters = new ObservableCollection<IChapter>(Chapters.Reverse());
             }, () => Manga.Chapters != null || Manga.Chapters.Any()));
 
-        private DelegateCommand _multiSelectCommand;
-        public DelegateCommand MultiSelectCommand
-            => _multiSelectCommand ?? (_multiSelectCommand = new DelegateCommand(() =>
+        private bool _multiSelect;
+        public bool MultiSelect
+        {
+            get { return _multiSelect; }
+            set { Set(ref _multiSelect, value); }
+        }
+
+        private DelegateCommand<object> _multiSelectCommand;
+        public DelegateCommand<object> MultiSelectCommand
+            => _multiSelectCommand ?? (_multiSelectCommand = new DelegateCommand<object>((object1) =>
             {
-                
-            }, () => Manga.Chapters != null && Manga.Chapters.Count > 1));
+                //MultiSelect = !MultiSelect;
+                var chapterGridView = object1 as GridView;
+                chapterGridView.SelectionMode = chapterGridView.SelectionMode == ListViewSelectionMode.None ? ListViewSelectionMode.Multiple : ListViewSelectionMode.None;
+                //MultiSelect = MultiSelect == ListViewSelectionMode.None ? ListViewSelectionMode.Multiple : ListViewSelectionMode.None;
+                //chapterGridView.IsMultiSelectCheckBoxEnabled = !chapterGridView.IsMultiSelectCheckBoxEnabled;
+                MultiSelect = !MultiSelect;
+                chapterGridView.IsItemClickEnabled = !chapterGridView.IsItemClickEnabled;
+                chapterGridView.CompleteViewChange();
+            }, (object1) => Manga.Chapters.Any() && Manga.Chapters.Count > 1));
 
         private DelegateCommand _favoritCommand;
         public DelegateCommand FavoritCommand
             => _favoritCommand ?? (_favoritCommand = new DelegateCommand(() =>
             {
                 _library.AddFavorit(Manga);
-                //base.RaisePropertyChanged("Mangas");
             }));
 
         private DelegateCommand _downloadCommand;

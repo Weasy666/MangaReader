@@ -16,6 +16,7 @@ namespace MangaReader_MVVM.ViewModels
 {
     public class MangasPageViewModel : ViewModelBase
     {
+        public MangaLibrary _library = MangaLibrary.Instance;
         public MangasPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
@@ -25,7 +26,7 @@ namespace MangaReader_MVVM.ViewModels
             }
             else
             {
-                Mangas = MangaLibrary.Instance.GetMangasAsync().Result;
+                Mangas = _library.Mangas;
             }
         }
 
@@ -61,7 +62,7 @@ namespace MangaReader_MVVM.ViewModels
             => _reloadGridCommand ?? (_reloadGridCommand = new DelegateCommand(async () =>
             {
                 Views.Busy.SetBusy(true, "Picking up the freshly printed books...");
-                Mangas = await MangaLibrary.Instance.GetMangasAsync(ReloadMode.FromSource);
+                Mangas = await _library.GetMangasAsync(ReloadMode.FromSource);
                 Views.Busy.SetBusy(false);
             }, () => Mangas.Any()));
 
@@ -76,7 +77,7 @@ namespace MangaReader_MVVM.ViewModels
         public DelegateCommand<IManga> FavoritCommand
             => _favoritCommand ?? (_favoritCommand = new DelegateCommand<IManga>((manga) =>
             {
-                MangaLibrary.Instance.AddFavorit(manga);
+                _library.AddFavorit(manga);
             }));
 
         public async void MangaClickedAsync(object sender, ItemClickEventArgs e)

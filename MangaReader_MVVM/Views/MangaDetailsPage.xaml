@@ -23,14 +23,23 @@
             <ColumnDefinition MaxWidth="600"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <converters:BoolToSelectionModeConverter x:Key="BoolToSelectionModeConverter"/>
+        </Grid.Resources>
 
         <t10controls:PageHeader x:Name="PageHeader" Text="{x:Bind ViewModel.Manga.Title}" Frame="{x:Bind Frame}" Grid.ColumnSpan="2">
             <t10controls:PageHeader.PrimaryCommands>
-                <AppBarButton Icon="Bullets" Label="Select All" Command="{Binding Path=MultiSelectCommand}"/>
+                <AppBarToggleButton x:Name="MultiSelect"
+                                    Icon="Bullets"
+                                    Label="Change selection mode"
+                                    Foreground="{Binding ElementName=PageHeader, Path=Foreground}"
+                                    Command="{Binding Path=MultiSelectCommand}"
+                                    CommandParameter="{Binding ElementName=ChapterGridView}" />
                 <AppBarSeparator />
-                <AppBarButton Icon="Switch" Label="Sort" Command="{Binding Path=SortGridCommand}"  />
+                <AppBarButton Icon="Switch" Label="Sort" Command="{Binding Path=SortGridCommand}" />
             </t10controls:PageHeader.PrimaryCommands>
         </t10controls:PageHeader>
+
 
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="10,10,0,0">
             <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
@@ -105,29 +114,43 @@
             <!--<TextBlock x:Name="DescriptionHeader" Margin="0,0,0,0" Text="Description" FontSize="15" FontWeight="Bold"/>-->
             <TextBlock x:Name="Description" Text="{x:Bind ViewModel.Manga.Description}" TextWrapping="WrapWholeWords"/>
         </StackPanel>
-
+        <!--"{Binding Path=MultiSelect, Converter={StaticResource BoolToSelectionModeConverter}, UpdateSourceTrigger=PropertyChanged}"-->
         <GridView x:Name="ChapterGridView" Grid.Row="1" Grid.Column="1"
-                  ItemsSource="{Binding Path=Chapters, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                   Margin="12,0,0,0" Padding="0,6,0,0"
                   SelectionMode="None"
+                  IsMultiSelectCheckBoxEnabled="True"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="20"
-                  ItemTemplate="{StaticResource ChapterItem}"
                   ItemClick="{x:Bind ViewModel.ChapterClickedAsync}"
                   ScrollViewer.HorizontalScrollMode="Enabled"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   ScrollViewer.VerticalScrollMode="Disabled" >
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapGrid Orientation="Vertical" /> <!--VerticalAlignment="Center"/>-->
+                    <WrapGrid Orientation="Vertical" />
+                    <!--VerticalAlignment="Center"/>-->
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem">
                     <Setter Property="Margin" Value="0,0,10,10" />
                 </Style>
-            </GridView.ItemContainerStyle>            
+            </GridView.ItemContainerStyle>
+            
         </GridView>
+        <t10controls:PageHeader x:Name="BottomBar" IsSticky="True"
+                                Grid.Row="1" Grid.ColumnSpan="2"
+                                VerticalAlignment="Bottom"
+                                ClosedDisplayMode="Compact"
+                                Visibility="{Binding MultiSelect, Converter={StaticResource BoolToFavoritSymbolConverter}, UpdateSourceTrigger=PropertyChanged}">
+            <t10controls:PageHeader.Resources>
+                <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
+            </t10controls:PageHeader.Resources>
+            <t10controls:PageHeader.PrimaryCommands>
+                <AppBarButton Icon="Accept" Label="AppBarButton"/>
+                <AppBarButton Icon="Cancel" Label="AppBarButton"/>
+            </t10controls:PageHeader.PrimaryCommands>            
+        </t10controls:PageHeader>
     </Grid>
 </Page>
 
@@ -237,7 +260,9 @@
                         <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="4"/>
                     </Grid>
                 </StackPanel>
-                --><!--<TextBlock x:Name="DescriptionHeader" Margin="0,0,0,0" Text="Description" FontSize="15" FontWeight="Bold"/>--><!--
+                -->
+<!--<TextBlock x:Name="DescriptionHeader" Margin="0,0,0,0" Text="Description" FontSize="15" FontWeight="Bold"/>-->
+<!--
                 <TextBlock x:Name="Description" Text="{x:Bind ViewModel.Manga.Description}" TextWrapping="WrapWholeWords"/>
             </StackPanel>
 
