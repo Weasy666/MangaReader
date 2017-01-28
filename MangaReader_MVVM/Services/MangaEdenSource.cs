@@ -197,7 +197,19 @@ namespace MangaReader_MVVM.Services
             }
         }
 
-        public async void AddAsRead(string mangaId, IChapter chapter)
+        public async void AddAsRead(string mangaId, ObservableCollection<IChapter> chapters)
+        {
+            if (chapters != null && chapters.Any())
+            {
+                foreach (var chapter in chapters)
+                {
+                    AddAsRead(mangaId, chapter, false);
+                }
+                await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, _readStatus, StorageStrategies.Roaming);
+            }
+        }
+
+        public async void AddAsRead(string mangaId, IChapter chapter, bool single = true)
         {
             if (mangaId != null && chapter != null)
             {
@@ -222,7 +234,10 @@ namespace MangaReader_MVVM.Services
                 {
                     _readStatus[mangaId] = new List<string>() { chapter.Id };
                 }
-                await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, _readStatus, StorageStrategies.Roaming);
+                if (single)
+                {
+                    await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, _readStatus, StorageStrategies.Roaming);
+                }
             }
         }
 

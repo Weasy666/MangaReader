@@ -47,7 +47,8 @@ namespace MangaReader_MVVM.Services
         public Task<ObservableCollection<IManga>> GetLatestReleasesAsync(int numberOfPastDays = 7, ReloadMode mode = ReloadMode.Default) => _mangaSource.GetLatestReleasesAsync(numberOfPastDays, mode);
         public void AddFavorit(IManga manga, List<string> favorits = null) => _mangaSource.AddFavorit(manga, favorits);
         public void AddFavorit(ObservableCollection<IManga> mangas) => _mangaSource.AddFavorit(mangas);
-        public void AddAsRead(string mangaId, IChapter chapter) => _mangaSource.AddAsRead(mangaId, chapter);
+        public void AddAsRead(string mangaId, IChapter chapter) => _mangaSource.AddAsRead(mangaId, chapter, true);
+        public void AddAsRead(string mangaId, ObservableCollection<IChapter> chapters) => _mangaSource.AddAsRead(mangaId, chapters);
         public void RemoveAsRead(string mangaId, IChapter chapter) => _mangaSource.RemoveAsRead(mangaId, chapter);
         public Task<IManga> GetMangaAsync(string mangaId) => _mangaSource.GetMangaAsync(mangaId);
         public Task<ObservableCollection<IChapter>> GetChaptersAsync(Manga manga) => _mangaSource.GetChaptersAsync(manga);

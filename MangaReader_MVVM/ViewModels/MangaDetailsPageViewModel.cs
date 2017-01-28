@@ -70,19 +70,18 @@ namespace MangaReader_MVVM.ViewModels
             set { Set(ref _multiSelect, value); }
         }
 
+        //TODO something here is not working correctly
+        public bool ButtonIsToggled { get { base.RaisePropertyChanged(); return !MultiSelect; }  }
+
         private DelegateCommand<object> _multiSelectCommand;
         public DelegateCommand<object> MultiSelectCommand
-            => _multiSelectCommand ?? (_multiSelectCommand = new DelegateCommand<object>((object1) =>
+            => _multiSelectCommand ?? (_multiSelectCommand = new DelegateCommand<object>((param) =>
             {
-                //MultiSelect = !MultiSelect;
-                var chapterGridView = object1 as GridView;
+                var chapterGridView = param as GridView;
                 chapterGridView.SelectionMode = chapterGridView.SelectionMode == ListViewSelectionMode.None ? ListViewSelectionMode.Multiple : ListViewSelectionMode.None;
-                //MultiSelect = MultiSelect == ListViewSelectionMode.None ? ListViewSelectionMode.Multiple : ListViewSelectionMode.None;
-                //chapterGridView.IsMultiSelectCheckBoxEnabled = !chapterGridView.IsMultiSelectCheckBoxEnabled;
                 MultiSelect = !MultiSelect;
                 chapterGridView.IsItemClickEnabled = !chapterGridView.IsItemClickEnabled;
-                chapterGridView.CompleteViewChange();
-            }, (object1) => Manga.Chapters.Any() && Manga.Chapters.Count > 1));
+            }, (param) => Manga.Chapters.Any() && Manga.Chapters.Count > 1));
 
         private DelegateCommand _favoritCommand;
         public DelegateCommand FavoritCommand
@@ -96,6 +95,30 @@ namespace MangaReader_MVVM.ViewModels
             => _downloadCommand ?? (_downloadCommand = new DelegateCommand(() =>
             {
                 //TODO implement download function for offline reading
+            }));
+
+        private DelegateCommand<object> _markAsReadCommand;
+        public DelegateCommand<object> MarkAsReadCommand
+            => _markAsReadCommand ?? (_markAsReadCommand = new DelegateCommand<object>((param) =>
+            {
+                var chapterGridView = param as GridView;
+                var chapters = new ObservableCollection<IChapter>(chapterGridView.SelectedItems.Cast<IChapter>());
+                _library.AddAsRead(Manga.Id, chapters);
+
+                chapterGridView.SelectionMode = ListViewSelectionMode.None;
+                MultiSelect = false;
+                chapterGridView.IsItemClickEnabled = true;
+            }));
+
+        private DelegateCommand<object> _cancelCommand;
+        public DelegateCommand<object> CancelCommand
+            => _cancelCommand ?? (_cancelCommand = new DelegateCommand<object>((param) =>
+            {
+                var chapterGridView = param as GridView;
+
+                chapterGridView.SelectionMode = ListViewSelectionMode.None;
+                MultiSelect = false;
+                chapterGridView.IsItemClickEnabled = true;
             }));
 
         public async Task ChapterClickedAsync(object sender, ItemClickEventArgs e)

@@ -11,7 +11,7 @@
         <vm:MangaDetailsPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
     <Page.Resources>
-        <ResourceDictionary Source="..\Styles\Templates.xaml" />
+        <ResourceDictionary Source="..\Styles\Templates.xaml" />        
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
@@ -25,13 +25,14 @@
         </Grid.ColumnDefinitions>
         <Grid.Resources>
             <converters:BoolToSelectionModeConverter x:Key="BoolToSelectionModeConverter"/>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         </Grid.Resources>
 
         <t10controls:PageHeader x:Name="PageHeader" Text="{x:Bind ViewModel.Manga.Title}" Frame="{x:Bind Frame}" Grid.ColumnSpan="2">
             <t10controls:PageHeader.PrimaryCommands>
                 <AppBarToggleButton x:Name="MultiSelect"
                                     Icon="Bullets"
-                                    Label="Change selection mode"
+                                    Label="Change selection mode" IsChecked="{Binding ButtonIsToggled}"
                                     Foreground="{Binding ElementName=PageHeader, Path=Foreground}"
                                     Command="{Binding Path=MultiSelectCommand}"
                                     CommandParameter="{Binding ElementName=ChapterGridView}" />
@@ -41,7 +42,7 @@
         </t10controls:PageHeader>
 
 
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="10,10,0,0">
+        <StackPanel Name="DetailsStackPanel" Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="10,10,0,0">
             <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                 <StackPanel>
                     <controls:ImageEx x:Name="Cover" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
@@ -117,8 +118,10 @@
         <!--"{Binding Path=MultiSelect, Converter={StaticResource BoolToSelectionModeConverter}, UpdateSourceTrigger=PropertyChanged}"-->
         <GridView x:Name="ChapterGridView" Grid.Row="1" Grid.Column="1"
                   Margin="12,0,0,0" Padding="0,6,0,0"
+                  ItemsSource="{Binding Path=Chapters, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                   SelectionMode="None"
                   IsMultiSelectCheckBoxEnabled="True"
+                  ItemTemplate="{StaticResource ChapterItem}"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="20"
                   ItemClick="{x:Bind ViewModel.ChapterClickedAsync}"
@@ -142,13 +145,17 @@
                                 Grid.Row="1" Grid.ColumnSpan="2"
                                 VerticalAlignment="Bottom"
                                 ClosedDisplayMode="Compact"
-                                Visibility="{Binding MultiSelect, Converter={StaticResource BoolToFavoritSymbolConverter}, UpdateSourceTrigger=PropertyChanged}">
-            <t10controls:PageHeader.Resources>
-                <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
-            </t10controls:PageHeader.Resources>
+                                Frame="{x:Bind Frame}"
+                                Visibility="{Binding MultiSelect, Converter={StaticResource BoolToVisibilityConverter}}">
             <t10controls:PageHeader.PrimaryCommands>
-                <AppBarButton Icon="Accept" Label="AppBarButton"/>
-                <AppBarButton Icon="Cancel" Label="AppBarButton"/>
+                <AppBarButton Icon="Accept"
+                              Label="Mark as Read"
+                              Command="{x:Bind ViewModel.MarkAsReadCommand}"
+                              CommandParameter="{x:Bind ChapterGridView}" />
+                <AppBarButton Icon="Cancel"
+                              Label="Cancel"
+                              Command="{x:Bind ViewModel.CancelCommand}"
+                              CommandParameter="{x:Bind ChapterGridView}" />
             </t10controls:PageHeader.PrimaryCommands>            
         </t10controls:PageHeader>
     </Grid>
