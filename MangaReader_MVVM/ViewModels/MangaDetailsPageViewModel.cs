@@ -70,15 +70,13 @@ namespace MangaReader_MVVM.ViewModels
             set { Set(ref _multiSelect, value); }
         }
 
-        //TODO something here is not working correctly
-        public bool ButtonIsToggled { get { base.RaisePropertyChanged(); return !MultiSelect; }  }
-
         private DelegateCommand<object> _multiSelectCommand;
         public DelegateCommand<object> MultiSelectCommand
             => _multiSelectCommand ?? (_multiSelectCommand = new DelegateCommand<object>((param) =>
             {
                 var chapterGridView = param as GridView;
                 chapterGridView.SelectionMode = chapterGridView.SelectionMode == ListViewSelectionMode.None ? ListViewSelectionMode.Multiple : ListViewSelectionMode.None;
+                MultiSelectButtonIsChecked = !MultiSelectButtonIsChecked;
                 MultiSelect = !MultiSelect;
                 chapterGridView.IsItemClickEnabled = !chapterGridView.IsItemClickEnabled;
             }, (param) => Manga.Chapters.Any() && Manga.Chapters.Count > 1));
@@ -97,6 +95,8 @@ namespace MangaReader_MVVM.ViewModels
                 //TODO implement download function for offline reading
             }));
 
+        public bool MultiSelectButtonIsChecked;
+
         private DelegateCommand<object> _markAsReadCommand;
         public DelegateCommand<object> MarkAsReadCommand
             => _markAsReadCommand ?? (_markAsReadCommand = new DelegateCommand<object>((param) =>
@@ -105,6 +105,7 @@ namespace MangaReader_MVVM.ViewModels
                 var chapters = new ObservableCollection<IChapter>(chapterGridView.SelectedItems.Cast<IChapter>());
                 _library.AddAsRead(Manga.Id, chapters);
 
+                MultiSelectButtonIsChecked = false;
                 chapterGridView.SelectionMode = ListViewSelectionMode.None;
                 MultiSelect = false;
                 chapterGridView.IsItemClickEnabled = true;
@@ -116,6 +117,7 @@ namespace MangaReader_MVVM.ViewModels
             {
                 var chapterGridView = param as GridView;
 
+                MultiSelectButtonIsChecked = false;
                 chapterGridView.SelectionMode = ListViewSelectionMode.None;
                 MultiSelect = false;
                 chapterGridView.IsItemClickEnabled = true;
