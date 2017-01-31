@@ -305,7 +305,7 @@
 
         <GridView x:Name="GridView" Grid.Row="1"
                   ItemsSource="{x:Bind ViewModel.FavoritsCVS.View, Mode=OneWay}"
-                  Margin="10,0,0,0" Padding="0,10,0,0"
+                  Margin="10,0,0,0"
                   SelectionMode="None"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="50"
@@ -314,7 +314,7 @@
                   ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}" >
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem">
-                    <Setter Property="Margin" Value="0,0,10,10" />
+                    <Setter Property="Margin" Value="0,10,10,0" />
                 </Style>
             </GridView.ItemContainerStyle>
             <GridView.GroupStyle>

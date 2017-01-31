@@ -11,9 +11,6 @@
     <Page.DataContext>
         <vm:ChapterPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
-    <Page.Resources>
-        <ResourceDictionary Source="..\Styles\Templates.xaml" />
-    </Page.Resources>
 
     <Grid x:Name="PageGrid" Background="#FF171717"
           RightTapped="{x:Bind ViewModel.Page_RightTapped}" >

@@ -15,9 +15,6 @@
     <Page.DataContext>
         <vm:LatestReleasesPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
-    <Page.Resources>
-        <ResourceDictionary Source="..\Styles\Templates.xaml" />
-    </Page.Resources>
 
     <Grid x:Name="PageGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
         <Grid.RowDefinitions>
@@ -25,21 +22,21 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <t10controls:PageHeader Text="Latest Releases" Frame="{x:Bind Frame}" >
+        <t10controls:PageHeader Name="PageHeader" Text="Latest Releases" Frame="{x:Bind Frame}" >
             <t10controls:PageHeader.PrimaryCommands>
                 <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False">
                     <Flyout>
                         <TimePicker ></TimePicker>
                     </Flyout>
                 </AppBarButton>
-                <AppBarButton Icon="Sort" Label="Sort" Command="{Binding Path=SortGridCommand}" />
+                <AppBarButton Icon="Sort" Label="Sort" Command="{x:Bind ViewModel.SortGridCommand, Mode=OneWay}" />
                 <AppBarSeparator />
-                <AppBarButton Icon="Refresh" Label="Reload" Command="{Binding Path=ReloadGridCommand}" />
+                <AppBarButton Icon="Refresh" Label="Reload" Command="{x:Bind ViewModel.ReloadGridCommand, Mode=OneWay}" />
             </t10controls:PageHeader.PrimaryCommands>
         </t10controls:PageHeader>
 
         <GridView x:Name="GridView" Grid.Row="1"
-                  ItemsSource="{Binding Path=Mangas, Mode=OneWay}"
+                  ItemsSource="{x:Bind ViewModel.Mangas, Mode=OneWay}"
                   Margin="10,0,0,0"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="50"
@@ -49,12 +46,9 @@
                   ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}" >
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem">
-                    <Setter Property="Margin" Value="0,0,10,10" />
+                    <Setter Property="Margin" Value="0,10,10,0" />
                 </Style>
             </GridView.ItemContainerStyle>
         </GridView>
     </Grid>
 </Page>
-
-
-
