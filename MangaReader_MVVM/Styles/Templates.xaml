@@ -47,12 +47,12 @@
     </DataTemplate>
 
     <DataTemplate x:Key="MangaItemWithoutDetails">
-        <Grid Width="171" >
+        <Grid Width="171" Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" >
             <controls:ImageEx x:Name="Cover" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
                                 Width="171" Height="250" 
                                 IsCacheEnabled="True"
                                 Source="{Binding Cover, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
-                                Stretch="Uniform"
+                                Stretch="UniformToFill"
                                 PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
                                 PlaceholderStretch="Uniform"
                                 HorizontalAlignment="Center"

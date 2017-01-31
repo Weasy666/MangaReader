@@ -12,12 +12,15 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Data;
+using MangaReader_MVVM.Services.SettingsServices;
+using System.ComponentModel;
 
 namespace MangaReader_MVVM.ViewModels
 {
     public class FavoritsPageViewModel : ViewModelBase
     {
         public MangaLibrary _library = MangaLibrary.Instance;
+        public SettingsService _settings = SettingsService.Instance;
         public FavoritsPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
@@ -29,6 +32,7 @@ namespace MangaReader_MVVM.ViewModels
             {
                 //Mangas = _library.GetFavoritMangasAsync().Result;
             }
+            
         }
 
         private ObservableCollection<IManga> _favorits;
@@ -87,16 +91,16 @@ namespace MangaReader_MVVM.ViewModels
             await Task.CompletedTask;
         }
 
-        private bool _isGridGrouped;
-        public bool IsGridGrouped
+        private bool? _isGridGrouped;
+        public bool? IsGridGrouped
         {
-            get => _isGridGrouped;
-            set { Set(ref _isGridGrouped, value); }
+            get => _settings.IsGroupedFavoritsGrid;
+            set { _settings.IsGroupedFavoritsGrid = (bool)value; }
         }
         private CollectionViewSource _favoritsCVS;
         public CollectionViewSource FavoritsCVS
         {
-            get { return _favoritsCVS = _favoritsCVS ?? new CollectionViewSource() { IsSourceGrouped = IsGridGrouped, Source = IsGridGrouped ? (object)FavoritsGroups : (object)Favorits }; }
+            get { return _favoritsCVS = _favoritsCVS ?? new CollectionViewSource() { IsSourceGrouped = (bool)IsGridGrouped, Source = (bool)IsGridGrouped ? (object)FavoritsGroups : (object)Favorits }; }
             set { Set(ref _favoritsCVS, value); }
         }
 
@@ -113,26 +117,17 @@ namespace MangaReader_MVVM.ViewModels
         public DelegateCommand<object> GroupGridCommand
             => _groupGridCommand ?? (_groupGridCommand = new DelegateCommand<object>((param) =>
             {
-                IsGridGrouped = !IsGridGrouped;
+                //IsGridGrouped = !IsGridGrouped;
                 var gridView = param as GridView;
-                var source = new CollectionViewSource() { IsSourceGrouped = IsGridGrouped };
+                var source = new CollectionViewSource() { IsSourceGrouped = (bool)IsGridGrouped };
 
-                if (IsGridGrouped)
+                if ((bool)IsGridGrouped)
                     source.Source = FavoritsGroups;
                 else
                     source.Source = Favorits;
 
                 FavoritsCVS = source;
-
-                //gridView.InitializeViewChange();
             }));
-
-        //private DelegateCommand _sortGridCommand;
-        //public DelegateCommand SortGridCommand
-        //    => _sortGridCommand ?? (_sortGridCommand = new DelegateCommand(() =>
-        //    {
-        //        Favorits = new ObservableCollection<IManga>(Favorits.Reverse());
-        //    }, () => Favorits.Any()));
 
         private DelegateCommand<IManga> _favoritCommand;
         public DelegateCommand<IManga> FavoritCommand

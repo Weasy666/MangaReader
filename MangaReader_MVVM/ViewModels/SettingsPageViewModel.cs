@@ -42,19 +42,18 @@ namespace MangaReader_MVVM.ViewModels
         public bool UseLightThemeButton
         {
             get { return _settings.AppTheme.Equals(ApplicationTheme.Light); }
-            set { _settings.AppTheme = value ? ApplicationTheme.Light : ApplicationTheme.Dark; base.RaisePropertyChanged(); }
+            set { _settings.AppTheme = value ? ApplicationTheme.Light : ApplicationTheme.Dark; base.RaisePropertyChanged(nameof(UseLightThemeButton)); }
         }
 
         public bool UseDetailedMangaItem
         {
             get { return _settings.MangaGridLayout.Equals("MangaItemWithDetails"); }
-            set { _settings.MangaGridLayout = value ? "MangaItemWithDetails" : "MangaItemWithoutDetails"; base.RaisePropertyChanged(); }
+            set { _settings.MangaGridLayout = value ? "MangaItemWithDetails" : "MangaItemWithoutDetails"; base.RaisePropertyChanged(nameof(UseDetailedMangaItem)); }
         }
 
         ObservableCollection<BitmapImage> _sourcesWithIcons;
         public ObservableCollection<BitmapImage> SourcesWithIcons => _sourcesWithIcons;
         public int SelectedMangaSource => SourcesWithIcons.IndexOf(SourcesWithIcons.Where(source => source.UriSource.ToString().Contains(_settings.UsedMangaSource.ToString().ToLower())).First());
-        
         private ObservableCollection<BitmapImage> LoadMangaSourceIcons()
         {
             var sources = Enum.GetValues(typeof(MangaSource)).Cast<MangaSource>().ToList();
@@ -69,28 +68,14 @@ namespace MangaReader_MVVM.ViewModels
         public int DaysOfLatestReleases
         {
             get { return _settings.DaysOfLatestReleases; }
-            set { _settings.DaysOfLatestReleases = value; base.RaisePropertyChanged(); }
+            set { _settings.DaysOfLatestReleases = value; base.RaisePropertyChanged(nameof(DaysOfLatestReleases)); }
         }
-
-        private string _BusyText = "Please wait...";
-        public string BusyText
-        {
-            get { return _BusyText; }
-            set
-            {
-                Set(ref _BusyText, value);
-                _ShowBusyCommand.RaiseCanExecuteChanged();
-            }
-        }
-
-        DelegateCommand _ShowBusyCommand;
-        public DelegateCommand ShowBusyCommand
-            => _ShowBusyCommand ?? (_ShowBusyCommand = new DelegateCommand(async () =>
-            {
-                Views.Busy.SetBusy(true, _BusyText);
-                await Task.Delay(5000);
-                Views.Busy.SetBusy(false);
-            }, () => !string.IsNullOrEmpty(BusyText)));
+        
+        //public bool IsGroupedFavoritsGrid
+        //{
+        //    get { return _settings.IsGroupedFavoritsGrid; }
+        //    set { _settings.IsGroupedFavoritsGrid = value; }
+        //}
     }
 
     public class AboutPartViewModel : ViewModelBase

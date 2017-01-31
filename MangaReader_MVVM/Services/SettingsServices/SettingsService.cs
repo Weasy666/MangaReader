@@ -58,26 +58,7 @@ namespace MangaReader_MVVM.Services.SettingsServices
         public string MangaGridLayout
         {
             get { return _helper.Read<string>(nameof(MangaGridLayout), "MangaItemWithDetails"); }
-            set
-            {
-                _helper.Write(nameof(MangaGridLayout), value);
-                TestSelector = new MangaItemTemplateSelector()
-                {
-                    MangaItemWithDetailsTemplate = TestSelector.MangaItemWithDetailsTemplate,
-                    MangaItemWithoutDetailsTemplate = TestSelector.MangaItemWithoutDetailsTemplate
-                };
-            }
-        }
-
-        private MangaItemTemplateSelector _testSelector = new MangaItemTemplateSelector()
-        {
-            MangaItemWithDetailsTemplate = XamlUtils.GetResource<DataTemplate>("MangaItemWithDetailsTemplate", null),
-            MangaItemWithoutDetailsTemplate = XamlUtils.GetResource<DataTemplate>("MangaItemWithoutDetailsTemplate", null)
-        };
-        public MangaItemTemplateSelector TestSelector
-        {
-            get => _testSelector;
-            set { _testSelector = value; base.RaisePropertyChanged(); }
+            set { _helper.Write(nameof(MangaGridLayout), value); base.RaisePropertyChanged(nameof(MangaGridLayout)); }
         }
 
         public MangaSource UsedMangaSource
@@ -99,6 +80,12 @@ namespace MangaReader_MVVM.Services.SettingsServices
         {
             get { return _helper.Read<int>(nameof(DaysOfLatestReleases), 7); }
             set { _helper.Write(nameof(DaysOfLatestReleases), value); }
+        }
+
+        public bool IsGroupedFavoritsGrid
+        {
+            get { return _helper.Read<bool>(nameof(IsGroupedFavoritsGrid), false); }
+            set { _helper.Write(nameof(IsGroupedFavoritsGrid), value); }
         }
     }
 }

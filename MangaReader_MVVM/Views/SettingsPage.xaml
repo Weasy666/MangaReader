@@ -61,34 +61,41 @@
                RelativePanel.Below="pageHeader">
 
             <!--  settings  -->
-            <PivotItem DataContext="{Binding SettingsPartViewModel}" Header="Settings">
+            <PivotItem DataContext="{x:Bind ViewModel.SettingsPartViewModel}" Header="Settings">
                 <ScrollViewer Margin="0,12,-12,0" HorizontalContentAlignment="Left"
                               VerticalScrollBarVisibility="Auto">
                     <RelativePanel HorizontalAlignment="Left">
 
                         <ToggleSwitch x:Name="UseShellDrawnBackButtonToggleSwtich"
-                                      Header="Use shell-drawn back button"
-                                      IsOn="{Binding UseShellBackButton, Mode=TwoWay}"
+                                      Header="Choose Back Button Style"
+                                      IsOn="{x:Bind ViewModel.SettingsPartViewModel.UseShellBackButton, Mode=TwoWay}"
                                       OffContent="Back button in page header"
                                       OnContent="Back button in titlebar or taskbar"
+                                      Margin="0,5,0,0"
                                       RelativePanel.AlignLeftWithPanel="True"
                                       RelativePanel.AlignTopWithPanel="True" />
 
-                        <ToggleSwitch x:Name="UseLightThemeToggleSwitch" Header="Use Light Theme"
-                                      IsOn="{Binding UseLightThemeButton, Mode=TwoWay}"
-                                      OffContent="Dark theme" OnContent="Light theme"
+                        <ToggleSwitch x:Name="UseLightThemeToggleSwitch"
+                                      Header="Choose App Theme"
+                                      IsOn="{x:Bind ViewModel.SettingsPartViewModel.UseLightThemeButton, Mode=TwoWay}"
+                                      OffContent="Dark theme"
+                                      OnContent="Light theme"
+                                      Margin="0,5,0,0"
                                       RelativePanel.AlignLeftWithPanel="True"
                                       RelativePanel.Below="UseShellDrawnBackButtonToggleSwtich" />
                         
-                        <ToggleSwitch x:Name="UseDetailedMangaItemSwitch" Header="Choose Manga Item Style"
-                                      IsOn="{Binding UseDetailedMangaItem, Mode=TwoWay}"
-                                      OffContent="Only Cover" OnContent="Cover with Details"
+                        <ToggleSwitch x:Name="UseDetailedMangaItemSwitch"
+                                      Header="Choose Manga Item Style"
+                                      IsOn="{x:Bind ViewModel.SettingsPartViewModel.UseDetailedMangaItem, Mode=TwoWay}"
+                                      OffContent="Only Cover"
+                                      OnContent="Cover with Details"
+                                      Margin="0,5,0,0"
                                       RelativePanel.AlignLeftWithPanel="True"
                                       RelativePanel.Below="UseLightThemeToggleSwitch" />
 
                         <ComboBox x:Name="MangaSourceComboBox" Header="Manga Source"
-                                  ItemsSource="{Binding SourcesWithIcons}"
-                                  Width="270" SelectedIndex="{Binding SelectedMangaSource, Mode=TwoWay}"
+                                  ItemsSource="{x:Bind ViewModel.SettingsPartViewModel.SourcesWithIcons}"
+                                  Width="270" SelectedIndex="{x:Bind ViewModel.SettingsPartViewModel.SelectedMangaSource, Mode=OneWay}"
                                   RelativePanel.AlignLeftWithPanel="True"
                                   RelativePanel.Below="UseDetailedMangaItemSwitch" >
                             <ComboBox.ItemTemplate>
@@ -98,30 +105,43 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                        <Slider x:Name="LatestReleasesDays" Header="Range of Latest Releases"
-                                Width="270" IsThumbToolTipEnabled="False"
-                                Margin="0,10,0,0" 
-                                Minimum="1" Maximum="14"
-                                Value="{Binding DaysOfLatestReleases, Mode=TwoWay}"
-                                RelativePanel.AlignLeftWithPanel="True"
-                                RelativePanel.Below="MangaSourceComboBox" />
+                        <!-- Favorites Settings -->
+                        <TextBlock x:Name="Favorits"
+                                   Text="Favorites"
+                                   Style="{StaticResource SubtitleTextBlockStyle}"
+                                   Margin="0,10,0,0"
+                                   RelativePanel.AlignLeftWithPanel="True"
+                                   RelativePanel.Below="MangaSourceComboBox"/>
 
-                        <TextBlock x:Name="LatestReleasesDaysTextBox" Text="{Binding Value, ElementName=LatestReleasesDays}"
-                                   Margin="10,38,0,0"
+                        <!--<ToggleSwitch x:Name="IsGroupedFavoritsGrid"
+                                      Header="Favorites Layout"
+                                      IsOn="{x:Bind ViewModel.SettingsPartViewModel.IsGroupedFavoritsGrid, Mode=TwoWay}"
+                                      OffContent="Ungrouped"
+                                      OnContent="Grouped by Initial"
+                                      Margin="0,5,0,0"
+                                      RelativePanel.AlignLeftWithPanel="True"
+                                      RelativePanel.Below="Favorits" />-->
+
+                        <!-- Latest Releases Settings -->
+                        <TextBlock x:Name="LatestReleases"
+                                   Text="Latest Releases"
+                                   Style="{StaticResource SubtitleTextBlockStyle}"
+                                   Margin="0,10,0,0"
+                                   RelativePanel.AlignLeftWithPanel="True"
+                                   RelativePanel.Below="Favorits"/>
+                        
+                        <Slider x:Name="LatestReleasesDays"
+                                Header="Range of Latest Releases"
+                                Margin="0,5,0,0" Width="270" IsThumbToolTipEnabled="False"                                 
+                                Minimum="1" Maximum="14"
+                                Value="{Binding DaysOfLatestReleases, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                RelativePanel.AlignLeftWithPanel="True"
+                                RelativePanel.Below="LatestReleases" />
+
+                        <TextBlock x:Name="LatestReleasesDaysTextBox" Text="{x:Bind LatestReleasesDays.Value}"
+                                   Margin="10,33,0,0"
                                    RelativePanel.AlignTopWith="LatestReleasesDays"
                                    RelativePanel.RightOf="LatestReleasesDays" />
-
-                        <TextBox x:Name="BusyTextTextBox" Width="200"
-                                 Margin="0,12,0,0" HorizontalAlignment="Left"
-                                 Header="Busy text" RelativePanel.AlignLeftWithPanel="True"
-                                 RelativePanel.Below="LatestReleasesDays"
-                                 Text="{Binding BusyText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                        <Button Margin="12,0,0,0"
-                                Command="{x:Bind ViewModel.SettingsPartViewModel.ShowBusyCommand}"
-                                Content="Show Busy"
-                                RelativePanel.AlignBottomWith="BusyTextTextBox"
-                                RelativePanel.RightOf="BusyTextTextBox" />
 
                     </RelativePanel>
 

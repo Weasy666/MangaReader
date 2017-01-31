@@ -31,11 +31,11 @@
         <t10controls:PageHeader x:Name="PageHeader" Text="{x:Bind ViewModel.Manga.Title}" Frame="{x:Bind Frame}" Grid.ColumnSpan="2">
             <t10controls:PageHeader.PrimaryCommands>
                 <AppBarToggleButton x:Name="MultiSelect"
-                                    Icon="Bullets" IsChecked="{Binding MultiSelectButtonIsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="False"
+                                    Icon="Bullets" IsChecked="{x:Bind ViewModel.MultiSelectButtonIsChecked, Mode=TwoWay}" IsThreeState="False"
                                     Label="Change selection mode"
-                                    Foreground="{Binding ElementName=PageHeader, Path=Foreground}"
-                                    Command="{Binding Path=MultiSelectCommand}"
-                                    CommandParameter="{Binding ElementName=ChapterGridView}" >
+                                    Foreground="{x:Bind PageHeader.Foreground}"
+                                    Command="{x:Bind ViewModel.MultiSelectCommand, Mode=OneWay}"
+                                    CommandParameter="{x:Bind ChapterGridView}" >
                     <AppBarToggleButton.Style>
                         <Style TargetType="AppBarToggleButton">
                             <Setter Property="Background" Value="Transparent"/>
@@ -311,7 +311,7 @@
                     </AppBarToggleButton.Style>
                 </AppBarToggleButton>
                 <AppBarSeparator />
-                <AppBarButton Icon="Switch" Label="Sort" Command="{Binding Path=SortGridCommand}" />
+                <AppBarButton Icon="Switch" Label="Sort" Command="{x:Bind ViewModel.SortGridCommand, Mode=OneWay}" />
             </t10controls:PageHeader.PrimaryCommands>
         </t10controls:PageHeader>
 
@@ -386,9 +386,9 @@
         
         <GridView x:Name="ChapterGridView" Grid.Row="1" Grid.Column="1"
                   Margin="12,0,0,0" Padding="0,10,0,0"
-                  ItemsSource="{Binding Path=Chapters, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{x:Bind ViewModel.Chapters, Mode=OneWay}"
                   SelectionMode="None"
-                  IsMultiSelectCheckBoxEnabled="{Binding Path=IsMultiSelect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  IsMultiSelectCheckBoxEnabled="{x:Bind ViewModel.IsMultiSelect, Mode=TwoWay}"
                   ItemTemplate="{StaticResource ChapterItem}"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="20"
