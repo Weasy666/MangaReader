@@ -10,12 +10,12 @@ namespace MangaReader_MVVM.Converters
 {
     public class BoolToVisibilityConverter : IValueConverter
     {
-        public Object Convert(Object value, Type targetType, Object parameter, String language)
+        public object Convert(object value, Type targetType, object parameter, string language)
         {
             return (bool)value ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        public Object ConvertBack(Object value, Type targetType, Object parameter, String language)
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             return (Visibility)value == Visibility.Visible;
         }

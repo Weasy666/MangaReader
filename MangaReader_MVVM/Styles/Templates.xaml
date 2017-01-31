@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:services="using:MangaReader_MVVM.Services"
                     xmlns:converters="using:MangaReader_MVVM.Converters"
-                    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls" >
+                    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls">
 
     <DataTemplate x:Key="MangaItemWithDetails">
         <Grid Width="350" Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" >
@@ -12,6 +12,7 @@
             </Grid.ColumnDefinitions>
             <Grid.Resources>
                 <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
+                <converters:DateTimeToPrettyDateTime x:Key="DateTimeToPrettyDateTime"/>
             </Grid.Resources>
             <Button x:Name="FavoriteButton"
                     Command="{Binding DataContext.FavoritCommand, ElementName=PageGrid}"
@@ -39,12 +40,12 @@
             <StackPanel Orientation="Vertical" Margin="5,0,0,0" MaxWidth="247" Grid.Column="1">
                 <TextBlock Text="{Binding Title}" FontSize="20" TextTrimming="CharacterEllipsis"/>
                 <!--<TextBlock Text="{Binding Released}" FontSize="15"/>-->
-                <TextBlock Text="{Binding LastUpdated}" FontSize="15"/>
+                <TextBlock Text="{Binding LastUpdated, Converter={StaticResource DateTimeToPrettyDateTime}}" FontSize="15"/>
                 <TextBlock Text="{Binding Category}" FontSize="15" TextWrapping="WrapWholeWords" TextTrimming="CharacterEllipsis"/>
             </StackPanel>
         </Grid>
     </DataTemplate>
-    
+
     <DataTemplate x:Key="MangaItemWithoutDetails">
         <Grid Width="171" >
             <controls:ImageEx x:Name="Cover" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
@@ -173,12 +174,13 @@
         <Grid Width="250" Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" >
             <Grid.Resources>
                 <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+                <converters:DateTimeToPrettyDateTime x:Key="DateTimeToPrettyDateTime"/>
             </Grid.Resources>
             <StackPanel Orientation="Vertical" Margin="5,0,0,0" MaxWidth="250">
                 <TextBlock Text="{Binding Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
                 <TextBlock Text="{Binding Number}" FontSize="15"/>
                 <!--<TextBlock Text="{Binding NumberOfPages}" FontSize="15"/>-->
-                <TextBlock Text="{Binding Released}" FontSize="15" Margin="0,0,0,5"/>
+                <TextBlock Text="{Binding Released, Converter={StaticResource DateTimeToPrettyDateTime}}" FontSize="15" Margin="0,0,0,5"/>
             </StackPanel>
             <Button x:Name="ReadStatus"
                     Command="{Binding DataContext.FavoritCommand, ElementName=PageGrid}"

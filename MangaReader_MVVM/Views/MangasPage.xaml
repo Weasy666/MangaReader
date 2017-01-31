@@ -15,9 +15,6 @@
     <Page.DataContext>
         <vm:MangasPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
-    <Page.Resources>
-        <ResourceDictionary Source="..\Styles\Templates.xaml" />
-    </Page.Resources>
 
     <Grid x:Name="PageGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
         <Grid.RowDefinitions>
@@ -35,12 +32,11 @@
         </t10controls:PageHeader>
 
         <GridView x:Name="GridView" Grid.Row="1"
-                  ItemsSource="{Binding Path=Mangas, Mode=OneWay}"
-                  Margin="10,0,0,0"
+                  ItemsSource="{x:Bind ViewModel.Mangas}"
+                  Margin="10,0,0,0" Padding="0,10,0,0"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="50"
                   IncrementalLoadingTrigger="Edge"
-                  DataContext="{Binding}"
                   ItemClick="{x:Bind ViewModel.MangaClickedAsync}"
                   ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}" >
             <GridView.ItemContainerStyle>

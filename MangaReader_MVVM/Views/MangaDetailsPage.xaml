@@ -10,9 +10,6 @@
     <Page.DataContext>
         <vm:MangaDetailsPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
-    <Page.Resources>
-        <ResourceDictionary Source="..\Styles\Templates.xaml" />        
-    </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
         <Grid.RowDefinitions>
@@ -25,13 +22,16 @@
         </Grid.ColumnDefinitions>
         <Grid.Resources>
             <converters:BoolToSelectionModeConverter x:Key="BoolToSelectionModeConverter"/>
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
+            <converters:BoolToMangaStatusConverter x:Key="BoolToMangaStatusConverter"/>
+            <converters:DateTimeToPrettyDateTime x:Key="DateTimeToPrettyDateTime"/>
         </Grid.Resources>
 
         <t10controls:PageHeader x:Name="PageHeader" Text="{x:Bind ViewModel.Manga.Title}" Frame="{x:Bind Frame}" Grid.ColumnSpan="2">
             <t10controls:PageHeader.PrimaryCommands>
                 <AppBarToggleButton x:Name="MultiSelect"
-                                    Icon="Bullets" IsChecked="{x:Bind ViewModel.MultiSelectButtonIsChecked}"
+                                    Icon="Bullets" IsChecked="{Binding MultiSelectButtonIsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="False"
                                     Label="Change selection mode"
                                     Foreground="{Binding ElementName=PageHeader, Path=Foreground}"
                                     Command="{Binding Path=MultiSelectCommand}"
@@ -328,9 +328,6 @@
                                       PlaceholderStretch="Uniform"
                                       VerticalAlignment="Top" />
                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0" FlowDirection="RightToLeft">
-                        <StackPanel.Resources>
-                            <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
-                        </StackPanel.Resources>
                         <Button x:Name="FavoriteButton"
                                 Command="{x:Bind ViewModel.FavoritCommand}"
                                 Content="{Binding Manga.IsFavorit, Mode=TwoWay, Converter={StaticResource BoolToFavoritSymbolConverter}, UpdateSourceTrigger=PropertyChanged}"
@@ -367,9 +364,6 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Grid.Resources>
-                        <converters:BoolToMangaStatusConverter x:Key="BoolToMangaStatusConverter"/>
-                    </Grid.Resources>
                     <TextBlock x:Name="AliasHeader" Text="Alias" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="0" FontWeight="SemiBold"/>
                     <TextBlock x:Name="Alias" Text="{x:Bind ViewModel.Manga.Alias}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="0"/>
 
@@ -380,7 +374,7 @@
                     <TextBlock x:Name="NumberOfChapters" Text="{x:Bind ViewModel.Manga.NumberOfChapters}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
 
                     <TextBlock x:Name="LastUpdatedHeader" Margin="0,0,10,0" Text="Last Updated" FontSize="15" Grid.Column="0" Grid.Row="3" FontWeight="SemiBold"/>
-                    <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Manga.LastUpdated}" FontSize="15" Grid.Column="1" Grid.Row="3"/>
+                    <TextBlock x:Name="LastUpdated" Text="{Binding Manga.LastUpdated, Converter={StaticResource DateTimeToPrettyDateTime}}" FontSize="15" Grid.Column="1" Grid.Row="3"/>
 
                     <TextBlock x:Name="CategoryHeader" Text="Category" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="4" FontWeight="SemiBold"/>
                     <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="4"/>
@@ -389,12 +383,12 @@
             <!--<TextBlock x:Name="DescriptionHeader" Margin="0,0,0,0" Text="Description" FontSize="15" FontWeight="Bold"/>-->
             <TextBlock x:Name="Description" Text="{x:Bind ViewModel.Manga.Description}" TextWrapping="WrapWholeWords"/>
         </StackPanel>
-        <!--"{Binding Path=MultiSelect, Converter={StaticResource BoolToSelectionModeConverter}, UpdateSourceTrigger=PropertyChanged}"-->
+        
         <GridView x:Name="ChapterGridView" Grid.Row="1" Grid.Column="1"
-                  Margin="12,0,0,0" Padding="0,6,0,0"
+                  Margin="12,0,0,0" Padding="0,10,0,0"
                   ItemsSource="{Binding Path=Chapters, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                   SelectionMode="None"
-                  IsMultiSelectCheckBoxEnabled="True"
+                  IsMultiSelectCheckBoxEnabled="{Binding Path=IsMultiSelect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   ItemTemplate="{StaticResource ChapterItem}"
                   IsItemClickEnabled="True"
                   IncrementalLoadingThreshold="20"
@@ -420,8 +414,13 @@
                                 VerticalAlignment="Bottom"
                                 ClosedDisplayMode="Compact"
                                 Frame="{x:Bind Frame}"
-                                Visibility="{Binding MultiSelect, Converter={StaticResource BoolToVisibilityConverter}}">
+                                Visibility="{Binding IsMultiSelect, Converter={StaticResource BoolToVisibilityConverter}}">
             <t10controls:PageHeader.PrimaryCommands>
+                <AppBarButton Icon="SelectAll"
+                              Label="Select All"
+                              Command="{x:Bind ViewModel.SelectAllCommand}"
+                              CommandParameter="{x:Bind ChapterGridView}" />
+                <AppBarSeparator />
                 <AppBarButton Icon="Accept"
                               Label="Mark as Read"
                               Command="{x:Bind ViewModel.MarkAsReadCommand}"

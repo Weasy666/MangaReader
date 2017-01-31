@@ -97,11 +97,14 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BoolToCollectionViewSource.cs" />
     <Compile Include="Converters\BoolToMangaStatusConverter.cs" />
     <Compile Include="Converters\BoolToFavoritSymbolConverter.cs" />
     <Compile Include="Converters\BoolToSelectionModeConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\DateTimeToPrettyDateTime.cs" />
     <Compile Include="Models\Chapter.cs" />
+    <Compile Include="Models\MangaGroups.cs" />
     <Compile Include="Utils\CompareNatural.cs" />
     <Compile Include="Models\IChapter.cs" />
     <Compile Include="Models\IManga.cs" />

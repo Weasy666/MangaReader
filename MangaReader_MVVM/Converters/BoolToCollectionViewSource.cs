@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
+using MangaReader_MVVM.Models;
 
 namespace MangaReader_MVVM.Converters
 {
-    public class BoolToFavoritSymbolConverter : IValueConverter
+    public class BoolToCollectionViewSource : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return (bool)value ? "\uE1CF" : "\uE1CE";
+            return true;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            return (string)value == "\uE1CF";
+            throw new NotImplementedException();
         }
     }
 }

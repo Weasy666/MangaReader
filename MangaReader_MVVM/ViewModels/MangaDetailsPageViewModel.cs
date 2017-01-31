@@ -63,11 +63,11 @@ namespace MangaReader_MVVM.ViewModels
                 Chapters = new ObservableCollection<IChapter>(Chapters.Reverse());
             }, () => Manga.Chapters != null || Manga.Chapters.Any()));
 
-        private bool _multiSelect;
-        public bool MultiSelect
+        private bool _isMultiSelect;
+        public bool IsMultiSelect
         {
-            get { return _multiSelect; }
-            set { Set(ref _multiSelect, value); }
+            get { return _isMultiSelect; }
+            set { Set(ref _isMultiSelect, value); }
         }
 
         private DelegateCommand<object> _multiSelectCommand;
@@ -75,9 +75,9 @@ namespace MangaReader_MVVM.ViewModels
             => _multiSelectCommand ?? (_multiSelectCommand = new DelegateCommand<object>((param) =>
             {
                 var chapterGridView = param as GridView;
+
                 chapterGridView.SelectionMode = chapterGridView.SelectionMode == ListViewSelectionMode.None ? ListViewSelectionMode.Multiple : ListViewSelectionMode.None;
-                MultiSelectButtonIsChecked = !MultiSelectButtonIsChecked;
-                MultiSelect = !MultiSelect;
+                IsMultiSelect = !IsMultiSelect;
                 chapterGridView.IsItemClickEnabled = !chapterGridView.IsItemClickEnabled;
             }, (param) => Manga.Chapters.Any() && Manga.Chapters.Count > 1));
 
@@ -95,7 +95,20 @@ namespace MangaReader_MVVM.ViewModels
                 //TODO implement download function for offline reading
             }));
 
-        public bool MultiSelectButtonIsChecked;
+        private bool? _multiSelectButtonIsChecked = false;
+        public bool? MultiSelectButtonIsChecked
+        {
+            get { return _multiSelectButtonIsChecked; }
+            set { Set(ref _multiSelectButtonIsChecked, value); }
+        }
+
+        private DelegateCommand<object> _selectAllCommand;
+        public DelegateCommand<object> SelectAllCommand
+            => _selectAllCommand ?? (_selectAllCommand = new DelegateCommand<object>((param) =>
+            {
+                var chapterGridView = param as GridView;
+                chapterGridView.SelectAll();
+            }));
 
         private DelegateCommand<object> _markAsReadCommand;
         public DelegateCommand<object> MarkAsReadCommand
@@ -107,7 +120,7 @@ namespace MangaReader_MVVM.ViewModels
 
                 MultiSelectButtonIsChecked = false;
                 chapterGridView.SelectionMode = ListViewSelectionMode.None;
-                MultiSelect = false;
+                IsMultiSelect = false;
                 chapterGridView.IsItemClickEnabled = true;
             }));
 
@@ -119,7 +132,7 @@ namespace MangaReader_MVVM.ViewModels
 
                 MultiSelectButtonIsChecked = false;
                 chapterGridView.SelectionMode = ListViewSelectionMode.None;
-                MultiSelect = false;
+                IsMultiSelect = false;
                 chapterGridView.IsItemClickEnabled = true;
             }));
 
