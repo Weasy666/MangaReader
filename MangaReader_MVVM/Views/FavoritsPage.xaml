@@ -22,7 +22,6 @@
         <t10controls:PageHeader Name="PageHeader" Text="Your Favorit Mangas" Frame="{x:Bind Frame}" >
             <t10controls:PageHeader.PrimaryCommands>
                 <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />
-                <!--<AppBarButton Icon="Sort" Label="Sort" Command="{Binding Path=SortGridCommand}" />-->
                 <AppBarSeparator />
                 <AppBarButton Icon="Refresh" Label="Reload" Command="{x:Bind ViewModel.ReloadGridCommand, Mode=OneWay}" />
                 <AppBarToggleButton x:Name="GroupGrid"
@@ -311,7 +310,8 @@
                   IncrementalLoadingThreshold="50"
                   IncrementalLoadingTrigger="Edge"
                   ItemClick="{x:Bind ViewModel.MangaClickedAsync}"                  
-                  ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}" >
+                  ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}"
+                  Style="{StaticResource GridViewSemiOpaqueScrollViewer}">
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem">
                     <Setter Property="Margin" Value="0,10,10,0" />

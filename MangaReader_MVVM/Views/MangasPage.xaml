@@ -1,15 +1,11 @@
 ﻿<Page x:Class="MangaReader_MVVM.Views.MangasPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:Behaviors="using:Template10.Behaviors"
-      xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
-      xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:t10controls="using:Template10.Controls"
       xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:MangaReader_MVVM.Views"
       xmlns:models="using:MangaReader_MVVM.Models"
-      xmlns:services="using:MangaReader_MVVM.Services"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:MangaReader_MVVM.ViewModels" mc:Ignorable="d" >    
     <Page.DataContext>
@@ -39,7 +35,8 @@
                   IncrementalLoadingThreshold="50"
                   IncrementalLoadingTrigger="Edge"
                   ItemClick="{x:Bind ViewModel.MangaClickedAsync}"
-                  ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}" >
+                  ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}" 
+                  Style="{StaticResource GridViewSemiOpaqueScrollViewer}">
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem">
                     <Setter Property="Margin" Value="0,10,10,0" />

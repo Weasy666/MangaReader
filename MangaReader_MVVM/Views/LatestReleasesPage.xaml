@@ -43,7 +43,8 @@
                   IncrementalLoadingTrigger="Edge"
                   DataContext="{Binding}"
                   ItemClick="{x:Bind ViewModel.MangaClickedAsync}"
-                  ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}" >
+                  ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}"
+                  Style="{StaticResource GridViewSemiOpaqueScrollViewer}">
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem">
                     <Setter Property="Margin" Value="0,10,10,0" />

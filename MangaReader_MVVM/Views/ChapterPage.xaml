@@ -78,14 +78,15 @@
                         </Grid>
                     </Grid>
                     <ListView x:Name="ChaptersView" Grid.Column="1" Margin="0,40,0,0"
-                                  ItemsSource="{x:Bind ViewModel.Manga.Chapters}"
-                                  ScrollViewer.HorizontalScrollMode="Enabled"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                  ScrollViewer.VerticalScrollMode="Disabled"
-                                  ItemTemplate="{StaticResource ChapterItem}"
-                                  Tapped="{x:Bind ViewModel.ChapterClickedAsync}"
-                                  SelectionChanged="{x:Bind ViewModel.ScrollToSelectedItem}"
-                                  SelectedIndex="{x:Bind ViewModel.SelectedChapterIndex}">
+                              ItemsSource="{x:Bind ViewModel.Manga.Chapters}"                                  
+                              ItemTemplate="{StaticResource ChapterItem}"
+                              Tapped="{x:Bind ViewModel.ChapterClickedAsync}"
+                              SelectionChanged="{x:Bind ViewModel.ScrollToSelectedItem}"
+                              SelectedIndex="{x:Bind ViewModel.SelectedChapterIndex}"
+                              Style="{StaticResource ListViewSemiOpaqueScrollViewer}"
+                              ScrollViewer.HorizontalScrollMode="Enabled"
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                              ScrollViewer.VerticalScrollMode="Disabled">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <ItemsWrapGrid />
@@ -97,17 +98,19 @@
                                 <Setter Property="Margin" Value="0,0,10,0" />
                                 <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
                                 <Setter Property="Foreground" Value="{ThemeResource ContrastColorBrush}" />
-                            </Style>
+                            </Style>                            
                         </ListView.ItemContainerStyle>
                     </ListView>
                 </Grid>
             </t10controls:PageHeader.Content>
         </t10controls:PageHeader>
 
-        <ScrollViewer HorizontalScrollMode="Auto"
+        <ScrollViewer x:Name="PagesViewScrollViewer" 
+                      HorizontalScrollMode="Auto"
                       HorizontalScrollBarVisibility="Auto"
                       VerticalScrollMode="Disabled"
-                      VerticalScrollBarVisibility="Disabled" >
+                      VerticalScrollBarVisibility="Disabled"
+                      Style="{StaticResource SemiOpaqueScrollViewer}">
             <GridView x:Name="PagesView" 
                       ItemsSource="{x:Bind Path=ViewModel.Pages, Mode=OneWay}"                      
                       IsHitTestVisible="False" >
@@ -139,12 +142,12 @@
                             <Grid x:Name="PageNumberGrid"
                                   Height="30"
                                   Width="40"
-                                  Margin="0,0,0,10"
+                                  Margin="0,0,0,12"
                                   Background="{ThemeResource SystemControlBackgroundAccentBrush}"
                                   BorderBrush="{x:Null}"
                                   HorizontalAlignment="Right"
                                   VerticalAlignment="Bottom"
-                                  Visibility="{x:Bind Path=OverlayVisibility, Mode=OneWay}">
+                                  Visibility="{x:Bind OverlayVisibility, Mode=OneWay}">
                                 <TextBlock x:Name="PageNumber"
                                            Text="{x:Bind Number}"
                                            FontSize="18"

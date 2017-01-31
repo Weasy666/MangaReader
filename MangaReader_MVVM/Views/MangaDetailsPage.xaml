@@ -395,7 +395,8 @@
                   ItemClick="{x:Bind ViewModel.ChapterClickedAsync}"
                   ScrollViewer.HorizontalScrollMode="Enabled"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                  ScrollViewer.VerticalScrollMode="Disabled" >
+                  ScrollViewer.VerticalScrollMode="Disabled"
+                  Style="{StaticResource GridViewSemiOpaqueScrollViewer}">
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapGrid Orientation="Vertical" />
