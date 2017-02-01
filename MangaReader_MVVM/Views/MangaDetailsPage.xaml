@@ -49,11 +49,10 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="AppBarToggleButton">
-                                        <Grid
-          x:Name="Root"
-          MinWidth="{TemplateBinding MinWidth}"
-          MaxWidth="{TemplateBinding MaxWidth}"
-          Background="{TemplateBinding Background}">
+                                        <Grid x:Name="Root"
+                                              MinWidth="{TemplateBinding MinWidth}"
+                                              MaxWidth="{TemplateBinding MaxWidth}"
+                                              Background="{TemplateBinding Background}">
                                             <VisualStateManager.VisualStateGroups>
                                                 <VisualStateGroup x:Name="ApplicationViewStates">
                                                     <VisualState x:Name="FullSize"/>
@@ -253,54 +252,50 @@
                                             <Rectangle x:Name="AccentOverlayBackground"/>
 
                                             <StackPanel x:Name="ContentRoot" MinHeight="{ThemeResource AppBarThemeCompactHeight}">
-                                                <ContentPresenter
-              x:Name="Content"
-              Height="20"
-              Margin="0,14,0,4"
-              Content="{TemplateBinding Icon}"
-              Foreground="{TemplateBinding Foreground}"
-              HorizontalAlignment="Stretch"
-              AutomationProperties.AccessibilityView="Raw"/>
-                                                <TextBlock
-              x:Name="TextLabel"
-              Text="{TemplateBinding Label}"
-              Foreground="{TemplateBinding Foreground}"
-              FontSize="12"
-              FontFamily="{TemplateBinding FontFamily}"
-              TextAlignment="Center"
-              TextWrapping="Wrap"
-              Margin="0,0,0,6"/>
+                                                <ContentPresenter x:Name="Content"
+                                                                  Height="20"
+                                                                  Margin="0,14,0,4"
+                                                                  Content="{TemplateBinding Icon}"
+                                                                  Foreground="{TemplateBinding Foreground}"
+                                                                  HorizontalAlignment="Stretch"
+                                                                  AutomationProperties.AccessibilityView="Raw"/>
+                                                <TextBlock x:Name="TextLabel"
+                                                           Text="{TemplateBinding Label}"
+                                                           Foreground="{TemplateBinding Foreground}"
+                                                           FontSize="12"
+                                                           FontFamily="{TemplateBinding FontFamily}"
+                                                           TextAlignment="Center"
+                                                           TextWrapping="Wrap"
+                                                           Margin="0,0,0,6"/>
                                             </StackPanel>
 
                                             <Grid x:Name="OverflowContentRoot" >
-                                                <TextBlock
-              x:Name="OverflowCheckGlyph"
-              Text="&#xE73E;"
-              Foreground="{TemplateBinding Foreground}"
-              FontFamily="{ThemeResource SymbolThemeFontFamily}"
-              FontSize="16"
-              HorizontalAlignment="Left"
-              VerticalAlignment="Center"
-              Height="14"
-              Width="14"
-              Margin="12,6,12,6"
-              Opacity="0"
-              Visibility="Collapsed"/>
+                                                <TextBlock x:Name="OverflowCheckGlyph"
+                                                           Text="&#xE73E;"
+                                                           Foreground="{TemplateBinding Foreground}"
+                                                           FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                                           FontSize="16"
+                                                           HorizontalAlignment="Left"
+                                                           VerticalAlignment="Center"
+                                                           Height="14"
+                                                           Width="14"
+                                                           Margin="12,6,12,6"
+                                                           Opacity="0"
+                                                           Visibility="Collapsed"/>
 
-                                                <TextBlock
-              x:Name="OverflowTextLabel"
-              Text="{TemplateBinding Label}"
-              Foreground="{TemplateBinding Foreground}"
-              FontSize="15"
-              FontFamily="{TemplateBinding FontFamily}"
-              TextAlignment="Left"
-              TextTrimming="Clip"
-              TextWrapping="NoWrap"
-              HorizontalAlignment="Stretch"
-              VerticalAlignment="Center"
-              Margin="38,0,12,0"
-              Padding="0,5,0,7"
-              Visibility="Collapsed"/>
+                                                <TextBlock x:Name="OverflowTextLabel"
+                                                           Text="{TemplateBinding Label}"
+                                                           Foreground="{TemplateBinding Foreground}"
+                                                           FontSize="15"
+                                                           FontFamily="{TemplateBinding FontFamily}"
+                                                           TextAlignment="Left"
+                                                           TextTrimming="Clip"
+                                                           TextWrapping="NoWrap"
+                                                           HorizontalAlignment="Stretch"
+                                                           VerticalAlignment="Center"
+                                                           Margin="38,0,12,0"
+                                                           Padding="0,5,0,7"
+                                                           Visibility="Collapsed"/>
                                             </Grid>
 
                                         </Grid>
@@ -400,7 +395,6 @@
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapGrid Orientation="Vertical" />
-                    <!--VerticalAlignment="Center"/>-->
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
             <GridView.ItemContainerStyle>
@@ -408,8 +402,8 @@
                     <Setter Property="Margin" Value="0,0,10,10" />
                 </Style>
             </GridView.ItemContainerStyle>
-            
         </GridView>
+        
         <t10controls:PageHeader x:Name="BottomBar" IsSticky="True"
                                 Grid.Row="1" Grid.ColumnSpan="2"
                                 VerticalAlignment="Bottom"
@@ -422,6 +416,10 @@
                               Command="{x:Bind ViewModel.SelectAllCommand}"
                               CommandParameter="{x:Bind ChapterGridView}" />
                 <AppBarSeparator />
+                <AppBarButton Icon="Delete"
+                              Label="Mark as Unread"
+                              Command="{x:Bind ViewModel.MarkAsUnReadCommand}"
+                              CommandParameter="{x:Bind ChapterGridView}" />
                 <AppBarButton Icon="Accept"
                               Label="Mark as Read"
                               Command="{x:Bind ViewModel.MarkAsReadCommand}"

@@ -17,11 +17,15 @@ namespace MangaReader_MVVM.Converters
 
             if (dateTime.Date == now.Date)
             {
-                return "Today at " + dateTime.ToString("T");
+                return "Today at " + dateTime.ToString("t");
             }
             else if (dateTime.Date == now.Date.AddDays(-1))
             {
                 return "Yesterday";
+            }
+            else if (dateTime.Year == 1970)
+            {
+                return "N/A";
             }
             else
             {

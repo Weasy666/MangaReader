@@ -7,8 +7,13 @@ using System.Threading.Tasks;
 
 namespace MangaReader_MVVM.Models
 {
-    public class MangaGroups : ObservableCollection<IManga>
+    public class MangaGroup : ObservableCollection<IManga>
     {
-        public char Initial;
+        public char Initial { get; set; }
+
+        public override string ToString()
+        {
+            return Initial.ToString();
+        }
     }
 }

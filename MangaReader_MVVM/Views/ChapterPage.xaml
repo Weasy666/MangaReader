@@ -24,6 +24,7 @@
                     </Grid.ColumnDefinitions>
                     <Grid.Resources>
                         <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
+                        <converters:DateTimeToPrettyDateTime x:Key="DateTimeToPrettyDateTime"/>
                     </Grid.Resources>
                     <Grid x:Name="MangaDetails" Width="350" Grid.Column="0" >
                         <Grid.ColumnDefinitions>
@@ -68,10 +69,10 @@
                             <TextBlock x:Name="Title" Text="{x:Bind ViewModel.Manga.Title}" FontSize="20" TextWrapping="WrapWholeWords" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"/>
                             
                             <TextBlock x:Name="StatusHeader" Text="Status" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="1" FontWeight="SemiBold"/>
-                            <TextBlock x:Name="Status" Text="{Binding Manga.Ongoing, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15" Grid.Column="1" Grid.Row="1"/>
+                            <TextBlock x:Name="Status" Text="{Binding Manga.Ongoing, Mode=OneWay, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15" Grid.Column="1" Grid.Row="1"/>
                             
                             <TextBlock x:Name="LastUpdatedHeader" Margin="0,0,10,0" Text="Last Updated" FontSize="15" Grid.Column="0" Grid.Row="2" FontWeight="SemiBold"/>
-                            <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Manga.LastUpdated}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
+                            <TextBlock x:Name="LastUpdated" Text="{Binding Manga.LastUpdated, Mode=OneWay, Converter={StaticResource DateTimeToPrettyDateTime}}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
                             
                             <TextBlock x:Name="CategoryHeader" Text="Category" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="3" FontWeight="SemiBold"/>
                             <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="3"/>
@@ -112,11 +113,8 @@
                       VerticalScrollBarVisibility="Disabled"
                       Style="{StaticResource SemiOpaqueScrollViewer}">
             <GridView x:Name="PagesView" 
-                      ItemsSource="{x:Bind Path=ViewModel.Pages, Mode=OneWay}"                      
-                      IsHitTestVisible="False" >
-                <GridView.Resources>
-                    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-                </GridView.Resources>
+                      ItemsSource="{x:Bind ViewModel.Pages, Mode=OneWay}"                      
+                      IsHitTestVisible="False">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ItemsStackPanel Orientation="Horizontal" Margin="0,0,0,-10"/>
@@ -128,7 +126,7 @@
                     </Style>
                 </GridView.ItemContainerStyle>
                 <GridView.ItemTemplate>
-                    <DataTemplate x:Name="PageTemplate" x:DataType="models:Page" >
+                    <DataTemplate x:Name="PageTemplate" x:DataType="models:Page">
                         <Grid x:Name="PageGrid" >
                             <controls:ImageEx x:Name="PageImage" Style="{ThemeResource BigImages}"
                                               IsCacheEnabled="False"

@@ -14,6 +14,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml.Data;
 using MangaReader_MVVM.Services.SettingsServices;
 using System.ComponentModel;
+using MangaReader_MVVM.Utils;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -36,35 +37,40 @@ namespace MangaReader_MVVM.ViewModels
         }
 
         private ObservableCollection<IManga> _favorits;
-        public ObservableCollection<IManga> Favorits { get { return _favorits = _favorits ?? _library.Favorits; } set { Set(ref _favorits, value); } }
-        public ObservableCollection<MangaGroups> FavoritsGroups
+        public ObservableCollection<IManga> Favorits { get { return _favorits = _favorits ?? _library.Favorits; } set { Set(ref _favorits, value); base.RaisePropertyChanged(nameof(FavoritsGroups)); } }
+        public ObservableCollection<MangaGroup> FavoritsGroups
         {
             get
             {
-                var groups = new ObservableCollection<MangaGroups>();
-
-                var query = from item in Favorits
-                            group item by item.Title.ToUpper()[0] into g
-                            orderby g.Key
-                            select new { GroupName = g.Key, Items = g };
-
-                foreach (var g in query)
+                var groups = new ObservableCollection<MangaGroup>();
+                groups.Add(new MangaGroup() { Initial = '&' });
+                groups.Add(new MangaGroup() { Initial = '#' });
+                for (int i = 'A'; i <= 'Z'; i++)
                 {
-                    MangaGroups info = new MangaGroups();
-                    info.Initial = g.GroupName;
-                    foreach (var item in g.Items)
+                    groups.Add(new MangaGroup() { Initial = (char)i });
+                }
+                
+                var query = from manga in Favorits
+                            group manga by manga.Title.ToUpper()[0] into grp
+                            orderby grp.Key
+                            select new { GroupName = grp.Key, Items = grp };
+
+                foreach (var grp in query)
+                {
+                    MangaGroup group = groups.First(g => g.Initial == Helpers.CategorizeAlphabetically(grp.GroupName));
+                    foreach (var item in grp.Items)
                     {
-                        info.Add(item);
+                        group.AddSorted(item);
                     }
-                    groups.Add(info);
                 }
 
                 return groups;
             }
-        }
+        }        
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
+            var test = FavoritsCVS.View.CollectionGroups;
             if (mode == NavigationMode.New)
             {
                 //Mangas = await _library.GetFavoritMangasAsync();
@@ -91,12 +97,18 @@ namespace MangaReader_MVVM.ViewModels
             await Task.CompletedTask;
         }
 
-        private bool? _isGridGrouped;
         public bool? IsGridGrouped
         {
             get => _settings.IsGroupedFavoritsGrid;
-            set { _settings.IsGroupedFavoritsGrid = (bool)value; }
+            set { _settings.IsGroupedFavoritsGrid = (bool)value; SemanticZoomCanChangeView = (bool)value; }
         }
+
+        public bool SemanticZoomCanChangeView
+        {
+            get => _settings.IsGroupedFavoritsGrid;
+            set { base.RaisePropertyChanged(nameof(SemanticZoomCanChangeView)); }
+        }
+
         private CollectionViewSource _favoritsCVS;
         public CollectionViewSource FavoritsCVS
         {
@@ -117,8 +129,6 @@ namespace MangaReader_MVVM.ViewModels
         public DelegateCommand<object> GroupGridCommand
             => _groupGridCommand ?? (_groupGridCommand = new DelegateCommand<object>((param) =>
             {
-                //IsGridGrouped = !IsGridGrouped;
-                var gridView = param as GridView;
                 var source = new CollectionViewSource() { IsSourceGrouped = (bool)IsGridGrouped };
 
                 if ((bool)IsGridGrouped)

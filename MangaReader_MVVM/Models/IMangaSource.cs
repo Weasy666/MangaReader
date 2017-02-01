@@ -24,7 +24,8 @@ namespace MangaReader_MVVM.Models
         void AddFavorit(ObservableCollection<IManga> mangas);
         void AddAsRead(string mangaId, IChapter chapter, bool single);
         void AddAsRead(string mangaId, ObservableCollection<IChapter> chapters);
-        void RemoveAsRead(string mangaId, IChapter chapter);
+        void RemoveAsRead(string mangaId, IChapter chapter, bool single);
+        void RemoveAsRead(string mangaId, ObservableCollection<IChapter> chapters);
         Task<IManga> GetMangaAsync(string mangaId);
         Task<ObservableCollection<IChapter>> GetChaptersAsync(Manga manga);
         Task<IChapter> GetChapterAsync(Chapter chapter);

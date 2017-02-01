@@ -44,12 +44,11 @@ namespace MangaReader_MVVM.ViewModels
         public int _selectedChapterIndex = -1;
         public int SelectedChapterIndex { get { return _selectedChapterIndex; } set { Set(ref _selectedChapterIndex, value); } }
 
-        public Visibility _pageOverlayVisibility = Visibility.Collapsed;
-
+        private IManga _manga;
+        public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
+        public ObservableCollection<IChapter> Chapters { get { return Manga.Chapters; } }
         private IChapter _chapter;
         public IChapter Chapter { get { return _chapter; } set { Set(ref _chapter, value); } }
-        //public ObservableCollection<IPage> Pages => Chapter.Pages;
-
         private ObservableCollection<IPage> _pages;
         public ObservableCollection<IPage> Pages
         {
@@ -64,14 +63,8 @@ namespace MangaReader_MVVM.ViewModels
                 Chapter.Pages = value;
                 Set(ref _pages, value);
             }
-        }
-
-        //private ObservableCollection<IChapter> _chapters;
-        public ObservableCollection<IChapter> Chapters { get { return Manga.Chapters; } }
-
-        private IManga _manga;
-        public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
-
+        }        
+        
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
             var chapter = parameter as Chapter;
@@ -109,13 +102,13 @@ namespace MangaReader_MVVM.ViewModels
             var grid = sender as Grid;
             if (grid != null)
             {
-                var chaptersPageHeader = grid.Children[0] as Template10.Controls.PageHeader;
+                var chaptersPageHeader = grid.FindName("ChaptersBar") as Template10.Controls.PageHeader;
                 chaptersPageHeader.IsOpen = !chaptersPageHeader.IsOpen;
 
-                _pageOverlayVisibility = _pageOverlayVisibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
+                var pageOverlayVisibility = chaptersPageHeader.IsOpen ? Visibility.Visible : Visibility.Collapsed;
                 foreach (var page in Pages)
                 {
-                    page.OverlayVisibility = _pageOverlayVisibility;
+                    page.OverlayVisibility = pageOverlayVisibility;
                 }
             }
         }
@@ -133,7 +126,6 @@ namespace MangaReader_MVVM.ViewModels
                     SelectedChapterIndex = listView.SelectedIndex;
                     MangaLibrary.Instance.AddAsRead(clickedChapter.ParentManga.Id, clickedChapter);
                     Pages = new ObservableCollection<IPage>(Chapter.Pages);
-                    //NavigationService.Navigate(typeof(Views.ChapterPage), clickedChapter);
                 }                
             }
             else

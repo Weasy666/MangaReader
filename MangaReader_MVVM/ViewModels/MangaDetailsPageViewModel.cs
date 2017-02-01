@@ -43,7 +43,7 @@ namespace MangaReader_MVVM.ViewModels
                 Manga = await _library.GetMangaAsync(manga.Id);
                 Chapters = Manga.Chapters;
             }
-            MultiSelectCommand.RaiseCanExecuteChanged();
+            //MultiSelectCommand.RaiseCanExecuteChanged();
             await Task.CompletedTask;
         }
 
@@ -108,6 +108,20 @@ namespace MangaReader_MVVM.ViewModels
             {
                 var chapterGridView = param as GridView;
                 chapterGridView.SelectAll();
+            }));
+
+        private DelegateCommand<object> _markAsUnReadCommand;
+        public DelegateCommand<object> MarkAsUnReadCommand
+            => _markAsUnReadCommand ?? (_markAsUnReadCommand = new DelegateCommand<object>((param) =>
+            {
+                var chapterGridView = param as GridView;
+                var chapters = new ObservableCollection<IChapter>(chapterGridView.SelectedItems.Cast<IChapter>());
+                _library.RemoveAsRead(Manga.Id, chapters);
+
+                MultiSelectButtonIsChecked = false;
+                chapterGridView.SelectionMode = ListViewSelectionMode.None;
+                IsMultiSelect = false;
+                chapterGridView.IsItemClickEnabled = true;
             }));
 
         private DelegateCommand<object> _markAsReadCommand;

@@ -49,7 +49,8 @@ namespace MangaReader_MVVM.Services
         public void AddFavorit(ObservableCollection<IManga> mangas) => _mangaSource.AddFavorit(mangas);
         public void AddAsRead(string mangaId, IChapter chapter) => _mangaSource.AddAsRead(mangaId, chapter, true);
         public void AddAsRead(string mangaId, ObservableCollection<IChapter> chapters) => _mangaSource.AddAsRead(mangaId, chapters);
-        public void RemoveAsRead(string mangaId, IChapter chapter) => _mangaSource.RemoveAsRead(mangaId, chapter);
+        public void RemoveAsRead(string mangaId, IChapter chapter) => _mangaSource.RemoveAsRead(mangaId, chapter, true);
+        public void RemoveAsRead(string mangaId, ObservableCollection<IChapter> chapters) => _mangaSource.RemoveAsRead(mangaId, chapters);
         public Task<IManga> GetMangaAsync(string mangaId) => _mangaSource.GetMangaAsync(mangaId);
         public Task<ObservableCollection<IChapter>> GetChaptersAsync(Manga manga) => _mangaSource.GetChaptersAsync(manga);
         public Task<IChapter> GetChapterAsync(Chapter chapter) => _mangaSource.GetChapterAsync(chapter);

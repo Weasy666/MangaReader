@@ -241,25 +241,35 @@ namespace MangaReader_MVVM.Services
             }
         }
 
-        public async void RemoveAsRead(string mangaId, IChapter chapter)
+        public async void RemoveAsRead(string mangaId, ObservableCollection<IChapter> chapters)
+        {
+            if (chapters != null && chapters.Any())
+            {
+                foreach (var chapter in chapters)
+                {
+                    RemoveAsRead(mangaId, chapter, false);
+                }
+                if (await FileHelper.FileExistsAsync("readStatus_" + this.Name, StorageStrategies.Roaming))
+                {
+                    await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, _readStatus, StorageStrategies.Roaming);
+                }
+            }
+        }
+
+        public async void RemoveAsRead(string mangaId, IChapter chapter, bool single = true)
         {
             if (mangaId != null && chapter != null)
             {
-                chapter.IsRead = !chapter.IsRead;
-                if (await FileHelper.FileExistsAsync("readStatus_" + this.Name, StorageStrategies.Roaming))
+                chapter.IsRead = false;
+                _readStatus = _readStatus ?? await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, StorageStrategies.Roaming);
+                if (_readStatus != null && _readStatus.ContainsKey(mangaId))
                 {
-                    var mangasWithStatus = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, StorageStrategies.Roaming);
-                    if (mangasWithStatus.ContainsKey(mangaId))
+                    _readStatus[mangaId]?.Remove(chapter.Id);
+
+                    if (single)
                     {
-                        var mangaChaptersWithStatus = mangasWithStatus[mangaId];
-                        var chapterWithStatus = mangaChaptersWithStatus.FirstOrDefault(c => c == chapter.Id);
-                        if (chapterWithStatus != null && chapterWithStatus.Any())
-                        {
-                            mangaChaptersWithStatus.Remove(chapter.Id);
-                            mangasWithStatus[mangaId] = mangaChaptersWithStatus;
-                        }
+                        await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, _readStatus, StorageStrategies.Roaming);
                     }
-                    await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, mangasWithStatus, StorageStrategies.Roaming);
                 }
             }
         }
