@@ -19,8 +19,6 @@ namespace MangaReader_MVVM.Services
 {
     class MangaEdenSource : ViewModelBase, IMangaSource
     {
-        
-
         private ObservableCollection<IManga> _mangas;
         public ObservableCollection<IManga> Mangas
         {
@@ -51,6 +49,13 @@ namespace MangaReader_MVVM.Services
             MangasListPage = new Uri($"list/{Language}/", UriKind.Relative);
             MangaDetails = new Uri("manga/", UriKind.Relative);
             MangaChapterPages = new Uri("chapter/", UriKind.Relative);
+            LoadReadStatus();
+        }
+
+        private async void LoadReadStatus()
+        {
+            var test = "" + this.Name;
+            _readStatus = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, StorageStrategies.Roaming);
         }
 
         public async Task<ObservableCollection<IManga>> GetMangasAsync(ReloadMode mode = ReloadMode.Default)
@@ -329,11 +334,18 @@ namespace MangaReader_MVVM.Services
         private async void LoadAndMergeReadStatus(string mangaId, IChapter chapter)
         {
             _readStatus = _readStatus ?? await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, StorageStrategies.Roaming);
-            if (_readStatus.ContainsKey(mangaId))
+
+            if (_readStatus != null && _readStatus.ContainsKey(mangaId))
             {
                 var chapterWithStatus = _readStatus[mangaId].FirstOrDefault(c => c == chapter.Id);
                 if (chapterWithStatus != null)
+                {
                     chapter.IsRead = true;
+
+                    var manga =_mangas.First(m => m.Id == mangaId);
+                    manga.ReadProgress = manga.Chapters.Count(c => c.IsRead == true);
+                    _favorits.First(m => m.Id == mangaId).ReadProgress = manga.ReadProgress;
+                }
             }
         }
     }

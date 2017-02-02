@@ -70,7 +70,6 @@ namespace MangaReader_MVVM.ViewModels
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            var test = FavoritsCVS.View.CollectionGroups;
             if (mode == NavigationMode.New)
             {
                 //Mangas = await _library.GetFavoritMangasAsync();

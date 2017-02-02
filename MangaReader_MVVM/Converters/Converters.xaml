@@ -1,0 +1,21 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MangaReader_MVVM.Converters">
+
+    <local:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
+    <local:BoolToMangaStatusConverter x:Key="BoolToMangaStatusConverter"/>
+    <local:BoolToSelectionModeConverter x:Key="BoolToSelectionModeConverter"/>
+    <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <local:DateTimeToPrettyDateTime x:Key="DateTimeToPrettyDateTime"/>
+    <local:ReadModeToIntConverter x:Key="ReadModeToIntConverter"/>
+    <local:ReadModeToIsEnabledConverter x:Key="ReadModeToIsEnabledConverter"/>
+    <local:ReadModeToOrientationConverter x:Key="ReadModeToOrientationConverter"/>
+    <local:ReadModeToScrollBarVisibilityConverter x:Key="ReadModeToScrollBarVisibilityConverter"/>
+    <local:ReadModeToScrollModeConverter x:Key="ReadModeToScrollModeConverter"/>
+    <local:ReadModeToStretchConverter x:Key="ReadModeToStretchConverter"/>
+    <local:ReadModeToVisibilityConverter x:Key="ReadModeToVisibilityConverter"/>
+
+    <JumpListItemBackgroundConverter x:Key="JumpListItemForegroundConverter"/>
+
+</ResourceDictionary>

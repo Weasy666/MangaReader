@@ -366,9 +366,6 @@
                           ItemsSource="{x:Bind ViewModel.FavoritsCVS.View.CollectionGroups, Mode=OneWay}"                             
                           HorizontalAlignment="Center" 
                           VerticalAlignment="Center">
-                    <GridView.Resources>
-                        <JumpListItemBackgroundConverter x:Key="JumpListItemForegroundConverter"/>
-                    </GridView.Resources>
                     <GridView.ItemTemplate>
                         <DataTemplate x:Name="ZoomedOutTemplate" x:DataType="ICollectionViewGroup">
                             <TextBlock Text="{x:Bind Group.(models:MangaGroup.Initial)}"

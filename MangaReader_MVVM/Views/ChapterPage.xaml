@@ -5,27 +5,61 @@
       xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:models="using:MangaReader_MVVM.Models"
-      xmlns:converters="using:MangaReader_MVVM.Converters"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:MangaReader_MVVM.ViewModels" mc:Ignorable="d">
     <Page.DataContext>
         <vm:ChapterPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
+    <Page.Resources>
+        <DataTemplate x:Name="PageTemplate" x:DataType="models:Page">
+            <Grid x:Name="PageGrid" >
+                <controls:ImageEx x:Name="PageImage" Style="{ThemeResource BigImages}"
+                                  IsCacheEnabled="False"
+                                  Source="{x:Bind Url, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
+                                  Stretch="{Binding ReadMode, Converter={StaticResource ReadModeToStretchConverter}}"
+                                  IsTapEnabled="False"
+                                  PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
+                                  PlaceholderStretch="None"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center" />
+                <Grid x:Name="PageNumberGrid"
+                      Height="30"
+                      Width="40"
+                      Margin="0,0,0,12"
+                      Background="{ThemeResource SystemControlBackgroundAccentBrush}"
+                      BorderBrush="{x:Null}"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Bottom"
+                      Visibility="{x:Bind OverlayVisibility, Mode=OneWay}">
+                    <TextBlock x:Name="PageNumber"
+                               Text="{x:Bind Number}"
+                               FontSize="18"
+                               Foreground="White"
+                               Margin="0,0,8,0"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center">Page</TextBlock>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
 
-    <Grid x:Name="PageGrid" Background="#FF171717"
+    <Grid x:Name="PageGrid"
+          Background="#FF171717"
           RightTapped="{x:Bind ViewModel.Page_RightTapped}" >
 
-        <t10controls:PageHeader x:Name="ChaptersBar" Frame="{x:Bind Frame}" ClosedDisplayMode="Hidden" Height="150" IsSticky="True" >
+        <t10controls:PageHeader x:Name="ChaptersBar"
+                                Frame="{x:Bind Frame}"
+                                ClosedDisplayMode="Hidden"
+                                Height="150"
+                                IsSticky="True"
+                                EllipsisVisibility="Collapsed">
             <t10controls:PageHeader.Content>
                 <Grid Margin="-16,0,0,-102" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition />
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <Grid.Resources>
-                        <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
-                        <converters:DateTimeToPrettyDateTime x:Key="DateTimeToPrettyDateTime"/>
-                    </Grid.Resources>
                     <Grid x:Name="MangaDetails" Width="350" Grid.Column="0" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="103"/>
@@ -50,7 +84,8 @@
                                           IsTapEnabled="False"
                                           PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
                                           PlaceholderStretch="Uniform" />
-                        <Grid Margin="5,0,0,0"
+                        <Grid x:Name="MangaDetailsGrid"
+                              Margin="5,0,0,0"
                               MaxWidth="247"
                               Grid.Column="1">
                             <Grid.ColumnDefinitions>
@@ -63,9 +98,6 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Grid.Resources>
-                                <converters:BoolToMangaStatusConverter x:Key="BoolToMangaStatusConverter"/>
-                            </Grid.Resources>
                             <TextBlock x:Name="Title" Text="{x:Bind ViewModel.Manga.Title}" FontSize="20" TextWrapping="WrapWholeWords" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"/>
                             
                             <TextBlock x:Name="StatusHeader" Text="Status" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="1" FontWeight="SemiBold"/>
@@ -78,7 +110,8 @@
                             <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="3"/>
                         </Grid>
                     </Grid>
-                    <ListView x:Name="ChaptersView" Grid.Column="1" Margin="0,40,0,0"
+                    <ListView x:Name="ChaptersView"
+                              Grid.Column="1" Margin="0,40,0,0"
                               ItemsSource="{x:Bind ViewModel.Manga.Chapters}"                                  
                               ItemTemplate="{StaticResource ChapterItem}"
                               Tapped="{x:Bind ViewModel.ChapterClickedAsync}"
@@ -102,61 +135,119 @@
                             </Style>                            
                         </ListView.ItemContainerStyle>
                     </ListView>
+                    <Button x:Name="SettingsButton" Grid.Column="2"
+                            Content="&#xE115;"
+                            Foreground="{x:Bind ChaptersBar.Foreground}"
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="{ThemeResource TextStyleLargeFontSize}">
+                        <Button.Resources>
+                            <Flyout x:Key="SettingsFlyout">
+                                <StackPanel Width="200">
+                                    <ComboBox x:Name="ReadMode"
+                                              Header="Read Mode"
+                                              MinWidth="110"
+                                              ItemsSource="{x:Bind ViewModel.ReadModeList}"
+                                              SelectedIndex="{Binding ReadMode, Mode=TwoWay, Converter={StaticResource ReadModeToIntConverter}}"
+                                              SelectionChanged="{x:Bind ViewModel.ReadMode_SelectionChanged}">
+                                    </ComboBox>
+                                    <ComboBox x:Name="ReadDirection"
+                                              Header="Read direction">
+                                        
+                                    </ComboBox>
+                                </StackPanel>
+                            </Flyout>
+                        </Button.Resources>
+                        <Button.Flyout>
+                            <StaticResource ResourceKey="SettingsFlyout"/>
+                        </Button.Flyout>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Grid>
+                                                <VisualStateManager.VisualStateGroups>
+                                                    <VisualStateGroup x:Name="CommonStates">
+                                                        <VisualState x:Name="Normal" />
+                                                        <VisualState x:Name="PointerOver">
+                                                            <VisualState.Setters>
+                                                                <Setter Target="ContentPresenter.Background" Value="{ThemeResource SystemControlHighlightListLowBrush}" />
+                                                                <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                        <VisualState x:Name="Pressed">
+                                                            <VisualState.Setters>
+                                                                <Setter Target="ContentPresenter.Background" Value="{ThemeResource SystemControlHighlightListMediumBrush}" />
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                        <VisualState x:Name="Disabled">
+                                                            <VisualState.Setters>
+                                                                <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource SystemControlDisabledBaseLowBrush}" />
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                    </VisualStateGroup>
+                                                </VisualStateManager.VisualStateGroups>
+                                                <ContentPresenter x:Name="ContentPresenter"
+                                                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                  AutomationProperties.AccessibilityView="Raw"
+                                                                  Background="{TemplateBinding Background}"
+                                                                  BorderBrush="{TemplateBinding BorderBrush}"
+                                                                  BorderThickness="{TemplateBinding BorderThickness}"
+                                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                                  ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                                  Padding="{TemplateBinding Padding}" />
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="UseSystemFocusVisuals" Value="True" />
+                                <Setter Property="VerticalAlignment" Value="Bottom" />
+                                <Setter Property="VerticalContentAlignment" Value="Center" />
+                                <Setter Property="Width" Value="{ThemeResource AppBarExpandButtonThemeWidth}" />
+                                <Setter Property="Height" Value="{ThemeResource AppBarExpandButtonThemeWidth}" />
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <!--xE713-->
                 </Grid>
             </t10controls:PageHeader.Content>
         </t10controls:PageHeader>
 
-        <ScrollViewer x:Name="PagesViewScrollViewer" 
-                      HorizontalScrollMode="Auto"
-                      HorizontalScrollBarVisibility="Auto"
-                      VerticalScrollMode="Disabled"
-                      VerticalScrollBarVisibility="Disabled"
+        <FlipView x:Name="PagesFlipView"
+                  IsEnabled="{Binding ReadMode, Converter={StaticResource ReadModeToIsEnabledConverter}, ConverterParameter=FlipView}"
+                  Visibility="{Binding ReadMode, Converter={StaticResource ReadModeToVisibilityConverter}, ConverterParameter=FlipView}"
+                  ItemsSource="{x:Bind ViewModel.Pages, Mode=OneWay}"
+                  ItemTemplate="{StaticResource PageTemplate}">
+            <FlipView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel AreScrollSnapPointsRegular="True" Orientation="{Binding ReadMode, Converter={StaticResource ReadModeToOrientationConverter}}" />
+                </ItemsPanelTemplate>
+            </FlipView.ItemsPanel>
+        </FlipView>
+        
+        <ScrollViewer x:Name="PagesScrollViewer"
+                      IsEnabled="{Binding ReadMode, Converter={StaticResource ReadModeToIsEnabledConverter}, ConverterParameter=GridView, FallbackValue=True}"
+                      Visibility="{Binding ReadMode, Converter={StaticResource ReadModeToVisibilityConverter}, ConverterParameter=GridView, FallbackValue=Visible}"
+                      HorizontalScrollMode="{Binding ReadMode, Converter={StaticResource ReadModeToScrollModeConverter}, ConverterParameter=Horizontal, FallbackValue=Auto}"
+                      HorizontalScrollBarVisibility="{Binding ReadMode, Converter={StaticResource ReadModeToScrollBarVisibilityConverter}, ConverterParameter=Horizontal, FallbackValue=Auto}"
+                      VerticalScrollMode="{Binding ReadMode, Converter={StaticResource ReadModeToScrollModeConverter}, ConverterParameter=Vertical, FallbackValue=Disabled}"
+                      VerticalScrollBarVisibility="{Binding ReadMode, Converter={StaticResource ReadModeToScrollBarVisibilityConverter}, ConverterParameter=Vertical, FallbackValue=Disabled}"
                       Style="{StaticResource SemiOpaqueScrollViewer}">
-            <GridView x:Name="PagesView" 
+            <GridView x:Name="PagesGridView" 
                       ItemsSource="{x:Bind ViewModel.Pages, Mode=OneWay}"                      
-                      IsHitTestVisible="False">
+                      IsHitTestVisible="False"
+                      ItemTemplate="{StaticResource PageTemplate}">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <ItemsStackPanel Orientation="Horizontal" Margin="0,0,0,-10"/>
+                        <ItemsStackPanel Orientation="{Binding ReadMode, Converter={StaticResource ReadModeToOrientationConverter}}" Margin="0,0,-10,-20"/>
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
                 <GridView.ItemContainerStyle>
                     <Style TargetType="GridViewItem">
-                        <Setter Property="Margin" Value="0,0,10,0" />
+                        <Setter Property="Margin" Value="0,0,10,10" />
                     </Style>
                 </GridView.ItemContainerStyle>
-                <GridView.ItemTemplate>
-                    <DataTemplate x:Name="PageTemplate" x:DataType="models:Page">
-                        <Grid x:Name="PageGrid" >
-                            <controls:ImageEx x:Name="PageImage" Style="{ThemeResource BigImages}"
-                                              IsCacheEnabled="False"
-                                              Source="{x:Bind Url, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
-                                              Stretch="UniformToFill"
-                                              IsTapEnabled="False"
-                                              PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
-                                              PlaceholderStretch="None"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center" />
-                            <Grid x:Name="PageNumberGrid"
-                                  Height="30"
-                                  Width="40"
-                                  Margin="0,0,0,12"
-                                  Background="{ThemeResource SystemControlBackgroundAccentBrush}"
-                                  BorderBrush="{x:Null}"
-                                  HorizontalAlignment="Right"
-                                  VerticalAlignment="Bottom"
-                                  Visibility="{x:Bind OverlayVisibility, Mode=OneWay}">
-                                <TextBlock x:Name="PageNumber"
-                                           Text="{x:Bind Number}"
-                                           FontSize="18"
-                                           Foreground="White"
-                                           Margin="0,0,8,0"
-                                           HorizontalAlignment="Right"
-                                           VerticalAlignment="Center">Page</TextBlock>
-                            </Grid>
-                        </Grid>
-                    </DataTemplate>
-                </GridView.ItemTemplate>
             </GridView>
         </ScrollViewer>
     </Grid>

@@ -34,6 +34,8 @@ namespace MangaReader_MVVM.ViewModels
         private ObservableCollection<IChapter> _chapters = new ObservableCollection<IChapter>();
         public ObservableCollection<IChapter> Chapters { get { return _chapters; } set { Set(ref _chapters, value); } }
 
+        public int ReadProgress { get; set; } = 0;
+
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
             var manga = parameter as Manga;
@@ -43,7 +45,7 @@ namespace MangaReader_MVVM.ViewModels
                 Manga = await _library.GetMangaAsync(manga.Id);
                 Chapters = Manga.Chapters;
             }
-            //MultiSelectCommand.RaiseCanExecuteChanged();
+
             await Task.CompletedTask;
         }
 

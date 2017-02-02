@@ -2,6 +2,8 @@ using System;
 using Template10.Common;
 using Template10.Utils;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace MangaReader_MVVM.Services.SettingsServices
 {
@@ -86,6 +88,17 @@ namespace MangaReader_MVVM.Services.SettingsServices
         {
             get { return _helper.Read<bool>(nameof(IsGroupedFavoritsGrid), false); }
             set { _helper.Write(nameof(IsGroupedFavoritsGrid), value); }
+        }
+
+        public ReadMode ReadMode
+        {
+            get
+            {
+                var readMode = ReadMode.HorizontalContinuous;
+                var value = _helper.Read<string>(nameof(ReadMode), readMode.ToString());
+                return Enum.TryParse<ReadMode>(value, out readMode) ? readMode : ReadMode.HorizontalContinuous;
+            }
+            set { _helper.Write(nameof(ReadMode), value.ToString()); base.RaisePropertyChanged(nameof(ReadMode)); }
         }
     }
 }

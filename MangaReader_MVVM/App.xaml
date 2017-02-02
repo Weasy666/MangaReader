@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="Styles\UwpToolkit_Controls.xaml" />
                 <ResourceDictionary Source="Styles\Microsoft_Controls.xaml" />
                 <ResourceDictionary Source="Styles\Templates.xaml" />
+                <ResourceDictionary Source="Converters\Converters.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="t10controls:CustomTitleBar">
                 <Setter Property="BackgroundColor" Value="{StaticResource SystemAccentColor}" />

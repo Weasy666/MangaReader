@@ -25,6 +25,7 @@ namespace MangaReader_MVVM.Models
         bool Ongoing { get; set; }
         ObservableCollection<IChapter> Chapters { get; set; }
         int NumberOfChapters { get; set; }
+        int ReadProgress { get; set; }
         bool IsFavorit { get; set; }
 
         void AddChapter(IChapter chapter);

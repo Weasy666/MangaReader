@@ -12,12 +12,15 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Input;
+using MangaReader_MVVM.Services.SettingsServices;
+using Windows.UI.Xaml.Media;
 
 namespace MangaReader_MVVM.ViewModels
 {
     public class ChapterPageViewModel : ViewModelBase
     {
         public MangaLibrary _library = MangaLibrary.Instance;
+        public SettingsService _settings = SettingsService.Instance;
         public ChapterPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
@@ -38,11 +41,20 @@ namespace MangaReader_MVVM.ViewModels
                 {
                     Pages = new ObservableCollection<IPage>()
                 };
+                var test = Enum.GetNames(typeof(ReadMode));
+                var test1 = ReadMode.HorizontalContinuous.ToString();
             }
         }
 
         public int _selectedChapterIndex = -1;
         public int SelectedChapterIndex { get { return _selectedChapterIndex; } set { Set(ref _selectedChapterIndex, value); } }
+
+        public List<string> ReadModeList => Enum.GetNames(typeof(ReadMode)).ToList();
+        public ReadMode ReadMode
+        {
+            get => _settings.ReadMode;
+            set { _settings.ReadMode = value; base.RaisePropertyChanged(nameof(ReadMode)); }
+        }
 
         private IManga _manga;
         public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
@@ -111,6 +123,12 @@ namespace MangaReader_MVVM.ViewModels
                     page.OverlayVisibility = pageOverlayVisibility;
                 }
             }
+        }
+
+        public void ReadMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var comboBox = sender as ComboBox;
+            int test = (int)ReadMode.HorizontalContinuous;
         }
 
         public async Task ChapterClickedAsync(object sender, TappedRoutedEventArgs args)

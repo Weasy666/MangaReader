@@ -20,13 +20,6 @@
             <ColumnDefinition MaxWidth="600"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Grid.Resources>
-            <converters:BoolToSelectionModeConverter x:Key="BoolToSelectionModeConverter"/>
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-            <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
-            <converters:BoolToMangaStatusConverter x:Key="BoolToMangaStatusConverter"/>
-            <converters:DateTimeToPrettyDateTime x:Key="DateTimeToPrettyDateTime"/>
-        </Grid.Resources>
 
         <t10controls:PageHeader x:Name="PageHeader" Text="{x:Bind ViewModel.Manga.Title}" Frame="{x:Bind Frame}" Grid.ColumnSpan="2">
             <t10controls:PageHeader.PrimaryCommands>
@@ -315,13 +308,18 @@
             <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                 <StackPanel>
                     <controls:ImageEx x:Name="Cover" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
-                                      Width="206" Height="300"
+                                      MaxWidth="206" MaxHeight="300"
                                       IsCacheEnabled="False" 
                                       Source="{x:Bind ViewModel.Manga.Cover, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
                                       Stretch="Uniform"
                                       PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
                                       PlaceholderStretch="Uniform"
                                       VerticalAlignment="Top" />
+                    <ProgressBar x:Name="ReadProgress"
+                                 Margin="0,4,0,0"
+                                 Height="5"
+                                 Maximum="{x:Bind ViewModel.Manga.Chapters.Count, Mode=OneWay}"
+                                 Value="{x:Bind ViewModel.Manga.ReadProgress, Mode=OneWay}" SmallChange="1" LargeChange="0"/>
                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0" FlowDirection="RightToLeft">
                         <Button x:Name="FavoriteButton"
                                 Command="{x:Bind ViewModel.FavoritCommand}"

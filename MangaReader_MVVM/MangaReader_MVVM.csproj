@@ -102,6 +102,13 @@
     <Compile Include="Converters\BoolToSelectionModeConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DateTimeToPrettyDateTime.cs" />
+    <Compile Include="Converters\ReadModeToScrollBarVisibilityConverter.cs" />
+    <Compile Include="Converters\ReadModeToScrollModeConverter.cs" />
+    <Compile Include="Converters\ReadModeToIsEnabledConverter.cs" />
+    <Compile Include="Converters\ReadModeToIntConverter.cs" />
+    <Compile Include="Converters\ReadModeToVisibilityConverter.cs" />
+    <Compile Include="Converters\ReadModeToStretchConverter.cs" />
+    <Compile Include="Converters\ReadModeToOrientationConverter.cs" />
     <Compile Include="Models\Chapter.cs" />
     <Compile Include="Models\MangaGroup.cs" />
     <Compile Include="Utils\CompareNatural.cs" />
@@ -244,6 +251,11 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Converters\Converters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
     <Page Include="Styles\Microsoft_Controls.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -33,11 +33,17 @@ namespace MangaReader_MVVM.Models
             set { Set(ref _chapters, value); }
         }
         public int NumberOfChapters { get; set; }
+        private int _readProgress;
+        public int ReadProgress
+        {
+            get => _readProgress;
+            set { Set(ref _readProgress, value); }
+        }
         private bool _isFavorit = false;
         public bool IsFavorit
         {
             get { return _isFavorit; }
-            set {Set(ref _isFavorit, value); }
+            set { Set(ref _isFavorit, value); }
         }
 
         public void AddChapter(IChapter chapter)
@@ -51,8 +57,8 @@ namespace MangaReader_MVVM.Models
 
         public void RemoveChapter(IChapter chapter)
         {
-            Chapters.Remove(chapter);
             chapter.ParentManga = null;
+            Chapters.Remove(chapter);
         }
 
         public ObservableCollection<IChapter> ReverseChapters() => new ObservableCollection<IChapter>(Chapters.Reverse());

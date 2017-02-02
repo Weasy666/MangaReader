@@ -167,6 +167,21 @@
                         <LineBreak />
                         - take a look at MangaEdenSource _favorits list...maybe it's not needed when Favorits are searched with a LINQ expression in the FavoritsPageViewModel, everytime they are needed
                         <LineBreak />
+                        - DONE - implement Semantic Zoom in FavoritsPage
+                        <LineBreak />
+                        - implement Search in MangasPage -> if possible move it to the HamburgerMenu later on
+                        <LineBreak />
+                        - implement sync over OneDrive, for consistent and persistent real time Favorits and Read Status
+                        <LineBreak />
+                        - implement Last Read functionallity
+                        <LineBreak />
+                        - implement Edge like Forward and Backward functionallity for navigating through the chapters
+                        <LineBreak />
+                        - in ChapterPage add a textbox for actualChapter/numberOfChapters
+                        <LineBreak />
+                        - DONE -> in MangaDetailsPage add a progress bar for chapter read progress
+                        <LineBreak />
+                        - implement different Views for ChapterPage, like single page mode, etc.
 
                     </TextBlock>
                 </ScrollViewer>
