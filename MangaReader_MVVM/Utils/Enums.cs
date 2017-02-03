@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,8 +17,14 @@ namespace MangaReader_MVVM
     
     public enum ReloadMode
     {
-        Default,
-        FromSource
+        Local,
+        Server
+    }
+
+    public enum MangaItemTemplate
+    {
+        CoverOnly,
+        CoverWithDetails
     }
 
     public enum ReadMode
@@ -30,5 +37,17 @@ namespace MangaReader_MVVM
         VerticalContinuous,
         [Display(Name = "Vertical Single Page")]
         VerticalSingle
+    }
+
+    public enum ReadDirection
+    {
+        [Display(Name = "Left to Right")]
+        LeftToRight,
+        [Display(Name = "Right to Left")]
+        RightToLeft,
+        [Display(Name = "Top to Bottom")]
+        TopToBottom,
+        [Display(Name = "Bottom to Top")]
+        BottomToTop
     }
 }

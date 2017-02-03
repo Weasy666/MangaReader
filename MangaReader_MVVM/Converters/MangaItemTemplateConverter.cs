@@ -16,12 +16,12 @@ namespace MangaReader_MVVM.Converters
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            var template = value as string;
+            var template = (MangaItemTemplate)value;
             switch (template)
             {
-                case "MangaItemWithDetails":
+                case MangaItemTemplate.CoverWithDetails:
                     return MangaItemWithDetailsTemplate;
-                case "MangaItemWithoutDetails":
+                case MangaItemTemplate.CoverOnly:
                     return MangaItemWithoutDetailsTemplate;
                 default:
                     return MangaItemWithDetailsTemplate;

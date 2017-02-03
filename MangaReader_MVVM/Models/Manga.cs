@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Windows.UI.Xaml.Media.Imaging;
+using System.Diagnostics;
 
 namespace MangaReader_MVVM.Models
 {
+    [DebuggerDisplay("{Title} | ID = {Id}")]
     public class Manga : Template10.Mvvm.ViewModelBase, IManga
     {
         public IMangaSource ParentLibrary { get; internal set; }
@@ -30,14 +27,14 @@ namespace MangaReader_MVVM.Models
         public ObservableCollection<IChapter> Chapters
         {
             get { return _chapters; }
-            set { Set(ref _chapters, value); }
+            set { Set(ref _chapters, value); base.RaisePropertyChanged(nameof(ReadProgress)); }
         }
         public int NumberOfChapters { get; set; }
         private int _readProgress;
         public int ReadProgress
         {
-            get => _readProgress;
-            set { Set(ref _readProgress, value); }
+            get => Chapters.Count(c => c.IsRead == true);
+            //set { Set(ref _readProgress, value); }
         }
         private bool _isFavorit = false;
         public bool IsFavorit

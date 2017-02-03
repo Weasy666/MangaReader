@@ -25,9 +25,9 @@ namespace MangaReader_MVVM.Services
         {
             switch (SettingsService.Instance.MangaGridLayout)
             {
-                case "MangaItemWithDetails":
+                case MangaItemTemplate.CoverWithDetails:
                     return MangaItemWithDetailsTemplate;
-                case "MangaItemWithoutDetails":
+                case MangaItemTemplate.CoverOnly:
                     return MangaItemWithoutDetailsTemplate;
                 default:
                     return MangaItemWithDetailsTemplate;

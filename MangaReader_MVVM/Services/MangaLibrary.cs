@@ -42,9 +42,9 @@ namespace MangaReader_MVVM.Services
         public ObservableCollection<IManga> Favorits => _mangaSource.Favorits;
         public Uri RootUri => _mangaSource.RootUri;
         public BitmapImage Icon => _mangaSource.Icon;
-        public Task<ObservableCollection<IManga>> GetMangasAsync(ReloadMode mode = ReloadMode.Default) => _mangaSource.GetMangasAsync(mode);
-        public Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode = ReloadMode.Default) => _mangaSource.GetFavoritMangasAsync(mode);
-        public Task<ObservableCollection<IManga>> GetLatestReleasesAsync(int numberOfPastDays = 7, ReloadMode mode = ReloadMode.Default) => _mangaSource.GetLatestReleasesAsync(numberOfPastDays, mode);
+        public Task<ObservableCollection<IManga>> GetMangasAsync(ReloadMode mode = ReloadMode.Local) => _mangaSource.GetMangasAsync(mode);
+        public Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode = ReloadMode.Local) => _mangaSource.GetFavoritMangasAsync(mode);
+        public Task<ObservableCollection<IManga>> GetLatestReleasesAsync(int numberOfPastDays = 7, ReloadMode mode = ReloadMode.Local) => _mangaSource.GetLatestReleasesAsync(numberOfPastDays, mode);
         public void AddFavorit(IManga manga, List<string> favorits = null) => _mangaSource.AddFavorit(manga, favorits);
         public void AddFavorit(ObservableCollection<IManga> mangas) => _mangaSource.AddFavorit(mangas);
         public void AddAsRead(string mangaId, IChapter chapter) => _mangaSource.AddAsRead(mangaId, chapter, true);

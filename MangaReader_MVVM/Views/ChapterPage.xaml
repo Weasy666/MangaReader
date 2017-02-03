@@ -60,14 +60,17 @@
                         <ColumnDefinition />
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <Grid x:Name="MangaDetails" Width="350" Grid.Column="0" >
+                    <Grid x:Name="MangaDetails"
+                          Width="350"
+                          Height="150"
+                          Grid.Column="0" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="103"/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Button x:Name="FavoriteButton"
                                 Command="{x:Bind ViewModel.FavoritCommand}"
-                                Content="{Binding Manga.IsFavorit, Mode=TwoWay, Converter={StaticResource BoolToFavoritSymbolConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{x:Bind ViewModel.Manga.IsFavorit, Mode=TwoWay, Converter={StaticResource BoolToFavoritSymbolConverter}}"
                                 FontFamily="Segoe UI Symbol"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"
@@ -77,10 +80,11 @@
                                 Canvas.ZIndex="10"
                                 Padding="0" Foreground="{ThemeResource ContrastColorBrush}"/>
                         <controls:ImageEx x:Name="Cover" Foreground="{ThemeResource ContrastColorBrush}"
-                                          Width="103" Height="150" Grid.Column="0"
+                                          MaxWidth="103" MaxHeight="150" Grid.Column="0"
                                           IsCacheEnabled="True"
                                           Source="{x:Bind ViewModel.Manga.Cover, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
-                                          Stretch="UniformToFill"
+                                          Stretch="Uniform"
+                                          HorizontalAlignment="Left"
                                           IsTapEnabled="False"
                                           PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
                                           PlaceholderStretch="Uniform" />
@@ -101,10 +105,10 @@
                             <TextBlock x:Name="Title" Text="{x:Bind ViewModel.Manga.Title}" FontSize="20" TextWrapping="WrapWholeWords" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"/>
                             
                             <TextBlock x:Name="StatusHeader" Text="Status" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="1" FontWeight="SemiBold"/>
-                            <TextBlock x:Name="Status" Text="{Binding Manga.Ongoing, Mode=OneWay, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15" Grid.Column="1" Grid.Row="1"/>
+                            <TextBlock x:Name="Status" Text="{x:Bind ViewModel.Manga.Ongoing, Mode=OneWay, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15" Grid.Column="1" Grid.Row="1"/>
                             
                             <TextBlock x:Name="LastUpdatedHeader" Margin="0,0,10,0" Text="Last Updated" FontSize="15" Grid.Column="0" Grid.Row="2" FontWeight="SemiBold"/>
-                            <TextBlock x:Name="LastUpdated" Text="{Binding Manga.LastUpdated, Mode=OneWay, Converter={StaticResource DateTimeToPrettyDateTime}}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
+                            <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Manga.LastUpdated, Mode=OneWay, Converter={StaticResource DateTimeToPrettyDateTime}}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
                             
                             <TextBlock x:Name="CategoryHeader" Text="Category" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="3" FontWeight="SemiBold"/>
                             <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="3"/>
@@ -143,7 +147,7 @@
                             FontSize="{ThemeResource TextStyleLargeFontSize}">
                         <Button.Resources>
                             <Flyout x:Key="SettingsFlyout">
-                                <StackPanel Width="200">
+                                <StackPanel Width="190">
                                     <ComboBox x:Name="ReadMode"
                                               Header="Read Mode"
                                               MinWidth="110"
@@ -152,8 +156,10 @@
                                               SelectionChanged="{x:Bind ViewModel.ReadMode_SelectionChanged}">
                                     </ComboBox>
                                     <ComboBox x:Name="ReadDirection"
-                                              Header="Read direction">
-                                        
+                                              Header="Read direction"
+                                              ItemsSource="{x:Bind ViewModel.ReadDirectionList}"
+                                              SelectedIndex="{Binding ReadMode, Mode=TwoWay, Converter={StaticResource ReadDirectionToIntConverter}}"
+                                              SelectionChanged="{x:Bind ViewModel.ReadMode_SelectionChanged}">                                        
                                     </ComboBox>
                                 </StackPanel>
                             </Flyout>
@@ -216,8 +222,8 @@
         </t10controls:PageHeader>
 
         <FlipView x:Name="PagesFlipView"
-                  IsEnabled="{Binding ReadMode, Converter={StaticResource ReadModeToIsEnabledConverter}, ConverterParameter=FlipView}"
-                  Visibility="{Binding ReadMode, Converter={StaticResource ReadModeToVisibilityConverter}, ConverterParameter=FlipView}"
+                  IsEnabled="{x:Bind ViewModel.ReadMode, Mode=OneWay, Converter={StaticResource ReadModeToIsEnabledConverter}, ConverterParameter=FlipView, FallbackValue=False}"
+                  Visibility="{x:Bind ViewModel.ReadMode, Mode=OneWay, Converter={StaticResource ReadModeToVisibilityConverter}, ConverterParameter=FlipView, FallbackValue=Collapsed}"
                   ItemsSource="{x:Bind ViewModel.Pages, Mode=OneWay}"
                   ItemTemplate="{StaticResource PageTemplate}">
             <FlipView.ItemsPanel>
@@ -228,12 +234,12 @@
         </FlipView>
         
         <ScrollViewer x:Name="PagesScrollViewer"
-                      IsEnabled="{Binding ReadMode, Converter={StaticResource ReadModeToIsEnabledConverter}, ConverterParameter=GridView, FallbackValue=True}"
-                      Visibility="{Binding ReadMode, Converter={StaticResource ReadModeToVisibilityConverter}, ConverterParameter=GridView, FallbackValue=Visible}"
-                      HorizontalScrollMode="{Binding ReadMode, Converter={StaticResource ReadModeToScrollModeConverter}, ConverterParameter=Horizontal, FallbackValue=Auto}"
-                      HorizontalScrollBarVisibility="{Binding ReadMode, Converter={StaticResource ReadModeToScrollBarVisibilityConverter}, ConverterParameter=Horizontal, FallbackValue=Auto}"
-                      VerticalScrollMode="{Binding ReadMode, Converter={StaticResource ReadModeToScrollModeConverter}, ConverterParameter=Vertical, FallbackValue=Disabled}"
-                      VerticalScrollBarVisibility="{Binding ReadMode, Converter={StaticResource ReadModeToScrollBarVisibilityConverter}, ConverterParameter=Vertical, FallbackValue=Disabled}"
+                      IsEnabled="{x:Bind ViewModel.ReadMode, Mode=OneWay, Converter={StaticResource ReadModeToIsEnabledConverter}, ConverterParameter=GridView, FallbackValue=True}"
+                      Visibility="{x:Bind ViewModel.ReadMode, Mode=OneWay, Converter={StaticResource ReadModeToVisibilityConverter}, ConverterParameter=GridView, FallbackValue=Visible}"
+                      HorizontalScrollMode="{x:Bind ViewModel.ReadMode, Mode=OneWay, Converter={StaticResource ReadModeToScrollModeConverter}, ConverterParameter=Horizontal, FallbackValue=Auto}"
+                      HorizontalScrollBarVisibility="{x:Bind ViewModel.ReadMode, Mode=OneWay, Converter={StaticResource ReadModeToScrollBarVisibilityConverter}, ConverterParameter=Horizontal, FallbackValue=Auto}"
+                      VerticalScrollMode="{x:Bind ViewModel.ReadMode, Mode=OneWay, Converter={StaticResource ReadModeToScrollModeConverter}, ConverterParameter=Vertical, FallbackValue=Disabled}"
+                      VerticalScrollBarVisibility="{x:Bind ViewModel.ReadMode, Mode=OneWay, Converter={StaticResource ReadModeToScrollBarVisibilityConverter}, ConverterParameter=Vertical, FallbackValue=Disabled}"
                       Style="{StaticResource SemiOpaqueScrollViewer}">
             <GridView x:Name="PagesGridView" 
                       ItemsSource="{x:Bind ViewModel.Pages, Mode=OneWay}"                      
@@ -241,7 +247,7 @@
                       ItemTemplate="{StaticResource PageTemplate}">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <ItemsStackPanel Orientation="{Binding ReadMode, Converter={StaticResource ReadModeToOrientationConverter}}" Margin="0,0,-10,-20"/>
+                        <ItemsStackPanel Orientation="{Binding ReadMode, Converter={StaticResource ReadModeToOrientationConverter}, FallbackValue=Horizontal}" Margin="0,0,-10,-20"/>
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
                 <GridView.ItemContainerStyle>

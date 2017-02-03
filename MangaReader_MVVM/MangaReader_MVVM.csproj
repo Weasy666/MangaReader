@@ -103,6 +103,7 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DateTimeToPrettyDateTime.cs" />
     <Compile Include="Converters\MangaItemTemplateConverter.cs" />
+    <Compile Include="Converters\ReadDirectionToIntConverter.cs" />
     <Compile Include="Converters\ReadModeToScrollBarVisibilityConverter.cs" />
     <Compile Include="Converters\ReadModeToScrollModeConverter.cs" />
     <Compile Include="Converters\ReadModeToIsEnabledConverter.cs" />

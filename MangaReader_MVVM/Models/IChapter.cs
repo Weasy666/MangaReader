@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace MangaReader_MVVM.Models
 {
+    
     public interface IChapter : IComparable<IChapter>, IEquatable<IChapter>
     {
         IManga ParentManga { get; set; }

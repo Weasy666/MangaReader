@@ -12,6 +12,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Popups;
 using MangaReader_MVVM.Services.SettingsServices;
+using System.ComponentModel;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -25,7 +26,12 @@ namespace MangaReader_MVVM.ViewModels
             set { _settings.DaysOfLatestReleases = _daysOfLatestReleases = value; base.RaisePropertyChanged(nameof(DaysOfLatestReleases)); }
         }
         //TODO how to propagate PropertyChanged frome inside SettingsService
-        public string MangaGridLayout => _settings.MangaGridLayout;
+        public MangaItemTemplate MangaGridLayout => _settings.MangaGridLayout;
+        private void Settings_Changed(object sender, PropertyChangedEventArgs e)
+        {
+            if (nameof(_settings.MangaGridLayout).Equals(e.PropertyName))
+                base.RaisePropertyChanged(nameof(MangaGridLayout));
+        }
 
         public LatestReleasesPageViewModel()
         {
@@ -38,6 +44,7 @@ namespace MangaReader_MVVM.ViewModels
             {
                 DaysOfLatestReleases = _settings.DaysOfLatestReleases;
                 Mangas = MangaLibrary.Instance.GetLatestReleasesAsync(DaysOfLatestReleases).Result;
+                _settings.PropertyChanged += Settings_Changed;
             }
         }
 
@@ -80,7 +87,7 @@ namespace MangaReader_MVVM.ViewModels
             => _reloadGridCommand ?? (_reloadGridCommand = new DelegateCommand(async () =>
             {
                 Views.Busy.SetBusy(true, "Picking up the freshly printed books...");
-                Mangas = await MangaLibrary.Instance.GetLatestReleasesAsync(DaysOfLatestReleases, ReloadMode.FromSource);
+                Mangas = await MangaLibrary.Instance.GetLatestReleasesAsync(DaysOfLatestReleases, ReloadMode.Server);
                 Views.Busy.SetBusy(false);
             }, () => Mangas.Any()));
 

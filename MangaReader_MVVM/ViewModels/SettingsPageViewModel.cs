@@ -47,8 +47,8 @@ namespace MangaReader_MVVM.ViewModels
 
         public bool UseDetailedMangaItem
         {
-            get { return _settings.MangaGridLayout.Equals("MangaItemWithDetails"); }
-            set { _settings.MangaGridLayout = value ? "MangaItemWithDetails" : "MangaItemWithoutDetails"; base.RaisePropertyChanged(nameof(UseDetailedMangaItem)); }
+            get { return _settings.MangaGridLayout.Equals(MangaItemTemplate.CoverWithDetails); }
+            set { _settings.MangaGridLayout = value ? MangaItemTemplate.CoverWithDetails : MangaItemTemplate.CoverOnly; base.RaisePropertyChanged(nameof(UseDetailedMangaItem)); }
         }
 
         ObservableCollection<BitmapImage> _sourcesWithIcons;

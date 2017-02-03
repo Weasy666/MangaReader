@@ -22,13 +22,23 @@ namespace MangaReader_MVVM.ViewModels
     {
         public MangaLibrary _library = MangaLibrary.Instance;
         public SettingsService _settings = SettingsService.Instance;
-        public string MangaGridLayout => _settings.MangaGridLayout;
+
+        public MangaItemTemplate MangaGridLayout => _settings.MangaGridLayout;
+        private void Settings_Changed(object sender, PropertyChangedEventArgs e)
+        {
+            if (nameof(_settings.MangaGridLayout).Equals(e.PropertyName))
+                base.RaisePropertyChanged(nameof(MangaGridLayout));
+        }
 
         public FavoritsPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
                 Favorits = DesignTimeService.GenerateMangaDummies();
+            }
+            else
+            {
+                _settings.PropertyChanged += Settings_Changed;
             }
         }
 
@@ -72,13 +82,11 @@ namespace MangaReader_MVVM.ViewModels
             }
             else
             {
-                base.RaisePropertyChanged(nameof(MangaGridLayout));
+                
             }
             
             await Task.CompletedTask;
         }
-
-
 
         public override async Task OnNavigatedFromAsync(IDictionary<string, object> suspensionState, bool suspending)
         {
@@ -119,7 +127,7 @@ namespace MangaReader_MVVM.ViewModels
             => _reloadGridCommand ?? (_reloadGridCommand = new DelegateCommand(async () =>
             {
                 Views.Busy.SetBusy(true, "Picking up the freshly printed books...");
-                Favorits = await _library.GetFavoritMangasAsync(ReloadMode.FromSource);
+                Favorits = await _library.GetFavoritMangasAsync(ReloadMode.Server);
                 Views.Busy.SetBusy(false);
             }, () => Favorits.Any()));
         

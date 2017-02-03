@@ -2,8 +2,6 @@ using System;
 using Template10.Common;
 using Template10.Utils;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 
 namespace MangaReader_MVVM.Services.SettingsServices
 {
@@ -57,10 +55,15 @@ namespace MangaReader_MVVM.Services.SettingsServices
             }
         }
 
-        public string MangaGridLayout
+        public MangaItemTemplate MangaGridLayout
         {
-            get { return _helper.Read<string>(nameof(MangaGridLayout), "MangaItemWithDetails"); }
-            set { _helper.Write(nameof(MangaGridLayout), value); base.RaisePropertyChanged(nameof(MangaGridLayout)); }
+            get
+            {
+                var template = MangaItemTemplate.CoverWithDetails;
+                var value = _helper.Read<string>(nameof(MangaGridLayout), template.ToString());
+                return Enum.TryParse<MangaItemTemplate>(value, out template) ? template : MangaItemTemplate.CoverWithDetails;
+            }
+            set { _helper.Write(nameof(MangaGridLayout), value.ToString()); base.RaisePropertyChanged(nameof(MangaGridLayout)); }
         }
 
         public MangaSource UsedMangaSource
@@ -99,6 +102,17 @@ namespace MangaReader_MVVM.Services.SettingsServices
                 return Enum.TryParse<ReadMode>(value, out readMode) ? readMode : ReadMode.HorizontalContinuous;
             }
             set { _helper.Write(nameof(ReadMode), value.ToString()); base.RaisePropertyChanged(nameof(ReadMode)); }
+        }
+
+        public ReadDirection ReadDirection
+        {
+            get
+            {
+                var readDirection = ReadDirection.LeftToRight;
+                var value = _helper.Read<string>(nameof(ReadDirection), readDirection.ToString());
+                return Enum.TryParse<ReadDirection>(value, out readDirection) ? readDirection : ReadDirection.LeftToRight;
+            }
+            set { _helper.Write(nameof(ReadDirection), value.ToString()); base.RaisePropertyChanged(nameof(ReadDirection)); }
         }
     }
 }

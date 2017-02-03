@@ -12,6 +12,7 @@
     <local:MangaItemTemplateConverter x:Key="MangaItemTemplateConverter"
                                       MangaItemWithDetailsTemplate="{StaticResource MangaItemWithDetails}"
                                       MangaItemWithoutDetailsTemplate="{StaticResource MangaItemWithoutDetails}"/>
+    <local:ReadDirectionToIntConverter x:Key="ReadDirectionToIntConverter"/>
     <local:ReadModeToIntConverter x:Key="ReadModeToIntConverter"/>
     <local:ReadModeToIsEnabledConverter x:Key="ReadModeToIsEnabledConverter"/>
     <local:ReadModeToOrientationConverter x:Key="ReadModeToOrientationConverter"/>

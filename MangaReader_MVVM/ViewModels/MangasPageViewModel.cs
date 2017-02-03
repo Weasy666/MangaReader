@@ -12,13 +12,22 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Popups;
 using MangaReader_MVVM.Services.SettingsServices;
+using System.ComponentModel;
 
 namespace MangaReader_MVVM.ViewModels
 {
     public class MangasPageViewModel : ViewModelBase
     {
         public MangaLibrary _library = MangaLibrary.Instance;
-        public string MangaGridLayout => SettingsService.Instance.MangaGridLayout;
+        public SettingsService _settings = SettingsService.Instance;
+
+        public MangaItemTemplate MangaGridLayout => SettingsService.Instance.MangaGridLayout;
+        private void Settings_Changed(object sender, PropertyChangedEventArgs e)
+        {
+            if (nameof(_settings.MangaGridLayout).Equals(e.PropertyName))
+                base.RaisePropertyChanged(nameof(MangaGridLayout));
+        }
+
         public MangasPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
@@ -29,6 +38,7 @@ namespace MangaReader_MVVM.ViewModels
             else
             {
                 Mangas = _library.Mangas;
+                _settings.PropertyChanged += Settings_Changed;
             }
         }
 
@@ -43,7 +53,7 @@ namespace MangaReader_MVVM.ViewModels
             }
             else
             {
-                base.RaisePropertyChanged(nameof(MangaGridLayout));
+                
             }
             await Task.CompletedTask;
         }
@@ -68,7 +78,7 @@ namespace MangaReader_MVVM.ViewModels
             => _reloadGridCommand ?? (_reloadGridCommand = new DelegateCommand(async () =>
             {
                 Views.Busy.SetBusy(true, "Picking up the freshly printed books...");
-                Mangas = await _library.GetMangasAsync(ReloadMode.FromSource);
+                Mangas = await _library.GetMangasAsync(ReloadMode.Server);
                 Views.Busy.SetBusy(false);
             }, () => Mangas.Any()));
 

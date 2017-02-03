@@ -4,7 +4,6 @@
       xmlns:t10controls="using:Template10.Controls"
       xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:converters="using:MangaReader_MVVM.Converters"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:MangaReader_MVVM.ViewModels" mc:Ignorable="d">
     <Page.DataContext>
@@ -319,7 +318,7 @@
                                  Margin="0,4,0,0"
                                  Height="5"
                                  Maximum="{x:Bind ViewModel.Manga.Chapters.Count, Mode=OneWay}"
-                                 Value="{x:Bind ViewModel.Manga.ReadProgress, Mode=OneWay}" SmallChange="1" LargeChange="0"/>
+                                 Value="{x:Bind ViewModel.ReadProgress, Mode=OneWay}" SmallChange="1" LargeChange="1"/>
                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0" FlowDirection="RightToLeft">
                         <Button x:Name="FavoriteButton"
                                 Command="{x:Bind ViewModel.FavoritCommand}"

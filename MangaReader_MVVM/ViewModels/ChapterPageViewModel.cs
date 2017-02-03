@@ -14,6 +14,8 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml.Input;
 using MangaReader_MVVM.Services.SettingsServices;
 using Windows.UI.Xaml.Media;
+using MangaReader_MVVM.Utils;
+using System.Collections;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -21,6 +23,7 @@ namespace MangaReader_MVVM.ViewModels
     {
         public MangaLibrary _library = MangaLibrary.Instance;
         public SettingsService _settings = SettingsService.Instance;
+
         public ChapterPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
@@ -41,8 +44,6 @@ namespace MangaReader_MVVM.ViewModels
                 {
                     Pages = new ObservableCollection<IPage>()
                 };
-                var test = Enum.GetNames(typeof(ReadMode));
-                var test1 = ReadMode.HorizontalContinuous.ToString();
             }
         }
 
@@ -56,9 +57,45 @@ namespace MangaReader_MVVM.ViewModels
             set { _settings.ReadMode = value; base.RaisePropertyChanged(nameof(ReadMode)); }
         }
 
+        public List<string> ReadDirectionList
+        {
+            get
+            {
+                var list = new List<string>();
+                if(ReadMode == ReadMode.HorizontalContinuous || ReadMode == ReadMode.HorizontalSingle)
+                {
+                    list.Add(ReadDirection.LeftToRight.ToString());
+                    list.Add(ReadDirection.RightToLeft.ToString());
+                }
+                else if(ReadMode == ReadMode.VerticalContinuous || ReadMode == ReadMode.VerticalSingle)
+                {
+                    list.Add(ReadDirection.TopToBottom.ToString());
+                    list.Add(ReadDirection.BottomToTop.ToString());
+                }
+                return list;
+            }
+        }
+        public ReadDirection ReadDirection
+        {
+            get => _settings.ReadDirection;
+            set
+            {
+                _settings.ReadDirection = value;
+
+                if (value == ReadDirection.LeftToRight || value == ReadDirection.TopToBottom)
+                    Pages.SortAscending((x, y) => x.Number.CompareTo(y.Number));
+                else if(value == ReadDirection.RightToLeft || value == ReadDirection.BottomToTop)
+                    Pages.SortDescending((x, y) => x.Number.CompareTo(y.Number));
+
+                base.RaisePropertyChanged(nameof(ReadDirection));
+                base.RaisePropertyChanged(nameof(ReadDirectionList));
+            }
+        }
+
         private IManga _manga;
         public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
-        public ObservableCollection<IChapter> Chapters { get { return Manga.Chapters; } }
+
+        public ObservableCollection<IChapter> Chapters => Manga.Chapters;
         private IChapter _chapter;
         public IChapter Chapter { get { return _chapter; } set { Set(ref _chapter, value); } }
         private ObservableCollection<IPage> _pages;
@@ -128,7 +165,25 @@ namespace MangaReader_MVVM.ViewModels
         public void ReadMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var comboBox = sender as ComboBox;
-            int test = (int)ReadMode.HorizontalContinuous;
+            if (comboBox.Parent is StackPanel stackPanel)
+            {
+                var flyout = stackPanel.Parent as FlyoutPresenter;
+                var popup = flyout.Parent as Windows.UI.Xaml.Controls.Primitives.Popup;
+                popup.IsOpen = false;
+            }
+            if(comboBox.Name == "ReadMode")
+            {
+                if((ReadMode == ReadMode.HorizontalContinuous || ReadMode == ReadMode.HorizontalSingle) &&
+                   (ReadDirection != ReadDirection.LeftToRight || ReadDirection != ReadDirection.RightToLeft))
+                {
+                    ReadDirection = ReadDirection.LeftToRight;
+                }
+                else if((ReadMode == ReadMode.VerticalContinuous || ReadMode == ReadMode.VerticalSingle) &&
+                        (ReadDirection != ReadDirection.TopToBottom || ReadDirection != ReadDirection.BottomToTop))
+                {
+                    ReadDirection = ReadDirection.TopToBottom;
+                }
+            }
         }
 
         public async Task ChapterClickedAsync(object sender, TappedRoutedEventArgs args)

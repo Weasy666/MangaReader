@@ -26,5 +26,59 @@ namespace MangaReader_MVVM.Utils
 
             list.Insert(i, item);
         }
+
+        public static void SortAscending<T>(this ObservableCollection<T> collection, Comparison<T> comparison)
+        {
+            var comparer = new AscendingComparer<T>(comparison);
+
+            List<T> sorted = collection.OrderBy(x => x, comparer).ToList();
+
+            for (int i = 0; i < sorted.Count(); i++)
+                collection.Move(collection.IndexOf(sorted[i]), i);
+        }
+
+        public static void SortDescending<T>(this ObservableCollection<T> collection, Comparison<T> comparison)
+        {
+            var comparer = new DescendingComparer<T>(comparison);
+
+            List<T> sorted = collection.OrderBy(x => x, comparer).ToList();
+
+            for (int i = 0; i < sorted.Count(); i++)
+                collection.Move(collection.IndexOf(sorted[i]), i);
+        }
+    }
+
+    internal class AscendingComparer<T> : IComparer<T>
+    {
+        private readonly Comparison<T> comparison;
+
+        public AscendingComparer(Comparison<T> comparison)
+        {
+            this.comparison = comparison;
+        }
+        #region IComparer<T> Members  
+
+        public int Compare(T x, T y)
+        {
+            return comparison.Invoke(x, y);
+        }
+        #endregion  
+    }
+
+    internal class DescendingComparer<T> : IComparer<T>
+    {
+        private readonly Comparison<T> comparison;
+
+        public DescendingComparer(Comparison<T> comparison)
+        {
+            this.comparison = comparison;
+        }
+        #region IComparer<T> Members  
+
+        public int Compare(T x, T y)
+        {
+            return -comparison.Invoke(x, y);
+        }
+        #endregion  
     }
 }

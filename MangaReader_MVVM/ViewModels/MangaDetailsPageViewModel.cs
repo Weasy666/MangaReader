@@ -12,6 +12,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Input;
+using System.ComponentModel;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -26,6 +27,10 @@ namespace MangaReader_MVVM.ViewModels
                 Manga = DesignTimeService.GenerateMangaDetailDummy();
                 Manga.Chapters = DesignTimeService.GenerateChapterDummies();
             }
+            else
+            {
+                
+            }
         }
 
         private IManga _manga = new Manga();
@@ -34,7 +39,7 @@ namespace MangaReader_MVVM.ViewModels
         private ObservableCollection<IChapter> _chapters = new ObservableCollection<IChapter>();
         public ObservableCollection<IChapter> Chapters { get { return _chapters; } set { Set(ref _chapters, value); } }
 
-        public int ReadProgress { get; set; } = 0;
+        public int ReadProgress => Manga.ReadProgress;
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
@@ -55,6 +60,12 @@ namespace MangaReader_MVVM.ViewModels
             {
                 suspensionState[nameof(Manga)] = Manga;
             }
+            await Task.CompletedTask;
+        }
+
+        public override async Task OnNavigatingFromAsync(NavigatingEventArgs args)
+        {
+            args.Cancel = false;
             await Task.CompletedTask;
         }
 
@@ -124,6 +135,7 @@ namespace MangaReader_MVVM.ViewModels
                 chapterGridView.SelectionMode = ListViewSelectionMode.None;
                 IsMultiSelect = false;
                 chapterGridView.IsItemClickEnabled = true;
+                base.RaisePropertyChanged(nameof(ReadProgress));
             }));
 
         private DelegateCommand<object> _markAsReadCommand;
@@ -138,6 +150,7 @@ namespace MangaReader_MVVM.ViewModels
                 chapterGridView.SelectionMode = ListViewSelectionMode.None;
                 IsMultiSelect = false;
                 chapterGridView.IsItemClickEnabled = true;
+                base.RaisePropertyChanged(nameof(ReadProgress));
             }));
 
         private DelegateCommand<object> _cancelCommand;
