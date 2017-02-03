@@ -44,10 +44,6 @@ namespace MangaReader_MVVM
         [Display(Name = "Left to Right")]
         LeftToRight,
         [Display(Name = "Right to Left")]
-        RightToLeft,
-        [Display(Name = "Top to Bottom")]
-        TopToBottom,
-        [Display(Name = "Bottom to Top")]
-        BottomToTop
+        RightToLeft
     }
 }

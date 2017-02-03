@@ -146,7 +146,7 @@
                             FontFamily="Segoe MDL2 Assets"
                             FontSize="{ThemeResource TextStyleLargeFontSize}">
                         <Button.Resources>
-                            <Flyout x:Key="SettingsFlyout">
+                            <Flyout x:Key="SettingsFlyout" Placement="Bottom">
                                 <StackPanel Width="190">
                                     <ComboBox x:Name="ReadMode"
                                               Header="Read Mode"
@@ -155,12 +155,12 @@
                                               SelectedIndex="{Binding ReadMode, Mode=TwoWay, Converter={StaticResource ReadModeToIntConverter}}"
                                               SelectionChanged="{x:Bind ViewModel.ReadMode_SelectionChanged}">
                                     </ComboBox>
-                                    <ComboBox x:Name="ReadDirection"
+                                    <!--<ComboBox x:Name="ReadDirection"
                                               Header="Read direction"
                                               ItemsSource="{x:Bind ViewModel.ReadDirectionList}"
                                               SelectedIndex="{Binding ReadMode, Mode=TwoWay, Converter={StaticResource ReadDirectionToIntConverter}}"
-                                              SelectionChanged="{x:Bind ViewModel.ReadMode_SelectionChanged}">                                        
-                                    </ComboBox>
+                                              SelectionChanged="{x:Bind ViewModel.ReadDirection_SelectionChanged}">
+                                    </ComboBox>-->
                                 </StackPanel>
                             </Flyout>
                         </Button.Resources>
