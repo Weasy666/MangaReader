@@ -22,18 +22,14 @@ namespace MangaReader_MVVM.ViewModels
     {
         public MangaLibrary _library = MangaLibrary.Instance;
         public SettingsService _settings = SettingsService.Instance;
+        public string MangaGridLayout => _settings.MangaGridLayout;
+
         public FavoritsPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
-                // designtime
                 Favorits = DesignTimeService.GenerateMangaDummies();
             }
-            else
-            {
-                //Mangas = _library.GetFavoritMangasAsync().Result;
-            }
-            
         }
 
         private ObservableCollection<IManga> _favorits;
@@ -72,14 +68,17 @@ namespace MangaReader_MVVM.ViewModels
         {
             if (mode == NavigationMode.New)
             {
-                //Mangas = await _library.GetFavoritMangasAsync();
+
             }
             else
             {
-                //Favorits = await _library.GetFavoritMangasAsync();
+                base.RaisePropertyChanged(nameof(MangaGridLayout));
             }
+            
             await Task.CompletedTask;
         }
+
+
 
         public override async Task OnNavigatedFromAsync(IDictionary<string, object> suspensionState, bool suspending)
         {

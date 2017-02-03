@@ -11,12 +11,22 @@ using MangaReader_MVVM.Services;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Popups;
+using MangaReader_MVVM.Services.SettingsServices;
 
 namespace MangaReader_MVVM.ViewModels
 {
     public class LatestReleasesPageViewModel : ViewModelBase
     {
-        public int DaysOfLatestReleases { get; set; }
+        private SettingsService _settings = SettingsService.Instance;
+        private int _daysOfLatestReleases;
+        public int DaysOfLatestReleases
+        {
+            get => _daysOfLatestReleases;
+            set { _settings.DaysOfLatestReleases = _daysOfLatestReleases = value; base.RaisePropertyChanged(nameof(DaysOfLatestReleases)); }
+        }
+        //TODO how to propagate PropertyChanged frome inside SettingsService
+        public string MangaGridLayout => _settings.MangaGridLayout;
+
         public LatestReleasesPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
@@ -26,7 +36,7 @@ namespace MangaReader_MVVM.ViewModels
             }
             else
             {
-                DaysOfLatestReleases = Services.SettingsServices.SettingsService.Instance.DaysOfLatestReleases;
+                DaysOfLatestReleases = _settings.DaysOfLatestReleases;
                 Mangas = MangaLibrary.Instance.GetLatestReleasesAsync(DaysOfLatestReleases).Result;
             }
         }
@@ -36,11 +46,15 @@ namespace MangaReader_MVVM.ViewModels
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            var daysOfLatestReleases = Services.SettingsServices.SettingsService.Instance.DaysOfLatestReleases;
+            var daysOfLatestReleases = _settings.DaysOfLatestReleases;
             if (DaysOfLatestReleases != daysOfLatestReleases)
             {
                 DaysOfLatestReleases = daysOfLatestReleases;
-                Mangas = MangaLibrary.Instance.GetLatestReleasesAsync(DaysOfLatestReleases).Result;
+                Mangas = await MangaLibrary.Instance.GetLatestReleasesAsync(DaysOfLatestReleases);
+            }
+            if (mode != NavigationMode.New)
+            {
+                base.RaisePropertyChanged(nameof(MangaGridLayout));
             }
 
             await Task.CompletedTask;

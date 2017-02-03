@@ -36,7 +36,7 @@
                   IncrementalLoadingTrigger="Edge"
                   DataContext="{Binding}"
                   ItemClick="{x:Bind ViewModel.MangaClickedAsync}"
-                  ItemTemplateSelector="{StaticResource MangaItemTemplateSelector}"
+                  ItemTemplate="{x:Bind ViewModel.MangaGridLayout, Converter={StaticResource MangaItemTemplateConverter}, FallbackValue={StaticResource MangaItemWithDetails}}"
                   Style="{StaticResource GridViewSemiOpaqueScrollViewer}">
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem">

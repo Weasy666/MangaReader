@@ -4,7 +4,7 @@
                     xmlns:converters="using:MangaReader_MVVM.Converters"
                     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls">
 
-    <DataTemplate x:Key="MangaItemWithDetails">
+    <DataTemplate x:Key="MangaItemWithDetails" x:Name="MangaItemWithDetails">
         <Grid Width="350" Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="103" />

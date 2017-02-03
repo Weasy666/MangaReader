@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MangaReader_MVVM.Services.SettingsServices;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -10,20 +6,13 @@ namespace MangaReader_MVVM.Services
 {
     public class MangaItemTemplateSelector : DataTemplateSelector
     {
-        SettingsServices.SettingsService _settings;
+        SettingsService _settings;
         public DataTemplate MangaItemWithDetailsTemplate { get; set; }
         public DataTemplate MangaItemWithoutDetailsTemplate { get; set; }
 
         public MangaItemTemplateSelector()
         {
-            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
-            {
-                // designtime
-            }
-            else
-            {
-                _settings = SettingsServices.SettingsService.Instance;
-            }
+
         }
 
         // http://www.wpftutorial.net/datatemplates.html
@@ -34,8 +23,7 @@ namespace MangaReader_MVVM.Services
 
         protected override DataTemplate SelectTemplateCore(object item)
         {
-            //_settings = _settings ?? SettingsServices.SettingsService.Instance;
-            switch (_settings.MangaGridLayout)
+            switch (SettingsService.Instance.MangaGridLayout)
             {
                 case "MangaItemWithDetails":
                     return MangaItemWithDetailsTemplate;

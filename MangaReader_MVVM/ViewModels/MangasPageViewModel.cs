@@ -11,12 +11,14 @@ using MangaReader_MVVM.Services;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Popups;
+using MangaReader_MVVM.Services.SettingsServices;
 
 namespace MangaReader_MVVM.ViewModels
 {
     public class MangasPageViewModel : ViewModelBase
     {
         public MangaLibrary _library = MangaLibrary.Instance;
+        public string MangaGridLayout => SettingsService.Instance.MangaGridLayout;
         public MangasPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
@@ -35,9 +37,13 @@ namespace MangaReader_MVVM.ViewModels
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            if (mode == NavigationMode.Back)
+            if (mode == NavigationMode.New)
             {
 
+            }
+            else
+            {
+                base.RaisePropertyChanged(nameof(MangaGridLayout));
             }
             await Task.CompletedTask;
         }

@@ -138,6 +138,7 @@
                     <Button x:Name="SettingsButton" Grid.Column="2"
                             Content="&#xE115;"
                             Foreground="{x:Bind ChaptersBar.Foreground}"
+                            Background="Transparent"
                             FontFamily="Segoe MDL2 Assets"
                             FontSize="{ThemeResource TextStyleLargeFontSize}">
                         <Button.Resources>
