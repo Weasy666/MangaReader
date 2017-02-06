@@ -72,7 +72,7 @@
                 <Interactivity:Interaction.Behaviors>
                     <!--  enable submit on enter key  -->
                     <Behaviors:KeyBehavior Key="Enter">
-                        <Core:CallMethodAction MethodName="GotoDetailsPage" TargetObject="{Binding}" />
+                        <Core:CallMethodAction MethodName="GotoSettings" TargetObject="{Binding}" />
                     </Behaviors:KeyBehavior>
                     <!--  focus on textbox when page loads  -->
                     <Core:EventTriggerBehavior>
@@ -84,7 +84,7 @@
         </controls:Resizer>
 
         <Button x:Name="submitButton"
-                Click="{x:Bind ViewModel.GotoDetailsPage}" Content="Submit"
+                Click="{x:Bind ViewModel.GotoSettings}" Content="Submit"
                 RelativePanel.AlignBottomWith="parameterResizer"
                 RelativePanel.RightOf="parameterResizer" />
 

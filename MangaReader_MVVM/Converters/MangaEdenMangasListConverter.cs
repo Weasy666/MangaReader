@@ -33,7 +33,7 @@ namespace MangaReader_MVVM.Models
                 Category = string.Join(", ", manga["c"].AsEnumerable().Select(item => item.ToString()).ToArray()),
                 Hits = (int)manga["h"],
                 LastUpdated = DateTimeOffset.FromUnixTimeSeconds(manga["ld"] != null ? (long)manga["ld"] : 0).DateTime.ToLocalTime(),
-                Ongoing = (int)manga["s"] == 1,
+                Ongoing = (int)manga["s"] != 2, // 0 = Suspended, 1 = Ongoing, 2 = Finished
                 IsFavorit = false
             }).ToList();
             mangas.Sort();

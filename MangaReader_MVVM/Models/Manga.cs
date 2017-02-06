@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace MangaReader_MVVM.Models
 {
-    [DebuggerDisplay("{Title} | ID = {Id}")]
+    [DebuggerDisplay("Manga: {Title} | ID = {Id}")]
     public class Manga : Template10.Mvvm.ViewModelBase, IManga
     {
         public IMangaSource ParentLibrary { get; internal set; }

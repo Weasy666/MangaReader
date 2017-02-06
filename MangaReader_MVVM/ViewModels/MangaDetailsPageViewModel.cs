@@ -18,7 +18,10 @@ namespace MangaReader_MVVM.ViewModels
 {
     public class MangaDetailsPageViewModel : ViewModelBase
     {
+        private bool viewModelInitialised;
         public MangaLibrary _library = MangaLibrary.Instance;
+
+
         public MangaDetailsPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
@@ -41,14 +44,36 @@ namespace MangaReader_MVVM.ViewModels
 
         public int ReadProgress => Manga.ReadProgress;
 
+        public void PageGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            var grid = sender as Grid;
+            var page = grid.Parent as Windows.UI.Xaml.Controls.Page;
+            var group = page.FindName("AdaptiveVisualStateGroup") as VisualStateGroup;
+            var state = group.States.First(x => x.Name == "VisualStateNormal");
+            var normalStateTrigger = state.StateTriggers.First() as AdaptiveTrigger;
+            state = group.States.First(x => x.Name == "VisualStateWide");
+            var wideStateTrigger = state.StateTriggers.First() as AdaptiveTrigger;
+
+            if (page.ActualWidth < normalStateTrigger.MinWindowWidth)
+            {
+                VisualStateManager.GoToState(page, "VisualStateNarrow", false);
+            }
+            else if (page.ActualWidth < wideStateTrigger.MinWindowWidth)
+            {
+                VisualStateManager.GoToState(page, "VisualStateNormal", false);
+            }
+        }
+
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
             var manga = parameter as Manga;
             
-            if (mode == NavigationMode.New && manga != null)
+            if ((mode == NavigationMode.New || mode == NavigationMode.Refresh || viewModelInitialised == false) && manga != null)
             {
-                Manga = await _library.GetMangaAsync(manga.Id);
+                Manga = (suspensionState.ContainsKey(nameof(Manga))) ? suspensionState[nameof(Manga)] as Manga : await _library.GetMangaAsync(manga.Id);
                 Chapters = Manga.Chapters;
+
+                viewModelInitialised = true;
             }
 
             await Task.CompletedTask;

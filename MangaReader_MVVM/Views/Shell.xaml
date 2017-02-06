@@ -5,16 +5,76 @@
       xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
       xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="using:MangaReader_MVVM.Views"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:views="using:MangaReader_MVVM.Views"
+      xmlns:models="using:MangaReader_MVVM.Models"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       mc:Ignorable="d">
 
-    <Controls:HamburgerMenu x:Name="MyHamburgerMenu">
+    <Controls:HamburgerMenu x:Name="MyHamburgerMenu"
+                            IsOpenChanged="MyHamburgerMenu_IsOpenChanged"
+                            Loaded="MyHamburgerMenu_Loaded">
         
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
+                <VisualState x:Name="VisualStateNarrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="SearchAutoSuggestBoxIcon.Visibility" Value="Visible" />
+                        <Setter Target="SearchAutoSuggestBox.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateNormal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="SearchAutoSuggestBoxIcon.Visibility" Value="Visible" />
+                        <Setter Target="SearchAutoSuggestBox.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateWide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="SearchAutoSuggestBoxIcon.Visibility" Value="Collapsed" />
+                        <Setter Target="SearchAutoSuggestBox.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
         <!--  MainPages buttons  -->
-        <Controls:HamburgerMenu.PrimaryButtons>            
+        <Controls:HamburgerMenu.PrimaryButtons>
+            <Controls:HamburgerButtonInfo ButtonType="Literal">
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Name="SearchAutoSuggestBoxIcon"
+                                Symbol="Find"
+                                Width="48" Height="48"
+                                Visibility="Collapsed"/>
+                    <AutoSuggestBox Name="SearchAutoSuggestBox"
+                                    PlaceholderText="Search for Manga..."
+                                    Height="48" Width="{x:Bind MyHamburgerMenu.PaneWidth, Mode=OneWay}"
+                                    QueryIcon="Find"
+                                    ItemsSource="{x:Bind Mangas, Mode=OneWay}"
+                                    TextChanged="SearchAllManga_TextChanged"
+                                    QuerySubmitted="SearchAllManga_QuerySubmitted"
+                                    SuggestionChosen="SearchAllManga_SuggestionChosen"
+                                    LostFocus="SearchAutoSuggestBox_LostFocus"
+                                    ItemTemplate="{StaticResource SuggestedItem}"
+                                    Style="{StaticResource HamburgerAutoSuggestBoxStyle}">
+                        <AutoSuggestBox.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Margin" Value="-11,1,-10,0" />
+                            </Style>
+                        </AutoSuggestBox.ItemContainerStyle>
+                    </AutoSuggestBox>
+                    
+                </StackPanel>                
+            </Controls:HamburgerButtonInfo>
             <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:MainPage" AutomationProperties.Name="Jerry" >
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Symbol="Home" Width="48" Height="48" />

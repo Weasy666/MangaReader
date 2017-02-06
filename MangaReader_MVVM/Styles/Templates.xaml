@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:services="using:MangaReader_MVVM.Services"
-                    xmlns:converters="using:MangaReader_MVVM.Converters"
                     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls">
 
     <DataTemplate x:Key="MangaItemWithDetails" x:Name="MangaItemWithDetails">
@@ -10,10 +9,6 @@
                 <ColumnDefinition Width="103" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Grid.Resources>
-                <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
-                <converters:DateTimeToPrettyDateTime x:Key="DateTimeToPrettyDateTime"/>
-            </Grid.Resources>
             <Button x:Name="FavoriteButton"
                     Command="{Binding DataContext.FavoritCommand, ElementName=PageGrid}"
                     CommandParameter="{Binding}"
@@ -34,12 +29,12 @@
                                 Source="{Binding Cover, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg, TargetNullValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
                                 Stretch="Uniform"
                                 PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
-                                PlaceholderStretch="Uniform"  
+                                PlaceholderStretch="Uniform"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center" />            
             <StackPanel Orientation="Vertical" Margin="5,0,0,0" MaxWidth="247" Grid.Column="1">
                 <TextBlock Text="{Binding Title}" FontSize="20" TextTrimming="CharacterEllipsis"/>
-                <!--<TextBlock Text="{Binding Released}" FontSize="15"/>-->
+                <TextBlock Text="{Binding OnGoing}" FontSize="15"/>
                 <TextBlock Text="{Binding LastUpdated, Converter={StaticResource DateTimeToPrettyDateTime}}" FontSize="15"/>
                 <TextBlock Text="{Binding Category}" FontSize="15" TextWrapping="WrapWholeWords" TextTrimming="CharacterEllipsis"/>
             </StackPanel>
@@ -49,14 +44,14 @@
     <DataTemplate x:Key="MangaItemWithoutDetails">
         <Grid Width="171" Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" >
             <controls:ImageEx x:Name="Cover" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
-                                Width="171" Height="250" 
-                                IsCacheEnabled="True"
-                                Source="{Binding Cover, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
-                                Stretch="UniformToFill"
-                                PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
-                                PlaceholderStretch="Uniform"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center" />
+                              Width="171" Height="250" 
+                              IsCacheEnabled="True"
+                              Source="{Binding Cover, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
+                              Stretch="UniformToFill"
+                              PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
+                              PlaceholderStretch="Uniform"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center" />
             <Grid Margin="0,0,0,0" 
                   VerticalAlignment="Bottom" 
                   Background="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" >
@@ -64,9 +59,6 @@
                     <ColumnDefinition Width="30" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Grid.Resources>
-                    <converters:BoolToFavoritSymbolConverter x:Key="BoolToFavoritSymbolConverter"/>
-                </Grid.Resources>
                 <Button x:Name="FavoriteButton"
                         Command="{Binding DataContext.FavoritCommand, ElementName=PageGrid}"
                         CommandParameter="{Binding}"
@@ -172,10 +164,6 @@
 
     <DataTemplate x:Key="ChapterItem">
         <Grid Width="250" Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" >
-            <Grid.Resources>
-                <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-                <converters:DateTimeToPrettyDateTime x:Key="DateTimeToPrettyDateTime"/>
-            </Grid.Resources>
             <StackPanel Orientation="Vertical" Margin="5,0,0,0" MaxWidth="250">
                 <TextBlock Text="{Binding Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
                 <TextBlock Text="{Binding Number}" FontSize="15"/>
@@ -194,6 +182,42 @@
                     IsHitTestVisible="False"
                     IsTapEnabled="False" />
         </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="SuggestedItem">
+        <StackPanel Orientation="Horizontal"
+                    Background="{StaticResource SystemControlBackgroundBaseHighBrush}"
+                    Width="{Binding Path=PaneWidth, ElementName=MyHamburgerMenu}"
+                    MaxHeight="75">
+            <controls:ImageEx x:Name="Cover" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                              Width="52" MinWidth="52"
+                              Height="75" 
+                              IsCacheEnabled="True"
+                              Stretch="UniformToFill"
+                              Source="{Binding Cover, FallbackValue=ms-appx:///Assets/Images/404_whoopsies.jpg, TargetNullValue=ms-appx:///Assets/Images/404_whoopsies.jpg}"
+                              PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
+                              PlaceholderStretch="Uniform"/>
+            <StackPanel Orientation="Vertical" 
+                        Margin="5,0,0,0"
+                        Width="168">
+                <TextBlock Text="{Binding Title}"
+                           Foreground="{ThemeResource SystemControlDisabledChromeDisabledHighBrush}"
+                           FontSize="14"
+                           TextWrapping="WrapWholeWords"/>
+                <TextBlock Text="{Binding Ongoing, Converter={StaticResource BoolToMangaStatusConverter}}"
+                           Foreground="{ThemeResource SystemControlDisabledChromeDisabledHighBrush}"
+                           FontSize="10"
+                           TextWrapping="WrapWholeWords"/>
+                <TextBlock Text="{Binding LastUpdated, Converter={StaticResource DateTimeToPrettyDateTime}}"
+                           Foreground="{ThemeResource SystemControlDisabledChromeDisabledHighBrush}"
+                           FontSize="10"
+                           TextWrapping="WrapWholeWords"/>
+                <TextBlock Text="{Binding Category}"
+                           Foreground="{ThemeResource SystemControlDisabledChromeDisabledHighBrush}"
+                           FontSize="10"
+                           TextWrapping="WrapWholeWords"/>
+            </StackPanel>
+        </StackPanel>
     </DataTemplate>
 
 </ResourceDictionary>

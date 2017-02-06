@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace MangaReader_MVVM.Models
 {
-    [DebuggerDisplay("{Title} | Number = {Number} | ID = {Id}")]
+    [DebuggerDisplay("Chapter: {Title} | Number = {Number} | ID = {Id}")]
     public class Chapter : Template10.Mvvm.ViewModelBase, IChapter
     {
         public IManga ParentManga { get; set; }

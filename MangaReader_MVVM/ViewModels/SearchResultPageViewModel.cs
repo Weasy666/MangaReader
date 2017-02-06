@@ -11,11 +11,24 @@ using MangaReader_MVVM.Services;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Popups;
+using System.ComponentModel;
+using MangaReader_MVVM.Services.SettingsServices;
 
 namespace MangaReader_MVVM.ViewModels
 {
     public class SearchResultPageViewModel : ViewModelBase
     {
+        public MangaLibrary _library = MangaLibrary.Instance;
+        public SettingsService _settings = SettingsService.Instance;
+        public string PageHeaderText { get; set; } = "Search results for \"{0}\"";
+
+        public MangaItemTemplate MangaGridLayout => SettingsService.Instance.MangaGridLayout;
+        private void Settings_Changed(object sender, PropertyChangedEventArgs e)
+        {
+            if (nameof(_settings.MangaGridLayout).Equals(e.PropertyName))
+                base.RaisePropertyChanged(nameof(MangaGridLayout));
+        }
+
         public SearchResultPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
@@ -25,7 +38,7 @@ namespace MangaReader_MVVM.ViewModels
             }
             else
             {
-                Mangas = MangaLibrary.Instance.GetMangasAsync().Result;
+                _settings.PropertyChanged += Settings_Changed;
             }
         }
 
@@ -34,6 +47,14 @@ namespace MangaReader_MVVM.ViewModels
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
+            var paramArray = parameter as List<object>;
+            PageHeaderText = String.Format(PageHeaderText, paramArray[0] as string);
+            var list = paramArray[1] as List<IManga>;
+            if (list != null)
+            {
+                Mangas = new ObservableCollection<IManga>(list);
+            }
+
             await Task.CompletedTask;
         }
 
@@ -51,22 +72,6 @@ namespace MangaReader_MVVM.ViewModels
             args.Cancel = false;
             await Task.CompletedTask;
         }
-
-        private DelegateCommand _reloadGridCommand;
-        public DelegateCommand ReloadGridCommand
-            => _reloadGridCommand ?? (_reloadGridCommand = new DelegateCommand(async () =>
-            {
-                Views.Busy.SetBusy(true, "Picking up the freshly printed books...");
-                Mangas = await MangaLibrary.Instance.GetMangasAsync(ReloadMode.Server);
-                Views.Busy.SetBusy(false);
-            }, () => Mangas.Any()));
-
-        private DelegateCommand _sortGridCommand;
-        public DelegateCommand SortGridCommand
-            => _sortGridCommand ?? (_sortGridCommand = new DelegateCommand(() =>
-            {
-                Mangas = new ObservableCollection<IManga>(Mangas.Reverse());
-            }, () => Mangas.Any()));
 
         private DelegateCommand<IManga> _favoritCommand;
         public DelegateCommand<IManga> FavoritCommand
