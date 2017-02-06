@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 using MangaReader_MVVM.Models;
+using Windows.Storage.Pickers;
+using Windows.Storage;
+using Newtonsoft.Json;
+using Windows.Storage.Provider;
+using System.Linq;
 
 namespace MangaReader_MVVM.Services
 {
@@ -36,6 +39,48 @@ namespace MangaReader_MVVM.Services
                 }
             }
             get => _mangaSource.Name;
+        }
+
+        public async Task<bool> ExportFavoritesAsync()
+        {
+            if (Favorits != null && Favorits.Any())
+            {
+                FileSavePicker savePicker = new FileSavePicker()
+                {
+                    SuggestedStartLocation = PickerLocationId.Downloads
+                };
+
+                // Dropdown of file types the user can save the file as
+                savePicker.FileTypeChoices.Add("JSON", new List<string>() { ".json" });
+                // Default file name if the user does not type one in or select a file to replace
+                savePicker.SuggestedFileName = "Favorits";
+
+                StorageFile file = await savePicker.PickSaveFileAsync();
+                if (file != null)
+                {
+                    // Prevent updates to the remote version of the file until we finish making changes and call CompleteUpdatesAsync.
+                    CachedFileManager.DeferUpdates(file);
+                    // write to file
+                    foreach (var manga in Favorits)
+                    {
+                        var serializedManga = JsonConvert.SerializeObject(manga);
+                        await FileIO.AppendTextAsync(file, serializedManga + "\n");
+                    }
+
+                    // Let Windows know that we're finished changing the file so the other app can update the remote version of the file.
+                    // Completing updates may require Windows to ask for user input.
+                    FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+                    return (status == FileUpdateStatus.Complete);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public ObservableCollection<IManga> Mangas => _mangaSource.Mangas;

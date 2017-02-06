@@ -20,8 +20,8 @@ namespace MangaReader_MVVM.ViewModels
 {
     public class FavoritsPageViewModel : ViewModelBase
     {
-        public MangaLibrary _library = MangaLibrary.Instance;
-        public SettingsService _settings = SettingsService.Instance;
+        private MangaLibrary _library = MangaLibrary.Instance;
+        private SettingsService _settings = SettingsService.Instance;
 
         public MangaItemTemplate MangaGridLayout => _settings.MangaGridLayout;
         private void Settings_Changed(object sender, PropertyChangedEventArgs e)
@@ -121,6 +121,13 @@ namespace MangaReader_MVVM.ViewModels
             get { return _favoritsCVS = _favoritsCVS ?? new CollectionViewSource() { IsSourceGrouped = (bool)IsGridGrouped, Source = (bool)IsGridGrouped ? (object)FavoritsGroups : (object)Favorits }; }
             set { Set(ref _favoritsCVS, value); }
         }
+
+        private DelegateCommand _exportCommand;
+        public DelegateCommand ExportCommand
+            => _exportCommand ?? (_exportCommand = new DelegateCommand(async () =>
+            {
+                await _library.ExportFavoritesAsync();
+            }, () => Favorits.Any()));
 
         private DelegateCommand _reloadGridCommand;
         public DelegateCommand ReloadGridCommand

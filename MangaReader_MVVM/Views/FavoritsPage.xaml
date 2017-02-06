@@ -18,12 +18,18 @@
 
         <t10controls:PageHeader Name="PageHeader" Text="Your Favorit Mangas" Frame="{x:Bind Frame}" >
             <t10controls:PageHeader.PrimaryCommands>
-                <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />
+                <!--<AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />-->
+                <AppBarButton x:Name="Export"
+                              Icon="SetTile"
+                              Label="Export"
+                              Command="{x:Bind ViewModel.ExportCommand, Mode=OneWay}"/>
                 <AppBarSeparator />
-                <AppBarButton Icon="Refresh" Label="Reload" Command="{x:Bind ViewModel.ReloadGridCommand, Mode=OneWay}" />
+                <AppBarButton Icon="Refresh"
+                              Label="Reload"
+                              Command="{x:Bind ViewModel.ReloadGridCommand, Mode=OneWay}" />
                 <AppBarToggleButton x:Name="GroupGrid"
                                     Icon="AllApps" IsChecked="{x:Bind ViewModel.IsGridGrouped, Mode=TwoWay}" IsThreeState="False"
-                                    Label="Group Favorites"
+                                    Label="Group"
                                     Foreground="{x:Bind PageHeader.Foreground}"
                                     Command="{x:Bind ViewModel.GroupGridCommand, Mode=OneWay}"
                                     CommandParameter="{x:Bind FavoritsSemanticZoom}" >
