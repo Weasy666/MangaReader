@@ -19,11 +19,10 @@ namespace MangaReader_MVVM.ViewModels
     public class LatestReleasesPageViewModel : ViewModelBase
     {
         private SettingsService _settings = SettingsService.Instance;
-        private int _daysOfLatestReleases;
         public int DaysOfLatestReleases
         {
-            get => _daysOfLatestReleases;
-            set { _settings.DaysOfLatestReleases = _daysOfLatestReleases = value; base.RaisePropertyChanged(nameof(DaysOfLatestReleases)); }
+            get => _settings.DaysOfLatestReleases;
+            set { _settings.DaysOfLatestReleases = value; base.RaisePropertyChanged(nameof(DaysOfLatestReleases)); }
         }
         //TODO how to propagate PropertyChanged frome inside SettingsService
         public MangaItemTemplate MangaGridLayout => _settings.MangaGridLayout;

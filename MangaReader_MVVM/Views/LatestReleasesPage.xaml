@@ -17,10 +17,23 @@
 
         <t10controls:PageHeader Name="PageHeader" Text="Latest Releases" Frame="{x:Bind Frame}" >
             <t10controls:PageHeader.PrimaryCommands>
-                <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False">
-                    <Flyout>
-                        <TimePicker ></TimePicker>
-                    </Flyout>
+                <AppBarButton Icon="Filter" Label="Filter">
+                    <AppBarButton.Flyout>
+                        <Flyout>
+                            <StackPanel Orientation="Horizontal">
+                                <Slider x:Name="LatestReleasesDays"
+                                    Header="Days of Latest Releases"
+                                    Width="270"
+                                    IsThumbToolTipEnabled="False"                                 
+                                    Minimum="1"
+                                    Maximum="14"
+                                    Value="{Binding DaysOfLatestReleases, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock x:Name="LatestReleasesDaysTextBox"
+                                           Text="{x:Bind LatestReleasesDays.Value, Mode=OneWay}"
+                                           Margin="10,27,0,0"/>
+                            </StackPanel>
+                        </Flyout>
+                    </AppBarButton.Flyout>
                 </AppBarButton>
                 <AppBarButton Icon="Sort" Label="Sort" Command="{x:Bind ViewModel.SortGridCommand, Mode=OneWay}" />
                 <AppBarSeparator />

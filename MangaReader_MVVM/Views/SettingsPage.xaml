@@ -113,15 +113,6 @@
                                    RelativePanel.AlignLeftWithPanel="True"
                                    RelativePanel.Below="MangaSourceComboBox"/>
 
-                        <!--<ToggleSwitch x:Name="IsGroupedFavoritsGrid"
-                                      Header="Favorites Layout"
-                                      IsOn="{x:Bind ViewModel.SettingsPartViewModel.IsGroupedFavoritsGrid, Mode=TwoWay}"
-                                      OffContent="Ungrouped"
-                                      OnContent="Grouped by Initial"
-                                      Margin="0,5,0,0"
-                                      RelativePanel.AlignLeftWithPanel="True"
-                                      RelativePanel.Below="Favorits" />-->
-
                         <!-- Latest Releases Settings -->
                         <TextBlock x:Name="LatestReleases"
                                    Text="Latest Releases"
@@ -138,7 +129,7 @@
                                 RelativePanel.AlignLeftWithPanel="True"
                                 RelativePanel.Below="LatestReleases" />
 
-                        <TextBlock x:Name="LatestReleasesDaysTextBox" Text="{x:Bind LatestReleasesDays.Value}"
+                        <TextBlock x:Name="LatestReleasesDaysTextBox" Text="{x:Bind LatestReleasesDays.Value, Mode=OneWay}"
                                    Margin="10,33,0,0"
                                    RelativePanel.AlignTopWith="LatestReleasesDays"
                                    RelativePanel.RightOf="LatestReleasesDays" />

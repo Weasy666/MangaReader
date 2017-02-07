@@ -16,7 +16,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <t10controls:PageHeader Name="PageHeader" Text="Your Favorit Mangas" Frame="{x:Bind Frame}" >
+        <t10controls:PageHeader Name="PageHeader" Text="Your Favorite Mangas" Frame="{x:Bind Frame}" >
             <t10controls:PageHeader.PrimaryCommands>
                 <!--<AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />-->
                 <AppBarButton x:Name="Export"

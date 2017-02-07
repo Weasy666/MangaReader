@@ -164,11 +164,14 @@ namespace MangaReader_MVVM.Services
 
                 if (Favorits.Contains(favorit))
                 {
-                    favorits?.Remove(favorit.Id);
+                    favorits.Remove(favorit.Id);
                     Favorits.Remove(favorit);
 
                     if (favorit.IsFavorit)
+                    {
+                        favorits.Add(favorit.Id);
                         Favorits.AddSorted(favorit);
+                    }
                 }
                 else
                 {

@@ -470,8 +470,10 @@
             </GridView.ItemContainerStyle>
         </GridView>
         
-        <t10controls:PageHeader x:Name="BottomBar" IsSticky="True"
-                                Grid.Row="1" Grid.ColumnSpan="2"
+        <t10controls:PageHeader x:Name="BottomBar"
+                                IsSticky="True"
+                                Grid.Row="2"
+                                Grid.ColumnSpan="2"
                                 VerticalAlignment="Bottom"
                                 ClosedDisplayMode="Compact"
                                 Frame="{x:Bind Frame}"
