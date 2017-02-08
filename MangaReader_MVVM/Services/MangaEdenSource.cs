@@ -16,6 +16,14 @@ namespace MangaReader_MVVM.Services
 {
     class MangaEdenSource : ViewModelBase, IMangaSource
     {
+        public BitmapImage Icon { get; } = new BitmapImage(new Uri("ms-appx:///Assets/Icons/icon-mangaeden.png"));
+        public MangaSource Name { get; } = MangaSource.MangaEden;
+        private int Language { get; } = 0;
+        public Uri RootUri { get; }
+        public Uri MangasListPage { get; }
+        public Uri MangaDetails { get; }
+        public Uri MangaChapterPages { get; }
+
         private ObservableCollection<IManga> _mangas;
         public ObservableCollection<IManga> Mangas
         {
@@ -31,14 +39,6 @@ namespace MangaReader_MVVM.Services
         }
 
         private Dictionary<string, List<string>> _readStatus;
-
-        public BitmapImage Icon { get; } = new BitmapImage(new Uri("ms-appx:///Assets/Icons/icon-mangaeden.png"));
-        public MangaSource Name { get; } = MangaSource.MangaEden;
-        private int Language { get; } = 0;
-        public Uri RootUri { get; }
-        public Uri MangasListPage { get; }
-        public Uri MangaDetails { get; }
-        public Uri MangaChapterPages { get; }
 
         public MangaEdenSource()
         {
@@ -83,19 +83,7 @@ namespace MangaReader_MVVM.Services
             LoadAndMergeFavorits();
 
             return Mangas;
-        }
-
-        public async Task<ObservableCollection<IManga>> GetLatestReleasesAsync(int numberOfPastDays, ReloadMode mode)
-        {
-            if (!Mangas.Any() || mode == ReloadMode.Server)
-            {
-                await GetMangasAsync(ReloadMode.Local);
-            }
-            var latestReleases = Mangas.Where(manga => manga.LastUpdated.AddDays(numberOfPastDays) >= DateTime.Today).ToList();
-            latestReleases.Sort((y, x) => y == null ? 1 : DateTime.Compare(x.LastUpdated, y.LastUpdated));
-
-            return new ObservableCollection<IManga>(latestReleases);
-        }
+        }        
 
         public async Task<IManga> GetMangaAsync(string mangaId)
         {
@@ -127,7 +115,35 @@ namespace MangaReader_MVVM.Services
             }
             return manga;
         }
-        
+
+        public async Task<IChapter> GetChapterAsync(IChapter chapter)
+        {
+            using (var httpClient = new HttpClient { BaseAddress = RootUri })
+            {
+                try
+                {
+                    var chapterUri = new Uri(RootUri, MangaChapterPages);
+                    var response = await httpClient.GetAsync(new Uri(chapterUri, chapter.Id));
+                    var result = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        JsonSerializerSettings settings = new JsonSerializerSettings();
+                        settings.Converters.Add(new MangaEdenChapterPagesConverter());
+
+                        var pages = JsonConvert.DeserializeObject<ObservableCollection<IPage>>(result, settings);
+
+                        chapter.Pages = pages;
+                    }
+                }
+                catch (Exception e)
+                {
+                    var dialog = new MessageDialog(e.Message);
+                    await dialog.ShowAsync();
+                }
+            }
+            return chapter;
+        }
+
         public async Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode = ReloadMode.Local)
         {
             if (!Mangas.Any() || mode == ReloadMode.Server)
@@ -141,6 +157,18 @@ namespace MangaReader_MVVM.Services
             }
 
             return Favorits;
+        }
+
+        public async Task<ObservableCollection<IManga>> GetLatestReleasesAsync(int numberOfPastDays, ReloadMode mode)
+        {
+            if (!Mangas.Any() || mode == ReloadMode.Server)
+            {
+                await GetMangasAsync(ReloadMode.Local);
+            }
+            var latestReleases = Mangas.Where(manga => manga.LastUpdated.AddDays(numberOfPastDays) >= DateTime.Today).ToList();
+            latestReleases.Sort((y, x) => y == null ? 1 : DateTime.Compare(x.LastUpdated, y.LastUpdated));
+
+            return new ObservableCollection<IManga>(latestReleases);
         }
 
         public async void AddFavorit(ObservableCollection<IManga> newFavorits)
@@ -260,40 +288,12 @@ namespace MangaReader_MVVM.Services
             }
         }
 
-        public async Task<ObservableCollection<IChapter>> GetChaptersAsync(Manga manga)
+        public ObservableCollection<IManga> SearchManga(string query)
         {
-            throw new NotImplementedException();
+            return new ObservableCollection<IManga>(Mangas.Where(manga => manga.Title.ToLower().Contains(query.ToLower()) && query != string.Empty));
         }
 
-        public async Task<IChapter> GetChapterAsync(Chapter chapter)
-        {
-            using (var httpClient = new HttpClient { BaseAddress = RootUri })
-            {
-                try
-                {
-                    var chapterUri = new Uri(RootUri, MangaChapterPages);
-                    var response = await httpClient.GetAsync(new Uri(chapterUri, chapter.Id));
-                    var result = await response.Content.ReadAsStringAsync();
-                    if (response.IsSuccessStatusCode)
-                    {
-                        JsonSerializerSettings settings = new JsonSerializerSettings();
-                        settings.Converters.Add(new MangaEdenChapterPagesConverter());
-
-                        var pages = JsonConvert.DeserializeObject<ObservableCollection<IPage>>(result, settings);
-
-                        chapter.Pages = pages;
-                    }
-                }
-                catch (Exception e)
-                {
-                    var dialog = new MessageDialog(e.Message);
-                    await dialog.ShowAsync();
-                }
-            }
-            return chapter;
-        }
-
-        public async Task<ObservableCollection<IManga>> SearchMangaAsync(string query)
+        public async Task<ObservableCollection<IChapter>> GetChaptersAsync(IManga manga)
         {
             throw new NotImplementedException();
         }

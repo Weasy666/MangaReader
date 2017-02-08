@@ -1,21 +1,17 @@
-﻿using Template10.Mvvm;
-using System.Collections.Generic;
+﻿using MangaReader_MVVM.Models;
+using MangaReader_MVVM.Services;
+using MangaReader_MVVM.Services.SettingsServices;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Template10.Services.NavigationService;
-using Windows.UI.Xaml.Navigation;
-using System.Collections.ObjectModel;
-using MangaReader_MVVM.Models;
-using MangaReader_MVVM.Services;
+using Template10.Mvvm;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Popups;
 using Windows.UI.Xaml.Input;
-using MangaReader_MVVM.Services.SettingsServices;
-using Windows.UI.Xaml.Media;
-using MangaReader_MVVM.Utils;
-using System.Collections;
+using Windows.UI.Xaml.Navigation;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -53,8 +49,8 @@ namespace MangaReader_MVVM.ViewModels
         public List<string> ReadModeList => Enum.GetNames(typeof(ReadMode)).ToList();
         public ReadMode ReadMode
         {
-            get => _settings.ReadMode;
-            set { _settings.ReadMode = value; base.RaisePropertyChanged(nameof(ReadMode)); }
+            get { return _settings.ReadMode; }
+            set { if (value >= 0) { _settings.ReadMode = value; base.RaisePropertyChanged(nameof(ReadMode)); } }
         }
 
         //public List<string> ReadDirectionList

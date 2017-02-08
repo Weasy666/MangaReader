@@ -13,8 +13,8 @@ namespace MangaReader_MVVM.Views
     {
         public static Shell Instance { get; set; }
         public static HamburgerMenu HamburgerMenu => Instance.MyHamburgerMenu;
-        public ObservableCollection<IManga> Mangas => MangaLibrary.Instance.Mangas;
-        private IEnumerable<IManga> _suggestions;
+        private MangaLibrary _library => MangaLibrary.Instance;
+        public ObservableCollection<IManga> Mangas => _library.Mangas;
 
         public Shell()
         {
@@ -34,8 +34,7 @@ namespace MangaReader_MVVM.Views
 
         private void SearchAllManga_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-            _suggestions = Mangas.Where(p => p.Title.ToLower().Contains(sender.Text.ToLower()) && sender.Text != string.Empty);
-            SearchAutoSuggestBox.ItemsSource = _suggestions;
+            SearchAutoSuggestBox.ItemsSource = _library.SearchManga(sender.Text);
         }
 
         private void SearchAllManga_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
