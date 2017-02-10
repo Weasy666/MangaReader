@@ -1,20 +1,20 @@
-﻿using Template10.Mvvm;
-using System.Collections.Generic;
+﻿using MangaReader_MVVM.Models;
+using MangaReader_MVVM.Services;
+using MangaReader_MVVM.Services.SettingsServices;
+using MangaReader_MVVM.Utils;
 using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Template10.Controls;
+using Template10.Mvvm;
 using Template10.Services.NavigationService;
-using Windows.UI.Xaml.Navigation;
-using System.Collections.ObjectModel;
-using MangaReader_MVVM.Models;
-using MangaReader_MVVM.Services;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Popups;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
-using MangaReader_MVVM.Services.SettingsServices;
-using System.ComponentModel;
-using MangaReader_MVVM.Utils;
+using Windows.UI.Xaml.Navigation;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -34,23 +34,23 @@ namespace MangaReader_MVVM.ViewModels
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
-                Favorits = DesignTimeService.GenerateMangaDummies();
+                //Favorits = DesignTimeService.GenerateMangaDummies();
             }
             else
             {
                 _settings.PropertyChanged += Settings_Changed;
+                Favorits.CollectionChanged += Favorits_Changed;
             }
         }
 
-        private ObservableCollection<IManga> _favorits;
-        public ObservableCollection<IManga> Favorits { get { return _favorits = _favorits ?? _library.Favorits; } set { Set(ref _favorits, value); base.RaisePropertyChanged(nameof(FavoritsGroups)); } }
-        public ObservableCollection<MangaGroup> FavoritsGroups
+        public ObservableItemCollection<Manga> Favorits => _library.Favorits; 
+        public ObservableItemCollection<MangaGroup> FavoritsGroups
         {
             get
             {
-                var groups = new ObservableCollection<MangaGroup>();
-                groups.Add(new MangaGroup() { Initial = '&' });
-                groups.Add(new MangaGroup() { Initial = '#' });
+                var groups = new ObservableItemCollection<MangaGroup> { new MangaGroup() { Initial = '&' },
+                                                                        new MangaGroup() { Initial = '#' } };
+
                 for (int i = 'A'; i <= 'Z'; i++)
                 {
                     groups.Add(new MangaGroup() { Initial = (char)i });
@@ -72,7 +72,11 @@ namespace MangaReader_MVVM.ViewModels
 
                 return groups;
             }
-        }        
+        }
+        private void Favorits_Changed(object sender, NotifyCollectionChangedEventArgs e)
+        {
+              
+        }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
@@ -134,7 +138,8 @@ namespace MangaReader_MVVM.ViewModels
             => _reloadGridCommand ?? (_reloadGridCommand = new DelegateCommand(async () =>
             {
                 Views.Busy.SetBusy(true, "Picking up the freshly printed books...");
-                Favorits = await _library.GetFavoritMangasAsync(ReloadMode.Server);
+                await _library.GetMangasAsync(ReloadMode.Server);
+                //base.RaisePropertyChanged(nameof(Favorits));
                 Views.Busy.SetBusy(false);
             }, () => Favorits.Any()));
         
@@ -152,9 +157,9 @@ namespace MangaReader_MVVM.ViewModels
                 FavoritsCVS = source;
             }));
 
-        private DelegateCommand<IManga> _favoritCommand;
-        public DelegateCommand<IManga> FavoritCommand
-            => _favoritCommand ?? (_favoritCommand = new DelegateCommand<IManga>((manga) =>
+        private DelegateCommand<Manga> _favoritCommand;
+        public DelegateCommand<Manga> FavoritCommand
+            => _favoritCommand ?? (_favoritCommand = new DelegateCommand<Manga>((manga) =>
             {
                 _library.AddFavorit(manga);
             }));

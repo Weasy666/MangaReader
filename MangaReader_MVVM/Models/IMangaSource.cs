@@ -1,32 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Template10.Controls;
+using Template10.Mvvm;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Models
 {
-    public interface IMangaSource
+    public interface IMangaSource : IBindable
     {
         BitmapImage Icon { get; }
         MangaSource Name { get; }       
         Uri RootUri { get; }
         Uri MangasListPage { get; }
-        ObservableCollection<IManga> Mangas { get; }
-        ObservableCollection<IManga> Favorits { get; }
+        ObservableItemCollection<Manga> Mangas { get; }
+        ObservableItemCollection<Manga> Favorits { get; }
 
-        Task<ObservableCollection<IManga>> GetMangasAsync(ReloadMode mode);
-        Task<IManga> GetMangaAsync(string mangaId);
-        Task<IChapter> GetChapterAsync(IChapter chapter);
-        Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode);
-        Task<ObservableCollection<IManga>> GetLatestReleasesAsync(int numberOfPastDays, ReloadMode mode);
-        void AddFavorit(ObservableCollection<IManga> mangas);
-        void AddFavorit(IManga manga, List<string> favorits);
-        void AddAsRead(string mangaId, ObservableCollection<IChapter> chapters);
-        void AddAsRead(string mangaId, IChapter chapter, bool single);
-        void RemoveAsRead(string mangaId, ObservableCollection<IChapter> chapters);
-        void RemoveAsRead(string mangaId, IChapter chapter, bool single);
-        ObservableCollection<IManga> SearchManga(string query);
-        Task<ObservableCollection<IChapter>> GetChaptersAsync(IManga manga);       
+        Task<ObservableItemCollection<Manga>> GetMangasAsync(ReloadMode mode);
+        Task<Manga> GetMangaAsync(string mangaId);
+        Task<Chapter> GetChapterAsync(Chapter chapter);
+        //Task<ObservableItemCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode);
+        Task<ObservableItemCollection<Manga>> GetLatestReleasesAsync(int numberOfPastDays, ReloadMode mode);
+        void AddFavorit(ObservableItemCollection<Manga> mangas);
+        void AddFavorit(Manga manga, bool isSingle = true);
+        void AddAsRead(ObservableItemCollection<Chapter> chapters);
+        void AddAsRead(Chapter chapter, bool isSingle = true);
+        void RemoveAsRead(ObservableItemCollection<Chapter> chapters);
+        void RemoveAsRead(Chapter chapter, bool isSingle = true);
+        ObservableItemCollection<Manga> SearchManga(string query);
+        Task<ObservableItemCollection<Chapter>> GetChaptersAsync(Manga manga);       
     }
 }

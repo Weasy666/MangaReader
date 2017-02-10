@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Template10.Controls;
 using Template10.Mvvm;
+using Template10.Utils;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -32,13 +34,10 @@ namespace MangaReader_MVVM.ViewModels
             }
             else
             {
-                Manga = new Manga()
-                {
-                    
-                };
+                Manga = new Manga();
                 Chapter = new Chapter()
                 {
-                    Pages = new ObservableCollection<IPage>()
+                    Pages = new ObservableItemCollection<Models.Page>()
                 };
             }
         }
@@ -88,27 +87,13 @@ namespace MangaReader_MVVM.ViewModels
         //    }
         //}
 
-        private IManga _manga;
-        public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
+        private Manga _manga;
+        public Manga Manga { get { return _manga; } set { Set(ref _manga, value); } }
 
-        public ObservableCollection<IChapter> Chapters => Manga.Chapters;
-        private IChapter _chapter;
-        public IChapter Chapter { get { return _chapter; } set { Set(ref _chapter, value); } }
-        private ObservableCollection<IPage> _pages;
-        public ObservableCollection<IPage> Pages
-        {
-            get
-            {
-                if (Chapter.Pages != _pages)
-                    _pages = Chapter.Pages;
-                return _pages;
-            }
-            set
-            {
-                Chapter.Pages = value;
-                Set(ref _pages, value);
-            }
-        }        
+        private Chapter _chapter;
+        public Chapter Chapter { get { return _chapter; } set { Set(ref _chapter, value); RaisePropertyChanged(nameof(Pages)); } }
+
+        public ObservableItemCollection<Models.Page> Pages => Chapter.Pages;
         
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
@@ -116,8 +101,7 @@ namespace MangaReader_MVVM.ViewModels
 
             if (mode == NavigationMode.New && parameter != null)
             {
-                Pages.Clear();
-                Manga = await _library.GetMangaAsync(chapter.ParentManga.Id);
+                Manga = chapter.ParentManga;
                 
                 var chapterIndex = Manga.Chapters.IndexOf(chapter);
                 Chapter = await _library.GetChapterAsync(chapter);
@@ -183,17 +167,15 @@ namespace MangaReader_MVVM.ViewModels
         public async Task ChapterClickedAsync(object sender, TappedRoutedEventArgs args)
         {
             var listView = sender as ListView;
-            var clickedChapter = listView.SelectedItem as Chapter;
 
-            if (clickedChapter != null)
+            if (listView.SelectedItem is Chapter clickedChapter)
             {
                 if (clickedChapter != Chapter)
                 {
                     Chapter = await MangaLibrary.Instance.GetChapterAsync(clickedChapter);
                     SelectedChapterIndex = listView.SelectedIndex;
-                    MangaLibrary.Instance.AddAsRead(clickedChapter.ParentManga.Id, clickedChapter);
-                    Pages = new ObservableCollection<IPage>(Chapter.Pages);
-                }                
+                    MangaLibrary.Instance.AddAsRead(clickedChapter);
+                }
             }
             else
             {

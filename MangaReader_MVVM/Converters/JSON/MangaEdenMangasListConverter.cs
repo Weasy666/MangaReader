@@ -1,20 +1,24 @@
-﻿using Newtonsoft.Json;
+﻿using MangaReader_MVVM.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Template10.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 
-namespace MangaReader_MVVM.Models
+namespace MangaReader_MVVM.Converters.JSON
 {
     class MangaEdenMangasListConverter : JsonConverter
     {
+        private MangaSource _source;
+        public MangaEdenMangasListConverter(MangaSource source)
+        {
+            _source = source;
+        }
+
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(ObservableCollection<IManga>));
+            return (objectType == typeof(ObservableItemCollection<Manga>));
         }
 
         // TODO: cleaner, maybe more generic and performant way to deserialize mangaList
@@ -26,6 +30,7 @@ namespace MangaReader_MVVM.Models
             // Construct the Result object using the non-default constructor
             var mangas = jo.Select(manga => new Manga
             {
+                MangaSource = _source,
                 Title = System.Net.WebUtility.HtmlDecode(manga["t"].ToString()),
                 Alias = System.Net.WebUtility.HtmlDecode(manga["a"].ToString()),
                 Id = manga["i"].ToString(),
@@ -39,7 +44,7 @@ namespace MangaReader_MVVM.Models
             mangas.Sort();
 
             // Return the result
-            return new ObservableCollection<IManga>(mangas);
+            return new ObservableItemCollection<Manga>(mangas);
         }
 
         public override bool CanWrite => false;

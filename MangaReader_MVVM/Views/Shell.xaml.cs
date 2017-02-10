@@ -14,7 +14,7 @@ namespace MangaReader_MVVM.Views
         public static Shell Instance { get; set; }
         public static HamburgerMenu HamburgerMenu => Instance.MyHamburgerMenu;
         private MangaLibrary _library => MangaLibrary.Instance;
-        public ObservableCollection<IManga> Mangas => _library.Mangas;
+        public ObservableItemCollection<Manga> Mangas => _library.Mangas;
 
         public Shell()
         {
@@ -42,11 +42,11 @@ namespace MangaReader_MVVM.Views
             var suggestionChosen = args.ChosenSuggestion;
             if (suggestionChosen != null)
             {
-                HamburgerMenu.NavigationService.Navigate(typeof(MangaDetailsPage), suggestionChosen as IManga);
+                HamburgerMenu.NavigationService.Navigate(typeof(MangaDetailsPage), suggestionChosen as Manga);
             }
             else
             {
-                var Results = sender.Items.ToList().Cast<IManga>().ToList();
+                var Results = sender.Items.ToList().Cast<Manga>().ToList();
                 HamburgerMenu.NavigationService.Navigate(typeof(SearchResultPage), new List<object> { sender.Text, Results });
             }
             sender.Text = "";

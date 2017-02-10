@@ -102,6 +102,7 @@
     <Compile Include="Converters\BoolToSelectionModeConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DateTimeToPrettyDateTime.cs" />
+    <Compile Include="Converters\JSON\InterfaceConverter.cs" />
     <Compile Include="Converters\MangaItemTemplateConverter.cs" />
     <Compile Include="Converters\ReadDirectionToIntConverter.cs" />
     <Compile Include="Converters\ReadModeToScrollBarVisibilityConverter.cs" />
@@ -113,15 +114,16 @@
     <Compile Include="Converters\ReadModeToOrientationConverter.cs" />
     <Compile Include="Models\Chapter.cs" />
     <Compile Include="Models\MangaGroup.cs" />
+    <Compile Include="Services\FileService\FileHelper.cs" />
     <Compile Include="Utils\CompareNatural.cs" />
     <Compile Include="Models\IChapter.cs" />
     <Compile Include="Models\IManga.cs" />
     <Compile Include="Models\IMangaSource.cs" />
     <Compile Include="Models\IPage.cs" />
     <Compile Include="Models\Manga.cs" />
-    <Compile Include="Converters\MangaEdenChapterPagesConverter.cs" />
-    <Compile Include="Converters\MangaEdenMangaDetailsConverter.cs" />
-    <Compile Include="Converters\MangaEdenMangasListConverter.cs" />
+    <Compile Include="Converters\JSON\MangaEdenChapterPagesConverter.cs" />
+    <Compile Include="Converters\JSON\MangaEdenMangaDetailsConverter.cs" />
+    <Compile Include="Converters\JSON\MangaEdenMangasListConverter.cs" />
     <Compile Include="Services\MangaEdenSource.cs" />
     <Compile Include="Services\MangaLibrary.cs" />
     <Compile Include="Utils\Enums.cs" />

@@ -1,18 +1,14 @@
 ﻿using MangaReader_MVVM.Models;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Template10.Controls;
 
 namespace MangaReader_MVVM.Services
 {
     class DesignTimeService
     {
-        public static ObservableCollection<IManga> GenerateMangaDummies(int number = 100, int offset = 0)
+        public static ObservableItemCollection<Manga> GenerateMangaDummies(int number = 100, int offset = 0)
         {
-            var mangaDummies = new ObservableCollection<IManga>();
+            var mangaDummies = new ObservableItemCollection<Manga>();
             for (int i = 0 + offset; i < number + offset; i++)
                 mangaDummies.Add(new Manga { Title = "Manga" + i,
                                              Id = i.ToString(),
@@ -24,7 +20,7 @@ namespace MangaReader_MVVM.Services
             return mangaDummies;
         }
 
-        public static IManga GenerateMangaDetailDummy()
+        public static Manga GenerateMangaDetailDummy()
         {
             return new Manga { Title = "MangaDetail",
                                Cover = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/NewStoreLogo.scale-400.png")),
@@ -35,9 +31,9 @@ namespace MangaReader_MVVM.Services
                              };
         }
 
-        public static ObservableCollection<IChapter> GenerateChapterDummies(int number = 100, int offset = 0)
+        public static ObservableItemCollection<Chapter> GenerateChapterDummies(int number = 100, int offset = 0)
         {
-            var chapterDummies = new ObservableCollection<IChapter>();
+            var chapterDummies = new ObservableItemCollection<Chapter>();
             for (int i = 0 + offset; i < number + offset; i++)
                 chapterDummies.Add(new Chapter { Title = "Chapter" + i,
                                                  Number = (i + 1),
@@ -47,9 +43,9 @@ namespace MangaReader_MVVM.Services
             return chapterDummies;
         }
         
-        public static ObservableCollection<IPage> GeneratePageDummies(int number = 25, int offset = 0)
+        public static ObservableItemCollection<Page> GeneratePageDummies(int number = 25, int offset = 0)
         {
-            var pageDummies = new ObservableCollection<IPage>();
+            var pageDummies = new ObservableItemCollection<Page>();
             for (int i = 0 + offset; i < number + offset; i++)
                 pageDummies.Add(new Page { Number = i,
                                            Url = new Uri("ms-appx:///Assets/NewStoreLogo.scale-400.png")

@@ -5,7 +5,7 @@ using Windows.UI.Xaml;
 
 namespace MangaReader_MVVM.Services.SettingsServices
 {
-    public class SettingsService : Template10.Mvvm.ViewModelBase
+    public class SettingsService : Template10.Mvvm.BindableBase
     {
         public static SettingsService Instance { get; } = new SettingsService();
         Template10.Services.SettingsService.ISettingsHelper _helper;

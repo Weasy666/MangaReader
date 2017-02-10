@@ -46,4 +46,12 @@ namespace MangaReader_MVVM
         [Display(Name = "Right to Left")]
         RightToLeft
     }
+
+    public enum StorageStrategies
+    {
+        Local,
+        Roaming,
+        Temporary,
+        OneDrive
+    }
 }

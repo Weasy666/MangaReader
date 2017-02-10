@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using Template10.Mvvm;
 using Windows.UI.Xaml;
 
 namespace MangaReader_MVVM.Models
 {
     [DebuggerDisplay("Page: Number = {Number}")]
-    public class Page : Template10.Mvvm.ViewModelBase, IPage
+    public class Page : BindableBase, IPage
     {
         private Visibility _overlayVisibility = Visibility.Collapsed;
         public Visibility OverlayVisibility

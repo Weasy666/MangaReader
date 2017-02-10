@@ -378,7 +378,7 @@
                     <ProgressBar x:Name="ReadProgress"
                                  Margin="0,4,0,0"
                                  Height="5"
-                                 Maximum="{x:Bind ViewModel.Manga.Chapters.Count, Mode=OneWay}"
+                                 Maximum="{x:Bind ViewModel.Manga.NumberOfChapters, Mode=OneWay}"
                                  Value="{x:Bind ViewModel.ReadProgress, Mode=OneWay}" SmallChange="1" LargeChange="1"/>
                     <StackPanel Orientation="Horizontal"
                                 Margin="0,4,0,0"

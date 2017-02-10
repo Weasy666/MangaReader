@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using Windows.UI.Xaml.Media.Imaging;
-using MangaReader_MVVM.Models;
-using Windows.Storage.Pickers;
-using Windows.Storage;
+﻿using MangaReader_MVVM.Models;
 using Newtonsoft.Json;
-using Windows.Storage.Provider;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Template10.Controls;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Provider;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Services
 {
@@ -85,21 +85,21 @@ namespace MangaReader_MVVM.Services
 
         public Uri RootUri => _mangaSource.RootUri;
         public BitmapImage Icon => _mangaSource.Icon;
-        public ObservableCollection<IManga> Mangas => _mangaSource.Mangas;
-        public ObservableCollection<IManga> Favorits => _mangaSource.Favorits;
+        public ObservableItemCollection<Manga> Mangas => _mangaSource.Mangas;
+        public ObservableItemCollection<Manga> Favorits => _mangaSource.Favorits;
 
-        public Task<ObservableCollection<IManga>> GetMangasAsync(ReloadMode mode = ReloadMode.Local) => _mangaSource.GetMangasAsync(mode);
-        public Task<IManga> GetMangaAsync(string mangaId) => _mangaSource.GetMangaAsync(mangaId);
-        public Task<IChapter> GetChapterAsync(Chapter chapter) => _mangaSource.GetChapterAsync(chapter);
-        public Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode = ReloadMode.Local) => _mangaSource.GetFavoritMangasAsync(mode);
-        public Task<ObservableCollection<IManga>> GetLatestReleasesAsync(int numberOfPastDays = 7, ReloadMode mode = ReloadMode.Local) => _mangaSource.GetLatestReleasesAsync(numberOfPastDays, mode);
-        public void AddFavorit(ObservableCollection<IManga> mangas) => _mangaSource.AddFavorit(mangas);
-        public void AddFavorit(IManga manga, List<string> favorits = null) => _mangaSource.AddFavorit(manga, favorits);
-        public void AddAsRead(string mangaId, ObservableCollection<IChapter> chapters) => _mangaSource.AddAsRead(mangaId, chapters);
-        public void AddAsRead(string mangaId, IChapter chapter) => _mangaSource.AddAsRead(mangaId, chapter, true);
-        public void RemoveAsRead(string mangaId, ObservableCollection<IChapter> chapters) => _mangaSource.RemoveAsRead(mangaId, chapters);
-        public void RemoveAsRead(string mangaId, IChapter chapter) => _mangaSource.RemoveAsRead(mangaId, chapter, true);
-        public ObservableCollection<IManga> SearchManga(string query) => _mangaSource.SearchManga(query);
-        public Task<ObservableCollection<IChapter>> GetChaptersAsync(Manga manga) => _mangaSource.GetChaptersAsync(manga);
+        public Task<ObservableItemCollection<Manga>> GetMangasAsync(ReloadMode mode = ReloadMode.Local) => _mangaSource.GetMangasAsync(mode);
+        public Task<Manga> GetMangaAsync(string mangaId) => _mangaSource.GetMangaAsync(mangaId);
+        public Task<Chapter> GetChapterAsync(Chapter chapter) => _mangaSource.GetChapterAsync(chapter);
+        //public Task<ObservableItemCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode = ReloadMode.Local) => _mangaSource.GetFavoritMangasAsync(mode);
+        public Task<ObservableItemCollection<Manga>> GetLatestReleasesAsync(int numberOfPastDays = 7, ReloadMode mode = ReloadMode.Local) => _mangaSource.GetLatestReleasesAsync(numberOfPastDays, mode);
+        public void AddFavorit(ObservableItemCollection<Manga> mangas) => _mangaSource.AddFavorit(mangas);
+        public void AddFavorit(Manga manga) => _mangaSource.AddFavorit(manga);
+        public void AddAsRead(ObservableItemCollection<Chapter> chapters) => _mangaSource.AddAsRead(chapters);
+        public void AddAsRead(Chapter chapter) => _mangaSource.AddAsRead(chapter);
+        public void RemoveAsRead(ObservableItemCollection<Chapter> chapters) => _mangaSource.RemoveAsRead(chapters);
+        public void RemoveAsRead(Chapter chapter) => _mangaSource.RemoveAsRead(chapter);
+        public ObservableItemCollection<Manga> SearchManga(string query) => _mangaSource.SearchManga(query);
+        public Task<ObservableItemCollection<Chapter>> GetChaptersAsync(Manga manga) => _mangaSource.GetChaptersAsync(manga);
     }
 }
