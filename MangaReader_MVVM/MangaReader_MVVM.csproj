@@ -133,6 +133,9 @@
     <Compile Include="Services\DesignTimeService.cs" />
     <Compile Include="Services\SettingsServices\SettingsService.cs" />
     <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\GenericCompare.cs" />
+    <Compile Include="Utils\GroupedObservableCollection.cs" />
+    <Compile Include="Utils\Grouping.cs" />
     <Compile Include="Utils\Helpers.cs" />
     <Compile Include="ViewModels\ChapterPageViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />

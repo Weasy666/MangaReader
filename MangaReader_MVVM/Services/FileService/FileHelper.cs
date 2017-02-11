@@ -1,8 +1,10 @@
-﻿using Microsoft.Toolkit.Uwp;
+﻿using Microsoft.Toolkit.Uwp.Services;
+using Microsoft.Toolkit.Uwp.Services.OneDrive;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.Streams;
 
 namespace MangaReader_MVVM.Services.FileService
 {
@@ -65,18 +67,30 @@ namespace MangaReader_MVVM.Services.FileService
             // convert to string
             var serializedValue = Serialize(value);
             // save string to file
-            await FileIO.WriteTextAsync(file, serializedValue);
+            if (file is StorageFile)
+            {
+                await FileIO.WriteTextAsync(file as StorageFile, serializedValue);
+            }
+            //else
+            //{
+            //    var rootFolder = file as OneDriveStorageFolder;
+                
+            //    var test = await rootFolder.CreateFileAsync(key, option);
+            //    test.
+            //}
             // result
             return await FileExistsAsync(key, location);
         }
 
-        private static async Task<StorageFile> CreateFileAsync(string key, StorageStrategies location = StorageStrategies.Local,
+        private static async Task<object> CreateFileAsync(string key, StorageStrategies location = StorageStrategies.Local,
             CreationCollisionOption option = CreationCollisionOption.OpenIfExists)
         {
             switch (location)
             {
                 case StorageStrategies.Local:
                     return await ApplicationData.Current.LocalFolder.CreateFileAsync(key, option);
+                //case StorageStrategies.OneDrive:
+                //    return await OneDriveService.Instance.AppRootFolderAsync();
                 case StorageStrategies.Roaming:
                     return await ApplicationData.Current.RoamingFolder.CreateFileAsync(key, option);
                 case StorageStrategies.Temporary:
@@ -116,12 +130,15 @@ namespace MangaReader_MVVM.Services.FileService
                     case StorageStrategies.Local:
                         retval = await ApplicationData.Current.LocalFolder.TryGetItemAsync(key) as StorageFile;
                         break;
+                    //case StorageStrategies.OneDrive:
+                    //    retval = await OneDriveService.Instance.RootFolderAsync();
+                    //    break;
                     case StorageStrategies.Roaming:
                         retval = await ApplicationData.Current.RoamingFolder.TryGetItemAsync(key) as StorageFile;
                         break;
                     case StorageStrategies.Temporary:
                         retval = await ApplicationData.Current.TemporaryFolder.TryGetItemAsync(key) as StorageFile;
-                        break;
+                        break;                    
                     default:
                         throw new NotSupportedException(location.ToString());
                 }

@@ -1,19 +1,20 @@
 ﻿using MangaReader_MVVM.Converters.JSON;
 using MangaReader_MVVM.Models;
+using MangaReader_MVVM.Services.FileService;
 using MangaReader_MVVM.Utils;
-using Microsoft.Toolkit.Uwp;
-using Microsoft.Toolkit.Uwp.UI;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Template10.Controls;
 using Template10.Mvvm;
-using MangaReader_MVVM.Services.FileService;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Provider;
 using Windows.UI.Popups;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Services
@@ -135,7 +136,7 @@ namespace MangaReader_MVVM.Services
                         JsonSerializerSettings settings = new JsonSerializerSettings();
                         settings.Converters.Add(new MangaEdenChapterPagesConverter());
 
-                        var pages = JsonConvert.DeserializeObject<ObservableItemCollection<Page>>(result, settings);
+                        var pages = JsonConvert.DeserializeObject<ObservableItemCollection<Models.Page>>(result, settings);
 
                         chapter.Pages = pages;
                     }
@@ -148,22 +149,7 @@ namespace MangaReader_MVVM.Services
             }
             return chapter;
         }
-
-        //public async Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode = ReloadMode.Local)
-        //{
-        //    //if (!Mangas.Any() || mode == ReloadMode.Server)
-        //    //{
-        //    //    await GetMangasAsync(ReloadMode.Local);
-        //    //    Favorits = new ObservableCollection<IManga>(Mangas.Where(manga => manga.IsFavorit).ToList());
-        //    //}
-        //    //else if (_favorits == null || !Favorits.Any())
-        //    //{
-        //    //    Favorits = new ObservableCollection<IManga>(Mangas.Where(manga => manga.IsFavorit).ToList());
-        //    //}
-
-        //    return Mangas.F;
-        //}
-
+        
         public async Task<ObservableItemCollection<Manga>> GetLatestReleasesAsync(int numberOfPastDays, ReloadMode mode)
         {
             if ((!Mangas.Any() && mode == ReloadMode.Local) || mode == ReloadMode.Server)
@@ -318,9 +304,7 @@ namespace MangaReader_MVVM.Services
             manga.Released = details.Released;
             foreach (var chapter in details.Chapters)
             {
-                //LoadAndMergeReadStatus(manga.Id, chapter);
                 manga.AddChapter(chapter);
-                //manga.RaisePropertyChanged(nameof(manga.ReadProgress));
             }
         }
 
@@ -342,6 +326,85 @@ namespace MangaReader_MVVM.Services
                         }
                     }
                 }
+            }
+        }
+
+        public async Task<bool> ExportMangaStatusAsync()
+        {
+            if (_storedData != null && _storedData.Any())
+            {
+                FileSavePicker savePicker = new FileSavePicker()
+                {
+                    SuggestedStartLocation = PickerLocationId.Downloads
+                };
+
+                // Dropdown of file types the user can save the file as
+                savePicker.FileTypeChoices.Add("JSON", new List<string>() { ".json" });
+                // Default file name if the user does not type one in or select a file to replace
+                savePicker.SuggestedFileName = DateTime.Now.ToUniversalTime().ToString() + "_MangaReader_Backup";
+
+                StorageFile file = await savePicker.PickSaveFileAsync();
+                if (file != null)
+                {
+                    // Prevent updates to the remote version of the file until we finish making changes and call CompleteUpdatesAsync.
+                    CachedFileManager.DeferUpdates(file);
+                    // write to file
+                    var serializedMangas  = JsonConvert.SerializeObject(_storedData, Formatting.None, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                                                                                                                                    PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                                                                                                                                    TypeNameHandling = TypeNameHandling.Objects,
+                                                                                                                                    TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple
+                                                                                                                                  });
+                    
+                    await FileIO.WriteTextAsync(file, serializedMangas);
+
+                    // Let Windows know that we're finished changing the file so the other app can update the remote version of the file.
+                    // Completing updates may require Windows to ask for user input.
+                    FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+                    return (status == FileUpdateStatus.Complete);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> ImportMangaStatusAsync()
+        {
+            FileOpenPicker openPicker = new FileOpenPicker()
+            {
+                SuggestedStartLocation = PickerLocationId.Downloads
+            };
+            
+            openPicker.FileTypeFilter.Add(".json");
+            openPicker.CommitButtonText = "Import and overwrite";
+            
+            StorageFile file = await openPicker.PickSingleFileAsync();
+            if (file != null)
+            {
+                _storedData = JsonConvert.DeserializeObject<Dictionary<string, Manga>>(await FileIO.ReadTextAsync(file));
+                var result = await FileHelper.WriteFileAsync<Dictionary<string, Manga>>(Name + "_mangasStatus", _storedData);
+                
+                LoadAndMergeStoredData();
+
+                var tempCollection = new ObservableItemCollection<Manga>(Mangas.Where(m => m.IsFavorit));
+                foreach(var temp in tempCollection)
+                {
+                    if (!Favorits.Any(m => m.Id == temp.Id))
+                    {
+                       Favorits.AddSorted(temp);
+                    }
+                }
+
+                return result;
+            }
+            else
+            {
+                return false;
             }
         }
     }

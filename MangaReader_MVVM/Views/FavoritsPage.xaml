@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:MangaReader_MVVM.ViewModels"
+      xmlns:utils="using:MangaReader_MVVM.Utils"
       xmlns:models="using:MangaReader_MVVM.Models" mc:Ignorable="d" >    
     <Page.DataContext>
         <vm:FavoritsPageViewModel x:Name="ViewModel" />
@@ -19,10 +20,10 @@
         <t10controls:PageHeader Name="PageHeader" Text="Your Favorite Mangas" Frame="{x:Bind Frame}" >
             <t10controls:PageHeader.PrimaryCommands>
                 <!--<AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />-->
-                <AppBarButton x:Name="Export"
+                <!--<AppBarButton x:Name="Export"
                               Icon="SetTile"
                               Label="Export"
-                              Command="{x:Bind ViewModel.ExportCommand, Mode=OneWay}"/>
+                              Command="{x:Bind ViewModel.ExportCommand, Mode=OneWay}"/>-->
                 <AppBarSeparator />
                 <AppBarButton Icon="Refresh"
                               Label="Reload"
@@ -358,7 +359,7 @@
                             </GroupStyle.HeaderContainerStyle>
                             <GroupStyle.HeaderTemplate>
                                 <DataTemplate x:DataType="models:MangaGroup">
-                                    <TextBlock Text="{x:Bind Initial}" Margin="0,0,0,-10"
+                                    <TextBlock Text="{x:Bind Key}" Margin="0,0,0,-10"
                                                Style="{ThemeResource SubheaderTextBlockStyle}"
                                                Foreground="{ThemeResource SystemControlHighlightAccentBrush}"/>
                                 </DataTemplate>
@@ -374,7 +375,7 @@
                           VerticalAlignment="Center">
                     <GridView.ItemTemplate>
                         <DataTemplate x:Name="ZoomedOutTemplate" x:DataType="ICollectionViewGroup">
-                            <TextBlock Text="{x:Bind Group.(models:MangaGroup.Initial)}"
+                            <TextBlock Text="{x:Bind Group.(models:MangaGroup.Key)}"
                                        Foreground="{Binding Converter={StaticResource JumpListItemForegroundConverter}}"
                                        Style="{ThemeResource SubheaderTextBlockStyle}"/>
                         </DataTemplate>                        

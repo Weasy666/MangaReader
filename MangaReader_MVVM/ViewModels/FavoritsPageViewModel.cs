@@ -40,22 +40,23 @@ namespace MangaReader_MVVM.ViewModels
             {
                 _settings.PropertyChanged += Settings_Changed;
                 Favorits.CollectionChanged += Favorits_Changed;
+                //FavoritsGroups = new GroupedObservableCollection<char, Manga>(m => m.Title[0], Favorits);
             }
         }
 
-        public ObservableItemCollection<Manga> Favorits => _library.Favorits; 
+        public ObservableItemCollection<Manga> Favorits => _library.Favorits;
         public ObservableItemCollection<MangaGroup> FavoritsGroups
         {
             get
             {
-                var groups = new ObservableItemCollection<MangaGroup> { new MangaGroup() { Initial = '&' },
-                                                                        new MangaGroup() { Initial = '#' } };
+                var groups = new ObservableItemCollection<MangaGroup> { new MangaGroup() { Key = '&' },
+                                                                        new MangaGroup() { Key = '#' } };
 
                 for (int i = 'A'; i <= 'Z'; i++)
                 {
-                    groups.Add(new MangaGroup() { Initial = (char)i });
+                    groups.Add(new MangaGroup() { Key = (char)i });
                 }
-                
+
                 var query = from manga in Favorits
                             group manga by manga.Title.ToUpper()[0] into grp
                             orderby grp.Key
@@ -63,7 +64,7 @@ namespace MangaReader_MVVM.ViewModels
 
                 foreach (var grp in query)
                 {
-                    MangaGroup group = groups.First(g => g.Initial == Helpers.CategorizeAlphabetically(grp.GroupName));
+                    MangaGroup group = groups.First(g => g.Key == Helpers.CategorizeAlphabetically(grp.GroupName));
                     foreach (var item in grp.Items)
                     {
                         group.AddSorted(item);
@@ -73,9 +74,36 @@ namespace MangaReader_MVVM.ViewModels
                 return groups;
             }
         }
+
+        //public GroupedObservableCollection<string, Manga> FavoritsGroups { get; internal set; }
+
         private void Favorits_Changed(object sender, NotifyCollectionChangedEventArgs e)
         {
-              
+            //FavoritsGroups.ReplaceWith(new GroupedObservableCollection<string, Manga>(c => c.Title[0].ToString(), Favorits), new GenericCompare<Manga>(m => m.Id));
+            //if (e.Action == NotifyCollectionChangedAction.Add)
+            //{
+            //    var added = e.NewItems;
+
+            //    if (FavoritsCVS.IsSourceGrouped)
+            //    {
+            //        foreach (Manga toAdd in added)
+            //        {
+            //            (FavoritsCVS.View.CollectionGroups.Where(g => (g as MangaGroup).Key == toAdd.Title.ToUpper()[0]).First() as MangaGroup).AddSorted(toAdd);
+            //        }
+            //    }
+            //}
+            //if (e.Action == NotifyCollectionChangedAction.Remove)
+            //{
+            //    var removed = e.OldItems;
+
+            //    if (FavoritsCVS.IsSourceGrouped)
+            //    {
+            //        foreach (Manga toRemove in removed)
+            //        {
+            //            (FavoritsCVS.View.CollectionGroups.Where(g => (g as MangaGroup).Key == toRemove.Title.ToUpper()[0]).First() as MangaGroup).Remove(toRemove);
+            //        }
+            //    }
+            //}
         }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
@@ -119,6 +147,8 @@ namespace MangaReader_MVVM.ViewModels
             set { base.RaisePropertyChanged(nameof(SemanticZoomCanChangeView)); }
         }
 
+
+
         private CollectionViewSource _favoritsCVS;
         public CollectionViewSource FavoritsCVS
         {
@@ -126,12 +156,12 @@ namespace MangaReader_MVVM.ViewModels
             set { Set(ref _favoritsCVS, value); }
         }
 
-        private DelegateCommand _exportCommand;
-        public DelegateCommand ExportCommand
-            => _exportCommand ?? (_exportCommand = new DelegateCommand(async () =>
-            {
-                await _library.ExportFavoritesAsync();
-            }, () => Favorits.Any()));
+        //private DelegateCommand _exportCommand;
+        //public DelegateCommand ExportCommand
+        //    => _exportCommand ?? (_exportCommand = new DelegateCommand(async () =>
+        //    {
+        //        await _library.ExportMangaStatusAsync();
+        //    }, () => Favorits.Any()));
 
         private DelegateCommand _reloadGridCommand;
         public DelegateCommand ReloadGridCommand

@@ -50,8 +50,8 @@ namespace MangaReader_MVVM
     public enum StorageStrategies
     {
         Local,
+        OneDrive,
         Roaming,
-        Temporary,
-        OneDrive
+        Temporary
     }
 }

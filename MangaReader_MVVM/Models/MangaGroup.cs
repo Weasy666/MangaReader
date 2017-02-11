@@ -9,11 +9,11 @@ namespace MangaReader_MVVM.Models
 {
     public class MangaGroup : ObservableCollection<Manga>
     {
-        public char Initial { get; set; }
+        public char Key { get; set; }
 
         public override string ToString()
         {
-            return Initial.ToString();
+            return Key.ToString();
         }
     }
 }

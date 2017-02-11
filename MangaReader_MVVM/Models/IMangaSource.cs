@@ -27,6 +27,9 @@ namespace MangaReader_MVVM.Models
         void RemoveAsRead(ObservableItemCollection<Chapter> chapters);
         void RemoveAsRead(Chapter chapter, bool isSingle = true);
         ObservableItemCollection<Manga> SearchManga(string query);
-        Task<ObservableItemCollection<Chapter>> GetChaptersAsync(Manga manga);       
+        Task<ObservableItemCollection<Chapter>> GetChaptersAsync(Manga manga);
+
+        Task<bool> ExportMangaStatusAsync();
+        Task<bool> ImportMangaStatusAsync();
     }
 }
