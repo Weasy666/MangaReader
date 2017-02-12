@@ -8,7 +8,7 @@ using Template10.Mvvm;
 namespace MangaReader_MVVM.Models
 {
     [DebuggerDisplay("Chapter: {Title} | Number = {Number} | ID = {Id}")]
-    public class Chapter : BindableBase, IChapter
+    public class Chapter : BindableBase, IChapter, IEquatable<IChapter>
     {
         public Manga ParentManga { get; set; }
         public float Number { get; set; }
@@ -25,6 +25,6 @@ namespace MangaReader_MVVM.Models
 
         public ObservableItemCollection<Page> Pages { get; set; } = new ObservableItemCollection<Page>();
         public int CompareTo(IChapter other) => other == null ? 1 : Number.CompareTo(other.Number);
-        public bool Equals(IChapter other) => Id == other.Id;        
+        public bool Equals(IChapter other) => Id.Equals(other.Id);
     }
 }

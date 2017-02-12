@@ -28,7 +28,7 @@ namespace MangaReader_MVVM.Models
         bool IsFavorit { get; set; }
 
         void AddChapter(Chapter chapter);
-        void RemoveChapter(Chapter chapter);
+        bool RemoveChapter(Chapter chapter);
         ObservableItemCollection<Chapter> ReverseChapters();
     }
 }

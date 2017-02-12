@@ -114,6 +114,12 @@ namespace MangaReader_MVVM.Services.SettingsServices
             }
             set { _helper.Write(nameof(ReadDirection), value.ToString()); base.RaisePropertyChanged(nameof(ReadDirection)); }
         }
+
+        public int NumberOfRecentMangas
+        {
+            get { return _helper.Read<int>(nameof(NumberOfRecentMangas), 8); }
+            set { _helper.Write(nameof(NumberOfRecentMangas), value); base.RaisePropertyChanged(nameof(NumberOfRecentMangas)); }
+        }
     }
 }
 

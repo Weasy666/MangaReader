@@ -44,9 +44,16 @@ namespace MangaReader_MVVM.Models
         {
             chapter.ParentManga = this;
 
-            if (Chapters.Contains(chapter))
+            if (Chapters.Any(c => c.Id == chapter.Id))
             {
-                var readStatus = Chapters[Chapters.IndexOf(chapter)].IsRead;
+                int i = 0;
+                for (; i < Chapters.Count; i++)
+                {
+                    if (Chapters[i].Id == chapter.Id)
+                        break;
+                }
+
+                var readStatus = Chapters[i].IsRead; //Chapters[Chapters.IndexOf(chapter)].IsRead;
                 Chapters.Remove(chapter);
 
                 chapter.IsRead = readStatus;
@@ -55,10 +62,10 @@ namespace MangaReader_MVVM.Models
             Chapters.Add(chapter);
         }
 
-        public void RemoveChapter(Chapter chapter)
+        public bool RemoveChapter(Chapter chapter)
         {
             chapter.ParentManga = null;
-            Chapters.Remove(chapter);
+            return Chapters.Remove(chapter);
         }
         public ObservableItemCollection<Chapter> ReverseChapters() => new ObservableItemCollection<Chapter>(Chapters.Reverse());
         public int CompareTo(IManga other) => other == null ? 1 : Utils.CompareNatural.Compare(Title, other.Title);

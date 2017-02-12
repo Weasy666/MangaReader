@@ -151,6 +151,7 @@
                                     <ComboBox x:Name="ReadMode"
                                               Header="Read Mode"
                                               MinWidth="110"
+                                              Tag="{x:Bind PageGrid}"
                                               ItemsSource="{x:Bind ViewModel.ReadModeList}"
                                               SelectedIndex="{Binding ReadMode, Mode=TwoWay, Converter={StaticResource ReadModeToIntConverter}}"
                                               SelectionChanged="{x:Bind ViewModel.ReadMode_SelectionChanged}">

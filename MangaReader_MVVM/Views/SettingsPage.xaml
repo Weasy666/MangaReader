@@ -4,7 +4,8 @@
       xmlns:Behaviors="using:Template10.Behaviors"
       xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
       xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
-      xmlns:controls="using:Template10.Controls"
+      xmlns:t10controls="using:Template10.Controls"      
+      xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:MangaReader_MVVM.Views"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -47,7 +48,7 @@
         </VisualStateManager.VisualStateGroups>
 
         <!--  header  -->
-        <controls:PageHeader x:Name="pageHeader" Content="Settings Page"
+        <t10controls:PageHeader x:Name="pageHeader" Content="Settings Page"
                              Frame="{x:Bind Frame}"
                              RelativePanel.AlignLeftWithPanel="True"
                              RelativePanel.AlignRightWithPanel="True"
@@ -93,11 +94,24 @@
                                       RelativePanel.AlignLeftWithPanel="True"
                                       RelativePanel.Below="UseLightThemeToggleSwitch" />
 
+                        <Slider x:Name="NumberOfRecentMangas"
+                                Header="Number of Last Read Mangas"
+                                Margin="0,5,0,0" Width="270" IsThumbToolTipEnabled="False"                                 
+                                Minimum="1" Maximum="12"
+                                Value="{Binding NumberOfRecentMangas, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                RelativePanel.AlignLeftWithPanel="True"
+                                RelativePanel.Below="UseDetailedMangaItemSwitch" />
+
+                        <TextBlock x:Name="NumberOfRecentMangasTextBox" Text="{x:Bind NumberOfRecentMangas.Value, Mode=OneWay}"
+                                   Margin="10,33,0,0"
+                                   RelativePanel.AlignTopWith="NumberOfRecentMangas"
+                                   RelativePanel.RightOf="NumberOfRecentMangas" />
+
                         <ComboBox x:Name="MangaSourceComboBox" Header="Manga Source"
                                   ItemsSource="{x:Bind ViewModel.SettingsPartViewModel.SourcesWithIcons}"
                                   Width="270" SelectedIndex="{x:Bind ViewModel.SettingsPartViewModel.SelectedMangaSource, Mode=OneWay}"
                                   RelativePanel.AlignLeftWithPanel="True"
-                                  RelativePanel.Below="UseDetailedMangaItemSwitch" >
+                                  RelativePanel.Below="NumberOfRecentMangasTextBox" >
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <Image Source="{Binding}" Height="28"/>
@@ -143,38 +157,8 @@
             <PivotItem DataContext="{Binding SettingsPartViewModel}"
                        Header="ToDo's" Padding="0">
                 <ScrollViewer Margin="0,0,-12,0" VerticalScrollBarVisibility="Auto">
-                    <TextBlock Margin="0,12,24,12" LineHeight="24"
-                               TextWrapping="Wrap">
-                        <LineBreak />
-                        - DONE -> change color of ImageEx Progress Ring
-                        <LineBreak />
-                        - get GridView to update Items after changing ItemTemplate with ItemSelector
-                        <LineBreak />
-                        - DONE -> check why Read Status was lost and why Favorits are not Syncing to Surface -> a sync for Roaming Data only takes place after user logs out of windows -> in the future need to sync status with using the App Folder concept in the OneDrive API
-                        <LineBreak />
-                        - DONE -> finish restructure, so that Favorit button in ChapterPage updates every other button correctly
-                        <LineBreak />
-                        - add ItemClicked handling for MangaSources in SettingsPage
-                        <LineBreak />
-                        - take a look at MangaEdenSource _favorits list...maybe it's not needed when Favorits are searched with a LINQ expression in the FavoritsPageViewModel, everytime they are needed
-                        <LineBreak />
-                        - DONE - implement Semantic Zoom in FavoritsPage
-                        <LineBreak />
-                        - implement Search in MangasPage -> if possible move it to the HamburgerMenu later on
-                        <LineBreak />
-                        - implement sync over OneDrive, for consistent and persistent real time Favorits and Read Status
-                        <LineBreak />
-                        - implement Last Read functionallity
-                        <LineBreak />
-                        - implement Edge like Forward and Backward functionallity for navigating through the chapters
-                        <LineBreak />
-                        - in ChapterPage add a textbox for actualChapter/numberOfChapters
-                        <LineBreak />
-                        - DONE -> in MangaDetailsPage add a progress bar for chapter read progress
-                        <LineBreak />
-                        - implement different Views for ChapterPage, like single page mode, etc.
-
-                    </TextBlock>
+                    <controls:MarkdownTextBlock Text="{x:Bind ViewModel.MarkDownText}"
+                                                Foreground="{ThemeResource TextBoxForegroundThemeBrush}"/>
                 </ScrollViewer>
             </PivotItem>
 

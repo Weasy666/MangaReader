@@ -20,7 +20,7 @@ namespace MangaReader_MVVM.Converters.JSON
         {
             // Load the JSON for the Result into a JObject
             JObject jo = JObject.Load(reader);
-            
+
             // Construct the Result object using the non-default constructor
             var manga = new Manga
             {
@@ -32,8 +32,8 @@ namespace MangaReader_MVVM.Converters.JSON
                 Artist = jo["artist"].ToString(),
                 Description = System.Net.WebUtility.HtmlDecode(jo["description"].ToString()),
                 Hits = (int)jo["hits"],
-                Released = DateTimeOffset.FromUnixTimeSeconds(jo["created"] != null ? (long)jo["created"] : 0).DateTime.ToLocalTime(),
-                LastUpdated = DateTimeOffset.FromUnixTimeSeconds(jo["last_chapter_date"] != null ? (long)jo["last_chapter_date"] : 0).DateTime.ToLocalTime(),
+                Released = DateTimeOffset.FromUnixTimeSeconds(jo["created"].Type != JTokenType.Null ? (long)jo["created"] : 0).DateTime.ToLocalTime(),
+                LastUpdated = DateTimeOffset.FromUnixTimeSeconds(jo["last_chapter_date"].Type != JTokenType.Null ? (long)jo["last_chapter_date"] : 0).DateTime.ToLocalTime(),
                 Ongoing = (int)jo["status"] == 1,
                 NumberOfChapters = (int)jo["chapters_len"],
             };

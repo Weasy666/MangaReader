@@ -8,7 +8,7 @@ namespace MangaReader_MVVM.Views
         public ChapterPage()
         {
             this.InitializeComponent();
-            NavigationCacheMode = NavigationCacheMode.Enabled;
+            NavigationCacheMode = NavigationCacheMode.Disabled;
         }
     }
 }

@@ -6,7 +6,7 @@ using Template10.Mvvm;
 
 namespace MangaReader_MVVM.Models
 {
-    public interface IChapter : IBindable, IComparable<IChapter>, IEquatable<IChapter>
+    public interface IChapter : IBindable, IComparable<IChapter>
     {
         Manga ParentManga { get; set; }
         float Number { get; set; }

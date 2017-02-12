@@ -24,7 +24,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <!--  TODO: change properties for narrow view  -->
-                        <Setter Target="stateTextBox.Text" Value="Narrow Visual State" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateNormal">
@@ -33,7 +32,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <!--  TODO: change properties for normal view  -->
-                        <Setter Target="stateTextBox.Text" Value="Normal Visual State" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateWide">
@@ -42,57 +40,58 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <!--  TODO: change properties for wide view  -->
-                        <Setter Target="stateTextBox.Text" Value="Wide Visual State" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <controls:PageHeader x:Name="pageHeader" RelativePanel.AlignLeftWithPanel="True"
+        <controls:PageHeader x:Name="pageHeader"
+                             RelativePanel.AlignLeftWithPanel="True"
                              RelativePanel.AlignRightWithPanel="True"
-                             RelativePanel.AlignTopWithPanel="True" Text="Main Page">
+                             RelativePanel.AlignTopWithPanel="True"
+                             Text="Main Page"
+                             EllipsisVisibility="Auto">
 
             <!--  secondary commands  -->
             <controls:PageHeader.SecondaryCommands>
-                <AppBarButton Click="{x:Bind ViewModel.GotoSettings}" Label="Settings" />
-                <AppBarButton Click="{x:Bind ViewModel.GotoPrivacy}" Label="Privacy" />
-                <AppBarButton Click="{x:Bind ViewModel.GotoAbout}" Label="About" />
             </controls:PageHeader.SecondaryCommands>
 
         </controls:PageHeader>
 
-        <controls:Resizer x:Name="parameterResizer" Margin="16,16,16,0"
-                          RelativePanel.AlignLeftWithPanel="True"
-                          RelativePanel.Below="pageHeader">
-
-            <TextBox MinWidth="150" MinHeight="62"
-                     Header="Parameter to pass"
-                     Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     TextWrapping="Wrap">
-                <Interactivity:Interaction.Behaviors>
-                    <!--  enable submit on enter key  -->
-                    <Behaviors:KeyBehavior Key="Enter">
-                        <Core:CallMethodAction MethodName="GotoSettings" TargetObject="{Binding}" />
-                    </Behaviors:KeyBehavior>
-                    <!--  focus on textbox when page loads  -->
-                    <Core:EventTriggerBehavior>
-                        <Behaviors:FocusAction />
-                    </Core:EventTriggerBehavior>
-                </Interactivity:Interaction.Behaviors>
-            </TextBox>
-
-        </controls:Resizer>
-
-        <Button x:Name="submitButton"
-                Click="{x:Bind ViewModel.GotoSettings}" Content="Submit"
-                RelativePanel.AlignBottomWith="parameterResizer"
-                RelativePanel.RightOf="parameterResizer" />
-
-        <TextBlock x:Name="stateTextBox" Margin="16,16,0,0"
-                   RelativePanel.AlignLeftWith="parameterResizer"
-                   RelativePanel.Below="parameterResizer"
-                   Text="Current Visual State" />
-
+        <GridView x:Name="GridView"
+                  ItemsSource="{x:Bind ViewModel.LastRead, Mode=OneWay}"
+                  Margin="10,0,0,0" Padding="0,0,0,0"
+                  RelativePanel.Below="pageHeader"
+                  RelativePanel.AlignLeftWithPanel="True"
+                  RelativePanel.AlignRightWithPanel="True"
+                  SelectionMode="None"
+                  IsItemClickEnabled="True"
+                  IncrementalLoadingThreshold="50"
+                  IncrementalLoadingTrigger="Edge"
+                  ItemClick="{x:Bind ViewModel.MangaClickedAsync}"
+                  ItemTemplate="{x:Bind ViewModel.MangaGridLayout, Converter={StaticResource MangaItemTemplateConverter}, FallbackValue={StaticResource MangaItemWithDetails}}"
+                  Style="{StaticResource GridViewSemiOpaqueScrollViewer}">
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem">
+                    <Setter Property="Margin" Value="0,10,10,0" />
+                </Style>
+            </GridView.ItemContainerStyle>
+            <GridView.Header>
+                <StackPanel>
+                    <TextBlock Text="Last Read"
+                           Margin="10,0,0,-10"
+                           Style="{ThemeResource SubheaderTextBlockStyle}"
+                           Foreground="{ThemeResource SystemControlHighlightAccentBrush}"/>
+                    <Rectangle Stroke="#FF2B2B2B"
+                           StrokeThickness="0.5"
+                           Height="1"
+                           VerticalAlignment="Bottom"
+                           HorizontalAlignment="Stretch"
+                           Margin="0,8,12,0"/>
+                </StackPanel>
+            </GridView.Header>
+        </GridView>
+        
     </RelativePanel>
 </Page>
 

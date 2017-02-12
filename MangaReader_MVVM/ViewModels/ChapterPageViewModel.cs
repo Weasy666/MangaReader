@@ -3,12 +3,10 @@ using MangaReader_MVVM.Services;
 using MangaReader_MVVM.Services.SettingsServices;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Template10.Controls;
 using Template10.Mvvm;
-using Template10.Utils;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -128,10 +126,10 @@ namespace MangaReader_MVVM.ViewModels
 
         public void Page_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            var grid = sender as Grid;
-            if (grid != null)
+            var pageGrid = sender as Grid;
+            if (pageGrid != null)
             {
-                var chaptersPageHeader = grid.FindName("ChaptersBar") as Template10.Controls.PageHeader;
+                var chaptersPageHeader = pageGrid.FindName("ChaptersBar") as Template10.Controls.PageHeader;
                 chaptersPageHeader.IsOpen = !chaptersPageHeader.IsOpen;
 
                 var pageOverlayVisibility = chaptersPageHeader.IsOpen ? Visibility.Visible : Visibility.Collapsed;
@@ -150,6 +148,19 @@ namespace MangaReader_MVVM.ViewModels
                 var flyout = stackPanel.Parent as FlyoutPresenter;
                 var popup = flyout.Parent as Windows.UI.Xaml.Controls.Primitives.Popup;
                 popup.IsOpen = false;
+
+                var pageGrid = comboBox.Tag as Grid;
+                if (pageGrid != null)
+                {
+                    var chaptersPageHeader = pageGrid.FindName("ChaptersBar") as Template10.Controls.PageHeader;
+                    chaptersPageHeader.IsOpen = !chaptersPageHeader.IsOpen;
+
+                    var pageOverlayVisibility = chaptersPageHeader.IsOpen ? Visibility.Visible : Visibility.Collapsed;
+                    foreach (var page in Pages)
+                    {
+                        page.OverlayVisibility = pageOverlayVisibility;
+                    }
+                }
             }
         }
 

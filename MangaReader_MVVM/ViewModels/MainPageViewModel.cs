@@ -1,31 +1,54 @@
-using Template10.Mvvm;
-using System.Collections.Generic;
+using MangaReader_MVVM.Models;
+using MangaReader_MVVM.Services;
+using MangaReader_MVVM.Services.SettingsServices;
+using MangaReader_MVVM.Views;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Template10.Controls;
+using Template10.Mvvm;
 using Template10.Services.NavigationService;
+using Windows.UI.Popups;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
 namespace MangaReader_MVVM.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
+        private MangaLibrary _library = MangaLibrary.Instance;
+        private SettingsService _settings = SettingsService.Instance;
+
+        public MangaItemTemplate MangaGridLayout => SettingsService.Instance.MangaGridLayout;
+        private void Settings_Changed(object sender, PropertyChangedEventArgs e)
+        {
+            //if (nameof(_settings.MangaGridLayout).Equals(e.PropertyName))
+            //    base.RaisePropertyChanged(nameof(MangaGridLayout));
+            //else if (nameof(_settings.NumberOfRecentMangas).Equals(e.PropertyName))
+            //    base.RaisePropertyChanged(nameof(LastRead));
+        }
+
         public MainPageViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
-                Value = "Designtime value";
+
+            }
+            else
+            {
+                _settings.PropertyChanged += Settings_Changed;
             }
         }
 
-        string _Value = "Gas";
-        public string Value { get { return _Value; } set { Set(ref _Value, value); } }
+        public ObservableItemCollection<Manga> LastRead => _library.LastRead;
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
             if (suspensionState.Any())
             {
-                Value = suspensionState[nameof(Value)]?.ToString();
+
             }
             await Task.CompletedTask;
         }
@@ -34,7 +57,7 @@ namespace MangaReader_MVVM.ViewModels
         {
             if (suspending)
             {
-                suspensionState[nameof(Value)] = Value;
+
             }
             await Task.CompletedTask;
         }
@@ -44,17 +67,28 @@ namespace MangaReader_MVVM.ViewModels
             args.Cancel = false;
             await Task.CompletedTask;
         }
-        
 
-        public void GotoSettings() =>
-            NavigationService.Navigate(typeof(Views.SettingsPage), 0);
+        private DelegateCommand<Manga> _favoritCommand;
+        public DelegateCommand<Manga> FavoritCommand
+            => _favoritCommand ?? (_favoritCommand = new DelegateCommand<Manga>((manga) =>
+            {
+                _library.AddFavorit(manga);
+            }));
 
-        public void GotoPrivacy() =>
-            NavigationService.Navigate(typeof(Views.SettingsPage), 1);
-
-        public void GotoAbout() =>
-            NavigationService.Navigate(typeof(Views.SettingsPage), 2);
-
+        public async void MangaClickedAsync(object sender, ItemClickEventArgs e)
+        {
+            var clickedManga = e.ClickedItem as Manga;
+            if (clickedManga != null)
+            {
+                NavigationService.Navigate(typeof(MangaDetailsPage), clickedManga);
+            }
+            else
+            {
+                //TODO change to PopupService
+                var dialog = new MessageDialog("This Manga doesn't exist");
+                await dialog.ShowAsync();
+            }
+        }
     }
 }
 
