@@ -103,6 +103,7 @@
     <Compile Include="Converters\BoolToSelectionModeConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DateTimeToPrettyDateTime.cs" />
+    <Compile Include="Converters\JSON\BackupConverter.cs" />
     <Compile Include="Converters\JSON\InterfaceConverter.cs" />
     <Compile Include="Converters\MangaItemTemplateConverter.cs" />
     <Compile Include="Converters\ReadDirectionToIntConverter.cs" />

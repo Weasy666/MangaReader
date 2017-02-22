@@ -24,10 +24,10 @@ namespace MangaReader_MVVM.ViewModels
         public MangaItemTemplate MangaGridLayout => SettingsService.Instance.MangaGridLayout;
         private void Settings_Changed(object sender, PropertyChangedEventArgs e)
         {
-            //if (nameof(_settings.MangaGridLayout).Equals(e.PropertyName))
-            //    base.RaisePropertyChanged(nameof(MangaGridLayout));
-            //else if (nameof(_settings.NumberOfRecentMangas).Equals(e.PropertyName))
-            //    base.RaisePropertyChanged(nameof(LastRead));
+            if (nameof(_settings.MangaGridLayout).Equals(e.PropertyName))
+                base.RaisePropertyChanged(nameof(MangaGridLayout));
+            else if (nameof(_settings.NumberOfRecentMangas).Equals(e.PropertyName))
+                base.RaisePropertyChanged(nameof(LastRead));
         }
 
         public MainPageViewModel()

@@ -6,10 +6,12 @@ using MangaReader_MVVM.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Template10.Common;
 using Template10.Controls;
 using Template10.Mvvm;
 using Windows.Storage;
@@ -71,8 +73,7 @@ namespace MangaReader_MVVM.Services
             MangasListPage = new Uri($"list/{Language}/", UriKind.Relative);
             MangaDetails = new Uri("manga/", UriKind.Relative);
             MangaChapterPages = new Uri("chapter/", UriKind.Relative);
-            Mangas = new ObservableItemCollection<Manga>();
-            LoadLastRead();
+            Mangas = new ObservableItemCollection<Manga>();            
             _settings.PropertyChanged += Settings_Changed;
         }
 
@@ -103,6 +104,7 @@ namespace MangaReader_MVVM.Services
             }
 
             LoadAndMergeStoredData();
+            LoadLastRead();
 
             return Mangas;
         }        
@@ -262,18 +264,18 @@ namespace MangaReader_MVVM.Services
                 if (_storedData.ContainsKey(chapter.ParentManga.Id))
                 {
                     var storedManga = _storedData[chapter.ParentManga.Id];
-                    storedManga.Chapters.Add(chapter);
+                    if (storedManga.Chapters.Contains(chapter))
+                    {
+                        storedManga.Chapters.First(c => c.Id == chapter.Id).IsRead = true;
+                    }
+                    else
+                    {
+                        storedManga.AddChapter(chapter);
+                    }                    
                 }
                 else
-                {
+                {                    
                     _storedData[chapter.ParentManga.Id] = chapter.ParentManga;
-                    foreach (var chap in _storedData[chapter.ParentManga.Id].Chapters)
-                    {
-                        if (!chap.IsRead)
-                        {
-                            _storedData[chapter.ParentManga.Id].Chapters.Remove(chap);
-                        }
-                    }
                 }
 
                 AddAsLastRead(chapter);
@@ -326,7 +328,7 @@ namespace MangaReader_MVVM.Services
 
         private void AddAsLastRead(Chapter chapter)
         {
-            if (!LastRead.Any(m => m.Id == chapter.ParentManga.Id))
+            if (!LastRead.Contains(chapter.ParentManga))
             {
                 LastRead.Insert(0, chapter.ParentManga);
 
@@ -380,6 +382,15 @@ namespace MangaReader_MVVM.Services
                         var storedManga = _storedData[manga.Id];
                         if (storedManga != null)
                         {
+                            storedManga.Chapters = new ObservableItemCollection<Chapter>(storedManga.Chapters.DistinctBy(m => m.Id));
+                            storedManga.Chapters.SortAscending((a,b) => (a.CompareTo(b)) );
+
+                            storedManga.Cover = Mangas[i].Cover;
+                            storedManga.Description = Mangas[i].Description;
+                            storedManga.Hits = Mangas[i].Hits;
+                            storedManga.LastUpdated = Mangas[i].LastUpdated;
+                            storedManga.Ongoing = Mangas[i].Ongoing;
+
                             Mangas[i] = storedManga;
                         }
                     }
@@ -391,7 +402,11 @@ namespace MangaReader_MVVM.Services
         {
             if (await FileHelper.FileExistsAsync(this.Name + "_lastRead"))
             {
-                LastRead = await FileHelper.ReadFileAsync<ObservableItemCollection<Manga>>(Name + "_lastRead");
+                var lastRead = await FileHelper.ReadFileAsync<ObservableItemCollection<Manga>>(Name + "_lastRead");
+                foreach (var manga in lastRead)
+                {
+                    LastRead.Add(Mangas.Where(m => m.Id == manga.Id).First());
+                }
             }
         }
 
@@ -465,7 +480,7 @@ namespace MangaReader_MVVM.Services
                 var tempCollection = new ObservableItemCollection<Manga>(Mangas.Where(m => m.IsFavorit));
                 foreach(var temp in tempCollection)
                 {
-                    if (!Favorits.Any(m => m.Id == temp.Id))
+                    if (!Favorits.Contains(temp))
                     {
                        Favorits.AddSorted(temp);
                     }

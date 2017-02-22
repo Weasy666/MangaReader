@@ -16,4 +16,4 @@
 - review the storage option...maybe use a in App DB
 - add exception handling
 - add check for network connectivity
-- Navigating to MangaDetailsPage adds the Chapters everytime...bloats chapter number to infinity
+- DONE -> Navigating to MangaDetailsPage adds the Chapters everytime...bloats chapter number to infinity
