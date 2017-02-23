@@ -56,7 +56,7 @@ namespace MangaReader_MVVM.Services
             internal set { Set(ref _lastRead, value); }
         }
 
-        private Dictionary<string, Manga> _storedData = new Dictionary<string, Manga>();
+        private Dictionary<string, List<string>> _storedData = new Dictionary<string, List<string>>();
 
         //private AdvancedCollectionView _favorits;
         //public AdvancedCollectionView Favorits
@@ -187,7 +187,7 @@ namespace MangaReader_MVVM.Services
                 {
                     AddFavorit(fav, false);
                 }
-                await FileHelper.WriteFileAsync<Dictionary<string, Manga>>(Name + "_mangasStatus", _storedData);
+                await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData);
             }
         }
 
@@ -200,31 +200,24 @@ namespace MangaReader_MVVM.Services
                 if (_storedData.ContainsKey(favorit.Id))
                 {
                     var storedManga = _storedData[favorit.Id];
-                    if (storedManga.ReadProgress > 0 || favorit.IsFavorit)
+                    if (!storedManga.Any() && !favorit.IsFavorit)
                     {
-                        storedManga.IsFavorit = favorit.IsFavorit;
-                        foreach(var chapter in storedManga.Chapters)
-                        {
-                            if (!chapter.IsRead)
-                            {
-                                storedManga.Chapters.Remove(chapter);
-                            }
-                        }
+                        _storedData.Remove(favorit.Id);
                     }
                     else
                     {
-                        _storedData.Remove(favorit.Id);
+                        storedManga[0] = favorit.IsFavorit.ToString();
                     }
                 }
                 else
                 {
-                    _storedData[favorit.Id] = favorit;
+                    _storedData[favorit.Id] = new List<string> { favorit.IsFavorit.ToString() };
 
-                    foreach (var chapter in _storedData[favorit.Id].Chapters)
+                    foreach (var chapter in favorit.Chapters)
                     {
-                        if (!chapter.IsRead)
+                        if (chapter.IsRead)
                         {
-                            _storedData[favorit.Id].Chapters.Remove(chapter);
+                            _storedData[favorit.Id].Add(chapter.Id);
                         }
                     }
                 }
@@ -237,7 +230,7 @@ namespace MangaReader_MVVM.Services
 
                 if (IsSingle)
                 {
-                    await FileHelper.WriteFileAsync<Dictionary<string, Manga>>(Name + "_mangasStatus", _storedData);
+                    await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData);
                 }
             }
         }
@@ -250,7 +243,7 @@ namespace MangaReader_MVVM.Services
                 {
                     AddAsRead(chapter, false);
                 }
-                await FileHelper.WriteFileAsync<Dictionary<string, Manga>>(Name + "_mangasStatus", _storedData);
+                await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData);
                 await FileHelper.WriteFileAsync<ObservableItemCollection<Manga>>(Name + "_lastRead", LastRead);
             }
         }
@@ -264,25 +257,21 @@ namespace MangaReader_MVVM.Services
                 if (_storedData.ContainsKey(chapter.ParentManga.Id))
                 {
                     var storedManga = _storedData[chapter.ParentManga.Id];
-                    if (storedManga.Chapters.Contains(chapter))
+                    if (!storedManga.Contains(chapter.Id))
                     {
-                        storedManga.Chapters.First(c => c.Id == chapter.Id).IsRead = true;
+                        storedManga.Add(chapter.Id);
                     }
-                    else
-                    {
-                        storedManga.AddChapter(chapter);
-                    }                    
                 }
                 else
                 {                    
-                    _storedData[chapter.ParentManga.Id] = chapter.ParentManga;
+                    _storedData[chapter.ParentManga.Id] = new List<string> { "False", chapter.Id };
                 }
 
                 AddAsLastRead(chapter);
 
                 if (IsSingle)
                 {
-                    await FileHelper.WriteFileAsync<Dictionary<string, Manga>>(Name + "_mangasStatus", _storedData);
+                    await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData);
                     await FileHelper.WriteFileAsync<ObservableItemCollection<Manga>>(Name + "_lastRead", LastRead);
                 }
             }
@@ -296,7 +285,7 @@ namespace MangaReader_MVVM.Services
                 {
                     RemoveAsRead(chapter, false);
                 }
-                await FileHelper.WriteFileAsync<Dictionary<string, Manga>>(Name + "_mangasStatus", _storedData);
+                await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData);
             }
         }
 
@@ -309,18 +298,14 @@ namespace MangaReader_MVVM.Services
                 if (_storedData.ContainsKey(chapter.ParentManga.Id))
                 {
                     var storedManga = _storedData[chapter.ParentManga.Id];
-                    if (storedManga.ReadProgress > 0 || storedManga.IsFavorit)
+                    if (storedManga.Contains(chapter.Id))
                     {
-                        storedManga.Chapters.Where(c => c.Id == chapter.Id).First().IsRead = false;
-                    }
-                    else
-                    {
-                        _storedData.Remove(chapter.ParentManga.Id);
+                        storedManga.Remove(chapter.Id);
                     }
 
                     if (IsSingle)
                     {
-                        await FileHelper.WriteFileAsync<Dictionary<string, Manga>>(Name + "_mangasStatus", _storedData);
+                        await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData);
                     }
                 }                
             }
@@ -328,12 +313,13 @@ namespace MangaReader_MVVM.Services
 
         private void AddAsLastRead(Chapter chapter)
         {
-            if (!LastRead.Contains(chapter.ParentManga))
+            if (LastRead.Contains(chapter.ParentManga))
             {
-                LastRead.Insert(0, chapter.ParentManga);
+                LastRead.Remove(chapter.ParentManga);
+            }            
 
-                UpdateLastRead();
-            }
+            LastRead.Insert(0, chapter.ParentManga);
+            UpdateLastRead();
         }
 
         public void UpdateLastRead()
@@ -362,8 +348,15 @@ namespace MangaReader_MVVM.Services
             manga.Description = details.Description;
             manga.NumberOfChapters = details.NumberOfChapters;
             manga.Released = details.Released;
+            List<string> storedManga = null;
+            if (_storedData.ContainsKey(manga.Id))
+            {
+                storedManga = _storedData[manga.Id];
+            }
             foreach (var chapter in details.Chapters)
             {
+                if (storedManga != null)
+                    chapter.IsRead = storedManga.Contains(chapter.Id);
                 manga.AddChapter(chapter);
             }
         }
@@ -372,27 +365,19 @@ namespace MangaReader_MVVM.Services
         {
             if (await FileHelper.FileExistsAsync(this.Name + "_mangasStatus"))
             {
-                _storedData = await FileHelper.ReadFileAsync<Dictionary<string, Manga>>(Name + "_mangasStatus");
+                _storedData = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus");                
 
                 for (int i = 0; i < Mangas.Count; i++)
                 {
                     var manga = Mangas[i];
                     if (_storedData.ContainsKey(manga.Id))
-                    {
+                    {                        
                         var storedManga = _storedData[manga.Id];
-                        if (storedManga != null)
-                        {
-                            storedManga.Chapters = new ObservableItemCollection<Chapter>(storedManga.Chapters.DistinctBy(m => m.Id));
-                            storedManga.Chapters.SortAscending((a,b) => (a.CompareTo(b)) );
 
-                            storedManga.Cover = Mangas[i].Cover;
-                            storedManga.Description = Mangas[i].Description;
-                            storedManga.Hits = Mangas[i].Hits;
-                            storedManga.LastUpdated = Mangas[i].LastUpdated;
-                            storedManga.Ongoing = Mangas[i].Ongoing;
+                        if (storedManga.Count == 0)
+                            storedManga.Add("True");
 
-                            Mangas[i] = storedManga;
-                        }
+                        Mangas[i].IsFavorit = bool.TryParse(storedManga[0], out bool isFavorit) ? isFavorit : false;
                     }
                 }
             }
@@ -422,7 +407,7 @@ namespace MangaReader_MVVM.Services
                 // Dropdown of file types the user can save the file as
                 savePicker.FileTypeChoices.Add("JSON", new List<string>() { ".json" });
                 // Default file name if the user does not type one in or select a file to replace
-                savePicker.SuggestedFileName = DateTime.Now.ToString("s") + "_MangaReader_Backup";
+                savePicker.SuggestedFileName = DateTime.Now.ToString("s") + "_MangaReader_Backup_" + this.Name;
 
                 StorageFile file = await savePicker.PickSaveFileAsync();
                 Views.Busy.SetBusy(true, "Printing your favorite Mangas...");
@@ -430,6 +415,7 @@ namespace MangaReader_MVVM.Services
                 {
                     // Prevent updates to the remote version of the file until we finish making changes and call CompleteUpdatesAsync.
                     CachedFileManager.DeferUpdates(file);
+
                     // write to file
                     var serializedMangas  = JsonConvert.SerializeObject(_storedData, Formatting.None, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
                                                                                                                                     PreserveReferencesHandling = PreserveReferencesHandling.Objects,
@@ -472,8 +458,9 @@ namespace MangaReader_MVVM.Services
             Views.Busy.SetBusy(true, "Printing your favorite Mangas...");
             if (file != null)
             {
-                _storedData = JsonConvert.DeserializeObject<Dictionary<string, Manga>>(await FileIO.ReadTextAsync(file));
-                var result = await FileHelper.WriteFileAsync<Dictionary<string, Manga>>(Name + "_mangasStatus", _storedData);
+                var _storedData = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(await FileIO.ReadTextAsync(file));
+
+                var result = await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData);
                 
                 LoadAndMergeStoredData();
 
