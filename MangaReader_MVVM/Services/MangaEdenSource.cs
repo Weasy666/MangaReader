@@ -6,19 +6,17 @@ using MangaReader_MVVM.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Template10.Common;
 using Template10.Controls;
 using Template10.Mvvm;
+using Template10.Services.NetworkAvailableService;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
 using Windows.UI.Popups;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Services
@@ -81,24 +79,47 @@ namespace MangaReader_MVVM.Services
         {
             if (!Mangas.Any() || mode == ReloadMode.Server)
             {
-                using (var httpClient = new HttpClient { BaseAddress = RootUri })
+                var networkService = new NetworkAvailableService();
+                if (await networkService.IsInternetAvailable())
                 {
-                    try
+                    using (var httpClient = new HttpClient { BaseAddress = RootUri })
                     {
-                        var response = await httpClient.GetAsync(MangasListPage);
-                        var result = await response.Content.ReadAsStringAsync();
-                        if (response.IsSuccessStatusCode)
+                        try
                         {
-                            JsonSerializerSettings settings = new JsonSerializerSettings();
-                            settings.Converters.Add(new MangaEdenMangasListConverter(this.Name));
+                            var response = await httpClient.GetAsync(MangasListPage);
+                            var result = await response.Content.ReadAsStringAsync();
+                            if (response.IsSuccessStatusCode)
+                            {
+                                JsonSerializerSettings settings = new JsonSerializerSettings();
+                                settings.Converters.Add(new MangaEdenMangasListConverter(this.Name));
 
-                            Mangas = JsonConvert.DeserializeObject<ObservableItemCollection<Manga>>(result, settings);
+                                Mangas = JsonConvert.DeserializeObject<ObservableItemCollection<Manga>>(result, settings);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            var dialog = new MessageDialog(e.Message);
+                            await dialog.ShowAsync();
                         }
                     }
-                    catch (Exception e)
+                }
+                else
+                {
+                    MessageDialog dialog = new MessageDialog("No Internet connection available. Check your connection and try again.");
+                    //dialog.Title = "Manga Status Backup";
+                    dialog.Commands.Add(new UICommand { Label = "Retry", Id = 0 });
+                    dialog.Commands.Add(new UICommand { Label = "Exit", Id = 1 });
+                    dialog.DefaultCommandIndex = 0;
+                    dialog.CancelCommandIndex = 1;
+
+                    var result = await dialog.ShowAsync();
+                    if((int)result.Id == 0)
                     {
-                        var dialog = new MessageDialog(e.Message);
-                        await dialog.ShowAsync();
+                        Mangas = await GetMangasAsync(mode);
+                    }
+                    else
+                    {
+                        App.Current.Exit();
                     }
                 }
             }
@@ -112,55 +133,102 @@ namespace MangaReader_MVVM.Services
         public async Task<Manga> GetMangaAsync(string mangaId)
         {
             var manga = Mangas.Where(m => m.Id == mangaId).First();
-            using (var httpClient = new HttpClient { BaseAddress = RootUri })
+            var networkService = new NetworkAvailableService();
+            if (await networkService.IsInternetAvailable())
             {
-                try
+                using (var httpClient = new HttpClient { BaseAddress = RootUri })
                 {
-                    var mangaDetailsUri = new Uri(RootUri, MangaDetails);
-                    var response = await httpClient.GetAsync(new Uri(mangaDetailsUri, mangaId));
-                    var result = await response.Content.ReadAsStringAsync();
-                    if (response.IsSuccessStatusCode)
+                    try
                     {
-                        JsonSerializerSettings settings = new JsonSerializerSettings();
-                        settings.Converters.Add(new MangaEdenMangaDetailsConverter());
-                        
-                        var details = JsonConvert.DeserializeObject<Manga>(result, settings);
-                        
-                        MergeMangaWithDetails(manga, details);
+                        var mangaDetailsUri = new Uri(RootUri, MangaDetails);
+                        var response = await httpClient.GetAsync(new Uri(mangaDetailsUri, mangaId));
+                        var result = await response.Content.ReadAsStringAsync();
+                        if (response.IsSuccessStatusCode)
+                        {
+                            JsonSerializerSettings settings = new JsonSerializerSettings();
+                            settings.Converters.Add(new MangaEdenMangaDetailsConverter());
+
+                            var details = JsonConvert.DeserializeObject<Manga>(result, settings);
+
+                            MergeMangaWithDetails(manga, details);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        var dialog = new MessageDialog(e.Message);
+                        await dialog.ShowAsync();
                     }
                 }
-                catch (Exception e)
+            }
+            else
+            {
+                MessageDialog dialog = new MessageDialog("No Internet connection available. Check your connection and try again.");
+                //dialog.Title = "Manga Status Backup";
+                dialog.Commands.Add(new UICommand { Label = "Retry", Id = 0 });
+                dialog.Commands.Add(new UICommand { Label = "Exit", Id = 1 });
+                dialog.DefaultCommandIndex = 0;
+                dialog.CancelCommandIndex = 1;
+
+                var result = await dialog.ShowAsync();
+                if ((int)result.Id == 0)
                 {
-                    var dialog = new MessageDialog(e.Message);
-                    await dialog.ShowAsync();
+                    manga = await GetMangaAsync(mangaId);
+                }
+                else
+                {
+                    App.Current.Exit();
                 }
             }
+
             return manga;
         }
 
         public async Task<Chapter> GetChapterAsync(Chapter chapter)
         {
-            using (var httpClient = new HttpClient { BaseAddress = RootUri })
+            var networkService = new NetworkAvailableService();
+            if (await networkService.IsInternetAvailable())
             {
-                try
+                using (var httpClient = new HttpClient { BaseAddress = RootUri })
                 {
-                    var chapterUri = new Uri(RootUri, MangaChapterPages);
-                    var response = await httpClient.GetAsync(new Uri(chapterUri, chapter.Id));
-                    var result = await response.Content.ReadAsStringAsync();
-                    if (response.IsSuccessStatusCode)
+                    try
                     {
-                        JsonSerializerSettings settings = new JsonSerializerSettings();
-                        settings.Converters.Add(new MangaEdenChapterPagesConverter());
+                        var chapterUri = new Uri(RootUri, MangaChapterPages);
+                        var response = await httpClient.GetAsync(new Uri(chapterUri, chapter.Id));
+                        var result = await response.Content.ReadAsStringAsync();
+                        if (response.IsSuccessStatusCode)
+                        {
+                            JsonSerializerSettings settings = new JsonSerializerSettings();
+                            settings.Converters.Add(new MangaEdenChapterPagesConverter());
 
-                        var pages = JsonConvert.DeserializeObject<ObservableItemCollection<Models.Page>>(result, settings);
+                            var pages = JsonConvert.DeserializeObject<ObservableItemCollection<Models.Page>>(result, settings);
 
-                        chapter.Pages = pages;
+                            chapter.Pages = pages;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        var dialog = new MessageDialog(e.Message);
+                        await dialog.ShowAsync();
                     }
                 }
-                catch (Exception e)
+            }
+            else
+            {
+                MessageDialog dialog = new MessageDialog("No Internet connection available. Check your connection and try again.");
+                //dialog.Title = "Manga Status Backup";
+                dialog.Commands.Add(new UICommand { Label = "Retry", Id = 0 });
+                dialog.Commands.Add(new UICommand { Label = "Exit", Id = 1 });
+                dialog.DefaultCommandIndex = 0;
+                dialog.CancelCommandIndex = 1;
+
+                var result = await dialog.ShowAsync();
+                if ((int)result.Id == 0)
                 {
-                    var dialog = new MessageDialog(e.Message);
-                    await dialog.ShowAsync();
+                    chapter = await GetChapterAsync(chapter);
+                }
+                else
+                {
+                    App.Current.Exit();
                 }
             }
             return chapter;
