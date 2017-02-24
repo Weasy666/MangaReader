@@ -456,6 +456,7 @@ namespace MangaReader_MVVM.Services
             if (await FileHelper.FileExistsAsync(this.Name + "_lastRead"))
             {
                 var lastRead = await FileHelper.ReadFileAsync<ObservableItemCollection<Manga>>(Name + "_lastRead");
+                LastRead.Clear();
                 foreach (var manga in lastRead)
                 {
                     LastRead.Add(Mangas.Where(m => m.Id == manga.Id).First());

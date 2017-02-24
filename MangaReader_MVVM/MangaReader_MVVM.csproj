@@ -92,6 +92,7 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="MangaReader_MVVM_TemporaryKey.pfx" />
     <None Include="project.json" />
+    <Content Include="Assets\Square44x44Logo.targetsize-32.png" />
     <Content Include="ToDo.md" />
   </ItemGroup>
   <ItemGroup>
