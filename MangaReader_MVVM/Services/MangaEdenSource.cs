@@ -517,14 +517,14 @@ namespace MangaReader_MVVM.Services
         {
             FileOpenPicker openPicker = new FileOpenPicker()
             {
-                SuggestedStartLocation = PickerLocationId.Downloads
+                SuggestedStartLocation = PickerLocationId.Downloads,
+                CommitButtonText = "Import"
             };
             
             openPicker.FileTypeFilter.Add(".json");
-            openPicker.CommitButtonText = "Import and overwrite";
 
             StorageFile file = await openPicker.PickSingleFileAsync();
-            Views.Busy.SetBusy(true, "Printing your favorite Mangas...");
+            Views.Busy.SetBusy(true, "Importing your favorite Mangas...");
             if (file != null)
             {
                 var _storedData = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(await FileIO.ReadTextAsync(file));

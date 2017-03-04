@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26020.0
+VisualStudioVersion = 15.0.26206.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaReader", "MangaReader\MangaReader.csproj", "{E4EBED19-6527-4313-A4B0-9892418F6662}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaReader_MVVM", "MangaReader_MVVM\MangaReader_MVVM.csproj", "{AC1F64A3-9F2A-4F94-9BBB-BB7563E57E51}"
 EndProject
 Global
@@ -17,24 +15,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Debug|ARM.ActiveCfg = Debug|ARM
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Debug|ARM.Build.0 = Debug|ARM
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Debug|ARM.Deploy.0 = Debug|ARM
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Debug|x64.ActiveCfg = Debug|x64
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Debug|x64.Build.0 = Debug|x64
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Debug|x64.Deploy.0 = Debug|x64
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Debug|x86.ActiveCfg = Debug|x86
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Debug|x86.Build.0 = Debug|x86
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Debug|x86.Deploy.0 = Debug|x86
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Release|ARM.ActiveCfg = Release|ARM
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Release|ARM.Build.0 = Release|ARM
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Release|ARM.Deploy.0 = Release|ARM
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Release|x64.ActiveCfg = Release|x64
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Release|x64.Build.0 = Release|x64
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Release|x64.Deploy.0 = Release|x64
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Release|x86.ActiveCfg = Release|x86
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Release|x86.Build.0 = Release|x86
-		{E4EBED19-6527-4313-A4B0-9892418F6662}.Release|x86.Deploy.0 = Release|x86
 		{AC1F64A3-9F2A-4F94-9BBB-BB7563E57E51}.Debug|ARM.ActiveCfg = Debug|ARM
 		{AC1F64A3-9F2A-4F94-9BBB-BB7563E57E51}.Debug|ARM.Build.0 = Debug|ARM
 		{AC1F64A3-9F2A-4F94-9BBB-BB7563E57E51}.Debug|ARM.Deploy.0 = Debug|ARM
