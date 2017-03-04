@@ -90,40 +90,33 @@ namespace MangaReader_MVVM.Views
 
         private async void DataBackup_Tapped(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            //OneDriveService.Instance.Initialize();
+            MessageDialog dialog = new MessageDialog("Create or Load a Backup of your Manga Status. \nWhen you load a Backup your actual status will be overwriten. ");
+            dialog.Title = "Manga Status Backup";
+            dialog.Commands.Add(new UICommand { Label = "Create", Id = 0 });
+            dialog.Commands.Add(new UICommand { Label = "Load", Id = 1 });
+            dialog.DefaultCommandIndex = 0;
+            dialog.CancelCommandIndex = 1;
 
-            var rootFolder = await OneDriveService.Instance.AppRootFolderAsync();
-            var name = rootFolder.DisplayName;
-            var files = await rootFolder.GetFilesAsync();
+            var result = await dialog.ShowAsync();
 
+            var isSuccess = false;
 
-            //MessageDialog dialog = new MessageDialog("Create or Load a Backup of your Manga Status. \nWhen you load a Backup your actual status will be overwriten. ");
-            //dialog.Title = "Manga Status Backup";
-            //dialog.Commands.Add(new UICommand { Label = "Create", Id = 0 });
-            //dialog.Commands.Add(new UICommand { Label = "Load", Id = 1 });
-            //dialog.DefaultCommandIndex = 0;
-            //dialog.CancelCommandIndex = 1;
-
-            //var result = await dialog.ShowAsync();
-
-            //var isSuccess = false;
-
-            //if ((int)result.Id == 0)
-            //{
-            //    isSuccess = await _library.ExportMangaStatusAsync();
-            //    dialog.Commands.Clear();
-            //    dialog.Title = "";
-            //    dialog.Content = isSuccess ? "Successfully created the Backup file." : "An error occured while creating the Backup file, or you canceled the operation.";
-            //    await dialog.ShowAsync();
-            //}
-            //else if ((int)result.Id == 1)
-            //{
-            //    isSuccess = await _library.ImportMangaStatusAsync();
-            //    dialog.Commands.Clear();
-            //    dialog.Title = "";
-            //    dialog.Content = isSuccess ? "Successfully loaded the Backup file." : "An error occured while loading the Backup file, or you canceled the operation.";
-            //    await dialog.ShowAsync();
-            //}
+            if ((int)result.Id == 0)
+            {
+                isSuccess = await _library.ExportMangaStatusAsync();
+                dialog.Commands.Clear();
+                dialog.Title = "";
+                dialog.Content = isSuccess ? "Successfully created the Backup file." : "An error occured while creating the Backup file, or you canceled the operation.";
+                await dialog.ShowAsync();
+            }
+            else if ((int)result.Id == 1)
+            {
+                isSuccess = await _library.ImportMangaStatusAsync();
+                dialog.Commands.Clear();
+                dialog.Title = "";
+                dialog.Content = isSuccess ? "Successfully loaded the Backup file." : "An error occured while loading the Backup file, or you canceled the operation.";
+                await dialog.ShowAsync();
+            }
         }
     }
 }
