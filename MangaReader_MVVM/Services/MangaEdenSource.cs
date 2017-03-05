@@ -124,7 +124,7 @@ namespace MangaReader_MVVM.Services
                 }
             }
 
-            LoadAndMergeStoredData();
+            await LoadAndMergeStoredData();
             LoadLastRead();
 
             return Mangas;
@@ -429,26 +429,32 @@ namespace MangaReader_MVVM.Services
             }
         }
 
-        private async void LoadAndMergeStoredData()
+        private async Task<bool> LoadAndMergeStoredData()
         {
+            bool retval = false;
             if (await FileHelper.FileExistsAsync(this.Name + "_mangasStatus"))
             {
-                _storedData = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _settings.StorageStrategy);                
+                _storedData = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _settings.StorageStrategy);
 
-                for (int i = 0; i < Mangas.Count; i++)
+                if (_storedData != null && _storedData.Any())
                 {
-                    var manga = Mangas[i];
-                    if (_storedData.ContainsKey(manga.Id))
-                    {                        
-                        var storedManga = _storedData[manga.Id];
+                    for (int i = 0; i < Mangas.Count; i++)
+                    {
+                        var manga = Mangas[i];
+                        if (_storedData.ContainsKey(manga.Id))
+                        {
+                            var storedManga = _storedData[manga.Id];
 
-                        if (storedManga.Count == 0)
-                            storedManga.Add("True");
+                            if (storedManga.Count == 0)
+                                storedManga.Add("True");
 
-                        Mangas[i].IsFavorit = bool.TryParse(storedManga[0], out bool isFavorit) ? isFavorit : false;
+                            Mangas[i].IsFavorit = bool.TryParse(storedManga[0], out bool isFavorit) ? isFavorit : false;
+                        }
                     }
+                    retval = true;
                 }
             }
+            return retval;
         }
 
         private async void LoadLastRead()

@@ -163,7 +163,7 @@
                                    RelativePanel.Below="OneDriveSync"/>
 
                         <TextBlock x:Name="OneDriveSyncTime"
-                                   Text="{x:Bind ViewModel.SettingsPartViewModel.OneDriveSyncTime, Converter={StaticResource DateTimeToPrettyDateTime}}"
+                                   Text="{x:Bind ViewModel.SettingsPartViewModel.OneDriveSyncTime, Mode=OneWay, Converter={StaticResource DateTimeToPrettyDateTime}}"
                                    Style="{StaticResource BodyTextBlockStyle}"
                                    Margin="0,5,0,0"
                                    RelativePanel.AlignLeftWithPanel="True"
@@ -171,7 +171,7 @@
                         
                         <ProgressBar x:Name="IsSyncing"
                                      IsIndeterminate="True"
-                                     Visibility="{x:Bind ViewModel.SettingsPartViewModel.IsSyncing, Converter={StaticResource BoolToVisibilityConverter}}"
+                                     Visibility="{x:Bind ViewModel.SettingsPartViewModel.IsSyncing, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                                      Width="270"
                                      Height="5"
                                      Margin="0,5,0,0"
