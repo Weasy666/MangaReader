@@ -101,6 +101,7 @@ namespace MangaReader_MVVM.Services.FileService
                 case StorageStrategies.Roaming:
                     return await ApplicationData.Current.RoamingFolder.CreateFileAsync(key, option);
                 case StorageStrategies.OneDrive:
+                    return await GetOneDriveFile(key, option);
                 case StorageStrategies.Temporary:
                     return await ApplicationData.Current.TemporaryFolder.CreateFileAsync(key, option);
                 default:
@@ -159,11 +160,11 @@ namespace MangaReader_MVVM.Services.FileService
             return retval;
         }
 
-        private static async Task<StorageFile> GetOneDriveFile(string key)
+        private static async Task<StorageFile> GetOneDriveFile(string key, CreationCollisionOption option = CreationCollisionOption.OpenIfExists)
         {
             var appRootFolder = await OneDriveService.Instance.AppRootFolderAsync();
             var remoteFile = await appRootFolder.GetFileAsync(key);
-            var localFile = await CreateFileAsync("OneDriveFileExists", StorageStrategies.Temporary);
+            var localFile = await CreateFileAsync(key, StorageStrategies.Temporary, option);
             if (remoteFile != null)
             {                
                 using (var remoteStream = await remoteFile.OpenAsync())

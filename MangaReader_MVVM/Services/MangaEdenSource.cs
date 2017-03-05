@@ -464,13 +464,13 @@ namespace MangaReader_MVVM.Services
             }
         }
 
-        public async Task<bool> SaveMangaStatusAsync()
+        public async Task<bool> SaveMangaStatusAsync(CreationCollisionOption option = CreationCollisionOption.ReplaceExisting)
         {
             if(_settings.StorageStrategy == StorageStrategies.OneDrive)
             {
                 _settings.LastSynced = DateTime.Now;
             }
-            return await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData, _settings.StorageStrategy);
+            return await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData, _settings.StorageStrategy, option);
         }
 
         public async Task<bool> ExportMangaStatusAsync()

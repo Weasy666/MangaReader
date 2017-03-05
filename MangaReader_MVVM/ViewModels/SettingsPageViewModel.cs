@@ -104,16 +104,16 @@ namespace MangaReader_MVVM.ViewModels
                 InvokeLibraryStoring();
                 if(!value)
                 {
-                    _settings.LastSynced = new DateTime();
+                    OneDriveSyncTime = new DateTime();
                 }
-                base.RaisePropertyChanged(nameof(OneDriveSyncTime));
+                RaisePropertyChanged(nameof(OneDriveSyncTime));
             }
         }
 
         private async void InvokeLibraryStoring()
         {
             IsSyncing = true;
-            await Services.MangaLibrary.Instance.SaveMangaStatusAsync();
+            await Services.MangaLibrary.Instance.SaveMangaStatusAsync(CreationCollisionOption.OpenIfExists);
             IsSyncing = false;
         }
 
@@ -124,17 +124,10 @@ namespace MangaReader_MVVM.ViewModels
             set { Set(ref _isSyncing, value); }
         }
 
-        public string OneDriveSyncTime
+        public DateTime OneDriveSyncTime
         {
-            get
-            {
-                var time = _settings.LastSynced.ToString("d");
-                if(_settings.LastSynced.Year == 0001)
-                {
-                    time = "Never";
-                }
-                return time;
-            }
+            get { return _settings.LastSynced; }
+            set { _settings.LastSynced = value; RaisePropertyChanged(nameof(OneDriveSyncTime)); }
         }
 
         //public bool IsGroupedFavoritsGrid

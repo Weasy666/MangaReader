@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Template10.Controls;
 using Template10.Mvvm;
+using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Models
@@ -30,7 +31,7 @@ namespace MangaReader_MVVM.Models
         ObservableItemCollection<Manga> SearchManga(string query);
         Task<ObservableItemCollection<Chapter>> GetChaptersAsync(Manga manga);
 
-        Task<bool> SaveMangaStatusAsync();
+        Task<bool> SaveMangaStatusAsync(CreationCollisionOption option);
         Task<bool> ExportMangaStatusAsync();
         Task<bool> ImportMangaStatusAsync();
     }
