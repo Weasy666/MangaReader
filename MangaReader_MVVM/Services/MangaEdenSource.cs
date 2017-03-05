@@ -436,6 +436,8 @@ namespace MangaReader_MVVM.Services
             {
                 _storedData = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _settings.StorageStrategy);
 
+                _settings.LastSynced = DateTime.Now;
+
                 if (_storedData != null && _storedData.Any())
                 {
                     for (int i = 0; i < Mangas.Count; i++)
