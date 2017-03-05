@@ -94,6 +94,49 @@ namespace MangaReader_MVVM.ViewModels
             set { _settings.NumberOfRecentMangas = value; base.RaisePropertyChanged(nameof(NumberOfRecentMangas)); }
         }
 
+        public bool UseOneDriveSync
+        {
+            get { return _settings.StorageStrategy.Equals(StorageStrategies.OneDrive); }
+            set
+            {
+                _settings.StorageStrategy = value ? StorageStrategies.OneDrive : StorageStrategies.Local;
+                base.RaisePropertyChanged(nameof(UseOneDriveSync));
+                InvokeLibraryStoring();
+                if(!value)
+                {
+                    _settings.LastSynced = new DateTime();
+                }
+                base.RaisePropertyChanged(nameof(OneDriveSyncTime));
+            }
+        }
+
+        private async void InvokeLibraryStoring()
+        {
+            IsSyncing = true;
+            await Services.MangaLibrary.Instance.SaveMangaStatusAsync();
+            IsSyncing = false;
+        }
+
+        private bool _isSyncing;
+        public bool IsSyncing
+        {
+            get => _isSyncing;
+            set { Set(ref _isSyncing, value); }
+        }
+
+        public string OneDriveSyncTime
+        {
+            get
+            {
+                var time = _settings.LastSynced.ToString("d");
+                if(_settings.LastSynced.Year == 0001)
+                {
+                    time = "Never";
+                }
+                return time;
+            }
+        }
+
         //public bool IsGroupedFavoritsGrid
         //{
         //    get { return _settings.IsGroupedFavoritsGrid; }

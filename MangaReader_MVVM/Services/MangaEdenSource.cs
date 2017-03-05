@@ -255,7 +255,7 @@ namespace MangaReader_MVVM.Services
                 {
                     AddFavorit(fav, false);
                 }
-                await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData);
+                await SaveMangaStatusAsync();
             }
         }
 
@@ -298,7 +298,7 @@ namespace MangaReader_MVVM.Services
 
                 if (IsSingle)
                 {
-                    await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData);
+                    await SaveMangaStatusAsync();
                 }
             }
         }
@@ -311,7 +311,7 @@ namespace MangaReader_MVVM.Services
                 {
                     AddAsRead(chapter, false);
                 }
-                await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData);
+                await SaveMangaStatusAsync();
                 await FileHelper.WriteFileAsync<ObservableItemCollection<Manga>>(Name + "_lastRead", LastRead);
             }
         }
@@ -339,7 +339,7 @@ namespace MangaReader_MVVM.Services
 
                 if (IsSingle)
                 {
-                    await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData);
+                    await SaveMangaStatusAsync();
                     await FileHelper.WriteFileAsync<ObservableItemCollection<Manga>>(Name + "_lastRead", LastRead);
                 }
             }
@@ -353,7 +353,7 @@ namespace MangaReader_MVVM.Services
                 {
                     RemoveAsRead(chapter, false);
                 }
-                await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData);
+                await SaveMangaStatusAsync();
             }
         }
 
@@ -373,7 +373,7 @@ namespace MangaReader_MVVM.Services
 
                     if (IsSingle)
                     {
-                        await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData);
+                        await SaveMangaStatusAsync();
                     }
                 }                
             }
@@ -433,7 +433,7 @@ namespace MangaReader_MVVM.Services
         {
             if (await FileHelper.FileExistsAsync(this.Name + "_mangasStatus"))
             {
-                _storedData = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus");                
+                _storedData = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _settings.StorageStrategy);                
 
                 for (int i = 0; i < Mangas.Count; i++)
                 {
@@ -462,6 +462,15 @@ namespace MangaReader_MVVM.Services
                     LastRead.Add(Mangas.Where(m => m.Id == manga.Id).First());
                 }
             }
+        }
+
+        public async Task<bool> SaveMangaStatusAsync()
+        {
+            if(_settings.StorageStrategy == StorageStrategies.OneDrive)
+            {
+                _settings.LastSynced = DateTime.Now;
+            }
+            return await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData, _settings.StorageStrategy);
         }
 
         public async Task<bool> ExportMangaStatusAsync()
@@ -529,8 +538,8 @@ namespace MangaReader_MVVM.Services
             {
                 var _storedData = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(await FileIO.ReadTextAsync(file));
 
-                var result = await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData);
-                
+                var result = await SaveMangaStatusAsync();
+
                 LoadAndMergeStoredData();
 
                 var tempCollection = new ObservableItemCollection<Manga>(Mangas.Where(m => m.IsFavorit));

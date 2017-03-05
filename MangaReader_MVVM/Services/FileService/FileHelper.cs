@@ -1,7 +1,7 @@
-﻿using Microsoft.Toolkit.Uwp.Services;
-using Microsoft.Toolkit.Uwp.Services.OneDrive;
+﻿using Microsoft.Toolkit.Uwp.Services.OneDrive;
 using Newtonsoft.Json;
 using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
@@ -23,9 +23,20 @@ namespace MangaReader_MVVM.Services.FileService
         /// <param name="location">Location storage strategy</param>
         public static async Task<bool> DeleteFileAsync(string key, StorageStrategies location = StorageStrategies.Local)
         {
-            var file = await GetIfFileExistsAsync(key, location);
-            if (file != null)
-                await file.DeleteAsync();
+            if (location == StorageStrategies.OneDrive)
+            {
+                var appRootFolder = await OneDriveService.Instance.AppRootFolderAsync();
+                var remoteFile = await appRootFolder.GetFileAsync(key);
+                if (remoteFile != null)
+                    await remoteFile.DeleteAsync();
+            }
+            else
+            {
+                var file = await GetIfFileExistsAsync(key, location);
+                if (file != null)
+                    await file.DeleteAsync();
+            }
+
             return !(await FileExistsAsync(key, location));
         }
 
@@ -67,32 +78,29 @@ namespace MangaReader_MVVM.Services.FileService
             // convert to string
             var serializedValue = Serialize(value);
             // save string to file
-            if (file is StorageFile)
+            await FileIO.WriteTextAsync(file, serializedValue);
+            if (location == StorageStrategies.OneDrive)
             {
-                await FileIO.WriteTextAsync(file as StorageFile, serializedValue);
+                var appRootFolder = await OneDriveService.Instance.AppRootFolderAsync();
+
+                using (var localStream = await file.OpenReadAsync())
+                {
+                    var fileCreated = await appRootFolder.CreateFileAsync(key, option, localStream);
+                }
             }
-            //else
-            //{
-            //    var rootFolder = file as OneDriveStorageFolder;
-                
-            //    var test = await rootFolder.CreateFileAsync(key, option);
-            //    test.
-            //}
-            // result
             return await FileExistsAsync(key, location);
         }
 
-        private static async Task<object> CreateFileAsync(string key, StorageStrategies location = StorageStrategies.Local,
+        private static async Task<StorageFile> CreateFileAsync(string key, StorageStrategies location = StorageStrategies.Local,
             CreationCollisionOption option = CreationCollisionOption.OpenIfExists)
         {
             switch (location)
             {
                 case StorageStrategies.Local:
                     return await ApplicationData.Current.LocalFolder.CreateFileAsync(key, option);
-                //case StorageStrategies.OneDrive:
-                //    return await OneDriveService.Instance.AppRootFolderAsync();
                 case StorageStrategies.Roaming:
                     return await ApplicationData.Current.RoamingFolder.CreateFileAsync(key, option);
+                case StorageStrategies.OneDrive:
                 case StorageStrategies.Temporary:
                     return await ApplicationData.Current.TemporaryFolder.CreateFileAsync(key, option);
                 default:
@@ -130,9 +138,9 @@ namespace MangaReader_MVVM.Services.FileService
                     case StorageStrategies.Local:
                         retval = await ApplicationData.Current.LocalFolder.TryGetItemAsync(key) as StorageFile;
                         break;
-                    //case StorageStrategies.OneDrive:
-                    //    retval = await OneDriveService.Instance.RootFolderAsync();
-                    //    break;
+                    case StorageStrategies.OneDrive:                        
+                        retval = await GetOneDriveFile(key);
+                        break;
                     case StorageStrategies.Roaming:
                         retval = await ApplicationData.Current.RoamingFolder.TryGetItemAsync(key) as StorageFile;
                         break;
@@ -149,6 +157,28 @@ namespace MangaReader_MVVM.Services.FileService
                 return null;
             }
             return retval;
+        }
+
+        private static async Task<StorageFile> GetOneDriveFile(string key)
+        {
+            var appRootFolder = await OneDriveService.Instance.AppRootFolderAsync();
+            var remoteFile = await appRootFolder.GetFileAsync(key);
+            var localFile = await CreateFileAsync("OneDriveFileExists", StorageStrategies.Temporary);
+            if (remoteFile != null)
+            {                
+                using (var remoteStream = await remoteFile.OpenAsync())
+                {
+                    byte[] buffer = new byte[remoteStream.Size];
+                    var localBuffer = await remoteStream.ReadAsync(buffer.AsBuffer(), (uint)remoteStream.Size, InputStreamOptions.ReadAhead);
+                    
+                    using (var localStream = await localFile.OpenAsync(FileAccessMode.ReadWrite))
+                    {
+                        await localStream.WriteAsync(localBuffer);
+                        await localStream.FlushAsync();
+                    }
+                }
+            }
+            return localFile;
         }
 
         private static string Serialize<T>(T item) => JsonConvert.SerializeObject(item, Formatting.None, new JsonSerializerSettings()

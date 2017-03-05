@@ -30,6 +30,7 @@ namespace MangaReader_MVVM.Models
         ObservableItemCollection<Manga> SearchManga(string query);
         Task<ObservableItemCollection<Chapter>> GetChaptersAsync(Manga manga);
 
+        Task<bool> SaveMangaStatusAsync();
         Task<bool> ExportMangaStatusAsync();
         Task<bool> ImportMangaStatusAsync();
     }
