@@ -99,6 +99,8 @@ namespace MangaReader_MVVM.ViewModels
 
             if (mode == NavigationMode.New && parameter != null)
             {
+                Chapter = new Chapter() { Pages = new ObservableItemCollection<Models.Page>() };
+
                 Manga = await _library.GetMangaAsync(chapter.ParentManga.Id);
                 
                 var chapterIndex = Manga.Chapters.IndexOf(chapter);
@@ -183,6 +185,7 @@ namespace MangaReader_MVVM.ViewModels
             {
                 if (clickedChapter != Chapter)
                 {
+                    Chapter = new Chapter() { Pages = new ObservableItemCollection<Models.Page>() };
                     Chapter = await _library.GetChapterAsync(clickedChapter);
                     SelectedChapterIndex = listView.SelectedIndex;
                     _library.AddAsRead(clickedChapter);
