@@ -28,12 +28,12 @@ namespace MangaReader_MVVM.Services
                     case MangaSource.MangaEden:
                         _mangaSource = new MangaEdenSource();
                         break;
-                    case MangaSource.MangaFox:
-                        throw new NotImplementedException("MangaFox Source is not implemented right now");
-                        break;
-                    case MangaSource.MangaReader:
-                        throw new NotImplementedException("MangaReader Source is not implemented right now");
-                        break;
+                    //case MangaSource.MangaFox:
+                    //    throw new NotImplementedException("MangaFox Source is not implemented right now");
+                    //    break;
+                    //case MangaSource.MangaReader:
+                    //    throw new NotImplementedException("MangaReader Source is not implemented right now");
+                    //    break;
                     default:
                         break;
                 }

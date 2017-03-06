@@ -11,8 +11,8 @@ namespace MangaReader_MVVM
     public enum MangaSource
     {
         MangaEden,
-        MangaFox,
-        MangaReader
+        //MangaFox,
+        //MangaReader
     }
     
     public enum ReloadMode
