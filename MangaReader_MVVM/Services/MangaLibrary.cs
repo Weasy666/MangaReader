@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Template10.Controls;
@@ -46,6 +47,7 @@ namespace MangaReader_MVVM.Services
         public ObservableItemCollection<Manga> Mangas => _mangaSource.Mangas;
         public ObservableItemCollection<Manga> Favorits => _mangaSource.Favorits;
         public ObservableItemCollection<Manga> LastRead => _mangaSource.LastRead;
+        public ObservableCollection<string> Categories => _mangaSource.Categories;
 
         public Task<ObservableItemCollection<Manga>> GetMangasAsync(ReloadMode mode = ReloadMode.Local) => _mangaSource.GetMangasAsync(mode);
         public Task<Manga> GetMangaAsync(string mangaId) => _mangaSource.GetMangaAsync(mangaId);

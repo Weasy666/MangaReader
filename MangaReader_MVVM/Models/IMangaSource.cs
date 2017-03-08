@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Template10.Controls;
 using Template10.Mvvm;
@@ -16,6 +17,7 @@ namespace MangaReader_MVVM.Models
         ObservableItemCollection<Manga> Mangas { get; }
         ObservableItemCollection<Manga> Favorits { get; }
         ObservableItemCollection<Manga> LastRead { get; }
+        ObservableCollection<string> Categories { get; }
 
         Task<ObservableItemCollection<Manga>> GetMangasAsync(ReloadMode mode);
         Task<Manga> GetMangaAsync(string mangaId);

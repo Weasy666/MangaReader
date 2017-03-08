@@ -4,6 +4,7 @@
       xmlns:t10controls="using:Template10.Controls"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:cont="using:MangaReader_MVVM.Controls"
       xmlns:vm="using:MangaReader_MVVM.ViewModels" mc:Ignorable="d" >    
     <Page.DataContext>
         <vm:MangasPageViewModel x:Name="ViewModel" />
@@ -17,7 +18,41 @@
 
         <t10controls:PageHeader Text="Manga Library" Frame="{x:Bind Frame}" >
             <t10controls:PageHeader.PrimaryCommands>
-                <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />
+                <AppBarButton Icon="Filter" Label="Filter">
+                    <AppBarButton.Flyout>
+                        <Flyout>
+                            <ItemsControl ItemsSource="{x:Bind ViewModel.Categories, Mode=OneWay}"
+                                          
+                                          MaxWidth="270"
+                                          Padding="0,0,0,0">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <cont:VariableWrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                            <!--<GridView x:Name="CategoryGridView"
+                                      ItemsSource="{x:Bind ViewModel.Categories, Mode=OneWay}"
+                                      MaxWidth="270"
+                                      Padding="0,0,0,0"
+                                      SelectionMode="Single"
+                                      IsItemClickEnabled="True"
+                                      ItemClick="{x:Bind ViewModel.CategoryClickedAsync}"
+                                      Style="{StaticResource GridViewSemiOpaqueScrollViewer}">
+                                <GridView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VariableSizedWrapGrid Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </GridView.ItemsPanel>
+                                <GridView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}"/>
+                                    </DataTemplate>
+                                </GridView.ItemTemplate>
+                            </GridView> -->
+                        </Flyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
                 <AppBarButton Icon="Sort" Label="Sort" Command="{x:Bind ViewModel.SortGridCommand, Mode=OneWay}" />
                 <AppBarSeparator />
                 <AppBarButton Icon="Refresh" Label="Reload" Command="{x:Bind ViewModel.ReloadGridCommand, Mode=OneWay}" />

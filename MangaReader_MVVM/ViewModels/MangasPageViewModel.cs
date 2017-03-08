@@ -4,6 +4,7 @@ using MangaReader_MVVM.Services.SettingsServices;
 using MangaReader_MVVM.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,12 +39,15 @@ namespace MangaReader_MVVM.ViewModels
             else
             {
                 Mangas = _library.Mangas;
+                Categories = _library.Categories;
                 _settings.PropertyChanged += Settings_Changed;
             }
         }
 
         private ObservableItemCollection<Manga> _mangas = new ObservableItemCollection<Manga>();
         public ObservableItemCollection<Manga> Mangas { get { return _mangas; } set { Set(ref _mangas, value); } }
+        private ObservableCollection<string> _categories = new ObservableCollection<string>();
+        public ObservableCollection<string> Categories { get { return _categories; } set { Set(ref _categories, value); } }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
@@ -88,7 +92,7 @@ namespace MangaReader_MVVM.ViewModels
             {
                 Mangas = new ObservableItemCollection<Manga>(Mangas.Reverse());
             }, () => Mangas.Any()));
-
+        
         private DelegateCommand<Manga> _favoritCommand;
         public DelegateCommand<Manga> FavoritCommand
             => _favoritCommand ?? (_favoritCommand = new DelegateCommand<Manga>((manga) =>
@@ -109,6 +113,11 @@ namespace MangaReader_MVVM.ViewModels
                 var dialog = new MessageDialog("This Manga doesn't exist");
                 await dialog.ShowAsync();
             }
+        }
+
+        public async void CategoryClickedAsync(object sender, ItemClickEventArgs e)
+        {
+            var clickedCategory = e.ClickedItem as string;
         }
     }
 }

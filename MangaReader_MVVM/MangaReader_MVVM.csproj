@@ -102,6 +102,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\VariableWrapPanel.cs" />
     <Compile Include="Converters\BoolToMangaStatusConverter.cs" />
     <Compile Include="Converters\BoolToFavoritSymbolConverter.cs" />
     <Compile Include="Converters\BoolToSelectionModeConverter.cs" />

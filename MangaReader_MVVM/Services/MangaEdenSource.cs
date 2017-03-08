@@ -6,6 +6,7 @@ using MangaReader_MVVM.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
@@ -56,14 +57,19 @@ namespace MangaReader_MVVM.Services
 
         private Dictionary<string, List<string>> _storedData = new Dictionary<string, List<string>>();
 
+        private ObservableCollection<string> _categories;
+        public ObservableCollection<string> Categories
+        {
+            get => _categories = _categories ?? GetCategories();
+            internal set { Set(ref _categories, value); }
+        }
+
         //private AdvancedCollectionView _favorits;
         //public AdvancedCollectionView Favorits
         //{
         //    get { return _favorits = _favorits ?? GetFavoritMangasAsync().Result; }
         //    internal set { Set(ref _favorits, value); }
         //}
-
-        //private Dictionary<string, List<string>> _readStatus;
 
         public MangaEdenSource()
         {
@@ -77,14 +83,14 @@ namespace MangaReader_MVVM.Services
 
         public async Task<ObservableItemCollection<Manga>> GetMangasAsync(ReloadMode mode = ReloadMode.Local)
         {
-            if (!Mangas.Any() || mode == ReloadMode.Server)
+            try
             {
-                var networkService = new NetworkAvailableService();
-                if (await networkService.IsInternetAvailable())
+                if (!Mangas.Any() || mode == ReloadMode.Server)
                 {
-                    using (var httpClient = new HttpClient { BaseAddress = RootUri })
+                    var networkService = new NetworkAvailableService();
+                    if (await networkService.IsInternetAvailable())
                     {
-                        try
+                        using (var httpClient = new HttpClient { BaseAddress = RootUri })
                         {
                             var response = await httpClient.GetAsync(MangasListPage);
                             var result = await response.Content.ReadAsStringAsync();
@@ -95,50 +101,56 @@ namespace MangaReader_MVVM.Services
 
                                 Mangas = JsonConvert.DeserializeObject<ObservableItemCollection<Manga>>(result, settings);
                             }
+                            else
+                            {
+                                throw new HttpRequestException(Name + ": " + response.ReasonPhrase);
+                            }
                         }
-                        catch (Exception e)
-                        {
-                            var dialog = new MessageDialog(e.Message);
-                            await dialog.ShowAsync();
-                        }
-                    }
-                }
-                else
-                {
-                    MessageDialog dialog = new MessageDialog("No Internet connection available. Check your connection and try again.");
-                    //dialog.Title = "Manga Status Backup";
-                    dialog.Commands.Add(new UICommand { Label = "Retry", Id = 0 });
-                    dialog.Commands.Add(new UICommand { Label = "Exit", Id = 1 });
-                    dialog.DefaultCommandIndex = 0;
-                    dialog.CancelCommandIndex = 1;
-
-                    var result = await dialog.ShowAsync();
-                    if((int)result.Id == 0)
-                    {
-                        Mangas = await GetMangasAsync(mode);
                     }
                     else
                     {
-                        App.Current.Exit();
+                        throw new HttpRequestException("No Internet connection available. Check your connection and try again.");
                     }
                 }
+
+                await LoadAndMergeStoredDataAsync();
+                LoadLastReadAsync();
             }
+            catch (HttpRequestException e)
+            {
+                MessageDialog dialog = new MessageDialog(e.Message);
+                dialog.Commands.Add(new UICommand { Label = "Retry", Id = 0 });
+                dialog.Commands.Add(new UICommand { Label = "Exit", Id = 1 });
+                dialog.DefaultCommandIndex = 0;
+                dialog.CancelCommandIndex = 1;
 
-            await LoadAndMergeStoredData();
-            LoadLastRead();
-
+                var result = await dialog.ShowAsync();
+                if ((int)result.Id == 0)
+                {
+                    Mangas = await GetMangasAsync(mode);
+                }
+                else
+                {
+                    App.Current.Exit();
+                }
+            }
+            catch (Exception e)
+            {
+                var dialog = new MessageDialog(e.Message);
+                await dialog.ShowAsync();
+            }
             return Mangas;
         }        
 
         public async Task<Manga> GetMangaAsync(string mangaId)
         {
             var manga = Mangas.Where(m => m.Id == mangaId).First();
-            var networkService = new NetworkAvailableService();
-            if (await networkService.IsInternetAvailable())
-            {
-                using (var httpClient = new HttpClient { BaseAddress = RootUri })
+            try
+            {                
+                var networkService = new NetworkAvailableService();
+                if (await networkService.IsInternetAvailable())
                 {
-                    try
+                    using (var httpClient = new HttpClient { BaseAddress = RootUri })
                     {
                         var mangaDetailsUri = new Uri(RootUri, MangaDetails);
                         var response = await httpClient.GetAsync(new Uri(mangaDetailsUri, mangaId));
@@ -152,25 +164,27 @@ namespace MangaReader_MVVM.Services
 
                             MergeMangaWithDetails(manga, details);
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        var dialog = new MessageDialog(e.Message);
-                        await dialog.ShowAsync();
+                        else
+                        {
+                            throw new HttpRequestException(Name + ": " + response.ReasonPhrase);
+                        }
                     }
                 }
+                else
+                {
+                    throw new HttpRequestException("No Internet connection available. Check your connection and try again.");
+                }
             }
-            else
+            catch (HttpRequestException e)
             {
-                MessageDialog dialog = new MessageDialog("No Internet connection available. Check your connection and try again.");
-                //dialog.Title = "Manga Status Backup";
+                MessageDialog dialog = new MessageDialog(e.Message);
                 dialog.Commands.Add(new UICommand { Label = "Retry", Id = 0 });
                 dialog.Commands.Add(new UICommand { Label = "Exit", Id = 1 });
                 dialog.DefaultCommandIndex = 0;
                 dialog.CancelCommandIndex = 1;
 
                 var result = await dialog.ShowAsync();
-                if ((int)result.Id == 0)
+                if ((int) result.Id == 0)
                 {
                     manga = await GetMangaAsync(mangaId);
                 }
@@ -179,18 +193,23 @@ namespace MangaReader_MVVM.Services
                     App.Current.Exit();
                 }
             }
+            catch (Exception e)
+            {
+                var dialog = new MessageDialog(e.Message);
+                await dialog.ShowAsync();
+            }
 
             return manga;
         }
 
         public async Task<Chapter> GetChapterAsync(Chapter chapter)
         {
-            var networkService = new NetworkAvailableService();
-            if (await networkService.IsInternetAvailable())
+            try
             {
-                using (var httpClient = new HttpClient { BaseAddress = RootUri })
+                var networkService = new NetworkAvailableService();
+                if (await networkService.IsInternetAvailable())
                 {
-                    try
+                    using (var httpClient = new HttpClient { BaseAddress = RootUri })
                     {
                         var chapterUri = new Uri(RootUri, MangaChapterPages);
                         var response = await httpClient.GetAsync(new Uri(chapterUri, chapter.Id));
@@ -204,18 +223,20 @@ namespace MangaReader_MVVM.Services
 
                             chapter.Pages = pages;
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        var dialog = new MessageDialog(e.Message);
-                        await dialog.ShowAsync();
+                        else
+                        {
+                            throw new HttpRequestException(Name + ": " + response.ReasonPhrase);
+                        }
                     }
                 }
+                else
+                {
+                    throw new HttpRequestException("No Internet connection available. Check your connection and try again.");
+                }
             }
-            else
+            catch (HttpRequestException e)
             {
-                MessageDialog dialog = new MessageDialog("No Internet connection available. Check your connection and try again.");
-                //dialog.Title = "Manga Status Backup";
+                MessageDialog dialog = new MessageDialog(e.Message);
                 dialog.Commands.Add(new UICommand { Label = "Retry", Id = 0 });
                 dialog.Commands.Add(new UICommand { Label = "Exit", Id = 1 });
                 dialog.DefaultCommandIndex = 0;
@@ -231,6 +252,12 @@ namespace MangaReader_MVVM.Services
                     App.Current.Exit();
                 }
             }
+            catch (Exception e)
+            {
+                var dialog = new MessageDialog(e.Message);
+                await dialog.ShowAsync();
+            }
+
             return chapter;
         }
         
@@ -408,6 +435,22 @@ namespace MangaReader_MVVM.Services
             throw new NotImplementedException();
         }
 
+        private ObservableCollection<string> GetCategories()
+        {
+            var hashSet = new HashSet<string>();
+            if (Mangas != null && Mangas.Any())
+            {
+                foreach(var manga in Mangas)
+                {
+                    var categories = manga.Category.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim()).ToArray();
+                    hashSet.UnionWith(categories);
+                }
+            }
+            var retval = new ObservableCollection<string>(hashSet);
+            retval.SortAscending((y, x) => y.CompareTo(x));
+            return retval;
+        }
+
         private void MergeMangaWithDetails(Manga manga, Manga details)
         {
             manga.Alias = details.Alias;
@@ -429,7 +472,7 @@ namespace MangaReader_MVVM.Services
             }
         }
 
-        private async Task<bool> LoadAndMergeStoredData()
+        private async Task<bool> LoadAndMergeStoredDataAsync()
         {
             bool retval = false;
             if (await FileHelper.FileExistsAsync(this.Name + "_mangasStatus"))
@@ -459,15 +502,18 @@ namespace MangaReader_MVVM.Services
             return retval;
         }
 
-        private async void LoadLastRead()
+        private async void LoadLastReadAsync()
         {
             if (await FileHelper.FileExistsAsync(this.Name + "_lastRead"))
             {
                 var lastRead = await FileHelper.ReadFileAsync<ObservableItemCollection<Manga>>(Name + "_lastRead");
                 LastRead.Clear();
-                foreach (var manga in lastRead)
+                if (Mangas != null && Mangas.Any())
                 {
-                    LastRead.Add(Mangas.Where(m => m.Id == manga.Id).First());
+                    foreach (var manga in lastRead)
+                    {
+                        LastRead.Add(Mangas.Where(m => m.Id == manga.Id).First());
+                    }
                 }
             }
         }
@@ -548,7 +594,7 @@ namespace MangaReader_MVVM.Services
 
                 var result = await SaveMangaStatusAsync();
 
-                LoadAndMergeStoredData();
+                await LoadAndMergeStoredDataAsync();
 
                 var tempCollection = new ObservableItemCollection<Manga>(Mangas.Where(m => m.IsFavorit));
                 foreach(var temp in tempCollection)
