@@ -1,6 +1,7 @@
 ﻿using MangaReader_MVVM.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -61,6 +62,7 @@ namespace MangaReader_MVVM.Services
         public void RemoveAsRead(ObservableItemCollection<Chapter> chapters) => _mangaSource.RemoveAsRead(chapters);
         public void RemoveAsRead(Chapter chapter) => _mangaSource.RemoveAsRead(chapter);
         public ObservableItemCollection<Manga> SearchManga(string query) => _mangaSource.SearchManga(query);
+        public ObservableItemCollection<Manga> FilterMangaByCategory(IEnumerable filters) => _mangaSource.FilterMangaByCategory(filters);
         public Task<ObservableItemCollection<Chapter>> GetChaptersAsync(Manga manga) => _mangaSource.GetChaptersAsync(manga);
 
         public Task<bool> SaveMangaStatusAsync(CreationCollisionOption option = CreationCollisionOption.ReplaceExisting) => _mangaSource.SaveMangaStatusAsync(option);

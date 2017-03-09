@@ -115,9 +115,13 @@ namespace MangaReader_MVVM.ViewModels
             }
         }
 
-        public async void CategoryClickedAsync(object sender, ItemClickEventArgs e)
+        public void CategoryClickedAsync(object sender, SelectionChangedEventArgs e)
         {
-            var clickedCategory = e.ClickedItem as string;
+            if(sender is ListView listView)
+            {
+                var categories = listView.SelectedItems.Cast<string>();
+                Mangas = _library.FilterMangaByCategory(categories);
+            }
         }
     }
 }

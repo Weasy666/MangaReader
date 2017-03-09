@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Template10.Controls;
@@ -31,6 +32,7 @@ namespace MangaReader_MVVM.Models
         void RemoveAsRead(ObservableItemCollection<Chapter> chapters);
         void RemoveAsRead(Chapter chapter, bool isSingle = true);
         ObservableItemCollection<Manga> SearchManga(string query);
+        ObservableItemCollection<Manga> FilterMangaByCategory(IEnumerable filters);
         Task<ObservableItemCollection<Chapter>> GetChaptersAsync(Manga manga);
 
         Task<bool> SaveMangaStatusAsync(CreationCollisionOption option);

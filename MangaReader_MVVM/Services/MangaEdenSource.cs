@@ -5,6 +5,7 @@ using MangaReader_MVVM.Services.SettingsServices;
 using MangaReader_MVVM.Utils;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -428,6 +429,23 @@ namespace MangaReader_MVVM.Services
         public ObservableItemCollection<Manga> SearchManga(string query)
         {
             return new ObservableItemCollection<Manga>(Mangas.Where(manga => manga.Title.ToLower().Contains(query.ToLower()) && query != string.Empty));
+        }
+
+        public ObservableItemCollection<Manga> FilterMangaByCategory(IEnumerable filters)
+        {
+            var retval = Mangas;
+
+            if(filters != null)
+            {
+                var temp = retval.AsEnumerable();
+                foreach(string filter in filters)
+                {
+                    temp = temp.Where(m => m.Category.Contains(filter));
+                }
+                retval = new ObservableItemCollection<Manga>(temp);
+            }
+
+            return retval;
         }
 
         public async Task<ObservableItemCollection<Chapter>> GetChaptersAsync(Manga manga)
