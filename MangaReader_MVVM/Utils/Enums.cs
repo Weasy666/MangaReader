@@ -11,8 +11,8 @@ namespace MangaReader_MVVM
     public enum MangaSource
     {
         MangaEden,
-        MangaFox,
-        MangaReader
+        //MangaFox,
+        //MangaReader
     }
     
     public enum ReloadMode
@@ -45,5 +45,13 @@ namespace MangaReader_MVVM
         LeftToRight,
         [Display(Name = "Right to Left")]
         RightToLeft
+    }
+
+    public enum StorageStrategies
+    {
+        Local,
+        OneDrive,
+        Roaming,
+        Temporary
     }
 }

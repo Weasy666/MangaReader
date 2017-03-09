@@ -34,7 +34,7 @@
                                 VerticalAlignment="Center" />            
             <StackPanel Orientation="Vertical" Margin="5,0,0,0" MaxWidth="247" Grid.Column="1">
                 <TextBlock Text="{Binding Title}" FontSize="20" TextTrimming="CharacterEllipsis"/>
-                <TextBlock Text="{Binding OnGoing}" FontSize="15"/>
+                <TextBlock Text="{Binding Ongoing, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15"/>
                 <TextBlock Text="{Binding LastUpdated, Converter={StaticResource DateTimeToPrettyDateTime}}" FontSize="15"/>
                 <TextBlock Text="{Binding Category}" FontSize="15" TextWrapping="WrapWholeWords" TextTrimming="CharacterEllipsis"/>
             </StackPanel>
@@ -163,9 +163,9 @@
     </services:MangaItemTemplateSelector>
 
     <DataTemplate x:Key="ChapterItem">
-        <Grid Width="250" Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" >
+        <Grid Width="250" Height="75" Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}">
             <StackPanel Orientation="Vertical" Margin="5,0,0,0" MaxWidth="250">
-                <TextBlock Text="{Binding Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
+                <TextBlock x:Name="Title" Text="{Binding Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
                 <TextBlock Text="{Binding Number}" FontSize="15"/>
                 <!--<TextBlock Text="{Binding NumberOfPages}" FontSize="15"/>-->
                 <TextBlock Text="{Binding Released, Converter={StaticResource DateTimeToPrettyDateTime}}" FontSize="15" Margin="0,0,0,5"/>

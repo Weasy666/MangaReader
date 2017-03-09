@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="ac3ad44c-ae5b-4c4e-b8de-aa563be94d93" Publisher="CN=weasy" Version="1.0.0.0" />
-  <mp:PhoneIdentity PhoneProductId="ac3ad44c-ae5b-4c4e-b8de-aa563be94d93" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="2487Weasy.WMangaReader" Publisher="CN=C93A68F1-B1EB-4AF8-9E1A-CB4D4271437F" Version="0.8.0.0" />
+  <mp:PhoneIdentity PhoneProductId="3f669652-1c52-429a-930a-820b0f55638e" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>MangaReader_MVVM</DisplayName>
-    <PublisherDisplayName>weasy</PublisherDisplayName>
+    <DisplayName>W Manga Reader</DisplayName>
+    <PublisherDisplayName>Weasy</PublisherDisplayName>
     <Logo>Assets\NewStoreLogo.png</Logo>
   </Properties>
   <Dependencies>
@@ -15,8 +15,13 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="MangaReader_MVVM.App">
-      <uap:VisualElements DisplayName="MangaReader_MVVM.App" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Sample" BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square310x310Logo="Assets\Square310x310Logo.png" Square71x71Logo="Assets\Square71x71Logo.png">
+      <uap:VisualElements DisplayName="W Manga Reader" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Sample" BackgroundColor="transparent">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square310x310Logo="Assets\Square310x310Logo.png" Square71x71Logo="Assets\Square71x71Logo.png" ShortName="W Manga Reader">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="square150x150Logo" />
+            <uap:ShowOn Tile="wide310x150Logo" />
+            <uap:ShowOn Tile="square310x310Logo" />
+          </uap:ShowNameOnTiles>
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>

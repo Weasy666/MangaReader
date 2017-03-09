@@ -1,16 +1,17 @@
-﻿using Newtonsoft.Json;
+﻿using MangaReader_MVVM.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
+using Template10.Controls;
 
-namespace MangaReader_MVVM.Models
+namespace MangaReader_MVVM.Converters.JSON
 {
     class MangaEdenChapterPagesConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(ObservableCollection<IPage>));
+            return (objectType == typeof(ObservableItemCollection<Page>));
         }
 
         // TODO: cleaner, maybe more generic and performant way to deserialize manga
@@ -29,7 +30,7 @@ namespace MangaReader_MVVM.Models
             }).ToList();
             pages.Sort();
 
-            return new ObservableCollection<IPage>(pages);
+            return new ObservableItemCollection<Page>(pages);
         }
 
         public override bool CanWrite => false;

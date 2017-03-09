@@ -1,25 +1,26 @@
-﻿using Template10.Mvvm;
-using System.Collections.Generic;
+﻿using MangaReader_MVVM.Models;
+using MangaReader_MVVM.Services;
+using MangaReader_MVVM.Services.SettingsServices;
+using MangaReader_MVVM.Views;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Template10.Controls;
+using Template10.Mvvm;
 using Template10.Services.NavigationService;
-using Windows.UI.Xaml.Navigation;
-using System.Collections.ObjectModel;
-using MangaReader_MVVM.Models;
-using MangaReader_MVVM.Services;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Popups;
-using MangaReader_MVVM.Services.SettingsServices;
-using System.ComponentModel;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace MangaReader_MVVM.ViewModels
 {
     public class MangasPageViewModel : ViewModelBase
     {
-        public MangaLibrary _library = MangaLibrary.Instance;
-        public SettingsService _settings = SettingsService.Instance;
+        private MangaLibrary _library = MangaLibrary.Instance;
+        private SettingsService _settings = SettingsService.Instance;
 
         public MangaItemTemplate MangaGridLayout => SettingsService.Instance.MangaGridLayout;
         private void Settings_Changed(object sender, PropertyChangedEventArgs e)
@@ -38,12 +39,15 @@ namespace MangaReader_MVVM.ViewModels
             else
             {
                 Mangas = _library.Mangas;
+                Categories = _library.Categories;
                 _settings.PropertyChanged += Settings_Changed;
             }
         }
 
-        private ObservableCollection<IManga> _mangas = new ObservableCollection<IManga>();
-        public ObservableCollection<IManga> Mangas { get { return _mangas; } set { Set(ref _mangas, value); } }
+        private ObservableItemCollection<Manga> _mangas = new ObservableItemCollection<Manga>();
+        public ObservableItemCollection<Manga> Mangas { get { return _mangas; } set { Set(ref _mangas, value); } }
+        private ObservableCollection<string> _categories = new ObservableCollection<string>();
+        public ObservableCollection<string> Categories { get { return _categories; } set { Set(ref _categories, value); } }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
@@ -86,12 +90,12 @@ namespace MangaReader_MVVM.ViewModels
         public DelegateCommand SortGridCommand
             => _sortGridCommand ?? (_sortGridCommand = new DelegateCommand(() =>
             {
-                Mangas = new ObservableCollection<IManga>(Mangas.Reverse());
+                Mangas = new ObservableItemCollection<Manga>(Mangas.Reverse());
             }, () => Mangas.Any()));
-
-        private DelegateCommand<IManga> _favoritCommand;
-        public DelegateCommand<IManga> FavoritCommand
-            => _favoritCommand ?? (_favoritCommand = new DelegateCommand<IManga>((manga) =>
+        
+        private DelegateCommand<Manga> _favoritCommand;
+        public DelegateCommand<Manga> FavoritCommand
+            => _favoritCommand ?? (_favoritCommand = new DelegateCommand<Manga>((manga) =>
             {
                 _library.AddFavorit(manga);
             }));
@@ -101,13 +105,22 @@ namespace MangaReader_MVVM.ViewModels
             var clickedManga = e.ClickedItem as Manga;
             if (clickedManga != null)
             {
-                NavigationService.Navigate(typeof(Views.MangaDetailsPage), clickedManga);
+                NavigationService.Navigate(typeof(MangaDetailsPage), clickedManga);
             }
             else
             {
                 //TODO change to PopupService
                 var dialog = new MessageDialog("This Manga doesn't exist");
                 await dialog.ShowAsync();
+            }
+        }
+
+        public void CategoryClickedAsync(object sender, SelectionChangedEventArgs e)
+        {
+            if(sender is ListView listView)
+            {
+                var categories = listView.SelectedItems.Cast<string>();
+                Mangas = _library.FilterMangaByCategory(categories);
             }
         }
     }

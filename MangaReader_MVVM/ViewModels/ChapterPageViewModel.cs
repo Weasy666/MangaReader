@@ -3,9 +3,9 @@ using MangaReader_MVVM.Services;
 using MangaReader_MVVM.Services.SettingsServices;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Template10.Controls;
 using Template10.Mvvm;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -32,13 +32,10 @@ namespace MangaReader_MVVM.ViewModels
             }
             else
             {
-                Manga = new Manga()
-                {
-                    
-                };
+                Manga = new Manga();
                 Chapter = new Chapter()
                 {
-                    Pages = new ObservableCollection<IPage>()
+                    Pages = new ObservableItemCollection<Models.Page>()
                 };
             }
         }
@@ -88,27 +85,13 @@ namespace MangaReader_MVVM.ViewModels
         //    }
         //}
 
-        private IManga _manga;
-        public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
+        private Manga _manga;
+        public Manga Manga { get { return _manga; } set { Set(ref _manga, value); } }
 
-        public ObservableCollection<IChapter> Chapters => Manga.Chapters;
-        private IChapter _chapter;
-        public IChapter Chapter { get { return _chapter; } set { Set(ref _chapter, value); } }
-        private ObservableCollection<IPage> _pages;
-        public ObservableCollection<IPage> Pages
-        {
-            get
-            {
-                if (Chapter.Pages != _pages)
-                    _pages = Chapter.Pages;
-                return _pages;
-            }
-            set
-            {
-                Chapter.Pages = value;
-                Set(ref _pages, value);
-            }
-        }        
+        private Chapter _chapter;
+        public Chapter Chapter { get { return _chapter; } set { Set(ref _chapter, value); RaisePropertyChanged(nameof(Pages)); } }
+
+        public ObservableItemCollection<Models.Page> Pages => Chapter.Pages;
         
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
@@ -116,7 +99,8 @@ namespace MangaReader_MVVM.ViewModels
 
             if (mode == NavigationMode.New && parameter != null)
             {
-                Pages.Clear();
+                Chapter = new Chapter() { Pages = new ObservableItemCollection<Models.Page>() };
+
                 Manga = await _library.GetMangaAsync(chapter.ParentManga.Id);
                 
                 var chapterIndex = Manga.Chapters.IndexOf(chapter);
@@ -144,10 +128,10 @@ namespace MangaReader_MVVM.ViewModels
 
         public void Page_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            var grid = sender as Grid;
-            if (grid != null)
+            var pageGrid = sender as Grid;
+            if (pageGrid != null)
             {
-                var chaptersPageHeader = grid.FindName("ChaptersBar") as Template10.Controls.PageHeader;
+                var chaptersPageHeader = pageGrid.FindName("ChaptersBar") as Template10.Controls.PageHeader;
                 chaptersPageHeader.IsOpen = !chaptersPageHeader.IsOpen;
 
                 var pageOverlayVisibility = chaptersPageHeader.IsOpen ? Visibility.Visible : Visibility.Collapsed;
@@ -166,6 +150,19 @@ namespace MangaReader_MVVM.ViewModels
                 var flyout = stackPanel.Parent as FlyoutPresenter;
                 var popup = flyout.Parent as Windows.UI.Xaml.Controls.Primitives.Popup;
                 popup.IsOpen = false;
+
+                var pageGrid = comboBox.Tag as Grid;
+                if (pageGrid != null)
+                {
+                    var chaptersPageHeader = pageGrid.FindName("ChaptersBar") as Template10.Controls.PageHeader;
+                    chaptersPageHeader.IsOpen = !chaptersPageHeader.IsOpen;
+
+                    var pageOverlayVisibility = chaptersPageHeader.IsOpen ? Visibility.Visible : Visibility.Collapsed;
+                    foreach (var page in Pages)
+                    {
+                        page.OverlayVisibility = pageOverlayVisibility;
+                    }
+                }
             }
         }
 
@@ -183,17 +180,16 @@ namespace MangaReader_MVVM.ViewModels
         public async Task ChapterClickedAsync(object sender, TappedRoutedEventArgs args)
         {
             var listView = sender as ListView;
-            var clickedChapter = listView.SelectedItem as Chapter;
 
-            if (clickedChapter != null)
+            if (listView.SelectedItem is Chapter clickedChapter)
             {
                 if (clickedChapter != Chapter)
                 {
-                    Chapter = await MangaLibrary.Instance.GetChapterAsync(clickedChapter);
+                    Chapter = new Chapter() { Pages = new ObservableItemCollection<Models.Page>() };
+                    Chapter = await _library.GetChapterAsync(clickedChapter);
                     SelectedChapterIndex = listView.SelectedIndex;
-                    MangaLibrary.Instance.AddAsRead(clickedChapter.ParentManga.Id, clickedChapter);
-                    Pages = new ObservableCollection<IPage>(Chapter.Pages);
-                }                
+                    _library.AddAsRead(clickedChapter);
+                }
             }
             else
             {

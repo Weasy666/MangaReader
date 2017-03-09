@@ -1,20 +1,29 @@
-﻿using Newtonsoft.Json;
+﻿using MangaReader_MVVM.Converters.JSON;
+using MangaReader_MVVM.Models;
+using MangaReader_MVVM.Services.FileService;
+using MangaReader_MVVM.Services.SettingsServices;
+using MangaReader_MVVM.Utils;
+using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Template10.Controls;
+using Template10.Mvvm;
+using Template10.Services.NetworkAvailableService;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Provider;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
-using Template10.Services.FileService;
-using MangaReader_MVVM.Models;
-using MangaReader_MVVM.Utils;
-using Template10.Mvvm;
 
 namespace MangaReader_MVVM.Services
 {
-    class MangaEdenSource : ViewModelBase, IMangaSource
+    class MangaEdenSource : BindableBase, IMangaSource
     {
         public BitmapImage Icon { get; } = new BitmapImage(new Uri("ms-appx:///Assets/Icons/icon-mangaeden.png"));
         public MangaSource Name { get; } = MangaSource.MangaEden;
@@ -24,21 +33,44 @@ namespace MangaReader_MVVM.Services
         public Uri MangaDetails { get; }
         public Uri MangaChapterPages { get; }
 
-        private ObservableCollection<IManga> _mangas;
-        public ObservableCollection<IManga> Mangas
+        private SettingsService _settings = SettingsService.Instance;
+
+        private ObservableItemCollection<Manga> _mangas;
+        public ObservableItemCollection<Manga> Mangas
         {
-            get { return _mangas = _mangas ?? new ObservableCollection<IManga>(); }
+            get { return _mangas; }
             internal set { Set(ref _mangas, value); }
         }
 
-        private ObservableCollection<IManga> _favorits;
-        public ObservableCollection<IManga> Favorits
+        private ObservableItemCollection<Manga> _favorits;
+        public ObservableItemCollection<Manga> Favorits
         {
-            get { return _favorits = _favorits ?? GetFavoritMangasAsync().Result; }
+            get => _favorits = _favorits ?? new ObservableItemCollection<Manga>(Mangas.Where(m => m.IsFavorit));
             internal set { Set(ref _favorits, value); }
         }
 
-        private Dictionary<string, List<string>> _readStatus;
+        private ObservableItemCollection<Manga> _lastRead;
+        public ObservableItemCollection<Manga> LastRead
+        {
+            get => _lastRead = _lastRead ?? new ObservableItemCollection<Manga>();
+            internal set { Set(ref _lastRead, value); }
+        }
+
+        private Dictionary<string, List<string>> _storedData = new Dictionary<string, List<string>>();
+
+        private ObservableCollection<string> _categories;
+        public ObservableCollection<string> Categories
+        {
+            get => _categories = _categories ?? GetCategories();
+            internal set { Set(ref _categories, value); }
+        }
+
+        //private AdvancedCollectionView _favorits;
+        //public AdvancedCollectionView Favorits
+        //{
+        //    get { return _favorits = _favorits ?? GetFavoritMangasAsync().Result; }
+        //    internal set { Set(ref _favorits, value); }
+        //}
 
         public MangaEdenSource()
         {
@@ -46,259 +78,398 @@ namespace MangaReader_MVVM.Services
             MangasListPage = new Uri($"list/{Language}/", UriKind.Relative);
             MangaDetails = new Uri("manga/", UriKind.Relative);
             MangaChapterPages = new Uri("chapter/", UriKind.Relative);
-            LoadReadStatus();
+            Mangas = new ObservableItemCollection<Manga>();            
+            _settings.PropertyChanged += Settings_Changed;
         }
 
-        private async void LoadReadStatus()
+        public async Task<ObservableItemCollection<Manga>> GetMangasAsync(ReloadMode mode = ReloadMode.Local)
         {
-            _readStatus = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, StorageStrategies.Roaming);
-        }
-
-        public async Task<ObservableCollection<IManga>> GetMangasAsync(ReloadMode mode = ReloadMode.Local)
-        {
-            if (!Mangas.Any() || mode == ReloadMode.Server)
+            try
             {
-                using (var httpClient = new HttpClient { BaseAddress = RootUri })
+                if (!Mangas.Any() || mode == ReloadMode.Server)
                 {
-                    try
+                    var networkService = new NetworkAvailableService();
+                    if (await networkService.IsInternetAvailable())
                     {
-                        var response = await httpClient.GetAsync(MangasListPage);
+                        using (var httpClient = new HttpClient { BaseAddress = RootUri })
+                        {
+                            var response = await httpClient.GetAsync(MangasListPage);
+                            var result = await response.Content.ReadAsStringAsync();
+                            if (response.IsSuccessStatusCode)
+                            {
+                                JsonSerializerSettings settings = new JsonSerializerSettings();
+                                settings.Converters.Add(new MangaEdenMangasListConverter(this.Name));
+
+                                Mangas = JsonConvert.DeserializeObject<ObservableItemCollection<Manga>>(result, settings);
+                            }
+                            else
+                            {
+                                throw new HttpRequestException(Name + ": " + response.ReasonPhrase);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new HttpRequestException("No Internet connection available. Check your connection and try again.");
+                    }
+                }
+
+                await LoadAndMergeStoredDataAsync();
+                LoadLastReadAsync();
+            }
+            catch (HttpRequestException e)
+            {
+                MessageDialog dialog = new MessageDialog(e.Message);
+                dialog.Commands.Add(new UICommand { Label = "Retry", Id = 0 });
+                dialog.Commands.Add(new UICommand { Label = "Exit", Id = 1 });
+                dialog.DefaultCommandIndex = 0;
+                dialog.CancelCommandIndex = 1;
+
+                var result = await dialog.ShowAsync();
+                if ((int)result.Id == 0)
+                {
+                    Mangas = await GetMangasAsync(mode);
+                }
+                else
+                {
+                    App.Current.Exit();
+                }
+            }
+            catch (Exception e)
+            {
+                var dialog = new MessageDialog(e.Message);
+                await dialog.ShowAsync();
+            }
+            return Mangas;
+        }        
+
+        public async Task<Manga> GetMangaAsync(string mangaId)
+        {
+            var manga = Mangas.Where(m => m.Id == mangaId).First();
+            try
+            {                
+                var networkService = new NetworkAvailableService();
+                if (await networkService.IsInternetAvailable())
+                {
+                    using (var httpClient = new HttpClient { BaseAddress = RootUri })
+                    {
+                        var mangaDetailsUri = new Uri(RootUri, MangaDetails);
+                        var response = await httpClient.GetAsync(new Uri(mangaDetailsUri, mangaId));
                         var result = await response.Content.ReadAsStringAsync();
                         if (response.IsSuccessStatusCode)
                         {
                             JsonSerializerSettings settings = new JsonSerializerSettings();
-                            settings.Converters.Add(new MangaEdenMangasListConverter());
+                            settings.Converters.Add(new MangaEdenMangaDetailsConverter());
 
-                            Mangas = JsonConvert.DeserializeObject<ObservableCollection<IManga>>(result, settings);
+                            var details = JsonConvert.DeserializeObject<Manga>(result, settings);
+
+                            MergeMangaWithDetails(manga, details);
+                        }
+                        else
+                        {
+                            throw new HttpRequestException(Name + ": " + response.ReasonPhrase);
                         }
                     }
-                    catch (Exception e)
-                    {
-                        var dialog = new MessageDialog(e.Message);
-                        await dialog.ShowAsync();
-                    }
+                }
+                else
+                {
+                    throw new HttpRequestException("No Internet connection available. Check your connection and try again.");
                 }
             }
-
-            LoadAndMergeFavorits();
-
-            return Mangas;
-        }        
-
-        public async Task<IManga> GetMangaAsync(string mangaId)
-        {
-            var manga = Mangas.Where(m => m.Id == mangaId).First();
-            using (var httpClient = new HttpClient { BaseAddress = RootUri })
+            catch (HttpRequestException e)
             {
-                try
+                MessageDialog dialog = new MessageDialog(e.Message);
+                dialog.Commands.Add(new UICommand { Label = "Retry", Id = 0 });
+                dialog.Commands.Add(new UICommand { Label = "Exit", Id = 1 });
+                dialog.DefaultCommandIndex = 0;
+                dialog.CancelCommandIndex = 1;
+
+                var result = await dialog.ShowAsync();
+                if ((int) result.Id == 0)
                 {
-                    var mangaDetailsUri = new Uri(RootUri, MangaDetails);
-                    var response = await httpClient.GetAsync(new Uri(mangaDetailsUri, mangaId));
-                    var result = await response.Content.ReadAsStringAsync();
-                    if (response.IsSuccessStatusCode)
-                    {
-                        JsonSerializerSettings settings = new JsonSerializerSettings();
-                        settings.Converters.Add(new MangaEdenMangaDetailsConverter());
-                        
-                        var details = JsonConvert.DeserializeObject<IManga>(result, settings);
-                        
-                        MergeMangaWithDetails(manga, details);
-                        int i = Mangas.IndexOf(manga);
-                        Mangas[i] = manga;
-                    }
+                    manga = await GetMangaAsync(mangaId);
                 }
-                catch (Exception e)
+                else
                 {
-                    var dialog = new MessageDialog(e.Message);
-                    await dialog.ShowAsync();
+                    App.Current.Exit();
                 }
             }
+            catch (Exception e)
+            {
+                var dialog = new MessageDialog(e.Message);
+                await dialog.ShowAsync();
+            }
+
             return manga;
         }
 
-        public async Task<IChapter> GetChapterAsync(IChapter chapter)
+        public async Task<Chapter> GetChapterAsync(Chapter chapter)
         {
-            using (var httpClient = new HttpClient { BaseAddress = RootUri })
+            try
             {
-                try
+                var networkService = new NetworkAvailableService();
+                if (await networkService.IsInternetAvailable())
                 {
-                    var chapterUri = new Uri(RootUri, MangaChapterPages);
-                    var response = await httpClient.GetAsync(new Uri(chapterUri, chapter.Id));
-                    var result = await response.Content.ReadAsStringAsync();
-                    if (response.IsSuccessStatusCode)
+                    using (var httpClient = new HttpClient { BaseAddress = RootUri })
                     {
-                        JsonSerializerSettings settings = new JsonSerializerSettings();
-                        settings.Converters.Add(new MangaEdenChapterPagesConverter());
+                        var chapterUri = new Uri(RootUri, MangaChapterPages);
+                        var response = await httpClient.GetAsync(new Uri(chapterUri, chapter.Id));
+                        var result = await response.Content.ReadAsStringAsync();
+                        if (response.IsSuccessStatusCode)
+                        {
+                            JsonSerializerSettings settings = new JsonSerializerSettings();
+                            settings.Converters.Add(new MangaEdenChapterPagesConverter());
 
-                        var pages = JsonConvert.DeserializeObject<ObservableCollection<IPage>>(result, settings);
+                            var pages = JsonConvert.DeserializeObject<ObservableItemCollection<Models.Page>>(result, settings);
 
-                        chapter.Pages = pages;
+                            chapter.Pages = pages;
+                        }
+                        else
+                        {
+                            throw new HttpRequestException(Name + ": " + response.ReasonPhrase);
+                        }
                     }
                 }
-                catch (Exception e)
+                else
                 {
-                    var dialog = new MessageDialog(e.Message);
-                    await dialog.ShowAsync();
+                    throw new HttpRequestException("No Internet connection available. Check your connection and try again.");
                 }
             }
+            catch (HttpRequestException e)
+            {
+                MessageDialog dialog = new MessageDialog(e.Message);
+                dialog.Commands.Add(new UICommand { Label = "Retry", Id = 0 });
+                dialog.Commands.Add(new UICommand { Label = "Exit", Id = 1 });
+                dialog.DefaultCommandIndex = 0;
+                dialog.CancelCommandIndex = 1;
+
+                var result = await dialog.ShowAsync();
+                if ((int)result.Id == 0)
+                {
+                    chapter = await GetChapterAsync(chapter);
+                }
+                else
+                {
+                    App.Current.Exit();
+                }
+            }
+            catch (Exception e)
+            {
+                var dialog = new MessageDialog(e.Message);
+                await dialog.ShowAsync();
+            }
+
             return chapter;
         }
-
-        public async Task<ObservableCollection<IManga>> GetFavoritMangasAsync(ReloadMode mode = ReloadMode.Local)
+        
+        public async Task<ObservableItemCollection<Manga>> GetLatestReleasesAsync(int numberOfPastDays, ReloadMode mode)
         {
-            if (!Mangas.Any() || mode == ReloadMode.Server)
+            if ((!Mangas.Any() && mode == ReloadMode.Local) || mode == ReloadMode.Server)
             {
-                await GetMangasAsync(ReloadMode.Local);
-                Favorits = new ObservableCollection<IManga>(Mangas.Where(manga => manga.IsFavorit).ToList());
-            }
-            else if (_favorits == null || !Favorits.Any())
-            {
-                Favorits = new ObservableCollection<IManga>(Mangas.Where(manga => manga.IsFavorit).ToList());
+                await GetMangasAsync(mode);
             }
 
-            return Favorits;
+            var latestReleases = new ObservableItemCollection<Manga>(Mangas.Where(manga => manga.LastUpdated.AddDays(numberOfPastDays) >= DateTime.Today));
+            latestReleases.SortAscending((y, x) => y == null ? 1 : DateTime.Compare(x.LastUpdated, y.LastUpdated));
+
+            return latestReleases;
         }
 
-        public async Task<ObservableCollection<IManga>> GetLatestReleasesAsync(int numberOfPastDays, ReloadMode mode)
-        {
-            if (!Mangas.Any() || mode == ReloadMode.Server)
-            {
-                await GetMangasAsync(ReloadMode.Local);
-            }
-            var latestReleases = Mangas.Where(manga => manga.LastUpdated.AddDays(numberOfPastDays) >= DateTime.Today).ToList();
-            latestReleases.Sort((y, x) => y == null ? 1 : DateTime.Compare(x.LastUpdated, y.LastUpdated));
-
-            return new ObservableCollection<IManga>(latestReleases);
-        }
-
-        public async void AddFavorit(ObservableCollection<IManga> newFavorits)
+        public async void AddFavorit(ObservableItemCollection<Manga> newFavorits)
         {
             if (newFavorits != null && newFavorits.Any())
             {
-                var favorits = await FileHelper.ReadFileAsync<List<string>>("favorits_" + this.Name, StorageStrategies.Roaming) ?? new List<string>();
                 foreach (var fav in newFavorits)
                 {
-                    AddFavorit(fav, favorits);
+                    AddFavorit(fav, false);
                 }
+                await SaveMangaStatusAsync();
             }
         }
 
-        public async void AddFavorit(IManga favorit, List<string> favorits)
+        public async void AddFavorit(Manga favorit, bool IsSingle = true)
         {
             if (favorit != null)
             { 
                 favorit.IsFavorit = !favorit.IsFavorit;
-                favorits = favorits ?? await FileHelper.ReadFileAsync<List<string>>("favorits_" + this.Name, StorageStrategies.Roaming) ?? new List<string>();
-
-                if (Favorits.Contains(favorit))
+                
+                if (_storedData.ContainsKey(favorit.Id))
                 {
-                    favorits.Remove(favorit.Id);
-                    Favorits.Remove(favorit);
-
-                    if (favorit.IsFavorit)
+                    var storedManga = _storedData[favorit.Id];
+                    if (!storedManga.Any() && !favorit.IsFavorit)
                     {
-                        favorits.Add(favorit.Id);
-                        Favorits.AddSorted(favorit);
+                        _storedData.Remove(favorit.Id);
+                    }
+                    else
+                    {
+                        storedManga[0] = favorit.IsFavorit.ToString();
                     }
                 }
                 else
                 {
-                    favorits.Add(favorit.Id);
+                    _storedData[favorit.Id] = new List<string> { favorit.IsFavorit.ToString() };
+
+                    foreach (var chapter in favorit.Chapters)
+                    {
+                        if (chapter.IsRead)
+                        {
+                            _storedData[favorit.Id].Add(chapter.Id);
+                        }
+                    }
+                }
+
+                Favorits.Remove(favorit);
+                if (favorit.IsFavorit)
+                {
                     Favorits.AddSorted(favorit);
                 }
 
-                await FileHelper.WriteFileAsync<List<string>>("favorits_" + this.Name, favorits, StorageStrategies.Roaming);
+                if (IsSingle)
+                {
+                    await SaveMangaStatusAsync();
+                }
             }
         }
 
-        public async void AddAsRead(string mangaId, ObservableCollection<IChapter> chapters)
+        public async void AddAsRead(ObservableItemCollection<Chapter> chapters)
         {
             if (chapters != null && chapters.Any())
             {
                 foreach (var chapter in chapters)
                 {
-                    AddAsRead(mangaId, chapter, false);
+                    AddAsRead(chapter, false);
                 }
-                await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, _readStatus, StorageStrategies.Roaming);
+                await SaveMangaStatusAsync();
+                await FileHelper.WriteFileAsync<ObservableItemCollection<Manga>>(Name + "_lastRead", LastRead);
             }
         }
 
-        public async void AddAsRead(string mangaId, IChapter chapter, bool single = true)
+        public async void AddAsRead(Chapter chapter, bool IsSingle = true)
         {
-            if (mangaId != null && chapter != null)
+            if (chapter.ParentManga.Id != null && chapter != null)
             {
                 chapter.IsRead = true;
-                _readStatus = _readStatus ?? await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, StorageStrategies.Roaming) ?? new Dictionary<string, List<string>>();
-                if (_readStatus.ContainsKey(mangaId))
+
+                if (_storedData.ContainsKey(chapter.ParentManga.Id))
                 {
-                    var mangaChaptersWithStatus = _readStatus[mangaId];
-                    var chapterWithStatus = mangaChaptersWithStatus.FirstOrDefault(c => c == chapter.Id);
-                    if (chapterWithStatus != null && chapterWithStatus.Any())
+                    var storedManga = _storedData[chapter.ParentManga.Id];
+                    if (!storedManga.Contains(chapter.Id))
                     {
-                        //mangaChaptersWithStatus.Remove(chapter.Id);
-                    }                        
-                    else
-                    {
-                        mangaChaptersWithStatus.Add(chapter.Id);
-                        _readStatus[mangaId] = mangaChaptersWithStatus;   
-                        // evtl noch das chapter in _mangas und _favorits liste ersetzen                    
-                    }                    
+                        storedManga.Add(chapter.Id);
+                    }
                 }
                 else
-                {
-                    _readStatus[mangaId] = new List<string>() { chapter.Id };
+                {                    
+                    _storedData[chapter.ParentManga.Id] = new List<string> { "False", chapter.Id };
                 }
-                if (single)
+
+                AddAsLastRead(chapter);
+
+                if (IsSingle)
                 {
-                    await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, _readStatus, StorageStrategies.Roaming);
+                    await SaveMangaStatusAsync();
+                    await FileHelper.WriteFileAsync<ObservableItemCollection<Manga>>(Name + "_lastRead", LastRead);
                 }
             }
         }
 
-        public async void RemoveAsRead(string mangaId, ObservableCollection<IChapter> chapters)
+        public async void RemoveAsRead(ObservableItemCollection<Chapter> chapters)
         {
             if (chapters != null && chapters.Any())
             {
                 foreach (var chapter in chapters)
                 {
-                    RemoveAsRead(mangaId, chapter, false);
+                    RemoveAsRead(chapter, false);
                 }
-                if (await FileHelper.FileExistsAsync("readStatus_" + this.Name, StorageStrategies.Roaming))
-                {
-                    await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, _readStatus, StorageStrategies.Roaming);
-                }
+                await SaveMangaStatusAsync();
             }
         }
 
-        public async void RemoveAsRead(string mangaId, IChapter chapter, bool single = true)
+        public async void RemoveAsRead(Chapter chapter, bool IsSingle = true)
         {
-            if (mangaId != null && chapter != null)
+            if (chapter.ParentManga.Id != null && chapter != null)
             {
                 chapter.IsRead = false;
-                _readStatus = _readStatus ?? await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, StorageStrategies.Roaming);
-                if (_readStatus != null && _readStatus.ContainsKey(mangaId))
+                
+                if (_storedData.ContainsKey(chapter.ParentManga.Id))
                 {
-                    _readStatus[mangaId]?.Remove(chapter.Id);
-
-                    if (single)
+                    var storedManga = _storedData[chapter.ParentManga.Id];
+                    if (storedManga.Contains(chapter.Id))
                     {
-                        await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, _readStatus, StorageStrategies.Roaming);
+                        storedManga.Remove(chapter.Id);
                     }
-                }
+
+                    if (IsSingle)
+                    {
+                        await SaveMangaStatusAsync();
+                    }
+                }                
             }
         }
 
-        public ObservableCollection<IManga> SearchManga(string query)
+        private void AddAsLastRead(Chapter chapter)
         {
-            return new ObservableCollection<IManga>(Mangas.Where(manga => manga.Title.ToLower().Contains(query.ToLower()) && query != string.Empty));
+            if (LastRead.Contains(chapter.ParentManga))
+            {
+                LastRead.Remove(chapter.ParentManga);
+            }            
+
+            LastRead.Insert(0, chapter.ParentManga);
+            UpdateLastRead();
         }
 
-        public async Task<ObservableCollection<IChapter>> GetChaptersAsync(IManga manga)
+        public void UpdateLastRead()
+        {
+            while (LastRead.Count > _settings.NumberOfRecentMangas)
+            {
+                LastRead.RemoveAt(LastRead.Count - 1);
+            }
+        }
+
+        public ObservableItemCollection<Manga> SearchManga(string query)
+        {
+            return new ObservableItemCollection<Manga>(Mangas.Where(manga => manga.Title.ToLower().Contains(query.ToLower()) && query != string.Empty));
+        }
+
+        public ObservableItemCollection<Manga> FilterMangaByCategory(IEnumerable filters)
+        {
+            var retval = Mangas;
+
+            if(filters != null)
+            {
+                var temp = retval.AsEnumerable();
+                foreach(string filter in filters)
+                {
+                    temp = temp.Where(m => m.Category.Contains(filter));
+                }
+                retval = new ObservableItemCollection<Manga>(temp);
+            }
+
+            return retval;
+        }
+
+        public async Task<ObservableItemCollection<Chapter>> GetChaptersAsync(Manga manga)
         {
             throw new NotImplementedException();
         }
 
-        private void MergeMangaWithDetails(IManga manga, IManga details)
+        private ObservableCollection<string> GetCategories()
+        {
+            var hashSet = new HashSet<string>();
+            if (Mangas != null && Mangas.Any())
+            {
+                foreach(var manga in Mangas)
+                {
+                    var categories = manga.Category.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim()).ToArray();
+                    hashSet.UnionWith(categories);
+                }
+            }
+            var retval = new ObservableCollection<string>(hashSet);
+            retval.SortAscending((y, x) => y.CompareTo(x));
+            return retval;
+        }
+
+        private void MergeMangaWithDetails(Manga manga, Manga details)
         {
             manga.Alias = details.Alias;
             manga.Artist = details.Artist;
@@ -306,44 +477,166 @@ namespace MangaReader_MVVM.Services
             manga.Description = details.Description;
             manga.NumberOfChapters = details.NumberOfChapters;
             manga.Released = details.Released;
+            List<string> storedManga = null;
+            if (_storedData.ContainsKey(manga.Id))
+            {
+                storedManga = _storedData[manga.Id];
+            }
             foreach (var chapter in details.Chapters)
             {
-                LoadAndMergeReadStatus(manga.Id, chapter);
+                if (storedManga != null)
+                    chapter.IsRead = storedManga.Contains(chapter.Id);
                 manga.AddChapter(chapter);
-                manga.RaisePropertyChanged(nameof(manga.ReadProgress));
             }
         }
 
-        private async void LoadAndMergeFavorits()
+        private async Task<bool> LoadAndMergeStoredDataAsync()
         {
-            if (await FileHelper.FileExistsAsync("favorits_" + this.Name, StorageStrategies.Roaming))
+            bool retval = false;
+            if (await FileHelper.FileExistsAsync(this.Name + "_mangasStatus"))
             {
-                var favorits = await FileHelper.ReadFileAsync<List<string>>("favorits_" + this.Name, StorageStrategies.Roaming);
-                foreach (var id in favorits)
+                _storedData = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _settings.StorageStrategy);
+
+                _settings.LastSynced = DateTime.Now;
+
+                if (_storedData != null && _storedData.Any())
                 {
-                    var manga = Mangas.FirstOrDefault(m => m.Id == id);
-                    if (manga != null)
-                        manga.IsFavorit = true;
+                    for (int i = 0; i < Mangas.Count; i++)
+                    {
+                        var manga = Mangas[i];
+                        if (_storedData.ContainsKey(manga.Id))
+                        {
+                            var storedManga = _storedData[manga.Id];
+
+                            if (storedManga.Count == 0)
+                                storedManga.Add("True");
+
+                            Mangas[i].IsFavorit = bool.TryParse(storedManga[0], out bool isFavorit) ? isFavorit : false;
+                        }
+                    }
+                    retval = true;
+                }
+            }
+            return retval;
+        }
+
+        private async void LoadLastReadAsync()
+        {
+            if (await FileHelper.FileExistsAsync(this.Name + "_lastRead"))
+            {
+                var lastRead = await FileHelper.ReadFileAsync<ObservableItemCollection<Manga>>(Name + "_lastRead");
+                LastRead.Clear();
+                if (Mangas != null && Mangas.Any())
+                {
+                    foreach (var manga in lastRead)
+                    {
+                        LastRead.Add(Mangas.Where(m => m.Id == manga.Id).First());
+                    }
                 }
             }
         }
 
-        private async void LoadAndMergeReadStatus(string mangaId, IChapter chapter)
+        public async Task<bool> SaveMangaStatusAsync(CreationCollisionOption option = CreationCollisionOption.ReplaceExisting)
         {
-            _readStatus = _readStatus ?? await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>("readStatus_" + this.Name, StorageStrategies.Roaming);
-
-            if (_readStatus != null && _readStatus.ContainsKey(mangaId))
+            if(_settings.StorageStrategy == StorageStrategies.OneDrive)
             {
-                var chapterWithStatus = _readStatus[mangaId].FirstOrDefault(c => c == chapter.Id);
-                if (chapterWithStatus != null)
-                {
-                    chapter.IsRead = true;
+                _settings.LastSynced = DateTime.Now;
+            }
+            return await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData, _settings.StorageStrategy, option);
+        }
 
-                    //var manga =_mangas.First(m => m.Id == mangaId);
-                    //manga.ReadProgress = manga.Chapters.Count(c => c.IsRead == true);
-                    //_favorits.First(m => m.Id == mangaId).ReadProgress = manga.ReadProgress;
+        public async Task<bool> ExportMangaStatusAsync()
+        {            
+            if (_storedData != null && _storedData.Any())
+            {
+                FileSavePicker savePicker = new FileSavePicker()
+                {
+                    SuggestedStartLocation = PickerLocationId.Downloads
+                };
+
+                // Dropdown of file types the user can save the file as
+                savePicker.FileTypeChoices.Add("JSON", new List<string>() { ".json" });
+                // Default file name if the user does not type one in or select a file to replace
+                savePicker.SuggestedFileName = DateTime.Now.ToString("s") + "_MangaReader_Backup_" + this.Name;
+
+                StorageFile file = await savePicker.PickSaveFileAsync();
+                Views.Busy.SetBusy(true, "Printing your favorite Mangas...");
+                if (file != null)
+                {
+                    // Prevent updates to the remote version of the file until we finish making changes and call CompleteUpdatesAsync.
+                    CachedFileManager.DeferUpdates(file);
+
+                    // write to file
+                    var serializedMangas  = JsonConvert.SerializeObject(_storedData, Formatting.None, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                                                                                                                                    PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                                                                                                                                    TypeNameHandling = TypeNameHandling.Objects,
+                                                                                                                                    TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple
+                                                                                                                                  });
+                    
+                    await FileIO.WriteTextAsync(file, serializedMangas);
+
+                    // Let Windows know that we're finished changing the file so the other app can update the remote version of the file.
+                    // Completing updates may require Windows to ask for user input.
+                    FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+
+                    Views.Busy.SetBusy(false);
+                    return (status == FileUpdateStatus.Complete);
+                }
+                else
+                {
+                    Views.Busy.SetBusy(false);
+                    return false;
                 }
             }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> ImportMangaStatusAsync()
+        {
+            FileOpenPicker openPicker = new FileOpenPicker()
+            {
+                SuggestedStartLocation = PickerLocationId.Downloads,
+                CommitButtonText = "Import"
+            };
+            
+            openPicker.FileTypeFilter.Add(".json");
+
+            StorageFile file = await openPicker.PickSingleFileAsync();
+            Views.Busy.SetBusy(true, "Importing your favorite Mangas...");
+            if (file != null)
+            {
+                var _storedData = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(await FileIO.ReadTextAsync(file));
+
+                var result = await SaveMangaStatusAsync();
+
+                await LoadAndMergeStoredDataAsync();
+
+                var tempCollection = new ObservableItemCollection<Manga>(Mangas.Where(m => m.IsFavorit));
+                foreach(var temp in tempCollection)
+                {
+                    if (!Favorits.Contains(temp))
+                    {
+                       Favorits.AddSorted(temp);
+                    }
+                }
+
+                Views.Busy.SetBusy(false);
+                return result;
+            }
+            else
+            {
+                Views.Busy.SetBusy(false);
+                return false;
+            }
+        }
+
+        private void Settings_Changed(object sender, PropertyChangedEventArgs e)
+        {
+            if (nameof(_settings.NumberOfRecentMangas).Equals(e.PropertyName))
+                UpdateLastRead();
         }
     }
 }

@@ -1,18 +1,16 @@
-﻿using Template10.Mvvm;
-using System.Collections.Generic;
+﻿using MangaReader_MVVM.Models;
+using MangaReader_MVVM.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Template10.Controls;
+using Template10.Mvvm;
 using Template10.Services.NavigationService;
-using Windows.UI.Xaml.Navigation;
-using System.Collections.ObjectModel;
-using MangaReader_MVVM.Models;
-using MangaReader_MVVM.Services;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Popups;
-using Windows.UI.Xaml.Input;
-using System.ComponentModel;
+using Windows.UI.Xaml.Navigation;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -36,11 +34,11 @@ namespace MangaReader_MVVM.ViewModels
             }
         }
 
-        private IManga _manga = new Manga();
-        public IManga Manga { get { return _manga; } set { Set(ref _manga, value); } }
+        private Manga _manga = new Manga();
+        public Manga Manga { get { return _manga; } set { Set(ref _manga, value); } }
 
-        private ObservableCollection<IChapter> _chapters = new ObservableCollection<IChapter>();
-        public ObservableCollection<IChapter> Chapters { get { return _chapters; } set { Set(ref _chapters, value); } }
+        private ObservableItemCollection<Chapter> _chapters = new ObservableItemCollection<Chapter>();
+        public ObservableItemCollection<Chapter> Chapters { get { return _chapters; } set { Set(ref _chapters, value); } }
 
         public int ReadProgress => Manga.ReadProgress;
 
@@ -98,7 +96,7 @@ namespace MangaReader_MVVM.ViewModels
         public DelegateCommand SortGridCommand
             => _sortGridCommand ?? (_sortGridCommand = new DelegateCommand(() =>
             {
-                Chapters = new ObservableCollection<IChapter>(Chapters.Reverse());
+                Chapters = new ObservableItemCollection<Chapter>(Chapters.Reverse());
             }, () => Manga.Chapters != null || Manga.Chapters.Any()));
 
         private bool _isMultiSelect;
@@ -153,8 +151,8 @@ namespace MangaReader_MVVM.ViewModels
             => _markAsUnReadCommand ?? (_markAsUnReadCommand = new DelegateCommand<object>((param) =>
             {
                 var chapterGridView = param as GridView;
-                var chapters = new ObservableCollection<IChapter>(chapterGridView.SelectedItems.Cast<IChapter>());
-                _library.RemoveAsRead(Manga.Id, chapters);
+                var chapters = new ObservableItemCollection<Chapter>(chapterGridView.SelectedItems.Cast<Chapter>());
+                _library.RemoveAsRead(chapters);
 
                 MultiSelectButtonIsChecked = false;
                 chapterGridView.SelectionMode = ListViewSelectionMode.None;
@@ -168,8 +166,8 @@ namespace MangaReader_MVVM.ViewModels
             => _markAsReadCommand ?? (_markAsReadCommand = new DelegateCommand<object>((param) =>
             {
                 var chapterGridView = param as GridView;
-                var chapters = new ObservableCollection<IChapter>(chapterGridView.SelectedItems.Cast<IChapter>());
-                _library.AddAsRead(Manga.Id, chapters);
+                var chapters = new ObservableItemCollection<Chapter>(chapterGridView.SelectedItems.Cast<Chapter>());
+                _library.AddAsRead(chapters);
 
                 MultiSelectButtonIsChecked = false;
                 chapterGridView.SelectionMode = ListViewSelectionMode.None;
@@ -195,8 +193,7 @@ namespace MangaReader_MVVM.ViewModels
             var clickedChapter = e.ClickedItem as Chapter;
             if (clickedChapter != null)
             {
-                _library.AddAsRead(Manga.Id, clickedChapter);
-                var parameters = clickedChapter.Id;
+                _library.AddAsRead(clickedChapter);                
                 NavigationService.Navigate(typeof(Views.ChapterPage), clickedChapter);
             }
             else

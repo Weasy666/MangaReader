@@ -1,14 +1,9 @@
-using Windows.UI.Xaml;
-using System.Threading.Tasks;
 using MangaReader_MVVM.Services.SettingsServices;
-using Windows.ApplicationModel.Activation;
+using System.Threading.Tasks;
 using Template10.Controls;
-using Template10.Common;
-using System;
-using System.Linq;
+using Windows.ApplicationModel.Activation;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
-using Windows.UI;
-using Windows.UI.Xaml.Media;
 
 namespace MangaReader_MVVM
 {

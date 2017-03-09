@@ -71,8 +71,7 @@
                                 <Setter Property="Margin" Value="-11,1,-10,0" />
                             </Style>
                         </AutoSuggestBox.ItemContainerStyle>
-                    </AutoSuggestBox>
-                    
+                    </AutoSuggestBox>                    
                 </StackPanel>                
             </Controls:HamburgerButtonInfo>
             <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:MainPage" AutomationProperties.Name="Jerry" >
@@ -102,9 +101,17 @@
         </Controls:HamburgerMenu.PrimaryButtons>
         
         <!--  SettingsPages buttons  -->
-        <Controls:HamburgerMenu.SecondaryButtons>            
-            <Controls:HamburgerButtonInfo x:Name="SettingsButton" PageParameter="0"
-                                          PageType="views:SettingsPage">
+        <Controls:HamburgerMenu.SecondaryButtons>
+            <Controls:HamburgerButtonInfo ButtonType="Literal" >
+                <Controls:HamburgerButtonInfo.NavigationTransitionInfo>
+                    <SuppressNavigationTransitionInfo />
+                </Controls:HamburgerButtonInfo.NavigationTransitionInfo>
+                <StackPanel Orientation="Horizontal" Tapped="DataBackup_Tapped">
+                    <SymbolIcon Symbol="ReShare" Width="48" Height="48" />
+                    <TextBlock Text="Backup" Margin="12,0,0,0" VerticalAlignment="Center" Width="172" />
+                </StackPanel>
+            </Controls:HamburgerButtonInfo>
+            <Controls:HamburgerButtonInfo x:Name="SettingsButton" PageType="views:SettingsPage" PageParameter="0" >
                 <Controls:HamburgerButtonInfo.NavigationTransitionInfo>
                     <SuppressNavigationTransitionInfo />
                 </Controls:HamburgerButtonInfo.NavigationTransitionInfo>
@@ -118,4 +125,3 @@
     </Controls:HamburgerMenu>
 
 </Page>
-

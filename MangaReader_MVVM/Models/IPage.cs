@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MangaReader_MVVM.Converters.JSON;
+using Newtonsoft.Json;
+using System;
+using Template10.Mvvm;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.Models
 {
-    public interface IPage : IComparable<IPage>
+    [JsonConverter(typeof(InterfaceConverter<IPage, Page>))]
+    public interface IPage : IBindable, IComparable<IPage>
     {
         Visibility OverlayVisibility { get; set; }
         int Number { get; set; }

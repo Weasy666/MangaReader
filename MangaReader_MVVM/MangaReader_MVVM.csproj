@@ -17,7 +17,8 @@
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>MangaReader_MVVM_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>MangaReader_MVVM_StoreKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>0761944F223A9561785C2F0BB93F85954B032A59</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -90,18 +91,24 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <None Include="MangaReader_MVVM_StoreKey.pfx" />
     <None Include="MangaReader_MVVM_TemporaryKey.pfx" />
     <None Include="project.json" />
+    <Content Include="Assets\Square44x44Logo.targetsize-32.png" />
+    <None Include="Package.StoreAssociation.xml" />
+    <Content Include="ToDo.md" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\VariableWrapPanel.cs" />
     <Compile Include="Converters\BoolToMangaStatusConverter.cs" />
     <Compile Include="Converters\BoolToFavoritSymbolConverter.cs" />
     <Compile Include="Converters\BoolToSelectionModeConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DateTimeToPrettyDateTime.cs" />
+    <Compile Include="Converters\JSON\InterfaceConverter.cs" />
     <Compile Include="Converters\MangaItemTemplateConverter.cs" />
     <Compile Include="Converters\ReadDirectionToIntConverter.cs" />
     <Compile Include="Converters\ReadModeToScrollBarVisibilityConverter.cs" />
@@ -113,15 +120,16 @@
     <Compile Include="Converters\ReadModeToOrientationConverter.cs" />
     <Compile Include="Models\Chapter.cs" />
     <Compile Include="Models\MangaGroup.cs" />
+    <Compile Include="Services\FileService\FileHelper.cs" />
     <Compile Include="Utils\CompareNatural.cs" />
     <Compile Include="Models\IChapter.cs" />
     <Compile Include="Models\IManga.cs" />
     <Compile Include="Models\IMangaSource.cs" />
     <Compile Include="Models\IPage.cs" />
     <Compile Include="Models\Manga.cs" />
-    <Compile Include="Converters\MangaEdenChapterPagesConverter.cs" />
-    <Compile Include="Converters\MangaEdenMangaDetailsConverter.cs" />
-    <Compile Include="Converters\MangaEdenMangasListConverter.cs" />
+    <Compile Include="Converters\JSON\MangaEdenChapterPagesConverter.cs" />
+    <Compile Include="Converters\JSON\MangaEdenMangaDetailsConverter.cs" />
+    <Compile Include="Converters\JSON\MangaEdenMangasListConverter.cs" />
     <Compile Include="Services\MangaEdenSource.cs" />
     <Compile Include="Services\MangaLibrary.cs" />
     <Compile Include="Utils\Enums.cs" />
@@ -131,6 +139,9 @@
     <Compile Include="Services\DesignTimeService.cs" />
     <Compile Include="Services\SettingsServices\SettingsService.cs" />
     <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\GenericCompare.cs" />
+    <Compile Include="Utils\GroupedObservableCollection.cs" />
+    <Compile Include="Utils\Grouping.cs" />
     <Compile Include="Utils\Helpers.cs" />
     <Compile Include="ViewModels\ChapterPageViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />

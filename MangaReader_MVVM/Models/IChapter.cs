@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using MangaReader_MVVM.Converters.JSON;
+using Newtonsoft.Json;
+using System;
+using Template10.Controls;
+using Template10.Mvvm;
 
 namespace MangaReader_MVVM.Models
 {
-    
-    public interface IChapter : IComparable<IChapter>, IEquatable<IChapter>
+    public interface IChapter : IBindable, IComparable<IChapter>
     {
-        IManga ParentManga { get; set; }
+        Manga ParentManga { get; set; }
         float Number { get; set; }
         string Title { get; set; }
         string Id { get; set; }
         DateTime Released { get; set; }
         bool IsRead { get; set; }
-        ObservableCollection<IPage> Pages { get; set; }
+        ObservableItemCollection<Page> Pages { get; set; }
     }
 }

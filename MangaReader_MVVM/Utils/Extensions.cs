@@ -27,6 +27,12 @@ namespace MangaReader_MVVM.Utils
             list.Insert(i, item);
         }
 
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            var knownKeys = new HashSet<TKey>();
+            return source.Where(element => knownKeys.Add(keySelector(element)));
+        }
+
         public static void SortAscending<T>(this ObservableCollection<T> collection, Comparison<T> comparison)
         {
             var comparer = new AscendingComparer<T>(comparison);

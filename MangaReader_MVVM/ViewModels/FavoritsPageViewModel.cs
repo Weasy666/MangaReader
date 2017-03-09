@@ -1,20 +1,20 @@
-﻿using Template10.Mvvm;
-using System.Collections.Generic;
+﻿using MangaReader_MVVM.Models;
+using MangaReader_MVVM.Services;
+using MangaReader_MVVM.Services.SettingsServices;
+using MangaReader_MVVM.Utils;
 using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Template10.Controls;
+using Template10.Mvvm;
 using Template10.Services.NavigationService;
-using Windows.UI.Xaml.Navigation;
-using System.Collections.ObjectModel;
-using MangaReader_MVVM.Models;
-using MangaReader_MVVM.Services;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Popups;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
-using MangaReader_MVVM.Services.SettingsServices;
-using System.ComponentModel;
-using MangaReader_MVVM.Utils;
+using Windows.UI.Xaml.Navigation;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -34,28 +34,29 @@ namespace MangaReader_MVVM.ViewModels
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
-                Favorits = DesignTimeService.GenerateMangaDummies();
+                //Favorits = DesignTimeService.GenerateMangaDummies();
             }
             else
             {
                 _settings.PropertyChanged += Settings_Changed;
+                Favorits.CollectionChanged += Favorits_Changed;
+                //FavoritsGroups = new GroupedObservableCollection<char, Manga>(m => m.Title[0], Favorits);
             }
         }
 
-        private ObservableCollection<IManga> _favorits;
-        public ObservableCollection<IManga> Favorits { get { return _favorits = _favorits ?? _library.Favorits; } set { Set(ref _favorits, value); base.RaisePropertyChanged(nameof(FavoritsGroups)); } }
-        public ObservableCollection<MangaGroup> FavoritsGroups
+        public ObservableItemCollection<Manga> Favorits => _library.Favorits;
+        public ObservableItemCollection<MangaGroup> FavoritsGroups
         {
             get
             {
-                var groups = new ObservableCollection<MangaGroup>();
-                groups.Add(new MangaGroup() { Initial = '&' });
-                groups.Add(new MangaGroup() { Initial = '#' });
+                var groups = new ObservableItemCollection<MangaGroup> { new MangaGroup() { Key = '&' },
+                                                                        new MangaGroup() { Key = '#' } };
+
                 for (int i = 'A'; i <= 'Z'; i++)
                 {
-                    groups.Add(new MangaGroup() { Initial = (char)i });
+                    groups.Add(new MangaGroup() { Key = (char)i });
                 }
-                
+
                 var query = from manga in Favorits
                             group manga by manga.Title.ToUpper()[0] into grp
                             orderby grp.Key
@@ -63,7 +64,7 @@ namespace MangaReader_MVVM.ViewModels
 
                 foreach (var grp in query)
                 {
-                    MangaGroup group = groups.First(g => g.Initial == Helpers.CategorizeAlphabetically(grp.GroupName));
+                    MangaGroup group = groups.First(g => g.Key == Helpers.CategorizeAlphabetically(grp.GroupName));
                     foreach (var item in grp.Items)
                     {
                         group.AddSorted(item);
@@ -72,7 +73,38 @@ namespace MangaReader_MVVM.ViewModels
 
                 return groups;
             }
-        }        
+        }
+
+        //public GroupedObservableCollection<string, Manga> FavoritsGroups { get; internal set; }
+
+        private void Favorits_Changed(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            //FavoritsGroups.ReplaceWith(new GroupedObservableCollection<string, Manga>(c => c.Title[0].ToString(), Favorits), new GenericCompare<Manga>(m => m.Id));
+            //if (e.Action == NotifyCollectionChangedAction.Add)
+            //{
+            //    var added = e.NewItems;
+
+            //    if (FavoritsCVS.IsSourceGrouped)
+            //    {
+            //        foreach (Manga toAdd in added)
+            //        {
+            //            (FavoritsCVS.View.CollectionGroups.Where(g => (g as MangaGroup).Key == toAdd.Title.ToUpper()[0]).First() as MangaGroup).AddSorted(toAdd);
+            //        }
+            //    }
+            //}
+            //if (e.Action == NotifyCollectionChangedAction.Remove)
+            //{
+            //    var removed = e.OldItems;
+
+            //    if (FavoritsCVS.IsSourceGrouped)
+            //    {
+            //        foreach (Manga toRemove in removed)
+            //        {
+            //            (FavoritsCVS.View.CollectionGroups.Where(g => (g as MangaGroup).Key == toRemove.Title.ToUpper()[0]).First() as MangaGroup).Remove(toRemove);
+            //        }
+            //    }
+            //}
+        }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
@@ -115,6 +147,8 @@ namespace MangaReader_MVVM.ViewModels
             set { base.RaisePropertyChanged(nameof(SemanticZoomCanChangeView)); }
         }
 
+
+
         private CollectionViewSource _favoritsCVS;
         public CollectionViewSource FavoritsCVS
         {
@@ -122,19 +156,20 @@ namespace MangaReader_MVVM.ViewModels
             set { Set(ref _favoritsCVS, value); }
         }
 
-        private DelegateCommand _exportCommand;
-        public DelegateCommand ExportCommand
-            => _exportCommand ?? (_exportCommand = new DelegateCommand(async () =>
-            {
-                await _library.ExportFavoritesAsync();
-            }, () => Favorits.Any()));
+        //private DelegateCommand _exportCommand;
+        //public DelegateCommand ExportCommand
+        //    => _exportCommand ?? (_exportCommand = new DelegateCommand(async () =>
+        //    {
+        //        await _library.ExportMangaStatusAsync();
+        //    }, () => Favorits.Any()));
 
         private DelegateCommand _reloadGridCommand;
         public DelegateCommand ReloadGridCommand
             => _reloadGridCommand ?? (_reloadGridCommand = new DelegateCommand(async () =>
             {
                 Views.Busy.SetBusy(true, "Picking up the freshly printed books...");
-                Favorits = await _library.GetFavoritMangasAsync(ReloadMode.Server);
+                await _library.GetMangasAsync(ReloadMode.Server);
+                //base.RaisePropertyChanged(nameof(Favorits));
                 Views.Busy.SetBusy(false);
             }, () => Favorits.Any()));
         
@@ -152,9 +187,9 @@ namespace MangaReader_MVVM.ViewModels
                 FavoritsCVS = source;
             }));
 
-        private DelegateCommand<IManga> _favoritCommand;
-        public DelegateCommand<IManga> FavoritCommand
-            => _favoritCommand ?? (_favoritCommand = new DelegateCommand<IManga>((manga) =>
+        private DelegateCommand<Manga> _favoritCommand;
+        public DelegateCommand<Manga> FavoritCommand
+            => _favoritCommand ?? (_favoritCommand = new DelegateCommand<Manga>((manga) =>
             {
                 _library.AddFavorit(manga);
             }));

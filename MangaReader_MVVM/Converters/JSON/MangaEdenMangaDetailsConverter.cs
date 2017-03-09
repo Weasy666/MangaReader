@@ -1,20 +1,18 @@
-﻿using Newtonsoft.Json;
+﻿using MangaReader_MVVM.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
+using Template10.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 
-namespace MangaReader_MVVM.Models
+namespace MangaReader_MVVM.Converters.JSON
 {
     class MangaEdenMangaDetailsConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IManga));
+            return (objectType == typeof(Manga));
         }
 
         // TODO: cleaner, maybe more generic and performant way to deserialize manga
@@ -22,7 +20,7 @@ namespace MangaReader_MVVM.Models
         {
             // Load the JSON for the Result into a JObject
             JObject jo = JObject.Load(reader);
-            
+
             // Construct the Result object using the non-default constructor
             var manga = new Manga
             {
@@ -34,8 +32,8 @@ namespace MangaReader_MVVM.Models
                 Artist = jo["artist"].ToString(),
                 Description = System.Net.WebUtility.HtmlDecode(jo["description"].ToString()),
                 Hits = (int)jo["hits"],
-                Released = DateTimeOffset.FromUnixTimeSeconds(jo["created"] != null ? (long)jo["created"] : 0).DateTime.ToLocalTime(),
-                LastUpdated = DateTimeOffset.FromUnixTimeSeconds(jo["last_chapter_date"] != null ? (long)jo["last_chapter_date"] : 0).DateTime.ToLocalTime(),
+                Released = DateTimeOffset.FromUnixTimeSeconds(jo["created"].Type != JTokenType.Null ? (long)jo["created"] : 0).DateTime.ToLocalTime(),
+                LastUpdated = DateTimeOffset.FromUnixTimeSeconds(jo["last_chapter_date"].Type != JTokenType.Null ? (long)jo["last_chapter_date"] : 0).DateTime.ToLocalTime(),
                 Ongoing = (int)jo["status"] == 1,
                 NumberOfChapters = (int)jo["chapters_len"],
             };
@@ -49,7 +47,7 @@ namespace MangaReader_MVVM.Models
                 IsRead = false
             }).ToList();
             chapters.Sort();
-            manga.Chapters = new ObservableCollection<IChapter>(chapters);
+            manga.Chapters = new ObservableItemCollection<Chapter>(chapters);
 
             // Return the result
             return manga;

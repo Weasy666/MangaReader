@@ -5,7 +5,7 @@ using Windows.UI.Xaml;
 
 namespace MangaReader_MVVM.Services.SettingsServices
 {
-    public class SettingsService : Template10.Mvvm.ViewModelBase
+    public class SettingsService : Template10.Mvvm.BindableBase
     {
         public static SettingsService Instance { get; } = new SettingsService();
         Template10.Services.SettingsService.ISettingsHelper _helper;
@@ -81,6 +81,23 @@ namespace MangaReader_MVVM.Services.SettingsServices
             }
         }
 
+        public StorageStrategies StorageStrategy
+        {
+            get
+            {
+                var source = StorageStrategies.Local;
+                var value = _helper.Read<string>(nameof(StorageStrategy), source.ToString());
+                return Enum.TryParse<StorageStrategies>(value, out source) ? source : StorageStrategies.Local;
+            }
+            set { _helper.Write(nameof(StorageStrategy), value.ToString()); base.RaisePropertyChanged(nameof(StorageStrategy)); }
+        }
+
+        public DateTime LastSynced
+        {
+            get { return _helper.Read<DateTime>(nameof(LastSynced), new DateTime()); }
+            set { _helper.Write(nameof(LastSynced), value); }
+        }
+
         public int DaysOfLatestReleases
         {
             get { return _helper.Read<int>(nameof(DaysOfLatestReleases), 7); }
@@ -113,6 +130,12 @@ namespace MangaReader_MVVM.Services.SettingsServices
                 return Enum.TryParse<ReadDirection>(value, out readDirection) ? readDirection : ReadDirection.LeftToRight;
             }
             set { _helper.Write(nameof(ReadDirection), value.ToString()); base.RaisePropertyChanged(nameof(ReadDirection)); }
+        }
+
+        public int NumberOfRecentMangas
+        {
+            get { return _helper.Read<int>(nameof(NumberOfRecentMangas), 8); }
+            set { _helper.Write(nameof(NumberOfRecentMangas), value); base.RaisePropertyChanged(nameof(NumberOfRecentMangas)); }
         }
     }
 }

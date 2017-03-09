@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Template10.Mvvm;
 using Template10.Services.SettingsService;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -14,6 +15,22 @@ namespace MangaReader_MVVM.ViewModels
     {
         public SettingsPartViewModel SettingsPartViewModel { get; } = new SettingsPartViewModel();
         public AboutPartViewModel AboutPartViewModel { get; } = new AboutPartViewModel();
+
+        public SettingsPageViewModel()
+        {
+            LoadMarkDownFile();
+        }
+
+        public string MarkDownText { get; set; }
+
+        private async void LoadMarkDownFile()
+        {
+            var folder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+            var file = await folder.GetFileAsync("ToDo.md");
+
+            MarkDownText = await FileIO.ReadTextAsync(file);
+            base.RaisePropertyChanged(nameof(MarkDownText));
+        }
     }
 
     public class SettingsPartViewModel : ViewModelBase
@@ -70,7 +87,49 @@ namespace MangaReader_MVVM.ViewModels
             get { return _settings.DaysOfLatestReleases; }
             set { _settings.DaysOfLatestReleases = value; base.RaisePropertyChanged(nameof(DaysOfLatestReleases)); }
         }
-        
+
+        public int NumberOfRecentMangas
+        {
+            get { return _settings.NumberOfRecentMangas; }
+            set { _settings.NumberOfRecentMangas = value; base.RaisePropertyChanged(nameof(NumberOfRecentMangas)); }
+        }
+
+        public bool UseOneDriveSync
+        {
+            get { return _settings.StorageStrategy.Equals(StorageStrategies.OneDrive); }
+            set
+            {
+                _settings.StorageStrategy = value ? StorageStrategies.OneDrive : StorageStrategies.Local;
+                base.RaisePropertyChanged(nameof(UseOneDriveSync));
+                InvokeLibraryStoring();
+                if(!value)
+                {
+                    OneDriveSyncTime = new DateTime();
+                }
+                RaisePropertyChanged(nameof(OneDriveSyncTime));
+            }
+        }
+
+        private async void InvokeLibraryStoring()
+        {
+            IsSyncing = true;
+            await Services.MangaLibrary.Instance.SaveMangaStatusAsync(CreationCollisionOption.OpenIfExists);
+            IsSyncing = false;
+        }
+
+        private bool _isSyncing;
+        public bool IsSyncing
+        {
+            get => _isSyncing;
+            set { Set(ref _isSyncing, value); }
+        }
+
+        public DateTime OneDriveSyncTime
+        {
+            get { return _settings.LastSynced; }
+            set { _settings.LastSynced = value; RaisePropertyChanged(nameof(OneDriveSyncTime)); }
+        }
+
         //public bool IsGroupedFavoritsGrid
         //{
         //    get { return _settings.IsGroupedFavoritsGrid; }
