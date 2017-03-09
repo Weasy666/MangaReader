@@ -1,7 +1,9 @@
 ﻿using MangaReader_MVVM.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Template10.Controls;
@@ -28,12 +30,12 @@ namespace MangaReader_MVVM.Services
                     case MangaSource.MangaEden:
                         _mangaSource = new MangaEdenSource();
                         break;
-                    case MangaSource.MangaFox:
-                        throw new NotImplementedException("MangaFox Source is not implemented right now");
-                        break;
-                    case MangaSource.MangaReader:
-                        throw new NotImplementedException("MangaReader Source is not implemented right now");
-                        break;
+                    //case MangaSource.MangaFox:
+                    //    throw new NotImplementedException("MangaFox Source is not implemented right now");
+                    //    break;
+                    //case MangaSource.MangaReader:
+                    //    throw new NotImplementedException("MangaReader Source is not implemented right now");
+                    //    break;
                     default:
                         break;
                 }
@@ -46,6 +48,7 @@ namespace MangaReader_MVVM.Services
         public ObservableItemCollection<Manga> Mangas => _mangaSource.Mangas;
         public ObservableItemCollection<Manga> Favorits => _mangaSource.Favorits;
         public ObservableItemCollection<Manga> LastRead => _mangaSource.LastRead;
+        public ObservableCollection<string> Categories => _mangaSource.Categories;
 
         public Task<ObservableItemCollection<Manga>> GetMangasAsync(ReloadMode mode = ReloadMode.Local) => _mangaSource.GetMangasAsync(mode);
         public Task<Manga> GetMangaAsync(string mangaId) => _mangaSource.GetMangaAsync(mangaId);
@@ -59,8 +62,10 @@ namespace MangaReader_MVVM.Services
         public void RemoveAsRead(ObservableItemCollection<Chapter> chapters) => _mangaSource.RemoveAsRead(chapters);
         public void RemoveAsRead(Chapter chapter) => _mangaSource.RemoveAsRead(chapter);
         public ObservableItemCollection<Manga> SearchManga(string query) => _mangaSource.SearchManga(query);
+        public ObservableItemCollection<Manga> FilterMangaByCategory(IEnumerable filters) => _mangaSource.FilterMangaByCategory(filters);
         public Task<ObservableItemCollection<Chapter>> GetChaptersAsync(Manga manga) => _mangaSource.GetChaptersAsync(manga);
 
+        public Task<bool> SaveMangaStatusAsync(CreationCollisionOption option = CreationCollisionOption.ReplaceExisting) => _mangaSource.SaveMangaStatusAsync(option);
         public Task<bool> ExportMangaStatusAsync() => _mangaSource.ExportMangaStatusAsync();
         public Task<bool> ImportMangaStatusAsync() => _mangaSource.ImportMangaStatusAsync();
     }

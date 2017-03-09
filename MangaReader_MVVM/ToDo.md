@@ -6,14 +6,16 @@
 - DONE -> implement Semantic Zoom in FavoritsPage
 - DONE -> implement Search in MangasPage
   - DONE -> if possible move it to the HamburgerMenu later on
-- implement sync over OneDrive, for consistent and persistent real time Favorits and Read Status
+- DONE -> implement sync over OneDrive, for consistent and persistent real time Favorits and Read Status
+  - needs some testing with adding a new device...could be that OneDrive data is overwritten by empty new Device data
 - DONE -> implement Last Read functionallity
 - implement Edge like Forward and Backward functionallity for navigating through the chapters
 - DONE -> added ProgressBar -> in ChapterPage add a textbox for actualChapter/numberOfChapters
 - DONE -> in MangaDetailsPage add a progress bar for chapter read progress
 - DONE -> implement different Views for ChapterPage, like single page mode, etc.
 - DONE -> add import and export functionallity
-- review the storage option...maybe use a in App DB
+- DONE -> review the storage option...maybe use a in App DB
 - add exception handling
-- add check for network connectivity
+- PARTLY DONE -> add check for network connectivity
 - DONE -> Navigating to MangaDetailsPage adds the Chapters everytime...bloats chapter number to infinity
+- add localization service

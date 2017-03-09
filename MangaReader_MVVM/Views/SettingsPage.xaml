@@ -117,15 +117,7 @@
                                     <Image Source="{Binding}" Height="28"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
-                        </ComboBox>
-
-                        <!-- Favorites Settings -->
-                        <TextBlock x:Name="Favorits"
-                                   Text="Favorites"
-                                   Style="{StaticResource SubtitleTextBlockStyle}"
-                                   Margin="0,10,0,0"
-                                   RelativePanel.AlignLeftWithPanel="True"
-                                   RelativePanel.Below="MangaSourceComboBox"/>
+                        </ComboBox>                        
 
                         <!-- Latest Releases Settings -->
                         <TextBlock x:Name="LatestReleases"
@@ -133,7 +125,7 @@
                                    Style="{StaticResource SubtitleTextBlockStyle}"
                                    Margin="0,10,0,0"
                                    RelativePanel.AlignLeftWithPanel="True"
-                                   RelativePanel.Below="Favorits"/>
+                                   RelativePanel.Below="MangaSourceComboBox"/>
                         
                         <Slider x:Name="LatestReleasesDays"
                                 Header="Range of Latest Releases"
@@ -148,16 +140,54 @@
                                    RelativePanel.AlignTopWith="LatestReleasesDays"
                                    RelativePanel.RightOf="LatestReleasesDays" />
 
+                        <!-- Favorites Settings -->
+                        <TextBlock x:Name="Favorits"
+                                   Text="Favorites"
+                                   Style="{StaticResource SubtitleTextBlockStyle}"
+                                   Margin="0,10,0,0"
+                                   RelativePanel.AlignLeftWithPanel="True"
+                                   RelativePanel.Below="LatestReleasesDays"/>
+
+                        <ToggleSwitch x:Name="OneDriveSync"
+                                      Header="OneDrive syncronization"
+                                      IsOn="{x:Bind ViewModel.SettingsPartViewModel.UseOneDriveSync, Mode=TwoWay}"
+                                      Margin="0,5,0,0"
+                                      RelativePanel.AlignLeftWithPanel="True"
+                                      RelativePanel.Below="Favorits" />
+
+                        <TextBlock x:Name="OneDriveSyncHeader"
+                                   Text="Last time synced:"
+                                   Style="{StaticResource BaseTextBlockStyle}"
+                                   Margin="0,0,0,0"
+                                   RelativePanel.AlignLeftWithPanel="True"
+                                   RelativePanel.Below="OneDriveSync"/>
+
+                        <TextBlock x:Name="OneDriveSyncTime"
+                                   Text="{x:Bind ViewModel.SettingsPartViewModel.OneDriveSyncTime, Mode=OneWay, Converter={StaticResource DateTimeToPrettyDateTime}}"
+                                   Style="{StaticResource BodyTextBlockStyle}"
+                                   Margin="0,5,0,0"
+                                   RelativePanel.AlignLeftWithPanel="True"
+                                   RelativePanel.Below="OneDriveSyncHeader"/>
+                        
+                        <ProgressBar x:Name="IsSyncing"
+                                     IsIndeterminate="True"
+                                     Visibility="{x:Bind ViewModel.SettingsPartViewModel.IsSyncing, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                                     Width="270"
+                                     Height="5"
+                                     Margin="0,5,0,0"
+                                     RelativePanel.AlignLeftWithPanel="True"
+                                     RelativePanel.Below="OneDriveSyncTime"/>
+
                     </RelativePanel>
 
                 </ScrollViewer>
             </PivotItem>
 
-            <!--  privacy  -->
+            <!--  ToDo  -->
             <PivotItem DataContext="{Binding SettingsPartViewModel}"
                        Header="ToDo's" Padding="0">
                 <ScrollViewer Margin="0,0,-12,0" VerticalScrollBarVisibility="Auto">
-                    <controls:MarkdownTextBlock Text="{x:Bind ViewModel.MarkDownText}"
+                    <controls:MarkdownTextBlock Text="{x:Bind ViewModel.MarkDownText, Mode=OneWay}"
                                                 Foreground="{ThemeResource TextBoxForegroundThemeBrush}"/>
                 </ScrollViewer>
             </PivotItem>

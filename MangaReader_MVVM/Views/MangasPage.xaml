@@ -4,6 +4,7 @@
       xmlns:t10controls="using:Template10.Controls"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:cont="using:MangaReader_MVVM.Controls"
       xmlns:vm="using:MangaReader_MVVM.ViewModels" mc:Ignorable="d" >    
     <Page.DataContext>
         <vm:MangasPageViewModel x:Name="ViewModel" />
@@ -17,7 +18,38 @@
 
         <t10controls:PageHeader Text="Manga Library" Frame="{x:Bind Frame}" >
             <t10controls:PageHeader.PrimaryCommands>
-                <AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />
+                <AppBarButton Icon="Filter" Label="Filter">
+                    <AppBarButton.Flyout>
+                        <Flyout>
+                            <ListView x:Name="CategoryListView"
+                                      ItemsSource="{x:Bind ViewModel.Categories, Mode=OneWay}"                                      
+                                      MaxWidth="280"
+                                      Padding="0,0,0,0"
+                                      SelectionMode="Multiple"
+                                      IsMultiSelectCheckBoxEnabled="False"
+                                      IsItemClickEnabled="True"
+                                      SelectionChanged="{x:Bind ViewModel.CategoryClickedAsync}"
+                                      Style="{StaticResource ListViewSemiOpaqueScrollViewer}">
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <cont:VariableWrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Margin" Value="0,10,10,0" />
+                                        <Setter Property="MinWidth" Value="0" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" MinWidth="0" MinHeight="0"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>                            
+                        </Flyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
                 <AppBarButton Icon="Sort" Label="Sort" Command="{x:Bind ViewModel.SortGridCommand, Mode=OneWay}" />
                 <AppBarSeparator />
                 <AppBarButton Icon="Refresh" Label="Reload" Command="{x:Bind ViewModel.ReloadGridCommand, Mode=OneWay}" />

@@ -1,5 +1,6 @@
 using MangaReader_MVVM.Models;
 using MangaReader_MVVM.Services;
+using Microsoft.Toolkit.Uwp.Services.OneDrive;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -95,9 +96,9 @@ namespace MangaReader_MVVM.Views
             dialog.Commands.Add(new UICommand { Label = "Load", Id = 1 });
             dialog.DefaultCommandIndex = 0;
             dialog.CancelCommandIndex = 1;
-            
+
             var result = await dialog.ShowAsync();
-            
+
             var isSuccess = false;
 
             if ((int)result.Id == 0)

@@ -23,7 +23,7 @@ namespace MangaReader_MVVM.Converters
             {
                 return "Yesterday";
             }
-            else if (dateTime.Year == 1970)
+            else if (dateTime.Year <= 1970)
             {
                 return "N/A";
             }
