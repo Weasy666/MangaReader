@@ -15,7 +15,8 @@
 - DONE -> implement different Views for ChapterPage, like single page mode, etc.
 - DONE -> add import and export functionallity
 - DONE -> review the storage option...maybe use a in App DB
-- add exception handling
+- PARTLY DONE -> add exception handling
 - PARTLY DONE -> add check for network connectivity
 - DONE -> Navigating to MangaDetailsPage adds the Chapters everytime...bloats chapter number to infinity
+- DONE -> add Category Filter in MangasPage
 - add localization service

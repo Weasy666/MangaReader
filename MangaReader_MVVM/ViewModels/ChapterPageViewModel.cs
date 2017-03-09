@@ -179,23 +179,31 @@ namespace MangaReader_MVVM.ViewModels
 
         public async Task ChapterClickedAsync(object sender, TappedRoutedEventArgs args)
         {
-            var listView = sender as ListView;
-
-            if (listView.SelectedItem is Chapter clickedChapter)
+            if (sender is ListView listView)
             {
-                if (clickedChapter != Chapter)
+                if (listView.SelectedItem is Chapter clickedChapter)
                 {
-                    Chapter = new Chapter() { Pages = new ObservableItemCollection<Models.Page>() };
-                    Chapter = await _library.GetChapterAsync(clickedChapter);
-                    SelectedChapterIndex = listView.SelectedIndex;
-                    _library.AddAsRead(clickedChapter);
+                    if (clickedChapter != Chapter)
+                    {
+                        if (listView.Parent is Grid grid)
+                        {
+                            if (grid.Parent is PageHeader pageHeader)
+                            {
+                                pageHeader.IsOpen = false;
+                            }
+                        }
+                        Chapter = new Chapter() { Pages = new ObservableItemCollection<Models.Page>() };
+                        Chapter = await _library.GetChapterAsync(clickedChapter);
+                        SelectedChapterIndex = listView.SelectedIndex;
+                        _library.AddAsRead(clickedChapter);
+                    }
                 }
-            }
-            else
-            {
-                //TODO change to PopupService
-                var dialog = new MessageDialog("This Chapter doesn't exist");
-                await dialog.ShowAsync();
+                else
+                {
+                    //TODO change to PopupService
+                    var dialog = new MessageDialog("This Chapter doesn't exist");
+                    await dialog.ShowAsync();
+                }
             }
         }
 

@@ -117,7 +117,7 @@
                     <ListView x:Name="ChaptersView"
                               Grid.Column="1" Margin="0,40,0,0"
                               ItemsSource="{x:Bind ViewModel.Manga.Chapters}"                                  
-                              ItemTemplate="{StaticResource ChapterItem}"
+                              ItemTemplate="{ThemeResource ChapterItem}"
                               Tapped="{x:Bind ViewModel.ChapterClickedAsync}"
                               SelectionChanged="{x:Bind ViewModel.ScrollToSelectedItem}"
                               SelectedIndex="{x:Bind ViewModel.SelectedChapterIndex}"

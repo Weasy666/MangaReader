@@ -163,16 +163,15 @@
     </services:MangaItemTemplateSelector>
 
     <DataTemplate x:Key="ChapterItem">
-        <Grid Width="250" Height="75" Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}">
+        <Grid Width="250" Height="75"
+              Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}">
             <StackPanel Orientation="Vertical" Margin="5,0,0,0" MaxWidth="250">
-                <TextBlock x:Name="Title" Text="{Binding Title}" FontSize="20" TextWrapping="WrapWholeWords"/>
+                <TextBlock x:Name="Title" Text="{Binding Title}" FontSize="20" TextTrimming="CharacterEllipsis"/>
                 <TextBlock Text="{Binding Number}" FontSize="15"/>
                 <!--<TextBlock Text="{Binding NumberOfPages}" FontSize="15"/>-->
                 <TextBlock Text="{Binding Released, Converter={StaticResource DateTimeToPrettyDateTime}}" FontSize="15" Margin="0,0,0,5"/>
             </StackPanel>
             <Button x:Name="ReadStatus"
-                    Command="{Binding DataContext.FavoritCommand, ElementName=PageGrid}"
-                    CommandParameter="{Binding}"
                     Content="Read"
                     Visibility="{Binding IsRead, Converter={StaticResource BoolToVisibilityConverter}}"
                     HorizontalAlignment="Right"

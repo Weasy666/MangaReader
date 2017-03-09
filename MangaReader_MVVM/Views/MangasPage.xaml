@@ -23,8 +23,8 @@
                         <Flyout>
                             <ListView x:Name="CategoryListView"
                                       ItemsSource="{x:Bind ViewModel.Categories, Mode=OneWay}"                                      
-                                      MaxWidth="280"
-                                      Padding="0,0,0,0"
+                                      MaxWidth="270"
+                                      Padding="0,-10,0,0"
                                       SelectionMode="Multiple"
                                       IsMultiSelectCheckBoxEnabled="False"
                                       IsItemClickEnabled="True"
