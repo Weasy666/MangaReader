@@ -156,7 +156,7 @@
                                       RelativePanel.Below="Favorits" />
 
                         <TextBlock x:Name="OneDriveSyncHeader"
-                                   Text="Last time synced:"
+                                   Text="Last synced:"
                                    Style="{StaticResource BaseTextBlockStyle}"
                                    Margin="0,0,0,0"
                                    RelativePanel.AlignLeftWithPanel="True"

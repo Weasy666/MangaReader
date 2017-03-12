@@ -113,7 +113,7 @@ namespace MangaReader_MVVM.ViewModels
         private async void InvokeLibraryStoring()
         {
             IsSyncing = true;
-            await Services.MangaLibrary.Instance.SaveMangaStatusAsync(CreationCollisionOption.OpenIfExists);
+            await Services.MangaLibrary.Instance.SaveMangaStatusAsync(CreationCollisionOption.ReplaceExisting);
             IsSyncing = false;
         }
 
