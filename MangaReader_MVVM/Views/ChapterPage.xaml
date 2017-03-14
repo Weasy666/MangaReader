@@ -45,7 +45,7 @@
 
     <Grid x:Name="PageGrid"
           Background="#FF171717"
-          RightTapped="{x:Bind ViewModel.Page_RightTapped}" >
+          RightTapped="{x:Bind ViewModel.Page_RightTapped}">
 
         <t10controls:PageHeader x:Name="ChaptersBar"
                                 Frame="{x:Bind Frame}"
@@ -226,7 +226,8 @@
                   IsEnabled="{x:Bind ViewModel.ReadMode, Mode=OneWay, Converter={StaticResource ReadModeToIsEnabledConverter}, ConverterParameter=FlipView, FallbackValue=False}"
                   Visibility="{x:Bind ViewModel.ReadMode, Mode=OneWay, Converter={StaticResource ReadModeToVisibilityConverter}, ConverterParameter=FlipView, FallbackValue=Collapsed}"
                   ItemsSource="{x:Bind ViewModel.Pages, Mode=OneWay}"
-                  ItemTemplate="{StaticResource PageTemplate}">
+                  ItemTemplate="{StaticResource PageTemplate}"
+                  Tapped="{x:Bind ViewModel.Page_Tapped}">
             <FlipView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel AreScrollSnapPointsRegular="True" Orientation="{Binding ReadMode, Converter={StaticResource ReadModeToOrientationConverter}}" />
@@ -241,7 +242,8 @@
                       HorizontalScrollBarVisibility="{x:Bind ViewModel.ReadMode, Mode=OneWay, Converter={StaticResource ReadModeToScrollBarVisibilityConverter}, ConverterParameter=Horizontal, FallbackValue=Auto}"
                       VerticalScrollMode="{x:Bind ViewModel.ReadMode, Mode=OneWay, Converter={StaticResource ReadModeToScrollModeConverter}, ConverterParameter=Vertical, FallbackValue=Disabled}"
                       VerticalScrollBarVisibility="{x:Bind ViewModel.ReadMode, Mode=OneWay, Converter={StaticResource ReadModeToScrollBarVisibilityConverter}, ConverterParameter=Vertical, FallbackValue=Disabled}"
-                      Style="{StaticResource SemiOpaqueScrollViewer}">
+                      Style="{StaticResource SemiOpaqueScrollViewer}"
+                      Tapped="{x:Bind ViewModel.Page_Tapped}">
             <GridView x:Name="PagesGridView" 
                       ItemsSource="{x:Bind ViewModel.Pages, Mode=OneWay}"                      
                       IsHitTestVisible="False"

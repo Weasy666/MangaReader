@@ -114,6 +114,7 @@ namespace MangaReader_MVVM.ViewModels
         {
             IsSyncing = true;
             await Services.MangaLibrary.Instance.SaveMangaStatusAsync(CreationCollisionOption.ReplaceExisting);
+            RaisePropertyChanged(nameof(OneDriveSyncTime));
             IsSyncing = false;
         }
 

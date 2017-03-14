@@ -1,9 +1,11 @@
 ﻿using MangaReader_MVVM.Models;
 using MangaReader_MVVM.Services;
 using MangaReader_MVVM.Services.SettingsServices;
+using MangaReader_MVVM.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Template10.Controls;
 using Template10.Mvvm;
@@ -19,6 +21,8 @@ namespace MangaReader_MVVM.ViewModels
     {
         public MangaLibrary _library = MangaLibrary.Instance;
         public SettingsService _settings = SettingsService.Instance;
+        private SplitViewDisplayMode hamburgerDisplayMode;
+        private bool hamburgerIsOpen;
 
         public ChapterPageViewModel()
         {
@@ -139,6 +143,25 @@ namespace MangaReader_MVVM.ViewModels
                 {
                     page.OverlayVisibility = pageOverlayVisibility;
                 }
+            }
+        }
+
+        public void Page_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var view = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView();
+
+            if (view.IsFullScreenMode)
+            {
+                view.ExitFullScreenMode();
+                Shell.HamburgerMenu.DisplayMode = hamburgerDisplayMode;
+                Shell.HamburgerMenu.IsOpen = hamburgerIsOpen;
+            }
+            else
+            {
+                view.TryEnterFullScreenMode();
+                hamburgerDisplayMode = Shell.HamburgerMenu.DisplayMode;
+                hamburgerIsOpen = Shell.HamburgerMenu.IsOpen;
+                Shell.HamburgerMenu.DisplayMode = SplitViewDisplayMode.Overlay;
             }
         }
 
