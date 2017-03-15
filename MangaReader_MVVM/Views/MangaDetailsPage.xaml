@@ -77,11 +77,13 @@
                                 Grid.ColumnSpan="2">
             <t10controls:PageHeader.PrimaryCommands>
                 <AppBarToggleButton x:Name="MultiSelect"
-                                    Icon="Bullets" IsChecked="{x:Bind ViewModel.MultiSelectButtonIsChecked, Mode=TwoWay}" IsThreeState="False"
-                                    Label="Change selection mode"
+                                    Icon="Bullets" IsChecked="{x:Bind ViewModel.MultiSelectButtonIsChecked, Mode=TwoWay}"
+                                    IsThreeState="False"
+                                    Label="Selection mode"
                                     Foreground="{x:Bind PageHeader.Foreground}"
                                     Command="{x:Bind ViewModel.MultiSelectCommand, Mode=OneWay}"
-                                    CommandParameter="{x:Bind ChapterGridView}" >
+                                    CommandParameter="{x:Bind ChapterGridView}"
+                                    ToolTipService.ToolTip="{x:Bind MultiSelect.Label, Mode=OneWay}">
                     <AppBarToggleButton.Style>
                         <Style TargetType="AppBarToggleButton">
                             <Setter Property="Background" Value="Transparent"/>
@@ -352,7 +354,11 @@
                     </AppBarToggleButton.Style>
                 </AppBarToggleButton>
                 <AppBarSeparator />
-                <AppBarButton Icon="Switch" Label="Sort" Command="{x:Bind ViewModel.SortGridCommand, Mode=OneWay}" />
+                <AppBarButton x:Name="Sort"
+                              Icon="Switch"
+                              Label="Sort"
+                              Command="{x:Bind ViewModel.SortGridCommand, Mode=OneWay}"
+                              ToolTipService.ToolTip="{x:Bind Sort.Label, Mode=OneWay}"/>
             </t10controls:PageHeader.PrimaryCommands>
         </t10controls:PageHeader>
 
@@ -397,7 +403,7 @@
                                 Padding="0" />
                         <Button x:Name="FavoriteButton"
                                 Command="{x:Bind ViewModel.FavoritCommand}"
-                                Content="{Binding Manga.IsFavorit, Mode=TwoWay, Converter={StaticResource BoolToFavoritSymbolConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{x:Bind ViewModel.Manga.IsFavorit, Mode=TwoWay, Converter={StaticResource BoolToFavoritSymbolConverter}}"
                                 FontFamily="Segoe MDL2 Assets"
                                 FontSize="20"
                                 HorizontalAlignment="Right"
@@ -405,7 +411,8 @@
                                 Height="30" Width="30"
                                 Margin="10,0,0,5"
                                 Grid.Column="1"
-                                Padding="0" />
+                                Padding="0"
+                                ToolTipService.ToolTip="{x:Bind ViewModel.Manga.IsFavorit, Mode=OneWay, Converter={StaticResource BoolToFavoriteTooltipConverter}}"/>
                     </StackPanel>
                 </StackPanel>
                 <Grid x:Name="DetailsGrid"

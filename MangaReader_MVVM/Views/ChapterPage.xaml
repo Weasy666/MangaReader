@@ -6,7 +6,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:models="using:MangaReader_MVVM.Models"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:vm="using:MangaReader_MVVM.ViewModels" mc:Ignorable="d">
+      xmlns:vm="using:MangaReader_MVVM.ViewModels" mc:Ignorable="d" >
     <Page.DataContext>
         <vm:ChapterPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
@@ -45,6 +45,7 @@
 
     <Grid x:Name="PageGrid"
           Background="#FF171717"
+          KeyDown="{x:Bind ViewModel.OnKeyDown, Mode=OneWay}"
           RightTapped="{x:Bind ViewModel.Page_RightTapped}">
 
         <t10controls:PageHeader x:Name="ChaptersBar"
@@ -78,7 +79,9 @@
                                 Margin="0,0,5,5"
                                 Grid.Column="1"
                                 Canvas.ZIndex="10"
-                                Padding="0" Foreground="{ThemeResource ContrastColorBrush}"/>
+                                Padding="0"
+                                Foreground="{ThemeResource ContrastColorBrush}"
+                                ToolTipService.ToolTip="{x:Bind ViewModel.Manga.IsFavorit, Mode=OneWay, Converter={StaticResource BoolToFavoriteTooltipConverter}}"/>
                         <controls:ImageEx x:Name="Cover" Foreground="{ThemeResource ContrastColorBrush}"
                                           MaxWidth="103" MaxHeight="150" Grid.Column="0"
                                           IsCacheEnabled="True"
@@ -144,7 +147,8 @@
                             Foreground="{x:Bind ChaptersBar.Foreground}"
                             Background="Transparent"
                             FontFamily="Segoe MDL2 Assets"
-                            FontSize="{ThemeResource TextStyleLargeFontSize}">
+                            FontSize="{ThemeResource TextStyleLargeFontSize}"
+                            ToolTipService.ToolTip="Reading Settings">
                         <Button.Resources>
                             <Flyout x:Key="SettingsFlyout" Placement="Bottom">
                                 <StackPanel Width="190">
@@ -217,7 +221,6 @@
                             </Style>
                         </Button.Style>
                     </Button>
-                    <!--xE713-->
                 </Grid>
             </t10controls:PageHeader.Content>
         </t10controls:PageHeader>

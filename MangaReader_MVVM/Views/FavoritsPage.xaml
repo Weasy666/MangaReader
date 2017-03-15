@@ -25,15 +25,20 @@
                               Label="Export"
                               Command="{x:Bind ViewModel.ExportCommand, Mode=OneWay}"/>-->
                 <AppBarSeparator />
-                <AppBarButton Icon="Refresh"
+                <AppBarButton x:Name="Reload"
+                              Icon="Refresh"
                               Label="Reload"
-                              Command="{x:Bind ViewModel.ReloadGridCommand, Mode=OneWay}" />
+                              Command="{x:Bind ViewModel.ReloadGridCommand, Mode=OneWay}"
+                              ToolTipService.ToolTip="{x:Bind Reload.Label, Mode=OneWay}"/>
                 <AppBarToggleButton x:Name="GroupGrid"
-                                    Icon="AllApps" IsChecked="{x:Bind ViewModel.IsGridGrouped, Mode=TwoWay}" IsThreeState="False"
+                                    Icon="AllApps"
                                     Label="Group"
+                                    IsChecked="{x:Bind ViewModel.IsGridGrouped, Mode=TwoWay}"
+                                    IsThreeState="False"
                                     Foreground="{x:Bind PageHeader.Foreground}"
                                     Command="{x:Bind ViewModel.GroupGridCommand, Mode=OneWay}"
-                                    CommandParameter="{x:Bind FavoritsSemanticZoom}" >
+                                    CommandParameter="{x:Bind FavoritsSemanticZoom}"
+                                    ToolTipService.ToolTip="{x:Bind GroupGrid.IsChecked, Mode=OneWay, Converter={StaticResource BoolToGroupedTooltipConverter}}">
                     <AppBarToggleButton.Style>
                         <Style TargetType="AppBarToggleButton">
                             <Setter Property="Background" Value="Transparent"/>

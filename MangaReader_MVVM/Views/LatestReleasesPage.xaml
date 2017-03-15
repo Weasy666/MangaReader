@@ -17,7 +17,10 @@
 
         <t10controls:PageHeader Name="PageHeader" Text="Latest Releases" Frame="{x:Bind Frame}" >
             <t10controls:PageHeader.PrimaryCommands>
-                <AppBarButton Icon="Filter" Label="Filter">
+                <AppBarButton x:Name="Filter"
+                              Icon="Filter"
+                              Label="Filter"
+                              ToolTipService.ToolTip="{x:Bind Filter.Label, Mode=OneWay}">
                     <AppBarButton.Flyout>
                         <Flyout>
                             <StackPanel Orientation="Horizontal">
@@ -35,9 +38,17 @@
                         </Flyout>
                     </AppBarButton.Flyout>
                 </AppBarButton>
-                <AppBarButton Icon="Sort" Label="Sort" Command="{x:Bind ViewModel.SortGridCommand, Mode=OneWay}" />
+                <AppBarButton x:Name="Sort"
+                              Icon="Sort"
+                              Label="Sort"
+                              Command="{x:Bind ViewModel.SortGridCommand, Mode=OneWay}"
+                              ToolTipService.ToolTip="{x:Bind Sort.Label, Mode=OneWay}"/>
                 <AppBarSeparator />
-                <AppBarButton Icon="Refresh" Label="Reload" Command="{x:Bind ViewModel.ReloadGridCommand, Mode=OneWay}" />
+                <AppBarButton x:Name="Reload"
+                              Icon="Refresh"
+                              Label="Reload"
+                              Command="{x:Bind ViewModel.ReloadGridCommand, Mode=OneWay}"
+                              ToolTipService.ToolTip="{x:Bind Reload.Label, Mode=OneWay}"/>
             </t10controls:PageHeader.PrimaryCommands>
         </t10controls:PageHeader>
 

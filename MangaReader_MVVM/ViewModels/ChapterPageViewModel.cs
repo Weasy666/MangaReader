@@ -120,6 +120,13 @@ namespace MangaReader_MVVM.ViewModels
             {
                 suspensionState[nameof(Chapter)] = Chapter;
             }
+            var view = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView();
+            if (view.IsFullScreenMode)
+            {
+                view.ExitFullScreenMode();
+                Shell.HamburgerMenu.DisplayMode = hamburgerDisplayMode;
+                Shell.HamburgerMenu.IsOpen = hamburgerIsOpen;
+            }
             await Task.CompletedTask;
         }
         
@@ -236,6 +243,20 @@ namespace MangaReader_MVVM.ViewModels
             if (listView.SelectedItem != null)
             {
                 listView.ScrollIntoView(listView.SelectedItem, ScrollIntoViewAlignment.Leading);
+            }
+        }
+
+        public void OnKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Escape)
+            {
+                var view = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView();
+                if (view.IsFullScreenMode)
+                {
+                    view.ExitFullScreenMode();
+                    Shell.HamburgerMenu.DisplayMode = hamburgerDisplayMode;
+                    Shell.HamburgerMenu.IsOpen = hamburgerIsOpen;
+                }
             }
         }
     }

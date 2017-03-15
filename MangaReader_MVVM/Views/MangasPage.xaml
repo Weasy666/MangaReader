@@ -18,41 +18,56 @@
 
         <t10controls:PageHeader Text="Manga Library" Frame="{x:Bind Frame}" >
             <t10controls:PageHeader.PrimaryCommands>
-                <AppBarButton Icon="Filter" Label="Filter">
+                <AppBarButton x:Name="Filter"
+                              Icon="Filter"
+                              Label="Filter"
+                              ToolTipService.ToolTip="{x:Bind Filter.Label, Mode=OneWay}">
                     <AppBarButton.Flyout>
                         <Flyout>
-                            <ListView x:Name="CategoryListView"
-                                      ItemsSource="{x:Bind ViewModel.Categories, Mode=OneWay}"                                      
-                                      MaxWidth="270"
-                                      Padding="0,-10,0,0"
-                                      SelectionMode="Multiple"
-                                      IsMultiSelectCheckBoxEnabled="False"
-                                      IsItemClickEnabled="True"
-                                      SelectionChanged="{x:Bind ViewModel.CategoryClickedAsync}"
-                                      Style="{StaticResource ListViewSemiOpaqueScrollViewer}">
-                                <ListView.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <cont:VariableWrapPanel/>
-                                    </ItemsPanelTemplate>
-                                </ListView.ItemsPanel>
-                                <ListView.ItemContainerStyle>
-                                    <Style TargetType="ListViewItem">
-                                        <Setter Property="Margin" Value="0,10,10,0" />
-                                        <Setter Property="MinWidth" Value="0" />
-                                    </Style>
-                                </ListView.ItemContainerStyle>
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}" MinWidth="0" MinHeight="0"/>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>                            
+                            <StackPanel MaxWidth="270">
+                                <TextBlock Text="By Category"
+                                           Margin="0,0,0,4"
+                                           Style="{StaticResource BaseTextBlockStyle}"/>
+                                <ListView x:Name="CategoryListView"
+                                          ItemsSource="{x:Bind ViewModel.Categories, Mode=OneWay}"                                          
+                                          Padding="0,0,0,-10"
+                                          SelectionMode="Multiple"
+                                          IsMultiSelectCheckBoxEnabled="False"
+                                          IsItemClickEnabled="True"
+                                          SelectionChanged="{x:Bind ViewModel.CategoryClickedAsync}"
+                                          Style="{StaticResource ListViewSemiOpaqueScrollViewer}">
+                                    <ListView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <cont:VariableWrapPanel/>
+                                        </ItemsPanelTemplate>
+                                    </ListView.ItemsPanel>
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="Margin" Value="0,0,10,10" />
+                                            <Setter Property="MinWidth" Value="0" />
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" MinWidth="0" MinHeight="0"/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </StackPanel>
                         </Flyout>
                     </AppBarButton.Flyout>
                 </AppBarButton>
-                <AppBarButton Icon="Sort" Label="Sort" Command="{x:Bind ViewModel.SortGridCommand, Mode=OneWay}" />
+                <AppBarButton x:Name="Sort"
+                              Icon="Sort"
+                              Label="Sort"
+                              Command="{x:Bind ViewModel.SortGridCommand, Mode=OneWay}"
+                              ToolTipService.ToolTip="{x:Bind Sort.Label, Mode=OneWay}"/>
                 <AppBarSeparator />
-                <AppBarButton Icon="Refresh" Label="Reload" Command="{x:Bind ViewModel.ReloadGridCommand, Mode=OneWay}" />
+                <AppBarButton x:Name="Reload"
+                              Icon="Refresh"
+                              Label="Reload"
+                              Command="{x:Bind ViewModel.ReloadGridCommand, Mode=OneWay}"
+                              ToolTipService.ToolTip="{x:Bind Reload.Label, Mode=OneWay}"/>
             </t10controls:PageHeader.PrimaryCommands>
         </t10controls:PageHeader>
 
