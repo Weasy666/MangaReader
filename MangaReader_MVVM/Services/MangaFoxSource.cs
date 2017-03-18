@@ -24,6 +24,7 @@ using AngleSharp.Parser.Html;
 using AngleSharp.Dom.Html;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using AngleSharp.Dom;
 
 namespace MangaReader_MVVM.Services
 {
@@ -78,7 +79,7 @@ namespace MangaReader_MVVM.Services
         public MangaFoxSource()
         {
             RootUri = new Uri("http://mangafox.me/");
-            MangasListPage = new Uri($"manga/", UriKind.Relative);
+            MangasListPage = new Uri($"directory/{0}.htm?az", UriKind.Relative);
             MangaDetails = new Uri("manga/", UriKind.Relative);
             Mangas = new ObservableItemCollection<Manga>();
             _settings.PropertyChanged += Settings_Changed;
@@ -89,83 +90,105 @@ namespace MangaReader_MVVM.Services
 
         public async Task<ObservableItemCollection<Manga>> GetMangasAsync(ReloadMode mode = ReloadMode.Local)
         {
-            try
+            //try
             {
                 if (!Mangas.Any() || mode == ReloadMode.Server)
                 {
-                    var networkService = new NetworkAvailableService();
-                    if (await networkService.IsInternetAvailable())
-                    {
-                        using (var httpClient = new HttpClient { BaseAddress = RootUri })
-                        {
-                            var response = await httpClient.GetAsync(MangasListPage);
-                            var result = await response.Content.ReadAsStringAsync();
-                            if (response.IsSuccessStatusCode)
-                            {
-                                var parser = new HtmlParser();
-                                var document = parser.Parse(result);
-
-                                var groupedMangaList = document.QuerySelector("div.manga_list");
-                                var mangaList = groupedMangaList.QuerySelectorAll("a.series_preview").OfType<IHtmlAnchorElement>();
-
-                                foreach (var manga in mangaList)
-                                {
-                                    MangasRefs[manga.Relation] = manga.PathName;
-                                    Mangas.Add(new Manga
-                                    {
-                                        MangaSource = Name,
-                                        Title = manga.Text,
-                                        Id = manga.Relation,
-                                        IsFavorit = false
-                                    });
-                                    await GetMangaAsync(manga.Relation);
-                                }
-                            }
-                            else
-                            {
-                                throw new HttpRequestException(Name + ": " + response.ReasonPhrase);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        throw new HttpRequestException("No Internet connection available. Check your connection and try again.");
-                    }
+                    var mangaList = new List<IElement>();
+                    await GetPagedMangas(mangaList, 1);
                 }
 
                 await LoadAndMergeStoredDataAsync();
                 LoadLastReadAsync();
             }
-            catch (HttpRequestException e)
-            {
-                MessageDialog dialog = new MessageDialog(e.Message);
-                dialog.Commands.Add(new UICommand { Label = "Retry", Id = 0 });
-                dialog.Commands.Add(new UICommand { Label = "Exit", Id = 1 });
-                dialog.DefaultCommandIndex = 0;
-                dialog.CancelCommandIndex = 1;
+            //catch (HttpRequestException e)
+            //{
+            //    MessageDialog dialog = new MessageDialog(e.Message);
+            //    dialog.Commands.Add(new UICommand { Label = "Retry", Id = 0 });
+            //    dialog.Commands.Add(new UICommand { Label = "Exit", Id = 1 });
+            //    dialog.DefaultCommandIndex = 0;
+            //    dialog.CancelCommandIndex = 1;
 
-                var result = await dialog.ShowAsync();
-                if ((int)result.Id == 0)
-                {
-                    Mangas = await GetMangasAsync(mode);
-                }
-                else
-                {
-                    App.Current.Exit();
-                }
-            }
-            catch (Exception e)
-            {
-                var dialog = new MessageDialog(e.Message);
-                await dialog.ShowAsync();
-            }
+            //    var result = await dialog.ShowAsync();
+            //    if ((int)result.Id == 0)
+            //    {
+            //        Mangas = await GetMangasAsync(mode);
+            //    }
+            //    else
+            //    {
+            //        App.Current.Exit();
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    var dialog = new MessageDialog(e.Message);
+            //    await dialog.ShowAsync();
+            //}
             return Mangas;
+        }
+
+        private async Task<List<IElement>> GetPagedMangas(List<IElement> mangaList, int currentPage)
+        {
+            var networkService = new NetworkAvailableService();
+            if (await networkService.IsInternetAvailable())
+            {
+                using (var httpClient = new HttpClient { BaseAddress = RootUri })
+                {
+                    var response = await httpClient.GetAsync(new Uri($"directory/{currentPage}.htm?az", UriKind.Relative));
+                    var result = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var parser = new HtmlParser();
+                        var document = parser.Parse(result);
+
+                        var divContent = document.All.OfType<IHtmlDivElement>().Where(m => m.Id == "content").FirstOrDefault();
+                        mangaList.AddRange(divContent.QuerySelector("ul.list")?.Children);// as IHtmlUnorderedListElement;
+
+                        var ulNav = divContent.QuerySelector("div#nav").FirstElementChild;
+
+                        var spanNextParent = ulNav.QuerySelector("span.next").ParentElement as IHtmlSpanElement;
+
+                        bool HasNextPage = spanNextParent == null || spanNextParent.ClassName != "disable";
+
+                        if (HasNextPage)
+                        {
+                            await GetPagedMangas(mangaList, currentPage + 1);
+                        }
+
+                        //var groupedMangaList = document.QuerySelector("div.manga_list");
+                        //var mangaList = groupedMangaList.QuerySelectorAll("a.series_preview").OfType<IHtmlAnchorElement>();
+
+                        //foreach (var manga in mangaList)
+                        //{
+                        //    MangasRefs[manga.Relation] = manga.PathName;
+                        //    Mangas.Add(new Manga
+                        //    {
+                        //        MangaSource = Name,
+                        //        Title = manga.Text,
+                        //        Id = manga.Relation,
+                        //        IsFavorit = false
+                        //    });
+                        //    //await GetMangaAsync(manga.Relation);
+                        //}
+                    }
+                    else
+                    {
+                        throw new HttpRequestException(Name + ": " + response.ReasonPhrase);
+                    }
+                }
+            }
+            else
+            {
+                throw new HttpRequestException("No Internet connection available. Check your connection and try again.");
+            }
+
+            return mangaList;
         }
 
         public async Task<Manga> GetMangaAsync(string mangaId)
         {
             var manga = Mangas.Where(m => m.Id == mangaId).First();
-            try
+            //try
             {
                 var networkService = new NetworkAvailableService();
                 if (await networkService.IsInternetAvailable())
@@ -186,8 +209,8 @@ namespace MangaReader_MVVM.Services
                             var chaptersDiv = leftDiv.Children.OfType<IHtmlDivElement>().Where(m => m.Id == "chapters").First();
                             var chaptersList = chaptersDiv.QuerySelectorAll("li");
                             //titleDiv
-                            var alias = titleDiv.Children.OfType<IHtmlHeadingElement>().Where(m => m.LocalName == "h3").First().TextContent;
-                            var description = titleDiv.QuerySelector("p.summary").TextContent;
+                            var alias = titleDiv.Children.OfType<IHtmlHeadingElement>().Where(m => m.LocalName == "h3").FirstOrDefault()?.TextContent ?? manga.Title;
+                            var description = titleDiv.QuerySelector("p.summary")?.TextContent ?? "N/A";
                             var table = titleDiv.QuerySelectorAll("td");
                             var released = new DateTime();
                             if (DateTime.TryParseExact(table[0].TextContent.Trim(), "yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out released))
@@ -201,14 +224,15 @@ namespace MangaReader_MVVM.Services
                             var ongoing = !data[0].TextContent.Contains("Completed");
                             var hits = Int32.Parse(Regex.Match(data[1].TextContent, "\\d+.\\d+\\s").Value.Trim().Replace(",", ""));
                             //chaptersDiv
-                            var chapDate = chaptersList[0]?.QuerySelector("span.date");
-                            var lastUpdated = Convert.ToDateTime(chapDate.TextContent).ToLocalTime();
+                            IElement chapDate = chaptersList != null && chaptersList.Any() ? chaptersList.ElementAt(0)?.QuerySelector("span.date") : null;
+                            var lastUpdated = ConvertToDateTime(chapDate);
 
-                            
+
 
                             //creation of manga
                             var details = new Manga
                             {
+                                MangaSource = this.Name,
                                 Alias = alias,
                                 Cover = cover,
                                 Category = category,
@@ -223,19 +247,24 @@ namespace MangaReader_MVVM.Services
                             };
 
                             var chapters = new List<Chapter>();
+                            CurrentMangaChaptersRef.Clear();
                             foreach (var chapter in chaptersList)
                             {
                                 var chapterId = chapter.QuerySelector("a.tips").TextContent;
+
+                                var chapNumber = Int32.Parse(Regex.Match(chapter.QuerySelector("a.tips").TextContent, "\\d+$").Value);
+                                var chapTitle = chapter.QuerySelector("span.title") != null ? chapter.QuerySelector("span.title").TextContent : chapter.QuerySelector("a.tips").TextContent;
+                                var chapReleased = ConvertToDateTime(chapter.QuerySelector("span.date"));
+
                                 new Chapter
                                 {
-                                    Number = Int32.Parse(Regex.Match(chapter.QuerySelector("a.tips").TextContent, "\\d+$").Value),
-                                    Title = chapter.QuerySelector("span.title") != null ? chapter.QuerySelector("span.title").TextContent : chapter.QuerySelector("a.tips").TextContent,
+                                    Number = chapNumber,
+                                    Title = chapTitle,
                                     Id = chapterId,
-                                    Released = Convert.ToDateTime(chapter.QuerySelector("span.date")).ToLocalTime(),
+                                    Released = chapReleased,
                                     IsRead = false
                                 };
-                                //add chapter Hrefs to CurrentMangaChaptersRef
-                                CurrentMangaChaptersRef.Clear();
+                                //add chapter Hrefs to CurrentMangaChaptersRef                                
                                 CurrentMangaChaptersRef[chapterId] = (chapter.QuerySelector("a.tips") as IHtmlAnchorElement).Href;
                             }
                             chapters.Sort();
@@ -255,36 +284,36 @@ namespace MangaReader_MVVM.Services
                     throw new HttpRequestException("No Internet connection available. Check your connection and try again.");
                 }
             }
-            catch (HttpRequestException e)
-            {
-                MessageDialog dialog = new MessageDialog(e.Message);
-                dialog.Commands.Add(new UICommand { Label = "Retry", Id = 0 });
-                dialog.Commands.Add(new UICommand { Label = "Exit", Id = 1 });
-                dialog.DefaultCommandIndex = 0;
-                dialog.CancelCommandIndex = 1;
+            //catch (HttpRequestException e)
+            //{
+            //    MessageDialog dialog = new MessageDialog(e.Message);
+            //    dialog.Commands.Add(new UICommand { Label = "Retry", Id = 0 });
+            //    dialog.Commands.Add(new UICommand { Label = "Exit", Id = 1 });
+            //    dialog.DefaultCommandIndex = 0;
+            //    dialog.CancelCommandIndex = 1;
 
-                var result = await dialog.ShowAsync();
-                if ((int)result.Id == 0)
-                {
-                    manga = await GetMangaAsync(mangaId);
-                }
-                else
-                {
-                    App.Current.Exit();
-                }
-            }
-            catch (Exception e)
-            {
-                var dialog = new MessageDialog(e.Message);
-                await dialog.ShowAsync();
-            }
+            //    var result = await dialog.ShowAsync();
+            //    if ((int)result.Id == 0)
+            //    {
+            //        manga = await GetMangaAsync(mangaId);
+            //    }
+            //    else
+            //    {
+            //        App.Current.Exit();
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    var dialog = new MessageDialog(e.Message);
+            //    await dialog.ShowAsync();
+            //}
 
             return manga;
         }
 
         public async Task<Chapter> GetChapterAsync(Chapter chapter)
         {
-            try
+            //try
             {
                 var networkService = new NetworkAvailableService();
                 if (await networkService.IsInternetAvailable())
@@ -313,29 +342,29 @@ namespace MangaReader_MVVM.Services
                     throw new HttpRequestException("No Internet connection available. Check your connection and try again.");
                 }
             }
-            catch (HttpRequestException e)
-            {
-                MessageDialog dialog = new MessageDialog(e.Message);
-                dialog.Commands.Add(new UICommand { Label = "Retry", Id = 0 });
-                dialog.Commands.Add(new UICommand { Label = "Exit", Id = 1 });
-                dialog.DefaultCommandIndex = 0;
-                dialog.CancelCommandIndex = 1;
+            //catch (HttpRequestException e)
+            //{
+            //    MessageDialog dialog = new MessageDialog(e.Message);
+            //    dialog.Commands.Add(new UICommand { Label = "Retry", Id = 0 });
+            //    dialog.Commands.Add(new UICommand { Label = "Exit", Id = 1 });
+            //    dialog.DefaultCommandIndex = 0;
+            //    dialog.CancelCommandIndex = 1;
 
-                var result = await dialog.ShowAsync();
-                if ((int)result.Id == 0)
-                {
-                    chapter = await GetChapterAsync(chapter);
-                }
-                else
-                {
-                    App.Current.Exit();
-                }
-            }
-            catch (Exception e)
-            {
-                var dialog = new MessageDialog(e.Message);
-                await dialog.ShowAsync();
-            }
+            //    var result = await dialog.ShowAsync();
+            //    if ((int)result.Id == 0)
+            //    {
+            //        chapter = await GetChapterAsync(chapter);
+            //    }
+            //    else
+            //    {
+            //        App.Current.Exit();
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    var dialog = new MessageDialog(e.Message);
+            //    await dialog.ShowAsync();
+            //}
 
             return chapter;
         }
@@ -544,6 +573,24 @@ namespace MangaReader_MVVM.Services
             }
             var retval = new ObservableCollection<string>(hashSet);
             retval.SortAscending((y, x) => y.CompareTo(x));
+            return retval;
+        }
+
+        private DateTime ConvertToDateTime(IElement element)
+        {
+            var retval = new DateTime();
+            if (element != null && element.TextContent.Contains("Today"))
+            {
+                retval = DateTime.Today;
+            }
+            else if (element != null && element.TextContent.Contains("Yesterday"))
+            {
+                retval = DateTime.Today.AddDays(-1);
+            }
+            else if (element != null)
+            {
+                Convert.ToDateTime(element.TextContent).ToLocalTime();
+            }
             return retval;
         }
 
