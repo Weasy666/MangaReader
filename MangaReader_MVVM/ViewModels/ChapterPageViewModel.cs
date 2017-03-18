@@ -237,6 +237,13 @@ namespace MangaReader_MVVM.ViewModels
             }
         }
 
+        private DelegateCommand _reloadChapterCommand;
+        public DelegateCommand ReloadChapterCommand
+            => _reloadChapterCommand ?? (_reloadChapterCommand = new DelegateCommand(async () =>
+            {
+                Chapter = await _library.GetChapterAsync(Chapter);
+            }, () => Chapter != null));
+
         public void ScrollToSelectedItem(object sender, SelectionChangedEventArgs e)
         {
             var listView = sender as ListView;

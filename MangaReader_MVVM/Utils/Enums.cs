@@ -11,7 +11,7 @@ namespace MangaReader_MVVM
     public enum MangaSource
     {
         MangaEden,
-        //MangaFox,
+        MangaFox,
         //MangaReader
     }
     

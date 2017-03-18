@@ -109,6 +109,7 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DateTimeToPrettyDateTime.cs" />
     <Compile Include="Converters\JSON\InterfaceConverter.cs" />
+    <Compile Include="Converters\JSON\MangaFoxMangasListConverter.cs" />
     <Compile Include="Converters\MangaItemTemplateConverter.cs" />
     <Compile Include="Converters\ReadDirectionToIntConverter.cs" />
     <Compile Include="Converters\ReadModeToScrollBarVisibilityConverter.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Models\Chapter.cs" />
     <Compile Include="Models\MangaGroup.cs" />
     <Compile Include="Services\FileService\FileHelper.cs" />
+    <Compile Include="Services\MangaFoxSource.cs" />
     <Compile Include="Utils\CompareNatural.cs" />
     <Compile Include="Models\IChapter.cs" />
     <Compile Include="Models\IManga.cs" />

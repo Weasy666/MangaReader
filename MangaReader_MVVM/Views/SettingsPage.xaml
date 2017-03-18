@@ -109,9 +109,11 @@
 
                         <ComboBox x:Name="MangaSourceComboBox" Header="Manga Source"
                                   ItemsSource="{x:Bind ViewModel.SettingsPartViewModel.SourcesWithIcons}"
-                                  Width="270" SelectedIndex="{x:Bind ViewModel.SettingsPartViewModel.SelectedMangaSource, Mode=OneWay}"
+                                  Width="270"
+                                  SelectedIndex="{x:Bind ViewModel.SettingsPartViewModel.SelectedMangaSource, Mode=OneWay}"
                                   RelativePanel.AlignLeftWithPanel="True"
-                                  RelativePanel.Below="NumberOfRecentMangasTextBox" >
+                                  RelativePanel.Below="NumberOfRecentMangasTextBox"
+                                  SelectionChanged="{x:Bind ViewModel.SettingsPartViewModel.MangaSourceComboBox_SelectionChanged, Mode=OneWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <Image Source="{Binding}" Height="28"/>

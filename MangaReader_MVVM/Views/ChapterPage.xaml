@@ -46,7 +46,7 @@
     <Grid x:Name="PageGrid"
           Background="#FF171717"
           KeyDown="{x:Bind ViewModel.OnKeyDown, Mode=OneWay}"
-          RightTapped="{x:Bind ViewModel.Page_RightTapped}">
+          RightTapped="{x:Bind ViewModel.Page_RightTapped, Mode=OneWay}">
 
         <t10controls:PageHeader x:Name="ChaptersBar"
                                 Frame="{x:Bind Frame}"
@@ -69,19 +69,7 @@
                             <ColumnDefinition Width="103"/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Button x:Name="FavoriteButton"
-                                Command="{x:Bind ViewModel.FavoritCommand}"
-                                Content="{x:Bind ViewModel.Manga.IsFavorit, Mode=TwoWay, Converter={StaticResource BoolToFavoritSymbolConverter}}"
-                                FontFamily="Segoe UI Symbol"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Bottom"
-                                Height="30" Width="30"
-                                Margin="0,0,5,5"
-                                Grid.Column="1"
-                                Canvas.ZIndex="10"
-                                Padding="0"
-                                Foreground="{ThemeResource ContrastColorBrush}"
-                                ToolTipService.ToolTip="{x:Bind ViewModel.Manga.IsFavorit, Mode=OneWay, Converter={StaticResource BoolToFavoriteTooltipConverter}}"/>
+                        
                         <controls:ImageEx x:Name="Cover" Foreground="{ThemeResource ContrastColorBrush}"
                                           MaxWidth="103" MaxHeight="150" Grid.Column="0"
                                           IsCacheEnabled="True"
@@ -91,9 +79,24 @@
                                           IsTapEnabled="False"
                                           PlaceholderSource="/Assets/NewStoreLogo.scale-400.png"
                                           PlaceholderStretch="Uniform" />
+                        <Button x:Name="FavoriteButton"
+                                Command="{x:Bind ViewModel.FavoritCommand}"
+                                Content="{x:Bind ViewModel.Manga.IsFavorit, Mode=TwoWay, Converter={StaticResource BoolToFavoritSymbolConverter}}"
+                                FontFamily="Segoe UI Symbol"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                Grid.Column="1"
+                                Height="30"
+                                Width="30"
+                                Margin="5,0,0,5"
+                                Canvas.ZIndex="10"
+                                Padding="0"
+                                Foreground="{ThemeResource ContrastColorBrush}"
+                                ToolTipService.ToolTip="{x:Bind ViewModel.Manga.IsFavorit, Mode=OneWay, Converter={StaticResource BoolToFavoriteTooltipConverter}}"/>
                         <Grid x:Name="MangaDetailsGrid"
                               Margin="5,0,0,0"
                               MaxWidth="247"
+                              MaxHeight="150"
                               Grid.Column="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -114,7 +117,7 @@
                             <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Manga.LastUpdated, Mode=OneWay, Converter={StaticResource DateTimeToPrettyDateTime}}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
                             
                             <TextBlock x:Name="CategoryHeader" Text="Category" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="3" FontWeight="SemiBold"/>
-                            <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="3"/>
+                            <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="3"/>                            
                         </Grid>
                     </Grid>
                     <ListView x:Name="ChaptersView"
@@ -142,85 +145,145 @@
                             </Style>                            
                         </ListView.ItemContainerStyle>
                     </ListView>
-                    <Button x:Name="SettingsButton" Grid.Column="2"
-                            Content="&#xE115;"
-                            Foreground="{x:Bind ChaptersBar.Foreground}"
-                            Background="Transparent"
-                            FontFamily="Segoe MDL2 Assets"
-                            FontSize="{ThemeResource TextStyleLargeFontSize}"
-                            ToolTipService.ToolTip="Reading Settings">
-                        <Button.Resources>
-                            <Flyout x:Key="SettingsFlyout" Placement="Bottom">
-                                <StackPanel Width="190">
-                                    <ComboBox x:Name="ReadMode"
-                                              Header="Read Mode"
-                                              MinWidth="110"
-                                              Tag="{x:Bind PageGrid}"
-                                              ItemsSource="{x:Bind ViewModel.ReadModeList}"
-                                              SelectedIndex="{Binding ReadMode, Mode=TwoWay, Converter={StaticResource ReadModeToIntConverter}}"
-                                              SelectionChanged="{x:Bind ViewModel.ReadMode_SelectionChanged}">
-                                    </ComboBox>
-                                    <!--<ComboBox x:Name="ReadDirection"
-                                              Header="Read direction"
-                                              ItemsSource="{x:Bind ViewModel.ReadDirectionList}"
-                                              SelectedIndex="{Binding ReadMode, Mode=TwoWay, Converter={StaticResource ReadDirectionToIntConverter}}"
-                                              SelectionChanged="{x:Bind ViewModel.ReadDirection_SelectionChanged}">
-                                    </ComboBox>-->
-                                </StackPanel>
-                            </Flyout>
-                        </Button.Resources>
-                        <Button.Flyout>
-                            <StaticResource ResourceKey="SettingsFlyout"/>
-                        </Button.Flyout>
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Grid>
-                                                <VisualStateManager.VisualStateGroups>
-                                                    <VisualStateGroup x:Name="CommonStates">
-                                                        <VisualState x:Name="Normal" />
-                                                        <VisualState x:Name="PointerOver">
-                                                            <VisualState.Setters>
-                                                                <Setter Target="ContentPresenter.Background" Value="{ThemeResource SystemControlHighlightListLowBrush}" />
-                                                                <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
-                                                            </VisualState.Setters>
-                                                        </VisualState>
-                                                        <VisualState x:Name="Pressed">
-                                                            <VisualState.Setters>
-                                                                <Setter Target="ContentPresenter.Background" Value="{ThemeResource SystemControlHighlightListMediumBrush}" />
-                                                            </VisualState.Setters>
-                                                        </VisualState>
-                                                        <VisualState x:Name="Disabled">
-                                                            <VisualState.Setters>
-                                                                <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource SystemControlDisabledBaseLowBrush}" />
-                                                            </VisualState.Setters>
-                                                        </VisualState>
-                                                    </VisualStateGroup>
-                                                </VisualStateManager.VisualStateGroups>
-                                                <ContentPresenter x:Name="ContentPresenter"
-                                                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                                  AutomationProperties.AccessibilityView="Raw"
-                                                                  Background="{TemplateBinding Background}"
-                                                                  BorderBrush="{TemplateBinding BorderBrush}"
-                                                                  BorderThickness="{TemplateBinding BorderThickness}"
-                                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                                  ContentTransitions="{TemplateBinding ContentTransitions}"
-                                                                  Padding="{TemplateBinding Padding}" />
-                                            </Grid>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="UseSystemFocusVisuals" Value="True" />
-                                <Setter Property="VerticalAlignment" Value="Bottom" />
-                                <Setter Property="VerticalContentAlignment" Value="Center" />
-                                <Setter Property="Width" Value="{ThemeResource AppBarExpandButtonThemeWidth}" />
-                                <Setter Property="Height" Value="{ThemeResource AppBarExpandButtonThemeWidth}" />
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                    <StackPanel Grid.Column="2"
+                                VerticalAlignment="Bottom">
+                        <Button x:Name="ReloadButton"
+                                Content="&#xE72C;"
+                                Foreground="{x:Bind ChaptersBar.Foreground}"
+                                Background="Transparent"
+                                FontFamily="Segoe MDL2 Assets"
+                                FontSize="{ThemeResource TextStyleLargeFontSize}"
+                                ToolTipService.ToolTip="Reload Chapter"
+                                Command="{x:Bind ViewModel.ReloadChapterCommand, Mode=OneWay}">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Grid>
+                                                    <VisualStateManager.VisualStateGroups>
+                                                        <VisualStateGroup x:Name="CommonStates">
+                                                            <VisualState x:Name="Normal" />
+                                                            <VisualState x:Name="PointerOver">
+                                                                <VisualState.Setters>
+                                                                    <Setter Target="ContentPresenter.Background" Value="{ThemeResource SystemControlHighlightListLowBrush}" />
+                                                                    <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
+                                                                </VisualState.Setters>
+                                                            </VisualState>
+                                                            <VisualState x:Name="Pressed">
+                                                                <VisualState.Setters>
+                                                                    <Setter Target="ContentPresenter.Background" Value="{ThemeResource SystemControlHighlightListMediumBrush}" />
+                                                                </VisualState.Setters>
+                                                            </VisualState>
+                                                            <VisualState x:Name="Disabled">
+                                                                <VisualState.Setters>
+                                                                    <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource SystemControlDisabledBaseLowBrush}" />
+                                                                </VisualState.Setters>
+                                                            </VisualState>
+                                                        </VisualStateGroup>
+                                                    </VisualStateManager.VisualStateGroups>
+                                                    <ContentPresenter x:Name="ContentPresenter"
+                                                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                      AutomationProperties.AccessibilityView="Raw"
+                                                                      Background="{TemplateBinding Background}"
+                                                                      BorderBrush="{TemplateBinding BorderBrush}"
+                                                                      BorderThickness="{TemplateBinding BorderThickness}"
+                                                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                                      ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                                      Padding="{TemplateBinding Padding}" />
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="UseSystemFocusVisuals" Value="True" />
+                                    <Setter Property="VerticalAlignment" Value="Bottom" />
+                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                    <Setter Property="Width" Value="{ThemeResource AppBarExpandButtonThemeWidth}" />
+                                    <Setter Property="Height" Value="{ThemeResource AppBarExpandButtonThemeWidth}" />
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button x:Name="SettingsButton"
+                                Content="&#xE115;"
+                                Foreground="{x:Bind ChaptersBar.Foreground}"
+                                Background="Transparent"
+                                FontFamily="Segoe MDL2 Assets"
+                                FontSize="{ThemeResource TextStyleLargeFontSize}"
+                                ToolTipService.ToolTip="Reading Settings">
+                            <Button.Resources>
+                                <Flyout x:Key="SettingsFlyout" Placement="Bottom">
+                                    <StackPanel Width="190">
+                                        <ComboBox x:Name="ReadMode"
+                                                  Header="Read Mode"
+                                                  MinWidth="110"
+                                                  Tag="{x:Bind PageGrid}"
+                                                  ItemsSource="{x:Bind ViewModel.ReadModeList}"
+                                                  SelectedIndex="{Binding ReadMode, Mode=TwoWay, Converter={StaticResource ReadModeToIntConverter}}"
+                                                  SelectionChanged="{x:Bind ViewModel.ReadMode_SelectionChanged}">
+                                        </ComboBox>
+                                        <!--<ComboBox x:Name="ReadDirection"
+                                                  Header="Read direction"
+                                                  ItemsSource="{x:Bind ViewModel.ReadDirectionList}"
+                                                  SelectedIndex="{Binding ReadMode, Mode=TwoWay, Converter={StaticResource ReadDirectionToIntConverter}}"
+                                                  SelectionChanged="{x:Bind ViewModel.ReadDirection_SelectionChanged}">
+                                        </ComboBox>-->
+                                    </StackPanel>
+                                </Flyout>
+                            </Button.Resources>
+                            <Button.Flyout>
+                                <StaticResource ResourceKey="SettingsFlyout"/>
+                            </Button.Flyout>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Grid>
+                                                    <VisualStateManager.VisualStateGroups>
+                                                        <VisualStateGroup x:Name="CommonStates">
+                                                            <VisualState x:Name="Normal" />
+                                                            <VisualState x:Name="PointerOver">
+                                                                <VisualState.Setters>
+                                                                    <Setter Target="ContentPresenter.Background" Value="{ThemeResource SystemControlHighlightListLowBrush}" />
+                                                                    <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
+                                                                </VisualState.Setters>
+                                                            </VisualState>
+                                                            <VisualState x:Name="Pressed">
+                                                                <VisualState.Setters>
+                                                                    <Setter Target="ContentPresenter.Background" Value="{ThemeResource SystemControlHighlightListMediumBrush}" />
+                                                                </VisualState.Setters>
+                                                            </VisualState>
+                                                            <VisualState x:Name="Disabled">
+                                                                <VisualState.Setters>
+                                                                    <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource SystemControlDisabledBaseLowBrush}" />
+                                                                </VisualState.Setters>
+                                                            </VisualState>
+                                                        </VisualStateGroup>
+                                                    </VisualStateManager.VisualStateGroups>
+                                                    <ContentPresenter x:Name="ContentPresenter"
+                                                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                      AutomationProperties.AccessibilityView="Raw"
+                                                                      Background="{TemplateBinding Background}"
+                                                                      BorderBrush="{TemplateBinding BorderBrush}"
+                                                                      BorderThickness="{TemplateBinding BorderThickness}"
+                                                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                                      ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                                      Padding="{TemplateBinding Padding}" />
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="UseSystemFocusVisuals" Value="True" />
+                                    <Setter Property="VerticalAlignment" Value="Bottom" />
+                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                    <Setter Property="Width" Value="{ThemeResource AppBarExpandButtonThemeWidth}" />
+                                    <Setter Property="Height" Value="{ThemeResource AppBarExpandButtonThemeWidth}" />
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
                 </Grid>
             </t10controls:PageHeader.Content>
         </t10controls:PageHeader>

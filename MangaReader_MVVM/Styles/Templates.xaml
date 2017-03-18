@@ -190,7 +190,7 @@
 
     <DataTemplate x:Key="SuggestedItem">
         <StackPanel Orientation="Horizontal"
-                    Background="{StaticResource SystemControlBackgroundBaseHighBrush}"
+                    Background="{ThemeResource SystemControlBackgroundBaseHighBrush}"
                     Width="{Binding Path=PaneWidth, ElementName=MyHamburgerMenu}"
                     MaxHeight="75">
             <controls:ImageEx x:Name="Cover" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"

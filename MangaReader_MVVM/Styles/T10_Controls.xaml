@@ -14,22 +14,22 @@
 
         <ResourceDictionary x:Key="Light">
 
-            <SolidColorBrush x:Key="CustomColorBrush" Color="{StaticResource SystemAccentColor}" />
+            <SolidColorBrush x:Key="CustomColorBrush" Color="{ThemeResource SystemAccentColor}" />
             <SolidColorBrush x:Key="ContrastColorBrush" Color="{StaticResource ContrastColor}" />
-            <SolidColorBrush x:Key="ExtendedSplashBackground" Color="{StaticResource SystemAccentColor}" />
+            <SolidColorBrush x:Key="ExtendedSplashBackground" Color="{ThemeResource SystemAccentColor}" />
             <SolidColorBrush x:Key="ExtendedSplashForeground" Color="{StaticResource ContrastColor}" />
 
             <Style TargetType="t10controls:HamburgerMenu">
-                <Setter Property="AccentColor" Value="{StaticResource SystemAccentColor}" />
-                <Setter Property="NavButtonCheckedIndicatorBrush" Value="{StaticResource SystemAccentColor}" />
+                <Setter Property="AccentColor" Value="{ThemeResource SystemAccentColor}" />
+                <Setter Property="NavButtonCheckedIndicatorBrush" Value="{ThemeResource SystemAccentColor}" />
                 <Setter Property="VisualStateNarrowMinWidth" Value="{StaticResource NarrowMinWidth}" />
                 <Setter Property="VisualStateNormalMinWidth" Value="{StaticResource NormalMinWidth}" />
                 <Setter Property="VisualStateWideMinWidth" Value="{StaticResource WideMinWidth}" />
             </Style>
 
             <Style TargetType="t10controls:PageHeader">
-                <Setter Property="Background" Value="{ThemeResource CustomColorBrush}" />
-                <Setter Property="Foreground" Value="{ThemeResource ContrastColorBrush}" />
+                <Setter Property="Background" Value="{StaticResource CustomColorBrush}" />
+                <Setter Property="Foreground" Value="{StaticResource ContrastColorBrush}" />
                 <Setter Property="VisualStateNarrowMinWidth" Value="{StaticResource NarrowMinWidth}" />
                 <Setter Property="VisualStateNormalMinWidth" Value="{StaticResource NormalMinWidth}" />
             </Style>
@@ -50,9 +50,9 @@
 
         <ResourceDictionary x:Key="Default">
 
-            <SolidColorBrush x:Key="CustomColorBrush" Color="{StaticResource SystemAccentColor}" />
+            <SolidColorBrush x:Key="CustomColorBrush" Color="{ThemeResource SystemAccentColor}" />
             <SolidColorBrush x:Key="ContrastColorBrush" Color="{StaticResource ContrastColor}" />
-            <SolidColorBrush x:Key="ExtendedSplashBackground" Color="{StaticResource SystemAccentColor}" />
+            <SolidColorBrush x:Key="ExtendedSplashBackground" Color="{ThemeResource SystemAccentColor}" />
             <SolidColorBrush x:Key="ExtendedSplashForeground" Color="{StaticResource ContrastColor}" />
             
             <Style TargetType="t10controls:HamburgerMenu">
@@ -77,22 +77,22 @@
 
                 -->
 
-                <Setter Property="AccentColor" Value="{StaticResource SystemAccentColor}" />
-                <Setter Property="NavButtonCheckedIndicatorBrush" Value="{StaticResource SystemAccentColor}" />
+                <Setter Property="AccentColor" Value="{ThemeResource SystemAccentColor}" />
+                <Setter Property="NavButtonCheckedIndicatorBrush" Value="{ThemeResource SystemAccentColor}" />
                 <Setter Property="VisualStateNarrowMinWidth" Value="{StaticResource NarrowMinWidth}" />
                 <Setter Property="VisualStateNormalMinWidth" Value="{StaticResource NormalMinWidth}" />
                 <Setter Property="VisualStateWideMinWidth" Value="{StaticResource WideMinWidth}" />
             </Style>
 
             <Style TargetType="t10controls:PageHeader">
-                <Setter Property="Background" Value="{ThemeResource CustomColorBrush}" />
-                <Setter Property="Foreground" Value="{ThemeResource ContrastColorBrush}" />
+                <Setter Property="Background" Value="{StaticResource CustomColorBrush}" />
+                <Setter Property="Foreground" Value="{StaticResource ContrastColorBrush}" />
                 <Setter Property="VisualStateNarrowMinWidth" Value="{StaticResource NarrowMinWidth}" />
                 <Setter Property="VisualStateNormalMinWidth" Value="{StaticResource NormalMinWidth}" />
             </Style>
 
             <Style TargetType="t10controls:Resizer">
-                <Setter Property="GrabberBrush" Value="{ThemeResource CustomColorBrush}" />
+                <Setter Property="GrabberBrush" Value="{StaticResource CustomColorBrush}" />
                 <Setter Property="GrabberVisibility" Value="Visible" />
             </Style>
 

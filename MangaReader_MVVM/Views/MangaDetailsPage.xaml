@@ -486,23 +486,31 @@
                                 Frame="{x:Bind Frame}"
                                 Visibility="{Binding IsMultiSelect, Converter={StaticResource BoolToVisibilityConverter}}">
             <t10controls:PageHeader.PrimaryCommands>
-                <AppBarButton Icon="SelectAll"
+                <AppBarButton x:Name="SelectAll"
+                              Icon="SelectAll"
                               Label="Select All"
                               Command="{x:Bind ViewModel.SelectAllCommand}"
-                              CommandParameter="{x:Bind ChapterGridView}" />
+                              CommandParameter="{x:Bind ChapterGridView}"
+                              ToolTipService.ToolTip="{x:Bind SelectAll.Label, Mode=OneWay}"/>
                 <AppBarSeparator />
-                <AppBarButton Icon="Delete"
+                <AppBarButton x:Name="Delete"
+                              Icon="Delete"
                               Label="Mark as Unread"
                               Command="{x:Bind ViewModel.MarkAsUnReadCommand}"
-                              CommandParameter="{x:Bind ChapterGridView}" />
-                <AppBarButton Icon="Accept"
+                              CommandParameter="{x:Bind ChapterGridView}"
+                              ToolTipService.ToolTip="{x:Bind Delete.Label, Mode=OneWay}"/>
+                <AppBarButton x:Name="Accept"
+                              Icon="Accept"
                               Label="Mark as Read"
                               Command="{x:Bind ViewModel.MarkAsReadCommand}"
-                              CommandParameter="{x:Bind ChapterGridView}" />
-                <AppBarButton Icon="Cancel"
+                              CommandParameter="{x:Bind ChapterGridView}"
+                              ToolTipService.ToolTip="{x:Bind Accept.Label, Mode=OneWay}"/>
+                <AppBarButton x:Name="Cancel"
+                              Icon="Cancel"
                               Label="Cancel"
                               Command="{x:Bind ViewModel.CancelCommand}"
-                              CommandParameter="{x:Bind ChapterGridView}" />
+                              CommandParameter="{x:Bind ChapterGridView}"
+                              ToolTipService.ToolTip="{x:Bind Cancel.Label, Mode=OneWay}"/>
             </t10controls:PageHeader.PrimaryCommands>            
         </t10controls:PageHeader>
     </Grid>
