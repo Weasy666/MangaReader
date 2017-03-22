@@ -69,7 +69,7 @@ namespace MangaReader_MVVM.ViewModels
             if ((mode == NavigationMode.New || mode == NavigationMode.Refresh || viewModelInitialised == false) && manga != null)
             {
                 Manga = (suspensionState.ContainsKey(nameof(Manga))) ? suspensionState[nameof(Manga)] as Manga : await _library.GetMangaAsync(manga.Id);
-                Chapters = Manga.Chapters;
+                Chapters = new ObservableItemCollection<Chapter>(Manga.Chapters.Reverse());
 
                 viewModelInitialised = true;
             }
