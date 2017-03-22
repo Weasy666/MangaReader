@@ -160,7 +160,7 @@ namespace MangaReader_MVVM.Services.FileService
             return retval;
         }
 
-        private static async Task<StorageFile> GetOneDriveFile(string key, CreationCollisionOption option = CreationCollisionOption.OpenIfExists)
+        private static async Task<StorageFile> GetOneDriveFile(string key, CreationCollisionOption option = CreationCollisionOption.ReplaceExisting)
         {
             var appRootFolder = await OneDriveService.Instance.AppRootFolderAsync();
             var remoteFile = await appRootFolder.GetFileAsync(key);
