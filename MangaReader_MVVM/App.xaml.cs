@@ -57,6 +57,28 @@ namespace MangaReader_MVVM
             NavigationService.Navigate(typeof(Views.MainPage));
             await Task.CompletedTask;
         }
+
+        //public override void OnLaunched(LaunchActivatedEventArgs args)
+        //{
+        //    SettingsPane.GetForCurrentView().CommandsRequested += DisplayPrivacyPolicy;
+        //}
+
+        //private void OnSuspending(object sender, SuspendingEventArgs e)
+        //{
+        //    SettingsPane.GetForCurrentView().CommandsRequested -= DisplayPrivacyPolicy;
+        //}
+
+        //private void DisplayPrivacyPolicy(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+        //{
+        //    SettingsCommand privacyPolicyCommand = new SettingsCommand("privacyPolicy", "Privacy Policy", (uiCommand) => { LaunchPrivacyPolicyUrl(); });
+        //    args.Request.ApplicationCommands.Add(privacyPolicyCommand);
+        //}
+
+        //async void LaunchPrivacyPolicyUrl()
+        //{
+        //    Uri privacyPolicyUrl = new Uri("http://myapppolicy.com/app/wmangareader");
+        //    var result = await Windows.System.Launcher.LaunchUriAsync(privacyPolicyUrl);
+        //}
     }
 }
 

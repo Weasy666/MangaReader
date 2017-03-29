@@ -25,7 +25,7 @@
                         <Flyout>
                             <StackPanel Orientation="Horizontal">
                                 <Slider x:Name="LatestReleasesDays"
-                                    Header="Days of Latest Releases"
+                                    Header="Period of Days"
                                     Width="270"
                                     IsThumbToolTipEnabled="False"                                 
                                     Minimum="1"

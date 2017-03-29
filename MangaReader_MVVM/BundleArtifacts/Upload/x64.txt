@@ -1,0 +1,6 @@
+MainPackage=D:\Prog\Code\MangaReader\MangaReader_MVVM\bin\x64\Release\Upload\MangaReader_MVVM_0.8.0.0_x64.appx
+SymbolPackage=D:\Prog\Code\MangaReader\MangaReader_MVVM\AppPackages\MangaReader_MVVM_0.8.0.0\MangaReader_MVVM_0.8.0.0_x64.appxsym
+ResourcePack=D:\Prog\Code\MangaReader\MangaReader_MVVM\_scale-100.appx
+ResourcePack=D:\Prog\Code\MangaReader\MangaReader_MVVM\_scale-125.appx
+ResourcePack=D:\Prog\Code\MangaReader\MangaReader_MVVM\_scale-150.appx
+ResourcePack=D:\Prog\Code\MangaReader\MangaReader_MVVM\_scale-400.appx
