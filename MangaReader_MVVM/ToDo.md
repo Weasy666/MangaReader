@@ -20,3 +20,4 @@
 - DONE -> Navigating to MangaDetailsPage adds the Chapters everytime...bloats chapter number to infinity
 - DONE -> add Category Filter in MangasPage
 - add localization service
+- import Backup broken
