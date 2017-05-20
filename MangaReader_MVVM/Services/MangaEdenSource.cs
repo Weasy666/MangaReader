@@ -493,11 +493,51 @@ namespace MangaReader_MVVM.Services
         private async Task<bool> LoadAndMergeStoredDataAsync()
         {
             bool retval = false;
-            if (await FileHelper.FileExistsAsync(this.Name + "_mangasStatus"))
+            if (await FileHelper.FileExistsAsync(this.Name + "_mangasStatus", _settings.StorageStrategy))
             {
-                _storedData = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _settings.StorageStrategy);
+                if (_settings.StorageStrategy == StorageStrategies.OneDrive)
+                {
+                    var oneDriveContent = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _settings.StorageStrategy);
+                    var localContent = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus");
 
-                _settings.LastSynced = DateTime.Now;
+                    if(oneDriveContent.Any() && !localContent.Any())
+                    {
+                        localContent = oneDriveContent;
+                        _storedData = oneDriveContent;
+                        await SaveMangaStatusAsync();
+                    }
+                    else if(!oneDriveContent.Any() && localContent.Any())
+                    {
+                        oneDriveContent = localContent;
+                        _storedData = localContent;
+                        await SaveMangaStatusAsync();
+                    }
+                    else if (oneDriveContent.Any() && localContent.Any())
+                    {
+                        for(int i = 0; i < localContent.Count; i++)
+                        {
+                            var pair = localContent.ElementAt(i);
+                            if (oneDriveContent.ContainsKey(pair.Key))
+                            {
+                                var oneDriveValue = oneDriveContent[pair.Key];
+                                oneDriveValue.Union(pair.Value);
+                                oneDriveContent[pair.Key] = oneDriveValue;
+                            }
+                            else
+                            {
+                                oneDriveContent[pair.Key] = pair.Value;
+                            }
+                        }
+                        localContent = oneDriveContent;
+                        _storedData = oneDriveContent;
+                        await SaveMangaStatusAsync();
+                        Favorits = new ObservableItemCollection<Manga>(Mangas.Where(m => m.IsFavorit));
+                    }
+                }
+                else
+                {
+                    _storedData = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _settings.StorageStrategy);
+                }
 
                 if (_storedData != null && _storedData.Any())
                 {
@@ -541,6 +581,7 @@ namespace MangaReader_MVVM.Services
             var retval = await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData, _settings.StorageStrategy, option);
             if (_settings.StorageStrategy == StorageStrategies.OneDrive)
             {
+                await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData, StorageStrategies.Local, option);
                 _settings.LastSynced = DateTime.Now;
             }
             return retval;
@@ -571,7 +612,7 @@ namespace MangaReader_MVVM.Services
                     var serializedMangas  = JsonConvert.SerializeObject(_storedData, Formatting.None, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
                                                                                                                                     PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                                                                                                                                     TypeNameHandling = TypeNameHandling.Objects,
-                                                                                                                                    TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple
+                                                                                                                                    TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
                                                                                                                                   });
                     
                     await FileIO.WriteTextAsync(file, serializedMangas);
