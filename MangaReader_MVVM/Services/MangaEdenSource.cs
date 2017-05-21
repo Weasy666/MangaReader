@@ -531,7 +531,6 @@ namespace MangaReader_MVVM.Services
                         localContent = oneDriveContent;
                         _storedData = oneDriveContent;
                         await SaveMangaStatusAsync();
-                        Favorits = new ObservableItemCollection<Manga>(Mangas.Where(m => m.IsFavorit));
                     }
                 }
                 else
@@ -555,6 +554,7 @@ namespace MangaReader_MVVM.Services
                         }
                     }
                     retval = true;
+                    Favorits = new ObservableItemCollection<Manga>(Mangas.Where(m => m.IsFavorit));
                 }
             }
             return retval;
@@ -581,7 +581,7 @@ namespace MangaReader_MVVM.Services
             var retval = await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData, _settings.StorageStrategy, option);
             if (_settings.StorageStrategy == StorageStrategies.OneDrive)
             {
-                await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData, StorageStrategies.Local, option);
+                await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData, StorageStrategies.Local);
                 _settings.LastSynced = DateTime.Now;
             }
             return retval;

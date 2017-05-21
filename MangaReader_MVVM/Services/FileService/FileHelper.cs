@@ -166,7 +166,7 @@ namespace MangaReader_MVVM.Services.FileService
             var remoteFile = await appRootFolder.GetFileAsync(key);
             DateTimeOffset? remoteFileTime = remoteFile.DateModified;
             StorageFile localFile;
-            if (remoteFileTime.Value.LocalDateTime >= SettingsServices.SettingsService.Instance.LastSynced) {
+            if (remoteFileTime.Value.LocalDateTime.AddSeconds(-3) >= SettingsServices.SettingsService.Instance.LastSynced) {
                 localFile = await CreateFileAsync(key, StorageStrategies.Temporary, option);
                 if (remoteFile != null)
                 {
