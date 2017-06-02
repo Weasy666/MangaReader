@@ -10,16 +10,13 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="800"
-   height="800"
+   width="750"
+   height="750"
    viewBox="0 0 750.00001 750.00001"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.1 r15371"
-   sodipodi:docname="MangaReader Logo.svg"
-   inkscape:export-filename="E:\Coding\Code\MangaReader\MangaReader_MVVM\Assets\MangaReader Logo.png"
-   inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96">
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="MangaReader Logo.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -30,7 +27,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
-     inkscape:cx="82.857143"
+     inkscape:cx="-75.919057"
      inkscape:cy="387.68872"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
@@ -49,23 +46,19 @@
     <sodipodi:guide
        position="278.66072,760.17859"
        orientation="1,0"
-       id="guide4197"
-       inkscape:locked="false" />
+       id="guide4197" />
     <sodipodi:guide
        position="278.9047,727.17569"
        orientation="0,1"
-       id="guide4248"
-       inkscape:locked="false" />
+       id="guide4248" />
     <sodipodi:guide
        position="282.40077,760.20294"
        orientation="1,0"
-       id="guide4250"
-       inkscape:locked="false" />
+       id="guide4250" />
     <sodipodi:guide
        position="286.875,1007.634"
        orientation="0,1"
-       id="guide4252"
-       inkscape:locked="false" />
+       id="guide4252" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -75,7 +68,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -107,7 +100,7 @@
      transform="translate(0,-302.36216)">
     <g
        id="g4269"
-       transform="matrix(0.59815081,0,0,0.59815081,207.20189,620.05048)">
+       transform="translate(94.471896,581.54738)">
       <ellipse
          ry="88.223457"
          rx="83.86718"
@@ -135,7 +128,7 @@
       <a
          id="a4153-3"
          style="display:inline;fill:#ffffff;stroke:#ffffff"
-         transform="rotate(-11.3,309.38267,300.8605)">
+         transform="matrix(0.98061466,-0.19594614,0.19594614,0.98061466,-52.954966,66.454624)">
         <path
            style="fill:#ffffff;fill-rule:evenodd;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            d="M 61.455461,37.945947 C 74.991222,31.119826 88.408974,23.941746 98.784467,19.256367 149.27303,74.278207 221.3801,149.81862 278.21429,297.63006 254.13118,223.73612 225.05588,134.23873 110.37418,-7.3079045 91.37292,8.982657 79.373173,20.972701 61.455461,37.945947 Z"
@@ -146,7 +139,7 @@
       <a
          id="a4153-3-3"
          style="display:inline;fill:#ffffff;stroke:#ffffff"
-         transform="rotate(-24.300001,305.78004,304.69828)">
+         transform="matrix(0.91140328,-0.41151437,0.41151437,0.91140328,-98.296612,152.82815)">
         <path
            style="fill:#ffffff;fill-rule:evenodd;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            d="M 69.204034,36.165643 C 81.309572,30.059205 95.573424,23.122903 107.07177,18.141101 169.58216,88.471805 233.03871,164.92078 278.80882,297.50664 260.61647,240.0063 242.24156,149.51611 119.27681,-8.0071205 100.27555,8.283441 87.121746,19.192397 69.204034,36.165643 Z"
