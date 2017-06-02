@@ -136,7 +136,6 @@ namespace MangaReader_MVVM.ViewModels
         {
             IsSyncing = true;
             await Services.MangaLibrary.Instance.LoadAndMergeStoredDataAsync();
-            await Services.MangaLibrary.Instance.SaveMangaStatusAsync(CreationCollisionOption.OpenIfExists);
             RaisePropertyChanged(nameof(OneDriveSyncTime));
             IsSyncing = false;
         }

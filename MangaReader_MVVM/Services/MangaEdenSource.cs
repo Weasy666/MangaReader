@@ -497,8 +497,8 @@ namespace MangaReader_MVVM.Services
             {
                 if (_settings.StorageStrategy == StorageStrategies.OneDrive)
                 {
-                    var oneDriveContent = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _settings.StorageStrategy);
-                    var localContent = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus");
+                    var oneDriveContent = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _settings.StorageStrategy) ?? new Dictionary<string, List<string>>();
+                    var localContent = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus") ?? new Dictionary<string, List<string>>();
 
                     if(oneDriveContent.Any() && !localContent.Any())
                     {
