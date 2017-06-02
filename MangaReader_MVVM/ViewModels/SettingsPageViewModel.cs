@@ -123,7 +123,7 @@ namespace MangaReader_MVVM.ViewModels
             {
                 _settings.StorageStrategy = value ? StorageStrategies.OneDrive : StorageStrategies.Local;
                 base.RaisePropertyChanged(nameof(UseOneDriveSync));
-                InvokeLibraryStoring();
+                InvokeLibrarySync();
                 if(!value)
                 {
                     OneDriveSyncTime = new DateTime();
@@ -132,9 +132,10 @@ namespace MangaReader_MVVM.ViewModels
             }
         }
 
-        private async void InvokeLibraryStoring()
+        private async void InvokeLibrarySync()
         {
             IsSyncing = true;
+            await Services.MangaLibrary.Instance.LoadAndMergeStoredDataAsync();
             await Services.MangaLibrary.Instance.SaveMangaStatusAsync(CreationCollisionOption.OpenIfExists);
             RaisePropertyChanged(nameof(OneDriveSyncTime));
             IsSyncing = false;

@@ -490,7 +490,7 @@ namespace MangaReader_MVVM.Services
             }
         }
 
-        private async Task<bool> LoadAndMergeStoredDataAsync()
+        public async Task<bool> LoadAndMergeStoredDataAsync()
         {
             bool retval = false;
             if (await FileHelper.FileExistsAsync(this.Name + "_mangasStatus", _settings.StorageStrategy))

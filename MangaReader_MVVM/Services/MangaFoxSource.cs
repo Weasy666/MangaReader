@@ -615,14 +615,53 @@ namespace MangaReader_MVVM.Services
             }
         }
 
-        private async Task<bool> LoadAndMergeStoredDataAsync()
+        public async Task<bool> LoadAndMergeStoredDataAsync()
         {
             bool retval = false;
-            if (await FileHelper.FileExistsAsync(this.Name + "_mangasStatus"))
+            if (await FileHelper.FileExistsAsync(this.Name + "_mangasStatus", _settings.StorageStrategy))
             {
-                _storedData = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _settings.StorageStrategy);
+                if (_settings.StorageStrategy == StorageStrategies.OneDrive)
+                {
+                    var oneDriveContent = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _settings.StorageStrategy);
+                    var localContent = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus");
 
-                _settings.LastSynced = DateTime.Now;
+                    if (oneDriveContent.Any() && !localContent.Any())
+                    {
+                        localContent = oneDriveContent;
+                        _storedData = oneDriveContent;
+                        await SaveMangaStatusAsync();
+                    }
+                    else if (!oneDriveContent.Any() && localContent.Any())
+                    {
+                        oneDriveContent = localContent;
+                        _storedData = localContent;
+                        await SaveMangaStatusAsync();
+                    }
+                    else if (oneDriveContent.Any() && localContent.Any())
+                    {
+                        for (int i = 0; i < localContent.Count; i++)
+                        {
+                            var pair = localContent.ElementAt(i);
+                            if (oneDriveContent.ContainsKey(pair.Key))
+                            {
+                                var oneDriveValue = oneDriveContent[pair.Key];
+                                oneDriveValue.Union(pair.Value);
+                                oneDriveContent[pair.Key] = oneDriveValue;
+                            }
+                            else
+                            {
+                                oneDriveContent[pair.Key] = pair.Value;
+                            }
+                        }
+                        localContent = oneDriveContent;
+                        _storedData = oneDriveContent;
+                        await SaveMangaStatusAsync();
+                    }
+                }
+                else
+                {
+                    _storedData = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _settings.StorageStrategy);
+                }
 
                 if (_storedData != null && _storedData.Any())
                 {
@@ -640,6 +679,7 @@ namespace MangaReader_MVVM.Services
                         }
                     }
                     retval = true;
+                    Favorits = new ObservableItemCollection<Manga>(Mangas.Where(m => m.IsFavorit));
                 }
             }
             return retval;

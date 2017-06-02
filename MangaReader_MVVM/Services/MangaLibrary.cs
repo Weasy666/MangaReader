@@ -65,6 +65,7 @@ namespace MangaReader_MVVM.Services
         public ObservableItemCollection<Manga> FilterMangaByCategory(IEnumerable filters) => _mangaSource.FilterMangaByCategory(filters);
         public Task<ObservableItemCollection<Chapter>> GetChaptersAsync(Manga manga) => _mangaSource.GetChaptersAsync(manga);
 
+        public Task<bool> LoadAndMergeStoredDataAsync() => _mangaSource.LoadAndMergeStoredDataAsync();
         public Task<bool> SaveMangaStatusAsync(CreationCollisionOption option = CreationCollisionOption.ReplaceExisting) => _mangaSource.SaveMangaStatusAsync(option);
         public Task<bool> ExportMangaStatusAsync() => _mangaSource.ExportMangaStatusAsync();
         public Task<bool> ImportMangaStatusAsync() => _mangaSource.ImportMangaStatusAsync();
