@@ -45,11 +45,10 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <controls:PageHeader x:Name="pageHeader"
+        <controls:PageHeader x:Name="pageHeader" x:Uid="MainPage_PageHeader"
                              RelativePanel.AlignLeftWithPanel="True"
                              RelativePanel.AlignRightWithPanel="True"
                              RelativePanel.AlignTopWithPanel="True"
-                             Text="Main Page"
                              EllipsisVisibility="Auto">
 
             <!--  secondary commands  -->
@@ -58,7 +57,7 @@
 
         </controls:PageHeader>
 
-        <GridView x:Name="GridView"
+        <GridView x:Name="LastRead_GridView"
                   ItemsSource="{x:Bind ViewModel.LastRead, Mode=OneWay}"
                   Margin="10,0,0,0" Padding="0,0,0,0"
                   RelativePanel.Below="pageHeader"
@@ -78,16 +77,17 @@
             </GridView.ItemContainerStyle>
             <GridView.Header>
                 <StackPanel>
-                    <TextBlock Text="Last Read"
-                           Margin="10,0,0,-10"
-                           Style="{ThemeResource SubheaderTextBlockStyle}"
-                           Foreground="{ThemeResource SystemControlHighlightAccentBrush}"/>
+                    <TextBlock x:Uid="MainPage_LastReadGridView_Header"
+                               Text="Last Read"
+                               Margin="10,0,0,-10"
+                               Style="{ThemeResource SubheaderTextBlockStyle}"
+                               Foreground="{ThemeResource SystemControlHighlightAccentBrush}"/>
                     <Rectangle Stroke="#FF2B2B2B"
-                           StrokeThickness="0.5"
-                           Height="1"
-                           VerticalAlignment="Bottom"
-                           HorizontalAlignment="Stretch"
-                           Margin="0,8,12,0"/>
+                               StrokeThickness="0.5"
+                               Height="1"
+                               VerticalAlignment="Bottom"
+                               HorizontalAlignment="Stretch"
+                               Margin="0,8,12,0"/>
                 </StackPanel>
             </GridView.Header>
         </GridView>

@@ -17,7 +17,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <t10controls:PageHeader Name="PageHeader" Text="Your Favorite Mangas" Frame="{x:Bind Frame}" >
+        <t10controls:PageHeader Name="PageHeader" x:Uid="FavoritesPage_PageHeader" Frame="{x:Bind Frame}" >
             <t10controls:PageHeader.PrimaryCommands>
                 <!--<AppBarButton Icon="Filter" Label="Filter" IsEnabled="False" />-->
                 <!--<AppBarButton x:Name="Export"
@@ -26,13 +26,12 @@
                               Command="{x:Bind ViewModel.ExportCommand, Mode=OneWay}"/>-->
                 <AppBarSeparator />
                 <AppBarButton x:Name="Reload"
+                              x:Uid="FavoritesPage_ReloadButton"
                               Icon="Refresh"
-                              Label="Reload"
-                              Command="{x:Bind ViewModel.ReloadGridCommand, Mode=OneWay}"
-                              ToolTipService.ToolTip="{x:Bind Reload.Label, Mode=OneWay}"/>
+                              Command="{x:Bind ViewModel.ReloadGridCommand, Mode=OneWay}"/>
                 <AppBarToggleButton x:Name="GroupGrid"
+                                    x:Uid="FavoritesPage_GroupGridButton"
                                     Icon="AllApps"
-                                    Label="Group"
                                     IsChecked="{x:Bind ViewModel.IsGridGrouped, Mode=TwoWay}"
                                     IsThreeState="False"
                                     Foreground="{x:Bind PageHeader.Foreground}"

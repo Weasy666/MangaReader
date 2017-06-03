@@ -1,0 +1,360 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BoolToFavoriteTooltipConverter.Otherwise" xml:space="preserve">
+    <value>Add Favorite</value>
+  </data>
+  <data name="BoolToFavoriteTooltipConverter.Value" xml:space="preserve">
+    <value>Remove Favorite</value>
+  </data>
+  <data name="BoolToGroupedTooltipConverter.Otherwise" xml:space="preserve">
+    <value>Group Favorites</value>
+  </data>
+  <data name="BoolToGroupedTooltipConverter.Value" xml:space="preserve">
+    <value>Ungroup Favorites</value>
+  </data>
+  <data name="BoolToMangaStatusConverter.Otherwise" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="BoolToMangaStatusConverter.Value" xml:space="preserve">
+    <value>Ongoing</value>
+  </data>
+  <data name="Busy_Text.Text" xml:space="preserve">
+    <value>Please wait...</value>
+  </data>
+  <data name="ChapterPage_Manga_CategoryHeader.Text" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="ChapterPage_Manga_LastUpdatedHeader.Text" xml:space="preserve">
+    <value>Last Updated</value>
+  </data>
+  <data name="ChapterPage_Manga_StatusHeader.Text" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="ChapterPage_ReloadButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Reload Chapter</value>
+  </data>
+  <data name="ChapterPage_SettingsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="ChapterPage_SettingsFlyout_ReadMode.Header" xml:space="preserve">
+    <value>Read Mode</value>
+  </data>
+  <data name="DateTimeToPrettyDateTime.Today" xml:space="preserve">
+    <value>Today at</value>
+  </data>
+  <data name="DateTimeToPrettyDateTime.Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
+  </data>
+  <data name="FavoritesPage_GroupGridButton.Label" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="FavoritesPage_PageHeader.Text" xml:space="preserve">
+    <value>Your Favorite Mangas</value>
+  </data>
+  <data name="FavoritesPage_ReloadButton.Label" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="FavoritesPage_ReloadButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Reload Favorites</value>
+  </data>
+  <data name="LatestReleasesPage_FilterButton.Label" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="LatestReleasesPage_FilterButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="LatestReleasesPage_PageHeader.Text" xml:space="preserve">
+    <value>Latest Releases</value>
+  </data>
+  <data name="LatestReleasesPage_ReloadButton.Label" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="LatestReleasesPage_ReloadButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="LatestReleasesPage_SortButton.Label" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="LatestReleasesPage_SortButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="MainPage_LastReadGridView_Header.Text" xml:space="preserve">
+    <value>Last Read</value>
+  </data>
+  <data name="MainPage_PageHeader.Text" xml:space="preserve">
+    <value>Main Page</value>
+  </data>
+  <data name="MangaDetailsPage_AcceptButton.Label" xml:space="preserve">
+    <value>Mark as Read</value>
+  </data>
+  <data name="MangaDetailsPage_AcceptButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Mark as Read</value>
+  </data>
+  <data name="MangaDetailsPage_AliasHeader.Text" xml:space="preserve">
+    <value>Alias</value>
+  </data>
+  <data name="MangaDetailsPage_CancelButton.Label" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="MangaDetailsPage_CancelButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="MangaDetailsPage_CategoryHeader.Text" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="MangaDetailsPage_DeleteButton.Label" xml:space="preserve">
+    <value>Mark as Unread</value>
+  </data>
+  <data name="MangaDetailsPage_DeleteButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Mark as Unread</value>
+  </data>
+  <data name="MangaDetailsPage_DescriptionHeader.Text" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="MangaDetailsPage_LastUpdatedHeader.Text" xml:space="preserve">
+    <value>Last Updated</value>
+  </data>
+  <data name="MangaDetailsPage_MultiSelectButton.Label" xml:space="preserve">
+    <value>Selection mode</value>
+  </data>
+  <data name="MangaDetailsPage_MultiSelectButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Selection mode</value>
+  </data>
+  <data name="MangaDetailsPage_NumberOfChaptersHeader.Text" xml:space="preserve">
+    <value>Chapters</value>
+  </data>
+  <data name="MangaDetailsPage_SelectAllButton.Label" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="MangaDetailsPage_SelectAllButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="MangaDetailsPage_SortButton.Label" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="MangaDetailsPage_SortButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="MangaDetailsPage_StatusHeader.Text" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="MangasPage_FilterButton.Label" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="MangasPage_FilterButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="MangasPage_FilterFlyout.Text" xml:space="preserve">
+    <value>By Category</value>
+  </data>
+  <data name="MangasPage_PageHeader.Text" xml:space="preserve">
+    <value>Manga Library</value>
+  </data>
+  <data name="MangasPage_ReloadButton.Label" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="MangasPage_ReloadButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="MangasPage_SortButton.Label" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="MangasPage_SortButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="SettingsPage_Favorites.Text" xml:space="preserve">
+    <value>Favorites</value>
+  </data>
+  <data name="SettingsPage_LatestReleases.Text" xml:space="preserve">
+    <value>Latest Releases</value>
+  </data>
+  <data name="SettingsPage_LatestReleasesDaysSlider.Header" xml:space="preserve">
+    <value>Range of Latest Releases</value>
+  </data>
+  <data name="SettingsPage_MangaSourceComboBox.Header" xml:space="preserve">
+    <value>Manga Source</value>
+  </data>
+  <data name="SettingsPage_NumberOfRecentMangasSlider.Header" xml:space="preserve">
+    <value>Period of Days of Recent Mangas</value>
+  </data>
+  <data name="SettingsPage_OneDriveSyncHeader.Text" xml:space="preserve">
+    <value>Last synced:</value>
+  </data>
+  <data name="SettingsPage_OneDriveSyncToggleSwitch.Header" xml:space="preserve">
+    <value>OneDrive syncronization</value>
+  </data>
+  <data name="SettingsPage_OneDriveSyncToggleSwitch.OffContent" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="SettingsPage_OneDriveSyncToggleSwitch.OnContent" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="SettingsPage_PageHeader.Text" xml:space="preserve">
+    <value>Settings Page</value>
+  </data>
+  <data name="SettingsPage_PivotItem1.Header" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SettingsPage_PivotItem2.Header" xml:space="preserve">
+    <value>ToDo's</value>
+  </data>
+  <data name="SettingsPage_PivotItem3.Header" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="SettingsPage_UseLightThemeToggleSwitch.Header" xml:space="preserve">
+    <value>Choose App Theme</value>
+  </data>
+  <data name="SettingsPage_UseLightThemeToggleSwitch.OffContent" xml:space="preserve">
+    <value>Dark theme</value>
+  </data>
+  <data name="SettingsPage_UseLightThemeToggleSwitch.OnContent" xml:space="preserve">
+    <value>Light theme</value>
+  </data>
+  <data name="SettingsPage_UseShellDrawnBackButtonToggleSwitch.Header" xml:space="preserve">
+    <value>Choose Back Button Style</value>
+  </data>
+  <data name="SettingsPage_UseShellDrawnBackButtonToggleSwitch.OffContent" xml:space="preserve">
+    <value>Back button in page header</value>
+  </data>
+  <data name="SettingsPage_UseShellDrawnBackButtonToggleSwitch.OnContent" xml:space="preserve">
+    <value>Back button in titlebar or taskbar</value>
+  </data>
+  <data name="Shell_BackupHamburgerButton.Text" xml:space="preserve">
+    <value>Backup</value>
+  </data>
+  <data name="Shell_FavoritesHamburgerButton.Text" xml:space="preserve">
+    <value>Favorites</value>
+  </data>
+  <data name="Shell_HomeHamburgerButton.Text" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Shell_LatestReleasesHamburgerButton.Text" xml:space="preserve">
+    <value>Latest Releases</value>
+  </data>
+  <data name="Shell_MangaLibraryHamburgerButton.Text" xml:space="preserve">
+    <value>Manga Library</value>
+  </data>
+  <data name="Shell_SearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>Search for Manga...</value>
+  </data>
+  <data name="Shell_SettingsHamburgerButton.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+</root>

@@ -738,7 +738,7 @@ namespace MangaReader_MVVM.Services
                         ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
                         PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                         TypeNameHandling = TypeNameHandling.Objects,
-                        TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple
+                        TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
                     });
 
                     await FileIO.WriteTextAsync(file, serializedMangas);

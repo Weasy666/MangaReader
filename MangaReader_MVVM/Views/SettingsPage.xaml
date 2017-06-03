@@ -48,11 +48,12 @@
         </VisualStateManager.VisualStateGroups>
 
         <!--  header  -->
-        <t10controls:PageHeader x:Name="pageHeader" Content="Settings Page"
-                             Frame="{x:Bind Frame}"
-                             RelativePanel.AlignLeftWithPanel="True"
-                             RelativePanel.AlignRightWithPanel="True"
-                             RelativePanel.AlignTopWithPanel="True" />
+        <t10controls:PageHeader x:Name="pageHeader"
+                                x:Uid="SettingsPage_PageHeader"
+                                Frame="{x:Bind Frame}"
+                                RelativePanel.AlignLeftWithPanel="True"
+                                RelativePanel.AlignRightWithPanel="True"
+                                RelativePanel.AlignTopWithPanel="True" />
 
         <!--  content  -->
         <Pivot x:Name="MyPivot" Grid.Row="1"
@@ -62,12 +63,13 @@
                RelativePanel.Below="pageHeader">
 
             <!--  settings  -->
-            <PivotItem DataContext="{x:Bind ViewModel.SettingsPartViewModel}" Header="Settings">
+            <PivotItem DataContext="{x:Bind ViewModel.SettingsPartViewModel}" x:Uid="SettingsPage_PivotItem1" Header="Settings">
                 <ScrollViewer Margin="0,12,-12,0" HorizontalContentAlignment="Left"
                               VerticalScrollBarVisibility="Auto">
                     <RelativePanel HorizontalAlignment="Left">
 
-                        <ToggleSwitch x:Name="UseShellDrawnBackButtonToggleSwtich"
+                        <ToggleSwitch x:Name="UseShellDrawnBackButtonToggleSwitch"
+                                      x:Uid="SettingsPage_UseShellDrawnBackButtonToggleSwitch"
                                       Header="Choose Back Button Style"
                                       IsOn="{x:Bind ViewModel.SettingsPartViewModel.UseShellBackButton, Mode=TwoWay}"
                                       OffContent="Back button in page header"
@@ -77,15 +79,17 @@
                                       RelativePanel.AlignTopWithPanel="True" />
 
                         <ToggleSwitch x:Name="UseLightThemeToggleSwitch"
+                                      x:Uid="SettingsPage_UseLightThemeToggleSwitch"
                                       Header="Choose App Theme"
                                       IsOn="{x:Bind ViewModel.SettingsPartViewModel.UseLightThemeButton, Mode=TwoWay}"
                                       OffContent="Dark theme"
                                       OnContent="Light theme"
                                       Margin="0,5,0,0"
                                       RelativePanel.AlignLeftWithPanel="True"
-                                      RelativePanel.Below="UseShellDrawnBackButtonToggleSwtich" />
+                                      RelativePanel.Below="UseShellDrawnBackButtonToggleSwitch" />
                         
                         <ToggleSwitch x:Name="UseDetailedMangaItemSwitch"
+                                      x:Uid="SettingsPage_UseDetailedMangaItemSwitch"
                                       Header="Choose Manga Item Style"
                                       IsOn="{x:Bind ViewModel.SettingsPartViewModel.UseDetailedMangaItem, Mode=TwoWay}"
                                       OffContent="Only Cover"
@@ -95,6 +99,7 @@
                                       RelativePanel.Below="UseLightThemeToggleSwitch" />
 
                         <Slider x:Name="NumberOfRecentMangas"
+                                x:Uid="SettingsPage_NumberOfRecentMangasSlider"
                                 Header="Period of Days of Recent Mangas"
                                 Margin="0,5,0,0" Width="270" IsThumbToolTipEnabled="False"                                 
                                 Minimum="1" Maximum="12"
@@ -107,7 +112,9 @@
                                    RelativePanel.AlignTopWith="NumberOfRecentMangas"
                                    RelativePanel.RightOf="NumberOfRecentMangas" />
 
-                        <ComboBox x:Name="MangaSourceComboBox" Header="Manga Source"
+                        <ComboBox x:Name="MangaSourceComboBox"
+                                  x:Uid="SettingsPage_MangaSourceComboBox"
+                                  Header="Manga Source"
                                   ItemsSource="{x:Bind ViewModel.SettingsPartViewModel.SourcesWithIcons}"
                                   Width="270"
                                   SelectedIndex="{x:Bind ViewModel.SettingsPartViewModel.SelectedMangaSource, Mode=OneWay}"
@@ -123,6 +130,7 @@
 
                         <!-- Latest Releases Settings -->
                         <TextBlock x:Name="LatestReleases"
+                                   x:Uid="SettingsPage_LatestReleases"
                                    Text="Latest Releases"
                                    Style="{StaticResource SubtitleTextBlockStyle}"
                                    Margin="0,10,0,0"
@@ -130,6 +138,7 @@
                                    RelativePanel.Below="MangaSourceComboBox"/>
                         
                         <Slider x:Name="LatestReleasesDays"
+                                x:Uid="SettingsPage_LatestReleasesDaysSlider"
                                 Header="Range of Latest Releases"
                                 Margin="0,5,0,0" Width="270" IsThumbToolTipEnabled="False"                                 
                                 Minimum="1" Maximum="14"
@@ -143,7 +152,8 @@
                                    RelativePanel.RightOf="LatestReleasesDays" />
 
                         <!-- Favorites Settings -->
-                        <TextBlock x:Name="Favorits"
+                        <TextBlock x:Name="Favorites"
+                                   x:Uid="SettingsPage_Favorites"
                                    Text="Favorites"
                                    Style="{StaticResource SubtitleTextBlockStyle}"
                                    Margin="0,10,0,0"
@@ -151,13 +161,15 @@
                                    RelativePanel.Below="LatestReleasesDays"/>
 
                         <ToggleSwitch x:Name="OneDriveSync"
+                                      x:Uid="SettingsPage_OneDriveSyncToggleSwitch"
                                       Header="OneDrive syncronization"
                                       IsOn="{x:Bind ViewModel.SettingsPartViewModel.UseOneDriveSync, Mode=TwoWay}"
                                       Margin="0,5,0,0"
                                       RelativePanel.AlignLeftWithPanel="True"
-                                      RelativePanel.Below="Favorits" />
+                                      RelativePanel.Below="Favorites" />
 
                         <TextBlock x:Name="OneDriveSyncHeader"
+                                   x:Uid="SettingsPage_OneDriveSyncHeader"
                                    Text="Last synced:"
                                    Style="{StaticResource BaseTextBlockStyle}"
                                    Margin="0,0,0,0"
@@ -186,7 +198,7 @@
             </PivotItem>
 
             <!--  ToDo  -->
-            <PivotItem DataContext="{Binding SettingsPartViewModel}"
+            <PivotItem DataContext="{Binding SettingsPartViewModel}" x:Uid="SettingsPage_PivotItem2"
                        Header="ToDo's" Padding="0">
                 <ScrollViewer Margin="0,0,-12,0" VerticalScrollBarVisibility="Auto">
                     <controls:MarkdownTextBlock Text="{x:Bind ViewModel.MarkDownText, Mode=OneWay}"
@@ -195,7 +207,7 @@
             </PivotItem>
 
             <!--  about  -->
-            <PivotItem Header="About">
+            <PivotItem x:Uid="SettingsPage_PivotItem3" Header="About">
                 <RelativePanel DataContext="{Binding AboutPartViewModel}">
 
                     <Border x:Name="LogoImage" HorizontalAlignment="Right"

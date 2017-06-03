@@ -56,6 +56,7 @@
                                 Width="48" Height="48"
                                 Visibility="Collapsed"/>
                     <AutoSuggestBox Name="SearchAutoSuggestBox"
+                                    x:Uid="Shell_SearchAutoSuggestBox"
                                     PlaceholderText="Search for Manga..."
                                     Height="48" Width="{x:Bind MyHamburgerMenu.PaneWidth, Mode=OneWay}"
                                     QueryIcon="Find"
@@ -77,25 +78,25 @@
             <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:MainPage" AutomationProperties.Name="Jerry" >
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Symbol="Home" Width="48" Height="48" />
-                    <TextBlock Text="Home" Margin="12,0,0,0" VerticalAlignment="Center" />
+                    <TextBlock x:Uid="Shell_HomeHamburgerButton" Text="Home" Margin="12,0,0,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
             <Controls:HamburgerButtonInfo PageType="views:LatestReleasesPage" AutomationProperties.Name="Jerry" >
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Symbol="Sync" Width="48" Height="48" />
-                    <TextBlock Text="Latest Releases" Margin="12,0,0,0" VerticalAlignment="Center" />
+                    <TextBlock x:Uid="Shell_LatestReleasesHamburgerButton" Text="Latest Releases" Margin="12,0,0,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
             <Controls:HamburgerButtonInfo PageType="views:FavoritsPage" AutomationProperties.Name="Jerry" >
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Symbol="Favorite" Width="48" Height="48" />
-                    <TextBlock Text="Favorites" Margin="12,0,0,0" VerticalAlignment="Center" />
+                    <TextBlock x:Uid="Shell_FavoritesHamburgerButton" Text="Favorites" Margin="12,0,0,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
             <Controls:HamburgerButtonInfo PageType="views:MangasPage" AutomationProperties.Name="Jerry" >
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Symbol="Library" Width="48" Height="48" />
-                    <TextBlock Text="Manga Library" Margin="12,0,0,0" VerticalAlignment="Center" />
+                    <TextBlock x:Uid="Shell_MangaLibraryHamburgerButton" Text="Manga Library" Margin="12,0,0,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
         </Controls:HamburgerMenu.PrimaryButtons>
@@ -108,7 +109,7 @@
                 </Controls:HamburgerButtonInfo.NavigationTransitionInfo>
                 <StackPanel Orientation="Horizontal" Tapped="DataBackup_Tapped">
                     <SymbolIcon Symbol="ReShare" Width="48" Height="48" />
-                    <TextBlock Text="Backup" Margin="12,0,0,0" VerticalAlignment="Center" Width="172" />
+                    <TextBlock x:Uid="Shell_BackupHamburgerButton" Text="Backup" Margin="12,0,0,0" VerticalAlignment="Center" Width="172" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
             <Controls:HamburgerButtonInfo x:Name="SettingsButton" PageType="views:SettingsPage" PageParameter="0" >
@@ -117,7 +118,7 @@
                 </Controls:HamburgerButtonInfo.NavigationTransitionInfo>
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Width="48" Height="48" Symbol="Setting" />
-                    <TextBlock Text="Settings" Margin="12,0,0,0" VerticalAlignment="Center" />
+                    <TextBlock x:Uid="Shell_SettingsHamburgerButton" Text="Settings" Margin="12,0,0,0" VerticalAlignment="Center" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
         </Controls:HamburgerMenu.SecondaryButtons>

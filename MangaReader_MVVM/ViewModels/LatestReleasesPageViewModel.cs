@@ -11,7 +11,6 @@ using Template10.Controls;
 using Template10.Mvvm;
 using Template10.Utils;
 using Template10.Services.NavigationService;
-using Microsoft.Toolkit.Uwp;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;

@@ -109,14 +109,14 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <TextBlock x:Name="Title" Text="{x:Bind ViewModel.Manga.Title}" FontSize="20" TextWrapping="WrapWholeWords" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"/>
-                            
-                            <TextBlock x:Name="StatusHeader" Text="Status" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="1" FontWeight="SemiBold"/>
+
+                            <TextBlock x:Name="StatusHeader" x:Uid="ChapterPage_Manga_StatusHeader" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="1" FontWeight="SemiBold"/>
                             <TextBlock x:Name="Status" Text="{x:Bind ViewModel.Manga.Ongoing, Mode=OneWay, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15" Grid.Column="1" Grid.Row="1"/>
-                            
-                            <TextBlock x:Name="LastUpdatedHeader" Margin="0,0,10,0" Text="Last Updated" FontSize="15" Grid.Column="0" Grid.Row="2" FontWeight="SemiBold"/>
+
+                            <TextBlock x:Name="LastUpdatedHeader" x:Uid="ChapterPage_Manga_LastUpdatedHeader" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="2" FontWeight="SemiBold"/>
                             <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Manga.LastUpdated, Mode=OneWay, Converter={StaticResource DateTimeToPrettyDateTime}}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
-                            
-                            <TextBlock x:Name="CategoryHeader" Text="Category" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="3" FontWeight="SemiBold"/>
+
+                            <TextBlock x:Name="CategoryHeader" x:Uid="ChapterPage_Manga_CategoryHeader" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="3" FontWeight="SemiBold"/>
                             <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="3"/>                            
                         </Grid>
                     </Grid>
@@ -148,12 +148,12 @@
                     <StackPanel Grid.Column="2"
                                 VerticalAlignment="Bottom">
                         <Button x:Name="ReloadButton"
+                                x:Uid="ChapterPage_ReloadButton"
                                 Content="&#xE72C;"
                                 Foreground="{x:Bind ChaptersBar.Foreground}"
                                 Background="Transparent"
                                 FontFamily="Segoe MDL2 Assets"
-                                FontSize="{ThemeResource TextStyleLargeFontSize}"
-                                ToolTipService.ToolTip="Reload Chapter"
+                                FontSize="{ThemeResource TextStyleLargeFontSize}"                                
                                 Command="{x:Bind ViewModel.ReloadChapterCommand, Mode=OneWay}">
                             <Button.Style>
                                 <Style TargetType="Button">
@@ -205,17 +205,17 @@
                             </Button.Style>
                         </Button>
                         <Button x:Name="SettingsButton"
+                                x:Uid="ChapterPage_SettingsButton"
                                 Content="&#xE115;"
                                 Foreground="{x:Bind ChaptersBar.Foreground}"
                                 Background="Transparent"
                                 FontFamily="Segoe MDL2 Assets"
-                                FontSize="{ThemeResource TextStyleLargeFontSize}"
-                                ToolTipService.ToolTip="Reading Settings">
+                                FontSize="{ThemeResource TextStyleLargeFontSize}">
                             <Button.Resources>
                                 <Flyout x:Key="SettingsFlyout" Placement="Bottom">
                                     <StackPanel Width="190">
                                         <ComboBox x:Name="ReadMode"
-                                                  Header="Read Mode"
+                                                  x:Uid="ChapterPage_SettingsFlyout_ReadMode"
                                                   MinWidth="110"
                                                   Tag="{x:Bind PageGrid}"
                                                   ItemsSource="{x:Bind ViewModel.ReadModeList}"
