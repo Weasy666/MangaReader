@@ -118,243 +118,243 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BoolToFavoriteTooltipConverter.Otherwise" xml:space="preserve">
-    <value>Add Favorite</value>
+    <value>Favorit hinzufügen</value>
   </data>
   <data name="BoolToFavoriteTooltipConverter.Value" xml:space="preserve">
-    <value>Remove Favorite</value>
+    <value>Favorit entfernen</value>
   </data>
   <data name="BoolToGroupedTooltipConverter.Otherwise" xml:space="preserve">
-    <value>Group Favorites</value>
+    <value>Favoriten gruppieren</value>
   </data>
   <data name="BoolToGroupedTooltipConverter.Value" xml:space="preserve">
-    <value>Ungroup Favorites</value>
+    <value>Gruppierung auflösen</value>
   </data>
   <data name="BoolToMangaStatusConverter_Otherwise" xml:space="preserve">
-    <value>Finished</value>
+    <value>Beendet</value>
   </data>
   <data name="BoolToMangaStatusConverter_Value" xml:space="preserve">
-    <value>Ongoing</value>
+    <value>Laufend</value>
   </data>
   <data name="Busy_Text.Text" xml:space="preserve">
-    <value>Please wait...</value>
+    <value>Bitte warten...</value>
   </data>
   <data name="ChapterPage_Manga_CategoryHeader.Text" xml:space="preserve">
-    <value>Category</value>
+    <value>Kategorie</value>
   </data>
   <data name="ChapterPage_Manga_LastUpdatedHeader.Text" xml:space="preserve">
-    <value>Last Updated</value>
+    <value>Aktualisiert</value>
   </data>
   <data name="ChapterPage_Manga_StatusHeader.Text" xml:space="preserve">
     <value>Status</value>
   </data>
   <data name="ChapterPage_ReloadButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Reload Chapter</value>
+    <value>Kapitel neu laden</value>
   </data>
   <data name="ChapterPage_SettingsButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Settings</value>
+    <value>Einstellungen</value>
   </data>
   <data name="ChapterPage_SettingsFlyout_ReadMode.Header" xml:space="preserve">
-    <value>Read Mode</value>
+    <value>Lesemodus</value>
   </data>
   <data name="DateTimeToPrettyDateTime_Today" xml:space="preserve">
-    <value>Today at</value>
+    <value>Heute um</value>
   </data>
   <data name="DateTimeToPrettyDateTime_Yesterday" xml:space="preserve">
-    <value>Yesterday</value>
+    <value>Gestern</value>
   </data>
   <data name="FavoritesPage_GroupGridButton.Label" xml:space="preserve">
-    <value>Group</value>
+    <value>Gruppieren</value>
   </data>
   <data name="FavoritesPage_PageHeader.Text" xml:space="preserve">
-    <value>Your Favorite Mangas</value>
+    <value>Deine liebsten Mangas</value>
   </data>
   <data name="FavoritesPage_ReloadButton.Label" xml:space="preserve">
-    <value>Reload</value>
+    <value>Neu laden</value>
   </data>
   <data name="FavoritesPage_ReloadButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Reload Favorites</value>
+    <value>Favoriten neu laden</value>
   </data>
   <data name="LatestReleasesPage_FilterButton.Label" xml:space="preserve">
-    <value>Filter</value>
+    <value>Filtern</value>
   </data>
   <data name="LatestReleasesPage_FilterButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Filter</value>
+    <value>Filtern</value>
   </data>
   <data name="LatestReleasesPage_PageHeader.Text" xml:space="preserve">
-    <value>Latest Releases</value>
+    <value>Neuerscheinungen</value>
   </data>
   <data name="LatestReleasesPage_ReloadButton.Label" xml:space="preserve">
-    <value>Reload</value>
+    <value>Neu laden</value>
   </data>
   <data name="LatestReleasesPage_ReloadButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Reload</value>
+    <value>Neu laden</value>
   </data>
   <data name="LatestReleasesPage_SortButton.Label" xml:space="preserve">
-    <value>Sort</value>
+    <value>Anordnen</value>
   </data>
   <data name="LatestReleasesPage_SortButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Sort</value>
+    <value>Anordnen</value>
   </data>
   <data name="MainPage_LastReadGridView_Header.Text" xml:space="preserve">
-    <value>Last Read</value>
+    <value>Zuletzt gelesen</value>
   </data>
   <data name="MainPage_PageHeader.Text" xml:space="preserve">
     <value>Home</value>
   </data>
   <data name="MangaDetailsPage_AcceptButton.Label" xml:space="preserve">
-    <value>Mark as Read</value>
+    <value>Gelesen</value>
   </data>
   <data name="MangaDetailsPage_AcceptButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Mark as Read</value>
+    <value>Als gelesen markieren</value>
   </data>
   <data name="MangaDetailsPage_AliasHeader.Text" xml:space="preserve">
     <value>Alias</value>
   </data>
   <data name="MangaDetailsPage_CancelButton.Label" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbruch</value>
   </data>
   <data name="MangaDetailsPage_CancelButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbruch</value>
   </data>
   <data name="MangaDetailsPage_CategoryHeader.Text" xml:space="preserve">
-    <value>Category</value>
+    <value>Kategorie</value>
   </data>
   <data name="MangaDetailsPage_DeleteButton.Label" xml:space="preserve">
-    <value>Mark as Unread</value>
+    <value>Nicht gelesen</value>
   </data>
   <data name="MangaDetailsPage_DeleteButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Mark as Unread</value>
+    <value>Als nicht gelesen markieren</value>
   </data>
   <data name="MangaDetailsPage_DescriptionHeader.Text" xml:space="preserve">
-    <value>Description</value>
+    <value>Beschreibung</value>
   </data>
   <data name="MangaDetailsPage_LastUpdatedHeader.Text" xml:space="preserve">
-    <value>Last Updated</value>
+    <value>Aktualisiert</value>
   </data>
   <data name="MangaDetailsPage_MultiSelectButton.Label" xml:space="preserve">
-    <value>Selection mode</value>
+    <value>Auswahlmodus</value>
   </data>
   <data name="MangaDetailsPage_MultiSelectButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Selection mode</value>
+    <value>Auswahlmodus</value>
   </data>
   <data name="MangaDetailsPage_NumberOfChaptersHeader.Text" xml:space="preserve">
-    <value>Chapters</value>
+    <value>Kapitel</value>
   </data>
   <data name="MangaDetailsPage_SelectAllButton.Label" xml:space="preserve">
-    <value>Select All</value>
+    <value>Alle auswählen</value>
   </data>
   <data name="MangaDetailsPage_SelectAllButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Select All</value>
+    <value>Alle auswählen</value>
   </data>
   <data name="MangaDetailsPage_SortButton.Label" xml:space="preserve">
-    <value>Sort</value>
+    <value>Anordnen</value>
   </data>
   <data name="MangaDetailsPage_SortButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Sort</value>
+    <value>Anordnen</value>
   </data>
   <data name="MangaDetailsPage_StatusHeader.Text" xml:space="preserve">
     <value>Status</value>
   </data>
   <data name="MangasPage_FilterButton.Label" xml:space="preserve">
-    <value>Filter</value>
+    <value>Filtern</value>
   </data>
   <data name="MangasPage_FilterButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Filter</value>
+    <value>Filtern</value>
   </data>
   <data name="MangasPage_FilterFlyout.Text" xml:space="preserve">
-    <value>By Category</value>
+    <value>Nach Kategorie</value>
   </data>
   <data name="MangasPage_PageHeader.Text" xml:space="preserve">
-    <value>Manga Library</value>
+    <value>Manga Bibliothek</value>
   </data>
   <data name="MangasPage_ReloadButton.Label" xml:space="preserve">
-    <value>Reload</value>
+    <value>Neu laden</value>
   </data>
   <data name="MangasPage_ReloadButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Reload</value>
+    <value>Neu laden</value>
   </data>
   <data name="MangasPage_SortButton.Label" xml:space="preserve">
-    <value>Sort</value>
+    <value>Anordnen</value>
   </data>
   <data name="MangasPage_SortButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Sort</value>
+    <value>Anordnen</value>
   </data>
   <data name="SettingsPage_Favorites.Text" xml:space="preserve">
-    <value>Favorites</value>
+    <value>Favoriten</value>
   </data>
   <data name="SettingsPage_LatestReleases.Text" xml:space="preserve">
-    <value>Latest Releases</value>
+    <value>Neuerscheinungen</value>
   </data>
   <data name="SettingsPage_LatestReleasesDaysSlider.Header" xml:space="preserve">
-    <value>Range of Latest Releases</value>
+    <value>Zeitraum der Neuerscheinungen</value>
   </data>
   <data name="SettingsPage_MangaSourceComboBox.Header" xml:space="preserve">
-    <value>Manga Source</value>
+    <value>Mange Quelle</value>
   </data>
   <data name="SettingsPage_NumberOfRecentMangasSlider.Header" xml:space="preserve">
-    <value>Period of Days of Recent Mangas</value>
+    <value>Anzahl der zuletzt gelesenen Mangas</value>
   </data>
   <data name="SettingsPage_OneDriveSyncHeader.Text" xml:space="preserve">
-    <value>Last synced:</value>
+    <value>Zuletzt synchroniziert:</value>
   </data>
   <data name="SettingsPage_OneDriveSyncToggleSwitch.Header" xml:space="preserve">
-    <value>OneDrive syncronization</value>
+    <value>OneDrive synchronizierung</value>
   </data>
   <data name="SettingsPage_OneDriveSyncToggleSwitch.OffContent" xml:space="preserve">
-    <value>Off</value>
+    <value>Aus</value>
   </data>
   <data name="SettingsPage_OneDriveSyncToggleSwitch.OnContent" xml:space="preserve">
-    <value>On</value>
+    <value>An</value>
   </data>
   <data name="SettingsPage_PageHeader.Text" xml:space="preserve">
-    <value>Settings Page</value>
+    <value>Einstellungen</value>
   </data>
   <data name="SettingsPage_PivotItem1.Header" xml:space="preserve">
-    <value>Settings</value>
+    <value>Einstellungen</value>
   </data>
   <data name="SettingsPage_PivotItem2.Header" xml:space="preserve">
     <value>ToDo's</value>
   </data>
   <data name="SettingsPage_PivotItem3.Header" xml:space="preserve">
-    <value>About</value>
+    <value>Über</value>
   </data>
   <data name="SettingsPage_UseLightThemeToggleSwitch.Header" xml:space="preserve">
-    <value>Choose App Theme</value>
+    <value>App Modus auswählen</value>
   </data>
   <data name="SettingsPage_UseLightThemeToggleSwitch.OffContent" xml:space="preserve">
-    <value>Dark theme</value>
+    <value>Dunkler Modus</value>
   </data>
   <data name="SettingsPage_UseLightThemeToggleSwitch.OnContent" xml:space="preserve">
-    <value>Light theme</value>
+    <value>Heller Modus</value>
   </data>
   <data name="SettingsPage_UseShellDrawnBackButtonToggleSwitch.Header" xml:space="preserve">
-    <value>Choose Back Button Style</value>
+    <value>Zurück-Button Modus auswählen</value>
   </data>
   <data name="SettingsPage_UseShellDrawnBackButtonToggleSwitch.OffContent" xml:space="preserve">
-    <value>Back button in page header</value>
+    <value>Zurück-Button in Seitenkopf</value>
   </data>
   <data name="SettingsPage_UseShellDrawnBackButtonToggleSwitch.OnContent" xml:space="preserve">
-    <value>Back button in titlebar or taskbar</value>
+    <value>Zurück-Button in Titelleiste oder Taskleiste</value>
   </data>
   <data name="Shell_BackupHamburgerButton.Text" xml:space="preserve">
     <value>Backup</value>
   </data>
   <data name="Shell_FavoritesHamburgerButton.Text" xml:space="preserve">
-    <value>Favorites</value>
+    <value>Favoriten</value>
   </data>
   <data name="Shell_HomeHamburgerButton.Text" xml:space="preserve">
     <value>Home</value>
   </data>
   <data name="Shell_LatestReleasesHamburgerButton.Text" xml:space="preserve">
-    <value>Latest Releases</value>
+    <value>Neuerscheinungen</value>
   </data>
   <data name="Shell_MangaLibraryHamburgerButton.Text" xml:space="preserve">
-    <value>Manga Library</value>
+    <value>Manga Bibliothek</value>
   </data>
   <data name="Shell_SearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
-    <value>Search for Manga...</value>
+    <value>Suche nach Mangas...</value>
   </data>
   <data name="Shell_SettingsHamburgerButton.Text" xml:space="preserve">
-    <value>Settings</value>
+    <value>Einstellungen</value>
   </data>
 </root>

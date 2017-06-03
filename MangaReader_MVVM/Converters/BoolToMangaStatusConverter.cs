@@ -11,8 +11,8 @@ namespace MangaReader_MVVM.Converters
 {
     public class BoolToMangaStatusConverter : IValueConverter
     {
-        private string ongoing = ResourceLoader.GetForViewIndependentUse().GetString("BoolToMangaStatusConverter.Value");
-        private string finished = ResourceLoader.GetForViewIndependentUse().GetString("BoolToMangaStatusConverter.Otherwise");
+        private string ongoing = ResourceLoader.GetForViewIndependentUse().GetString("BoolToMangaStatusConverter_Value");
+        private string finished = ResourceLoader.GetForViewIndependentUse().GetString("BoolToMangaStatusConverter_Otherwise");
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {

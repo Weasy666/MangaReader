@@ -18,11 +18,11 @@ namespace MangaReader_MVVM.Converters
 
             if (dateTime.Date == now.Date)
             {
-                return ResourceLoader.GetForViewIndependentUse().GetString("DateTimeToPrettyDateTime.Today") + " " + dateTime.ToString("t");
+                return ResourceLoader.GetForViewIndependentUse().GetString("DateTimeToPrettyDateTime_Today") + " " + dateTime.ToString("t");
             }
             else if (dateTime.Date == now.Date.AddDays(-1))
             {
-                return ResourceLoader.GetForViewIndependentUse().GetString("DateTimeToPrettyDateTime.Yesterday");
+                return ResourceLoader.GetForViewIndependentUse().GetString("DateTimeToPrettyDateTime_Yesterday");
             }
             else if (dateTime.Year <= 1970)
             {
