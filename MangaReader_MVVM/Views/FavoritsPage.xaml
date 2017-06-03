@@ -317,6 +317,7 @@
                       ScrollViewer.ZoomMode="Enabled">
             <SemanticZoom.ZoomedInView>
                 <GridView x:Name="ZoomedInGridView"
+                          Loaded="{x:Bind ViewModel.ZoomedInGridView_Loaded}"
                           ItemsSource="{x:Bind ViewModel.FavoritsCVS.View, Mode=OneWay}"
                           Margin="10,0,0,0"
                           SelectionMode="None"
@@ -374,7 +375,8 @@
                 </GridView>
             </SemanticZoom.ZoomedInView>
             <SemanticZoom.ZoomedOutView>
-                <GridView x:Name="ZoomedOutGridView"   
+                <GridView x:Name="ZoomedOutGridView"
+                          Loaded="{x:Bind ViewModel.ZoomedOutGridView_Loaded}"
                           ItemsSource="{x:Bind ViewModel.FavoritsCVS.View.CollectionGroups, Mode=OneWay}"                             
                           HorizontalAlignment="Center" 
                           VerticalAlignment="Center">

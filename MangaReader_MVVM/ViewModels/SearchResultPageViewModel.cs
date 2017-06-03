@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using Template10.Controls;
 using Template10.Mvvm;
 using Template10.Services.NavigationService;
+using Template10.Utils;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -19,6 +21,8 @@ namespace MangaReader_MVVM.ViewModels
     {
         public MangaLibrary _library = MangaLibrary.Instance;
         public SettingsService _settings = SettingsService.Instance;
+
+        private ScrollViewer gridViewScrollViewer = null;
         public string PageHeaderText { get; set; } = "Search results for \"{0}\"";
 
         public MangaItemTemplate MangaGridLayout => SettingsService.Instance.MangaGridLayout;
@@ -46,12 +50,15 @@ namespace MangaReader_MVVM.ViewModels
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            var paramArray = parameter as List<object>;
-            PageHeaderText = String.Format(PageHeaderText, paramArray[0] as string);
-            var list = paramArray[1] as List<Manga>;
-            if (list != null)
+            var query = parameter as string;
+            PageHeaderText = String.Format(PageHeaderText, query);
+
+            Mangas = _library.SearchManga(query);
+
+            if (suspensionState.ContainsKey("GridViewVerticalOffset") && (mode == NavigationMode.Back || mode == NavigationMode.Forward))
             {
-                Mangas = new ObservableItemCollection<Manga>(list);
+                var test = Double.Parse(suspensionState["GridViewVerticalOffset"].ToString());
+                gridViewScrollViewer.ChangeView(null, Double.Parse(suspensionState["GridViewVerticalOffset"].ToString()), null);
             }
 
             await Task.CompletedTask;
@@ -59,6 +66,8 @@ namespace MangaReader_MVVM.ViewModels
 
         public override async Task OnNavigatedFromAsync(IDictionary<string, object> suspensionState, bool suspending)
         {
+            suspensionState["GridViewVerticalOffset"] = gridViewScrollViewer.VerticalOffset;
+
             if (suspending)
             {
                 suspensionState[nameof(Mangas)] = Mangas;
@@ -92,6 +101,12 @@ namespace MangaReader_MVVM.ViewModels
                 var dialog = new MessageDialog("This Manga doesn't exist");
                 await dialog.ShowAsync();
             }
+        }
+
+        public void GridView_Loaded(object sender, RoutedEventArgs e)
+        {
+            var gridView = sender as GridView;
+            gridViewScrollViewer = gridView.FirstChild<ScrollViewer>();
         }
     }
 }

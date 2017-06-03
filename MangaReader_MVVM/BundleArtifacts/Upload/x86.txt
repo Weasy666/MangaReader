@@ -1,2 +1,0 @@
-MainPackage=D:\Prog\Code\MangaReader\MangaReader_MVVM\bin\x86\Release\Upload\MangaReader_MVVM_0.8.0.0_x86.appx
-SymbolPackage=D:\Prog\Code\MangaReader\MangaReader_MVVM\AppPackages\MangaReader_MVVM_0.8.0.0\MangaReader_MVVM_0.8.0.0_x86.appxsym

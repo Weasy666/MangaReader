@@ -72,6 +72,7 @@
         </t10controls:PageHeader>
 
         <GridView x:Name="GridView" Grid.Row="1"
+                  Loaded="{x:Bind ViewModel.GridView_Loaded}"
                   ItemsSource="{x:Bind ViewModel.Mangas, Mode=OneWay}"
                   Margin="10,0,0,0" Padding="0,0,0,0"
                   SelectionMode="None"

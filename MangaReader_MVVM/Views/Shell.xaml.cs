@@ -49,8 +49,7 @@ namespace MangaReader_MVVM.Views
             }
             else
             {
-                var Results = sender.Items.ToList().Cast<Manga>().ToList();
-                HamburgerMenu.NavigationService.Navigate(typeof(SearchResultPage), new List<object> { sender.Text, Results });
+                HamburgerMenu.NavigationService.Navigate(typeof(SearchResultPage), sender.Text);
             }
             sender.Text = "";
         }
@@ -92,7 +91,7 @@ namespace MangaReader_MVVM.Views
         {
             MessageDialog dialog = new MessageDialog("Create or Load a Backup of your Manga Status. \nWhen you load a Backup your actual status will be overwriten. ");
             dialog.Title = "Manga Status Backup";
-            dialog.Commands.Add(new UICommand { Label = "Create", Id = 0 });
+            dialog.Commands.Add(new UICommand { Label = "Save", Id = 0 });
             dialog.Commands.Add(new UICommand { Label = "Load", Id = 1 });
             dialog.DefaultCommandIndex = 0;
             dialog.CancelCommandIndex = 1;
