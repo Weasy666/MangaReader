@@ -282,6 +282,12 @@
   <data name="SettingsPage_Favorites.Text" xml:space="preserve">
     <value>Favoriten</value>
   </data>
+  <data name="SettingsPage_LanguageComboBox.Header" xml:space="preserve">
+    <value>App Sprache</value>
+  </data>
+  <data name="SettingsPage_LanguageComboBox_Info.Text" xml:space="preserve">
+    <value>Sie sehen die Änderungen beim nächsten App Start</value>
+  </data>
   <data name="SettingsPage_LatestReleases.Text" xml:space="preserve">
     <value>Neuerscheinungen</value>
   </data>

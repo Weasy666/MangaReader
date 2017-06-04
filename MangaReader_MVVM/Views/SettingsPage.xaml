@@ -87,16 +87,38 @@
                                       Margin="0,5,0,0"
                                       RelativePanel.AlignLeftWithPanel="True"
                                       RelativePanel.Below="UseShellDrawnBackButtonToggleSwitch" />
-                        
+
+                        <ComboBox x:Name="LanguageComboBox"
+                                  x:Uid="SettingsPage_LanguageComboBox"
+                                  Header="Language"
+                                  ItemsSource="{x:Bind ViewModel.SettingsPartViewModel.AvailableLanguages, Mode=OneWay}"                                  
+                                  DisplayMemberPath="DisplayName"
+                                  Width="270"
+                                  Margin="0,5,0,0"
+                                  SelectedIndex="{x:Bind ViewModel.SettingsPartViewModel.SelectedLanguage, Mode=OneWay}"
+                                  SelectedValue="{Binding AppLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  RelativePanel.AlignLeftWithPanel="True"
+                                  RelativePanel.Below="UseLightThemeToggleSwitch"/>
+
+                        <TextBlock x:Name="LanguageComboBox_Info"
+                                   x:Uid="SettingsPage_LanguageComboBox_Info"
+                                   Text="You'll see the changes with the next App start"
+                                   Visibility="{x:Bind ViewModel.SettingsPartViewModel.ShowAppLanguageInfo, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                                   Foreground="Red"
+                                   Margin="0,5,0,0"
+                                   RelativePanel.AlignLeftWithPanel="True"
+                                   RelativePanel.Below="LanguageComboBox"/>
+
+
                         <ToggleSwitch x:Name="UseDetailedMangaItemSwitch"
                                       x:Uid="SettingsPage_UseDetailedMangaItemSwitch"
                                       Header="Choose Manga Item Style"
                                       IsOn="{x:Bind ViewModel.SettingsPartViewModel.UseDetailedMangaItem, Mode=TwoWay}"
                                       OffContent="Only Cover"
                                       OnContent="Cover with Details"
-                                      Margin="0,5,0,0"
+                                      Margin="0,15,0,0"
                                       RelativePanel.AlignLeftWithPanel="True"
-                                      RelativePanel.Below="UseLightThemeToggleSwitch" />
+                                      RelativePanel.Below="LanguageComboBox_Info" />
 
                         <Slider x:Name="NumberOfRecentMangas"
                                 x:Uid="SettingsPage_NumberOfRecentMangasSlider"
@@ -116,10 +138,11 @@
                                   x:Uid="SettingsPage_MangaSourceComboBox"
                                   Header="Manga Source"
                                   ItemsSource="{x:Bind ViewModel.SettingsPartViewModel.SourcesWithIcons}"
+                                  Margin="0,5,0,0"
                                   Width="270"
                                   SelectedIndex="{x:Bind ViewModel.SettingsPartViewModel.SelectedMangaSource, Mode=OneWay}"
                                   RelativePanel.AlignLeftWithPanel="True"
-                                  RelativePanel.Below="NumberOfRecentMangasTextBox"
+                                  RelativePanel.Below="NumberOfRecentMangas"
                                   SelectionChanged="{x:Bind ViewModel.SettingsPartViewModel.MangaSourceComboBox_SelectionChanged, Mode=OneWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -133,7 +156,7 @@
                                    x:Uid="SettingsPage_LatestReleases"
                                    Text="Latest Releases"
                                    Style="{StaticResource SubtitleTextBlockStyle}"
-                                   Margin="0,10,0,0"
+                                   Margin="0,15,0,0"
                                    RelativePanel.AlignLeftWithPanel="True"
                                    RelativePanel.Below="MangaSourceComboBox"/>
                         
@@ -156,7 +179,7 @@
                                    x:Uid="SettingsPage_Favorites"
                                    Text="Favorites"
                                    Style="{StaticResource SubtitleTextBlockStyle}"
-                                   Margin="0,10,0,0"
+                                   Margin="0,5,0,0"
                                    RelativePanel.AlignLeftWithPanel="True"
                                    RelativePanel.Below="LatestReleasesDays"/>
 

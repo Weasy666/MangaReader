@@ -282,17 +282,23 @@
   <data name="SettingsPage_Favorites.Text" xml:space="preserve">
     <value>Favorites</value>
   </data>
+  <data name="SettingsPage_LanguageComboBox.Header" xml:space="preserve">
+    <value>App Language</value>
+  </data>
+  <data name="SettingsPage_LanguageComboBox_Info.Text" xml:space="preserve">
+    <value>You'll see the changes with the next App start</value>
+  </data>
   <data name="SettingsPage_LatestReleases.Text" xml:space="preserve">
     <value>Latest Releases</value>
   </data>
   <data name="SettingsPage_LatestReleasesDaysSlider.Header" xml:space="preserve">
-    <value>Range of Latest Releases</value>
+    <value>Period of Days of Latest Releases</value>
   </data>
   <data name="SettingsPage_MangaSourceComboBox.Header" xml:space="preserve">
     <value>Manga Source</value>
   </data>
   <data name="SettingsPage_NumberOfRecentMangasSlider.Header" xml:space="preserve">
-    <value>Period of Days of Recent Mangas</value>
+    <value>Number of Last Read Mangas</value>
   </data>
   <data name="SettingsPage_OneDriveSyncHeader.Text" xml:space="preserve">
     <value>Last synced:</value>

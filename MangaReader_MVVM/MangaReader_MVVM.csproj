@@ -100,8 +100,8 @@
     <Content Include="Assets\Square44x44Logo.targetsize-32.png" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="ToDo.md" />
-    <PRIResource Include="Strings\de-de\Resources.resw" />
-    <PRIResource Include="Strings\en-us\Resources.resw" />
+    <PRIResource Include="Strings\de-DE\Resources.resw" />
+    <PRIResource Include="Strings\en-US\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">

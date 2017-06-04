@@ -89,7 +89,7 @@ namespace MangaReader_MVVM.Views
 
         private async void DataBackup_Tapped(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            MessageDialog dialog = new MessageDialog("Create or Load a Backup of your Manga Status. \nWhen you load a Backup your actual status will be overwriten. ");
+            MessageDialog dialog = new MessageDialog("Create or Load a Backup of your Manga Status. \nWhen you load a Backup your current status will be overwriten. ");
             dialog.Title = "Manga Status Backup";
             dialog.Commands.Add(new UICommand { Label = "Save", Id = 0 });
             dialog.Commands.Add(new UICommand { Label = "Load", Id = 1 });

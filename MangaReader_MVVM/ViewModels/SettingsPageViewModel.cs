@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Template10.Mvvm;
+using Template10.Services.NavigationService;
 using Template10.Services.SettingsService;
+using Windows.ApplicationModel.Resources;
+using Windows.ApplicationModel.Resources.Core;
+using Windows.Globalization;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -61,6 +66,30 @@ namespace MangaReader_MVVM.ViewModels
         {
             get { return _settings.AppTheme.Equals(ApplicationTheme.Light); }
             set { _settings.AppTheme = value ? ApplicationTheme.Light : ApplicationTheme.Dark; base.RaisePropertyChanged(nameof(UseLightThemeButton)); }
+        }
+
+        public bool ShowAppLanguageInfo { get; set; }
+        public int SelectedLanguage => AvailableLanguages.ToList().IndexOf(AvailableLanguages.Where(lang => lang.Name == AppLanguage.Name).First());
+        private CultureInfo previousInfo = null;
+        public CultureInfo AppLanguage
+        {
+            get { return _settings.AppLanguage; }
+            set
+            {
+                if(!_settings.AppLanguage.Equals(value))
+                {
+                    if(previousInfo == null) previousInfo = _settings.AppLanguage;
+                    _settings.AppLanguage = value;
+                    ShowAppLanguageInfo = !previousInfo.Equals(value);
+                    base.RaisePropertyChanged(nameof(ShowAppLanguageInfo));
+                    base.RaisePropertyChanged(nameof(AppLanguage));
+                }
+            }
+        }
+        private ObservableCollection<CultureInfo> _availableLanguages;
+        public ObservableCollection<CultureInfo> AvailableLanguages
+        {
+            get { return _availableLanguages = _availableLanguages ?? new ObservableCollection<CultureInfo>(ApplicationLanguages.ManifestLanguages.Select(lang => new CultureInfo(lang))); }
         }
 
         public bool UseDetailedMangaItem
