@@ -12,6 +12,7 @@ using Template10.Controls;
 using Template10.Mvvm;
 using Template10.Services.NavigationService;
 using Template10.Utils;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -84,7 +85,7 @@ namespace MangaReader_MVVM.ViewModels
         public DelegateCommand ReloadGridCommand
             => _reloadGridCommand ?? (_reloadGridCommand = new DelegateCommand(async () =>
             {
-                Views.Busy.SetBusy(true, "Picking up the freshly printed books...");
+                Views.Busy.SetBusy(true, ResourceLoader.GetForViewIndependentUse().GetString("Reload_BusyText"));
                 Mangas = await _library.GetMangasAsync(ReloadMode.Server);
                 Views.Busy.SetBusy(false);
             }, () => Mangas.Any()));

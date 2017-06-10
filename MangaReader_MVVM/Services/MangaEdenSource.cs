@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Template10.Controls;
 using Template10.Mvvm;
 using Template10.Services.NetworkAvailableService;
+using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
@@ -602,7 +603,7 @@ namespace MangaReader_MVVM.Services
                 savePicker.SuggestedFileName = DateTime.Now.ToString("s") + "_MangaReader_Backup_" + this.Name;
 
                 StorageFile file = await savePicker.PickSaveFileAsync();
-                Views.Busy.SetBusy(true, "Printing your favorite Mangas...");
+                Views.Busy.SetBusy(true, ResourceLoader.GetForViewIndependentUse().GetString("ExportMangaStatus_BusyText"));
                 if (file != null)
                 {
                     // Prevent updates to the remote version of the file until we finish making changes and call CompleteUpdatesAsync.
@@ -641,13 +642,13 @@ namespace MangaReader_MVVM.Services
             FileOpenPicker openPicker = new FileOpenPicker()
             {
                 SuggestedStartLocation = PickerLocationId.Downloads,
-                CommitButtonText = "Import"
+                CommitButtonText = ResourceLoader.GetForViewIndependentUse().GetString("ImportMangaStatus_CommitButton")
             };
             
             openPicker.FileTypeFilter.Add(".json");
 
             StorageFile file = await openPicker.PickSingleFileAsync();
-            Views.Busy.SetBusy(true, "Importing your favorite Mangas...");
+            Views.Busy.SetBusy(true, ResourceLoader.GetForViewIndependentUse().GetString("ImportMangaStatus_BusyText"));
             if (file != null)
             {
                 var _storedData = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(await FileIO.ReadTextAsync(file));

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Template10.Controls;
 using Template10.Services.NavigationService;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 
@@ -89,10 +90,10 @@ namespace MangaReader_MVVM.Views
 
         private async void DataBackup_Tapped(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            MessageDialog dialog = new MessageDialog("Create or Load a Backup of your Manga Status. \nWhen you load a Backup your current status will be overwriten. ");
-            dialog.Title = "Manga Status Backup";
-            dialog.Commands.Add(new UICommand { Label = "Save", Id = 0 });
-            dialog.Commands.Add(new UICommand { Label = "Load", Id = 1 });
+            MessageDialog dialog = new MessageDialog(ResourceLoader.GetForViewIndependentUse().GetString("Backup_MessageDialog_Content"));
+            dialog.Title = ResourceLoader.GetForViewIndependentUse().GetString("Backup_MessageDialog_Title");
+            dialog.Commands.Add(new UICommand { Label = ResourceLoader.GetForViewIndependentUse().GetString("Backup_MessageDialog_Button1"), Id = 0 });
+            dialog.Commands.Add(new UICommand { Label = ResourceLoader.GetForViewIndependentUse().GetString("Backup_MessageDialog_Button2"), Id = 1 });
             dialog.DefaultCommandIndex = 0;
             dialog.CancelCommandIndex = 1;
 
@@ -105,7 +106,8 @@ namespace MangaReader_MVVM.Views
                 isSuccess = await _library.ExportMangaStatusAsync();
                 dialog.Commands.Clear();
                 dialog.Title = "";
-                dialog.Content = isSuccess ? "Successfully created the Backup file." : "An error occured while creating the Backup file, or you canceled the operation.";
+                dialog.Content = isSuccess ? ResourceLoader.GetForViewIndependentUse().GetString("Backup_MessageDialog_Export_Success")
+                                           : ResourceLoader.GetForViewIndependentUse().GetString("Backup_MessageDialog_Export_Error");
                 await dialog.ShowAsync();
             }
             else if ((int)result.Id == 1)
@@ -113,7 +115,8 @@ namespace MangaReader_MVVM.Views
                 isSuccess = await _library.ImportMangaStatusAsync();
                 dialog.Commands.Clear();
                 dialog.Title = "";
-                dialog.Content = isSuccess ? "Successfully loaded the Backup file." : "An error occured while loading the Backup file, or you canceled the operation.";
+                dialog.Content = isSuccess ? ResourceLoader.GetForViewIndependentUse().GetString("Backup_MessageDialog_Import_Success")
+                                           : ResourceLoader.GetForViewIndependentUse().GetString("Backup_MessageDialog_Export_Error");
                 await dialog.ShowAsync();
             }
         }

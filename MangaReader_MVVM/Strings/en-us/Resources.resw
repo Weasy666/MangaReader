@@ -117,6 +117,30 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Backup_MessageDialog_Button1" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="Backup_MessageDialog_Button2" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="Backup_MessageDialog_Content" xml:space="preserve">
+    <value>Create or Load a Backup of your Manga Status. \nWhen you load a Backup your current status will be merged with it.</value>
+  </data>
+  <data name="Backup_MessageDialog_Export_Error" xml:space="preserve">
+    <value>An error occured while creating the Backup file, or you canceled the operation.</value>
+  </data>
+  <data name="Backup_MessageDialog_Export_Success" xml:space="preserve">
+    <value>Successfully created the Backup file.</value>
+  </data>
+  <data name="Backup_MessageDialog_Import_Error" xml:space="preserve">
+    <value>An error occured while loading the Backup file, or you canceled the operation.</value>
+  </data>
+  <data name="Backup_MessageDialog_Import_Success" xml:space="preserve">
+    <value>Successfully loaded the Backup file.</value>
+  </data>
+  <data name="Backup_MessageDialog_Title" xml:space="preserve">
+    <value>Manga Status Backup</value>
+  </data>
   <data name="BoolToFavoriteTooltipConverter.Otherwise" xml:space="preserve">
     <value>Add Favorite</value>
   </data>
@@ -162,6 +186,9 @@
   <data name="DateTimeToPrettyDateTime_Yesterday" xml:space="preserve">
     <value>Yesterday</value>
   </data>
+  <data name="ExportMangaStatus_BusyText" xml:space="preserve">
+    <value>Printing your favorite Mangas...</value>
+  </data>
   <data name="FavoritesPage_GroupGridButton.Label" xml:space="preserve">
     <value>Group</value>
   </data>
@@ -173,6 +200,12 @@
   </data>
   <data name="FavoritesPage_ReloadButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Reload Favorites</value>
+  </data>
+  <data name="ImportMangaStatus_BusyText" xml:space="preserve">
+    <value>Importing your favorite Mangas...</value>
+  </data>
+  <data name="ImportMangaStatus_CommitButton" xml:space="preserve">
+    <value>Import</value>
   </data>
   <data name="LatestReleasesPage_FilterButton.Label" xml:space="preserve">
     <value>Filter</value>
@@ -278,6 +311,9 @@
   </data>
   <data name="MangasPage_SortButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Sort</value>
+  </data>
+  <data name="Reload_BusyText" xml:space="preserve">
+    <value>Picking up the freshly printed books...</value>
   </data>
   <data name="SettingsPage_Favorites.Text" xml:space="preserve">
     <value>Favorites</value>
