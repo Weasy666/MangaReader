@@ -30,9 +30,9 @@ namespace MangaReader_MVVM.Services
                     case MangaSource.MangaEden:
                         _mangaSource = new MangaEdenSource();
                         break;
-                    //case MangaSource.MangaFox:
-                    //    throw new NotImplementedException("MangaFox Source is not implemented right now");
-                    //    break;
+                    case MangaSource.MangaFox:
+                        _mangaSource = new MangaFoxSource();
+                        break;
                     //case MangaSource.MangaReader:
                     //    throw new NotImplementedException("MangaReader Source is not implemented right now");
                     //    break;
@@ -65,6 +65,7 @@ namespace MangaReader_MVVM.Services
         public ObservableItemCollection<Manga> FilterMangaByCategory(IEnumerable filters) => _mangaSource.FilterMangaByCategory(filters);
         public Task<ObservableItemCollection<Chapter>> GetChaptersAsync(Manga manga) => _mangaSource.GetChaptersAsync(manga);
 
+        public Task<bool> LoadAndMergeStoredDataAsync() => _mangaSource.LoadAndMergeStoredDataAsync();
         public Task<bool> SaveMangaStatusAsync(CreationCollisionOption option = CreationCollisionOption.ReplaceExisting) => _mangaSource.SaveMangaStatusAsync(option);
         public Task<bool> ExportMangaStatusAsync() => _mangaSource.ExportMangaStatusAsync();
         public Task<bool> ImportMangaStatusAsync() => _mangaSource.ImportMangaStatusAsync();

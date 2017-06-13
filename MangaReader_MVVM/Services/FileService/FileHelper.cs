@@ -160,24 +160,32 @@ namespace MangaReader_MVVM.Services.FileService
             return retval;
         }
 
-        private static async Task<StorageFile> GetOneDriveFile(string key, CreationCollisionOption option = CreationCollisionOption.OpenIfExists)
+        private static async Task<StorageFile> GetOneDriveFile(string key, CreationCollisionOption option = CreationCollisionOption.ReplaceExisting)
         {
             var appRootFolder = await OneDriveService.Instance.AppRootFolderAsync();
             var remoteFile = await appRootFolder.GetFileAsync(key);
-            var localFile = await CreateFileAsync(key, StorageStrategies.Temporary, option);
-            if (remoteFile != null)
-            {                
-                using (var remoteStream = await remoteFile.OpenAsync())
+            DateTimeOffset? remoteFileTime = remoteFile.DateModified;
+            StorageFile localFile;
+            if (remoteFileTime.Value.LocalDateTime.AddSeconds(-3) >= SettingsServices.SettingsService.Instance.LastSynced) {
+                localFile = await CreateFileAsync(key, StorageStrategies.Temporary, option);
+                if (remoteFile != null)
                 {
-                    byte[] buffer = new byte[remoteStream.Size];
-                    var localBuffer = await remoteStream.ReadAsync(buffer.AsBuffer(), (uint)remoteStream.Size, InputStreamOptions.ReadAhead);
-                    
-                    using (var localStream = await localFile.OpenAsync(FileAccessMode.ReadWrite))
+                    using (var remoteStream = await remoteFile.OpenAsync())
                     {
-                        await localStream.WriteAsync(localBuffer);
-                        await localStream.FlushAsync();
+                        byte[] buffer = new byte[remoteStream.Size];
+                        var localBuffer = await remoteStream.ReadAsync(buffer.AsBuffer(), (uint)remoteStream.Size, InputStreamOptions.ReadAhead);
+
+                        using (var localStream = await localFile.OpenAsync(FileAccessMode.ReadWrite))
+                        {
+                            await localStream.WriteAsync(localBuffer);
+                            await localStream.FlushAsync();
+                        }
                     }
                 }
+            }
+            else
+            {
+                localFile = await CreateFileAsync(key, StorageStrategies.Local);
             }
             return localFile;
         }
@@ -187,7 +195,7 @@ namespace MangaReader_MVVM.Services.FileService
             ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
             PreserveReferencesHandling = PreserveReferencesHandling.Objects,
             TypeNameHandling = TypeNameHandling.Objects,
-            TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple
+            TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
         });
 
         private static T Deserialize<T>(string json) => JsonConvert.DeserializeObject<T>(json);

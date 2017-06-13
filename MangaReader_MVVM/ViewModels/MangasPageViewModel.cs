@@ -11,7 +11,10 @@ using System.Threading.Tasks;
 using Template10.Controls;
 using Template10.Mvvm;
 using Template10.Services.NavigationService;
+using Template10.Utils;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -21,6 +24,8 @@ namespace MangaReader_MVVM.ViewModels
     {
         private MangaLibrary _library = MangaLibrary.Instance;
         private SettingsService _settings = SettingsService.Instance;
+
+        private ScrollViewer gridViewScrollViewer = null;
 
         public MangaItemTemplate MangaGridLayout => SettingsService.Instance.MangaGridLayout;
         private void Settings_Changed(object sender, PropertyChangedEventArgs e)
@@ -51,19 +56,18 @@ namespace MangaReader_MVVM.ViewModels
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            if (mode == NavigationMode.New)
+            if (suspensionState.ContainsKey("GridViewVerticalOffset") && (mode == NavigationMode.Back || mode == NavigationMode.Forward))
             {
+                gridViewScrollViewer.ChangeView(null, Double.Parse(suspensionState["GridViewVerticalOffset"].ToString()), null);
+            }
 
-            }
-            else
-            {
-                
-            }
             await Task.CompletedTask;
         }
 
         public override async Task OnNavigatedFromAsync(IDictionary<string, object> suspensionState, bool suspending)
         {
+            suspensionState["GridViewVerticalOffset"] = gridViewScrollViewer.VerticalOffset;
+
             if (suspending)
             {
                 suspensionState[nameof(Mangas)] = Mangas;
@@ -81,7 +85,7 @@ namespace MangaReader_MVVM.ViewModels
         public DelegateCommand ReloadGridCommand
             => _reloadGridCommand ?? (_reloadGridCommand = new DelegateCommand(async () =>
             {
-                Views.Busy.SetBusy(true, "Picking up the freshly printed books...");
+                Views.Busy.SetBusy(true, ResourceLoader.GetForViewIndependentUse().GetString("Reload_BusyText"));
                 Mangas = await _library.GetMangasAsync(ReloadMode.Server);
                 Views.Busy.SetBusy(false);
             }, () => Mangas.Any()));
@@ -122,6 +126,12 @@ namespace MangaReader_MVVM.ViewModels
                 var categories = listView.SelectedItems.Cast<string>();
                 Mangas = _library.FilterMangaByCategory(categories);
             }
+        }
+
+        public void GridView_Loaded(object sender, RoutedEventArgs e)
+        {
+            var gridView = sender as GridView;
+            gridViewScrollViewer = gridView.FirstChild<ScrollViewer>();
         }
     }
 }

@@ -11,7 +11,9 @@ using System.Threading.Tasks;
 using Template10.Controls;
 using Template10.Mvvm;
 using Template10.Services.NavigationService;
+using Template10.Utils;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Navigation;
@@ -22,6 +24,9 @@ namespace MangaReader_MVVM.ViewModels
     {
         private MangaLibrary _library = MangaLibrary.Instance;
         private SettingsService _settings = SettingsService.Instance;
+
+        private ScrollViewer zoomedInGridViewScrollViewer = null;
+        private ScrollViewer zoomedOutGridViewScrollViewer = null;
 
         public MangaItemTemplate MangaGridLayout => _settings.MangaGridLayout;
         private void Settings_Changed(object sender, PropertyChangedEventArgs e)
@@ -108,20 +113,26 @@ namespace MangaReader_MVVM.ViewModels
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            if (mode == NavigationMode.New)
+            if (mode == NavigationMode.Back || mode == NavigationMode.Forward)
             {
+                if (suspensionState.ContainsKey("ZoomedInGridViewVerticalOffset"))
+                {
+                    zoomedInGridViewScrollViewer.ChangeView(null, Double.Parse(suspensionState["ZoomedInGridViewVerticalOffset"].ToString()), null);
+                }
+                if (suspensionState.ContainsKey("ZoomedOutGridViewVerticalOffset"))
+                {
+                    zoomedOutGridViewScrollViewer.ChangeView(null, Double.Parse(suspensionState["ZoomedOutGridViewVerticalOffset"].ToString()), null);
+                }
+            }
 
-            }
-            else
-            {
-                
-            }
-            
             await Task.CompletedTask;
         }
 
         public override async Task OnNavigatedFromAsync(IDictionary<string, object> suspensionState, bool suspending)
         {
+            suspensionState["ZoomedInGridViewVerticalOffset"] = zoomedInGridViewScrollViewer.VerticalOffset;
+            suspensionState["ZoomedOutGridViewVerticalOffset"] = zoomedOutGridViewScrollViewer.VerticalOffset;
+
             if (suspending)
             {
                 suspensionState[nameof(Favorits)] = Favorits;
@@ -207,6 +218,18 @@ namespace MangaReader_MVVM.ViewModels
                 var dialog = new MessageDialog("This Manga doesn't exist");
                 await dialog.ShowAsync();
             }
+        }
+
+        public void ZoomedInGridView_Loaded(object sender, RoutedEventArgs e)
+        {
+            var gridView = sender as GridView;
+            zoomedInGridViewScrollViewer = gridView.FirstChild<ScrollViewer>();
+        }
+
+        public void ZoomedOutGridView_Loaded(object sender, RoutedEventArgs e)
+        {
+            var gridView = sender as GridView;
+            zoomedOutGridViewScrollViewer = gridView.FirstChild<ScrollViewer>();
         }
     }
 }

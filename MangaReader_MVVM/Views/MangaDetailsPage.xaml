@@ -77,13 +77,12 @@
                                 Grid.ColumnSpan="2">
             <t10controls:PageHeader.PrimaryCommands>
                 <AppBarToggleButton x:Name="MultiSelect"
+                                    x:Uid="MangaDetailsPage_MultiSelectButton"
                                     Icon="Bullets" IsChecked="{x:Bind ViewModel.MultiSelectButtonIsChecked, Mode=TwoWay}"
                                     IsThreeState="False"
-                                    Label="Selection mode"
                                     Foreground="{x:Bind PageHeader.Foreground}"
                                     Command="{x:Bind ViewModel.MultiSelectCommand, Mode=OneWay}"
-                                    CommandParameter="{x:Bind ChapterGridView}"
-                                    ToolTipService.ToolTip="{x:Bind MultiSelect.Label, Mode=OneWay}">
+                                    CommandParameter="{x:Bind ChapterGridView}">
                     <AppBarToggleButton.Style>
                         <Style TargetType="AppBarToggleButton">
                             <Setter Property="Background" Value="Transparent"/>
@@ -355,10 +354,9 @@
                 </AppBarToggleButton>
                 <AppBarSeparator />
                 <AppBarButton x:Name="Sort"
+                              x:Uid="MangaDetailsPage_SortButton"
                               Icon="Switch"
-                              Label="Sort"
-                              Command="{x:Bind ViewModel.SortGridCommand, Mode=OneWay}"
-                              ToolTipService.ToolTip="{x:Bind Sort.Label, Mode=OneWay}"/>
+                              Command="{x:Bind ViewModel.SortGridCommand, Mode=OneWay}"/>
             </t10controls:PageHeader.PrimaryCommands>
         </t10controls:PageHeader>
 
@@ -390,6 +388,7 @@
                                 Margin="0,4,0,0"
                                 HorizontalAlignment="Right">
                         <Button x:Name="Download"
+                                x:Uid="MangaDetailsPage_DownloadButton"
                                 IsEnabled="False"
                                 Command="{x:Bind ViewModel.DownloadCommand}"
                                 Content="&#xE118;"
@@ -429,23 +428,23 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock x:Name="AliasHeader" Text="Alias" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="0" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="AliasHeader" x:Uid="MangaDetailsPage_AliasHeader" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="0" FontWeight="SemiBold"/>
                     <TextBlock x:Name="Alias" Text="{x:Bind ViewModel.Manga.Alias}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="0"/>
 
-                    <TextBlock x:Name="StatusHeader" Text="Status" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="1" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="StatusHeader" x:Uid="MangaDetailsPage_StatusHeader" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="1" FontWeight="SemiBold"/>
                     <TextBlock x:Name="Status" Text="{x:Bind ViewModel.Manga.Ongoing, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15" Grid.Column="1" Grid.Row="1"/>
 
-                    <TextBlock x:Name="NumberOfChaptersHeader" Margin="0,0,10,0" Text="Chapters" FontSize="15" Grid.Column="0" Grid.Row="2" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="NumberOfChaptersHeader" x:Uid="MangaDetailsPage_NumberOfChaptersHeader" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="2" FontWeight="SemiBold"/>
                     <TextBlock x:Name="NumberOfChapters" Text="{x:Bind ViewModel.Manga.NumberOfChapters}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
 
-                    <TextBlock x:Name="LastUpdatedHeader" Margin="0,0,10,0" Text="Last Updated" FontSize="15" Grid.Column="0" Grid.Row="3" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="LastUpdatedHeader" x:Uid="MangaDetailsPage_LastUpdatedHeader" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="3" FontWeight="SemiBold"/>
                     <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Manga.LastUpdated, Converter={StaticResource DateTimeToPrettyDateTime}}" FontSize="15" Grid.Column="1" Grid.Row="3"/>
 
-                    <TextBlock x:Name="CategoryHeader" Text="Category" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="4" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="CategoryHeader" x:Uid="MangaDetailsPage_CategoryHeader" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="4" FontWeight="SemiBold"/>
                     <TextBlock x:Name="Category" Text="{x:Bind ViewModel.Manga.Category}" FontSize="15" TextWrapping="WrapWholeWords" Grid.Column="1" Grid.Row="4"/>
                 </Grid>
             </StackPanel>
-            <!--<TextBlock x:Name="DescriptionHeader" Margin="0,0,0,0" Text="Description" FontSize="15" FontWeight="Bold"/>-->
+            <!--<TextBlock x:Name="DescriptionHeader" x:Uid="MangaDetailsPage_DescriptionHeader" Margin="0,0,0,0" FontSize="15" FontWeight="Bold"/>-->
             <TextBlock x:Name="Description" Text="{x:Bind ViewModel.Manga.Description}" TextWrapping="WrapWholeWords"/>
         </StackPanel>
         
@@ -486,23 +485,27 @@
                                 Frame="{x:Bind Frame}"
                                 Visibility="{Binding IsMultiSelect, Converter={StaticResource BoolToVisibilityConverter}}">
             <t10controls:PageHeader.PrimaryCommands>
-                <AppBarButton Icon="SelectAll"
-                              Label="Select All"
+                <AppBarButton x:Name="SelectAll"
+                              x:Uid="MangaDetailsPage_SelectAllButton"
+                              Icon="SelectAll"
                               Command="{x:Bind ViewModel.SelectAllCommand}"
-                              CommandParameter="{x:Bind ChapterGridView}" />
+                              CommandParameter="{x:Bind ChapterGridView}"/>
                 <AppBarSeparator />
-                <AppBarButton Icon="Delete"
-                              Label="Mark as Unread"
+                <AppBarButton x:Name="Delete"
+                              x:Uid="MangaDetailsPage_DeleteButton"
+                              Icon="Delete"
                               Command="{x:Bind ViewModel.MarkAsUnReadCommand}"
-                              CommandParameter="{x:Bind ChapterGridView}" />
-                <AppBarButton Icon="Accept"
-                              Label="Mark as Read"
+                              CommandParameter="{x:Bind ChapterGridView}"/>
+                <AppBarButton x:Name="Accept"
+                              x:Uid="MangaDetailsPage_AcceptButton"
+                              Icon="Accept"
                               Command="{x:Bind ViewModel.MarkAsReadCommand}"
-                              CommandParameter="{x:Bind ChapterGridView}" />
-                <AppBarButton Icon="Cancel"
-                              Label="Cancel"
+                              CommandParameter="{x:Bind ChapterGridView}"/>
+                <AppBarButton x:Name="Cancel"
+                              x:Uid="MangaDetailsPage_CancelButton"
+                              Icon="Cancel"
                               Command="{x:Bind ViewModel.CancelCommand}"
-                              CommandParameter="{x:Bind ChapterGridView}" />
+                              CommandParameter="{x:Bind ChapterGridView}"/>
             </t10controls:PageHeader.PrimaryCommands>            
         </t10controls:PageHeader>
     </Grid>

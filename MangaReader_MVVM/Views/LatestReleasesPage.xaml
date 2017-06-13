@@ -15,22 +15,21 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <t10controls:PageHeader Name="PageHeader" Text="Latest Releases" Frame="{x:Bind Frame}" >
+        <t10controls:PageHeader Name="PageHeader" x:Uid="LatestReleasesPage_PageHeader" Frame="{x:Bind Frame}" >
             <t10controls:PageHeader.PrimaryCommands>
                 <AppBarButton x:Name="Filter"
-                              Icon="Filter"
-                              Label="Filter"
-                              ToolTipService.ToolTip="{x:Bind Filter.Label, Mode=OneWay}">
+                              x:Uid="LatestReleasesPage_FilterButton"
+                              Icon="Filter">
                     <AppBarButton.Flyout>
                         <Flyout>
                             <StackPanel Orientation="Horizontal">
                                 <Slider x:Name="LatestReleasesDays"
-                                    Header="Days of Latest Releases"
-                                    Width="270"
-                                    IsThumbToolTipEnabled="False"                                 
-                                    Minimum="1"
-                                    Maximum="14"
-                                    Value="{Binding DaysOfLatestReleases, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                        Header="Period of Days"
+                                        Width="270"
+                                        IsThumbToolTipEnabled="False"                                 
+                                        Minimum="1"
+                                        Maximum="14"
+                                        Value="{Binding DaysOfLatestReleases, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock x:Name="LatestReleasesDaysTextBox"
                                            Text="{x:Bind LatestReleasesDays.Value, Mode=OneWay}"
                                            Margin="10,27,0,0"/>
@@ -39,20 +38,19 @@
                     </AppBarButton.Flyout>
                 </AppBarButton>
                 <AppBarButton x:Name="Sort"
+                              x:Uid="LatestReleasesPage_SortButton"
                               Icon="Sort"
-                              Label="Sort"
-                              Command="{x:Bind ViewModel.SortGridCommand, Mode=OneWay}"
-                              ToolTipService.ToolTip="{x:Bind Sort.Label, Mode=OneWay}"/>
+                              Command="{x:Bind ViewModel.SortGridCommand, Mode=OneWay}"/>
                 <AppBarSeparator />
                 <AppBarButton x:Name="Reload"
+                              x:Uid="LatestReleasesPage_ReloadButton"
                               Icon="Refresh"
-                              Label="Reload"
-                              Command="{x:Bind ViewModel.ReloadGridCommand, Mode=OneWay}"
-                              ToolTipService.ToolTip="{x:Bind Reload.Label, Mode=OneWay}"/>
+                              Command="{x:Bind ViewModel.ReloadGridCommand, Mode=OneWay}"/>
             </t10controls:PageHeader.PrimaryCommands>
         </t10controls:PageHeader>
 
         <GridView x:Name="GridView" Grid.Row="1"
+                  Loaded="{x:Bind ViewModel.GridView_Loaded}"
                   ItemsSource="{x:Bind ViewModel.Mangas, Mode=OneWay}"
                   Margin="10,0,0,0"
                   IsItemClickEnabled="True"

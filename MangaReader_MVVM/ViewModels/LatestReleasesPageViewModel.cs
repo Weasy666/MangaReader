@@ -9,10 +9,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Template10.Controls;
 using Template10.Mvvm;
+using Template10.Utils;
 using Template10.Services.NavigationService;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -20,6 +22,9 @@ namespace MangaReader_MVVM.ViewModels
     {
         private MangaLibrary _library = MangaLibrary.Instance;
         private SettingsService _settings = SettingsService.Instance;
+
+        private ScrollViewer gridViewScrollViewer = null;
+
         public int DaysOfLatestReleases
         {
             get => _settings.DaysOfLatestReleases;
@@ -59,11 +64,18 @@ namespace MangaReader_MVVM.ViewModels
                 Mangas = await _library.GetLatestReleasesAsync(DaysOfLatestReleases);
             }
 
+            if (suspensionState.ContainsKey("GridViewVerticalOffset") && (mode == NavigationMode.Back || mode == NavigationMode.Forward))
+            {
+                gridViewScrollViewer.ChangeView(null, Double.Parse(suspensionState["GridViewVerticalOffset"].ToString()), null);
+            }
+
             await Task.CompletedTask;
         }
 
         public override async Task OnNavigatedFromAsync(IDictionary<string, object> suspensionState, bool suspending)
         {
+            suspensionState["GridViewVerticalOffset"] = gridViewScrollViewer.VerticalOffset;
+
             if (suspending)
             {
                 suspensionState[nameof(Mangas)] = Mangas;
@@ -103,6 +115,7 @@ namespace MangaReader_MVVM.ViewModels
         public async void MangaClickedAsync(object sender, ItemClickEventArgs e)
         {
             var clickedManga = e.ClickedItem as Manga;
+            
             if (clickedManga != null)
             {
                 NavigationService.Navigate(typeof(MangaDetailsPage), clickedManga);
@@ -113,6 +126,12 @@ namespace MangaReader_MVVM.ViewModels
                 var dialog = new MessageDialog("This Manga doesn't exist");
                 await dialog.ShowAsync();
             }
+        }
+
+        public void GridView_Loaded(object sender, RoutedEventArgs e)
+        {
+            var gridView = sender as GridView;
+            gridViewScrollViewer = gridView.FirstChild<ScrollViewer>();
         }
     }
 }

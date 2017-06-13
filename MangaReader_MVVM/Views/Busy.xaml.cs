@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Template10.Common;
 using Template10.Controls;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -21,7 +22,7 @@ namespace MangaReader_MVVM.Views
             set { SetValue(BusyTextProperty, value); }
         }
         public static readonly DependencyProperty BusyTextProperty =
-            DependencyProperty.Register(nameof(BusyText), typeof(string), typeof(Busy), new PropertyMetadata("Please wait..."));
+            DependencyProperty.Register(nameof(BusyText), typeof(string), typeof(Busy), new PropertyMetadata(ResourceLoader.GetForViewIndependentUse().GetString("Busy_Text.Text")));
 
         public bool IsBusy
         {

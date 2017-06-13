@@ -1,12 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Template10.Mvvm;
+using Template10.Services.NavigationService;
 using Template10.Services.SettingsService;
+using Windows.ApplicationModel.Resources;
+using Windows.ApplicationModel.Resources.Core;
+using Windows.Globalization;
 using Windows.Storage;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace MangaReader_MVVM.ViewModels
@@ -62,6 +68,30 @@ namespace MangaReader_MVVM.ViewModels
             set { _settings.AppTheme = value ? ApplicationTheme.Light : ApplicationTheme.Dark; base.RaisePropertyChanged(nameof(UseLightThemeButton)); }
         }
 
+        public bool ShowAppLanguageInfo { get; set; }
+        public int SelectedLanguage => AvailableLanguages.ToList().IndexOf(AvailableLanguages.Where(lang => lang.Name == AppLanguage.Name).First());
+        private CultureInfo previousInfo = null;
+        public CultureInfo AppLanguage
+        {
+            get { return _settings.AppLanguage; }
+            set
+            {
+                if(!_settings.AppLanguage.Equals(value))
+                {
+                    if(previousInfo == null) previousInfo = _settings.AppLanguage;
+                    _settings.AppLanguage = value;
+                    ShowAppLanguageInfo = !previousInfo.Equals(value);
+                    base.RaisePropertyChanged(nameof(ShowAppLanguageInfo));
+                    base.RaisePropertyChanged(nameof(AppLanguage));
+                }
+            }
+        }
+        private ObservableCollection<CultureInfo> _availableLanguages;
+        public ObservableCollection<CultureInfo> AvailableLanguages
+        {
+            get { return _availableLanguages = _availableLanguages ?? new ObservableCollection<CultureInfo>(ApplicationLanguages.ManifestLanguages.Select(lang => new CultureInfo(lang))); }
+        }
+
         public bool UseDetailedMangaItem
         {
             get { return _settings.MangaGridLayout.Equals(MangaItemTemplate.CoverWithDetails); }
@@ -80,6 +110,27 @@ namespace MangaReader_MVVM.ViewModels
                 sourcesWithIcons.Add(new BitmapImage(new Uri("ms-appx:///Assets/Icons/icon-" + source.ToString().ToLower() + ".png")));
             }
             return sourcesWithIcons;
+        }
+
+        public async void MangaSourceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ComboBox comboBox)
+            {
+                if (comboBox.SelectedItem is BitmapImage image)
+                {
+                    var uri = image.UriSource.Segments.Last();
+                    var IsParsed = Enum.TryParse<MangaSource>(uri.Substring(5).Remove(uri.Length - 5 - 4), true, out MangaSource source);
+
+                    if (IsParsed && source != _settings.UsedMangaSource)
+                    {
+                        _settings.UsedMangaSource = source;
+                        Views.Busy.SetBusy(true, "Picking up the freshly printed books...");
+                        Services.MangaLibrary.Instance.MangaSource = source;
+                        await Services.MangaLibrary.Instance.GetMangasAsync();
+                        Views.Busy.SetBusy(false);
+                    }
+                }
+            }
         }
 
         public int DaysOfLatestReleases
@@ -101,7 +152,7 @@ namespace MangaReader_MVVM.ViewModels
             {
                 _settings.StorageStrategy = value ? StorageStrategies.OneDrive : StorageStrategies.Local;
                 base.RaisePropertyChanged(nameof(UseOneDriveSync));
-                InvokeLibraryStoring();
+                InvokeLibrarySync();
                 if(!value)
                 {
                     OneDriveSyncTime = new DateTime();
@@ -110,10 +161,10 @@ namespace MangaReader_MVVM.ViewModels
             }
         }
 
-        private async void InvokeLibraryStoring()
+        private async void InvokeLibrarySync()
         {
             IsSyncing = true;
-            await Services.MangaLibrary.Instance.SaveMangaStatusAsync(CreationCollisionOption.ReplaceExisting);
+            await Services.MangaLibrary.Instance.LoadAndMergeStoredDataAsync();
             RaisePropertyChanged(nameof(OneDriveSyncTime));
             IsSyncing = false;
         }

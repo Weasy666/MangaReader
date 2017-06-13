@@ -11,7 +11,7 @@
     <AssemblyName>MangaReader_MVVM</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
+    <TargetPlatformVersion>10.0.15063.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
@@ -19,6 +19,9 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>MangaReader_MVVM_StoreKey.pfx</PackageCertificateKeyFile>
     <PackageCertificateThumbprint>0761944F223A9561785C2F0BB93F85954B032A59</PackageCertificateThumbprint>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -97,6 +100,8 @@
     <Content Include="Assets\Square44x44Logo.targetsize-32.png" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="ToDo.md" />
+    <PRIResource Include="Strings\de-DE\Resources.resw" />
+    <PRIResource Include="Strings\en-US\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -109,6 +114,7 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DateTimeToPrettyDateTime.cs" />
     <Compile Include="Converters\JSON\InterfaceConverter.cs" />
+    <Compile Include="Converters\JSON\MangaFoxMangasListConverter.cs" />
     <Compile Include="Converters\MangaItemTemplateConverter.cs" />
     <Compile Include="Converters\ReadDirectionToIntConverter.cs" />
     <Compile Include="Converters\ReadModeToScrollBarVisibilityConverter.cs" />
@@ -121,6 +127,7 @@
     <Compile Include="Models\Chapter.cs" />
     <Compile Include="Models\MangaGroup.cs" />
     <Compile Include="Services\FileService\FileHelper.cs" />
+    <Compile Include="Services\MangaFoxSource.cs" />
     <Compile Include="Utils\CompareNatural.cs" />
     <Compile Include="Models\IChapter.cs" />
     <Compile Include="Models\IManga.cs" />

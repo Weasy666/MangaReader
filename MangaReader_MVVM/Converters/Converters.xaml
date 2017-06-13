@@ -24,28 +24,18 @@
 
     <JumpListItemBackgroundConverter x:Key="JumpListItemForegroundConverter"/>
 
-    <t10converters:ValueWhenConverter x:Key="BoolToFavoriteTooltipConverter">
+    <t10converters:ValueWhenConverter x:Key="BoolToFavoriteTooltipConverter"
+                                      x:Uid="BoolToFavoriteTooltipConverter">
         <t10converters:ValueWhenConverter.When>
             <x:Boolean>True</x:Boolean>
         </t10converters:ValueWhenConverter.When>
-        <t10converters:ValueWhenConverter.Value>
-            <x:String>Remove Favorite</x:String>
-        </t10converters:ValueWhenConverter.Value>
-        <t10converters:ValueWhenConverter.Otherwise>
-            <x:String>Add Favorite</x:String>
-        </t10converters:ValueWhenConverter.Otherwise>
     </t10converters:ValueWhenConverter>
 
-    <t10converters:ValueWhenConverter x:Key="BoolToGroupedTooltipConverter">
+    <t10converters:ValueWhenConverter x:Key="BoolToGroupedTooltipConverter"
+                                      x:Uid="BoolToGroupedTooltipConverter">
         <t10converters:ValueWhenConverter.When>
             <x:Boolean>True</x:Boolean>
         </t10converters:ValueWhenConverter.When>
-        <t10converters:ValueWhenConverter.Value>
-            <x:String>Ungroup Favorites</x:String>
-        </t10converters:ValueWhenConverter.Value>
-        <t10converters:ValueWhenConverter.Otherwise>
-            <x:String>Group Favorites</x:String>
-        </t10converters:ValueWhenConverter.Otherwise>
     </t10converters:ValueWhenConverter>
 
 </ResourceDictionary>

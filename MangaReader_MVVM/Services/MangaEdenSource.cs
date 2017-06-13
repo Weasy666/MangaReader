@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Template10.Controls;
 using Template10.Mvvm;
 using Template10.Services.NetworkAvailableService;
+using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
@@ -25,9 +26,9 @@ namespace MangaReader_MVVM.Services
 {
     class MangaEdenSource : BindableBase, IMangaSource
     {
-        public BitmapImage Icon { get; } = new BitmapImage(new Uri("ms-appx:///Assets/Icons/icon-mangaeden.png"));
-        public MangaSource Name { get; } = MangaSource.MangaEden;
-        private int Language { get; } = 0;
+        public BitmapImage Icon => new BitmapImage(new Uri("ms-appx:///Assets/Icons/icon-mangaeden.png"));
+        public MangaSource Name => MangaSource.MangaEden;
+        private int Language => 0;
         public Uri RootUri { get; }
         public Uri MangasListPage { get; }
         public Uri MangaDetails { get; }
@@ -490,14 +491,53 @@ namespace MangaReader_MVVM.Services
             }
         }
 
-        private async Task<bool> LoadAndMergeStoredDataAsync()
+        public async Task<bool> LoadAndMergeStoredDataAsync()
         {
             bool retval = false;
-            if (await FileHelper.FileExistsAsync(this.Name + "_mangasStatus"))
+            if (await FileHelper.FileExistsAsync(this.Name + "_mangasStatus", _settings.StorageStrategy))
             {
-                _storedData = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _settings.StorageStrategy);
+                if (_settings.StorageStrategy == StorageStrategies.OneDrive)
+                {
+                    var oneDriveContent = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _settings.StorageStrategy) ?? new Dictionary<string, List<string>>();
+                    var localContent = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus") ?? new Dictionary<string, List<string>>();
 
-                _settings.LastSynced = DateTime.Now;
+                    if(oneDriveContent.Any() && !localContent.Any())
+                    {
+                        localContent = oneDriveContent;
+                        _storedData = oneDriveContent;
+                        await SaveMangaStatusAsync();
+                    }
+                    else if(!oneDriveContent.Any() && localContent.Any())
+                    {
+                        oneDriveContent = localContent;
+                        _storedData = localContent;
+                        await SaveMangaStatusAsync();
+                    }
+                    else if (oneDriveContent.Any() && localContent.Any())
+                    {
+                        for(int i = 0; i < localContent.Count; i++)
+                        {
+                            var pair = localContent.ElementAt(i);
+                            if (oneDriveContent.ContainsKey(pair.Key))
+                            {
+                                var oneDriveValue = oneDriveContent[pair.Key];
+                                oneDriveValue.Union(pair.Value);
+                                oneDriveContent[pair.Key] = oneDriveValue;
+                            }
+                            else
+                            {
+                                oneDriveContent[pair.Key] = pair.Value;
+                            }
+                        }
+                        localContent = oneDriveContent;
+                        _storedData = oneDriveContent;
+                        await SaveMangaStatusAsync();
+                    }
+                }
+                else
+                {
+                    _storedData = await FileHelper.ReadFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _settings.StorageStrategy);
+                }
 
                 if (_storedData != null && _storedData.Any())
                 {
@@ -515,6 +555,7 @@ namespace MangaReader_MVVM.Services
                         }
                     }
                     retval = true;
+                    Favorits = new ObservableItemCollection<Manga>(Mangas.Where(m => m.IsFavorit));
                 }
             }
             return retval;
@@ -541,6 +582,7 @@ namespace MangaReader_MVVM.Services
             var retval = await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData, _settings.StorageStrategy, option);
             if (_settings.StorageStrategy == StorageStrategies.OneDrive)
             {
+                await FileHelper.WriteFileAsync<Dictionary<string, List<string>>>(Name + "_mangasStatus", _storedData, StorageStrategies.Local);
                 _settings.LastSynced = DateTime.Now;
             }
             return retval;
@@ -561,7 +603,7 @@ namespace MangaReader_MVVM.Services
                 savePicker.SuggestedFileName = DateTime.Now.ToString("s") + "_MangaReader_Backup_" + this.Name;
 
                 StorageFile file = await savePicker.PickSaveFileAsync();
-                Views.Busy.SetBusy(true, "Printing your favorite Mangas...");
+                Views.Busy.SetBusy(true, ResourceLoader.GetForViewIndependentUse().GetString("ExportMangaStatus_BusyText"));
                 if (file != null)
                 {
                     // Prevent updates to the remote version of the file until we finish making changes and call CompleteUpdatesAsync.
@@ -571,7 +613,7 @@ namespace MangaReader_MVVM.Services
                     var serializedMangas  = JsonConvert.SerializeObject(_storedData, Formatting.None, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
                                                                                                                                     PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                                                                                                                                     TypeNameHandling = TypeNameHandling.Objects,
-                                                                                                                                    TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple
+                                                                                                                                    TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
                                                                                                                                   });
                     
                     await FileIO.WriteTextAsync(file, serializedMangas);
@@ -600,13 +642,13 @@ namespace MangaReader_MVVM.Services
             FileOpenPicker openPicker = new FileOpenPicker()
             {
                 SuggestedStartLocation = PickerLocationId.Downloads,
-                CommitButtonText = "Import"
+                CommitButtonText = ResourceLoader.GetForViewIndependentUse().GetString("ImportMangaStatus_CommitButton")
             };
             
             openPicker.FileTypeFilter.Add(".json");
 
             StorageFile file = await openPicker.PickSingleFileAsync();
-            Views.Busy.SetBusy(true, "Importing your favorite Mangas...");
+            Views.Busy.SetBusy(true, ResourceLoader.GetForViewIndependentUse().GetString("ImportMangaStatus_BusyText"));
             if (file != null)
             {
                 var _storedData = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(await FileIO.ReadTextAsync(file));

@@ -1,6 +1,9 @@
 using System;
+using System.Globalization;
+using System.Threading.Tasks;
 using Template10.Common;
 using Template10.Utils;
+using Windows.Globalization;
 using Windows.UI.Xaml;
 
 namespace MangaReader_MVVM.Services.SettingsServices
@@ -42,6 +45,23 @@ namespace MangaReader_MVVM.Services.SettingsServices
                 _helper.Write(nameof(AppTheme), value.ToString());
                 (Window.Current.Content as FrameworkElement).RequestedTheme = value.ToElementTheme();
                 Views.Shell.HamburgerMenu.RefreshStyles(value);
+            }
+        }
+
+        public CultureInfo AppLanguage
+        {
+            get
+            {
+                var culture = CultureInfo.CurrentCulture;
+                var value = _helper.Read<string>(nameof(AppLanguage), culture.Name);
+                return new CultureInfo(value);
+            }
+            set
+            {
+                _helper.Write(nameof(AppLanguage), value.Name);
+                ApplicationLanguages.PrimaryLanguageOverride = value.Name;
+                Windows.ApplicationModel.Resources.Core.ResourceContext.GetForCurrentView().Reset();
+                Windows.ApplicationModel.Resources.Core.ResourceContext.GetForViewIndependentUse().Reset();
             }
         }
 

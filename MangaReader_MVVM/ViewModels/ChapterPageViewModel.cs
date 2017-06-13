@@ -1,6 +1,7 @@
 ﻿using MangaReader_MVVM.Models;
 using MangaReader_MVVM.Services;
 using MangaReader_MVVM.Services.SettingsServices;
+using MangaReader_MVVM.Utils;
 using MangaReader_MVVM.Views;
 using System;
 using System.Collections.Generic;
@@ -105,12 +106,13 @@ namespace MangaReader_MVVM.ViewModels
             {
                 Chapter = new Chapter() { Pages = new ObservableItemCollection<Models.Page>() };
 
-                Manga = await _library.GetMangaAsync(chapter.ParentManga.Id);
-                
+                Manga = await _library.GetMangaAsync(chapter.ParentManga.Id);                
+
                 var chapterIndex = Manga.Chapters.IndexOf(chapter);
                 Chapter = await _library.GetChapterAsync(chapter);
                 SelectedChapterIndex = chapterIndex;
             }
+            Helpers.SetTitlebarText(chapter);
             await Task.CompletedTask;
         }
 
@@ -127,6 +129,7 @@ namespace MangaReader_MVVM.ViewModels
                 Shell.HamburgerMenu.DisplayMode = hamburgerDisplayMode;
                 Shell.HamburgerMenu.IsOpen = hamburgerIsOpen;
             }
+            Helpers.SetTitlebarText("");
             await Task.CompletedTask;
         }
         
@@ -223,6 +226,7 @@ namespace MangaReader_MVVM.ViewModels
                             }
                         }
                         Chapter = new Chapter() { Pages = new ObservableItemCollection<Models.Page>() };
+                        Helpers.SetTitlebarText(clickedChapter);
                         Chapter = await _library.GetChapterAsync(clickedChapter);
                         SelectedChapterIndex = listView.SelectedIndex;
                         _library.AddAsRead(clickedChapter);
@@ -236,6 +240,13 @@ namespace MangaReader_MVVM.ViewModels
                 }
             }
         }
+
+        private DelegateCommand _reloadChapterCommand;
+        public DelegateCommand ReloadChapterCommand
+            => _reloadChapterCommand ?? (_reloadChapterCommand = new DelegateCommand(async () =>
+            {
+                Chapter = await _library.GetChapterAsync(Chapter);
+            }, () => Chapter != null));
 
         public void ScrollToSelectedItem(object sender, SelectionChangedEventArgs e)
         {

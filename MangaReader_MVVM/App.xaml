@@ -15,8 +15,8 @@
                 <ResourceDictionary Source="Converters\Converters.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="t10controls:CustomTitleBar">
-                <Setter Property="BackgroundColor" Value="{StaticResource SystemAccentColor}" />
-                <Setter Property="ButtonBackgroundColor" Value="{StaticResource SystemAccentColor}" />
+                <Setter Property="BackgroundColor" Value="{ThemeResource SystemAccentColor}" />
+                <Setter Property="ButtonBackgroundColor" Value="{ThemeResource SystemAccentColor}" />
                 <!--<Setter Property="ButtonForegroundColor" Value="White" />-->
                 <Setter Property="ButtonHoverBackgroundColor" Value="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}" />
                 <!--<Setter Property="ButtonHoverForegroundColor" Value="White" />-->

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
@@ -17,11 +18,11 @@ namespace MangaReader_MVVM.Converters
 
             if (dateTime.Date == now.Date)
             {
-                return "Today at " + dateTime.ToString("t");
+                return ResourceLoader.GetForViewIndependentUse().GetString("DateTimeToPrettyDateTime_Today") + " " + dateTime.ToString("t");
             }
             else if (dateTime.Date == now.Date.AddDays(-1))
             {
-                return "Yesterday";
+                return ResourceLoader.GetForViewIndependentUse().GetString("DateTimeToPrettyDateTime_Yesterday");
             }
             else if (dateTime.Year <= 1970)
             {
