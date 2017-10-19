@@ -22,7 +22,7 @@
                     Grid.Column="1"
                     Canvas.ZIndex="10"
                     Padding="0"
-                    Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                    Foreground="{ThemeResource FocusVisualWhiteStrokeThemeBrush}"
                     ToolTipService.ToolTip="{Binding IsFavorit, Mode=OneWay, Converter={StaticResource BoolToFavoriteTooltipConverter}}"/>
             <controls:ImageEx x:Name="Cover" Foreground="{ThemeResource ContrastColorBrush}"
                                 Width="103" Height="150" Grid.Column="0"
@@ -70,7 +70,7 @@
                         Width="30"
                         Padding="0"
                         VerticalAlignment="Bottom"
-                        Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                        Foreground="{ThemeResource FocusVisualWhiteStrokeThemeBrush}"
                         Background="Transparent"
                         ToolTipService.ToolTip="{Binding IsFavorit, Mode=OneWay, Converter={StaticResource BoolToFavoriteTooltipConverter}}">
                     <Button.Style>
