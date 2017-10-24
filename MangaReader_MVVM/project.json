@@ -1,7 +1,7 @@
 ﻿{
   "dependencies": {
     "AngleSharp": "0.9.9",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "6.0.1",
     "Microsoft.Toolkit.Uwp": "2.0.0",
     "Microsoft.Toolkit.Uwp.Services": "2.0.0",
     "Microsoft.Toolkit.Uwp.UI": "2.0.0",
