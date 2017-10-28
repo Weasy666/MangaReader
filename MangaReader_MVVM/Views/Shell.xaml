@@ -103,7 +103,7 @@
         
         <!--  SettingsPages buttons  -->
         <Controls:HamburgerMenu.SecondaryButtons>
-            <Controls:HamburgerButtonInfo ButtonType="Literal" >
+            <Controls:HamburgerButtonInfo ButtonType="Command" >
                 <Controls:HamburgerButtonInfo.NavigationTransitionInfo>
                     <SuppressNavigationTransitionInfo />
                 </Controls:HamburgerButtonInfo.NavigationTransitionInfo>
