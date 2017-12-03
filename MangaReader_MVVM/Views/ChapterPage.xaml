@@ -53,6 +53,7 @@
                                 ClosedDisplayMode="Hidden"
                                 Height="150"
                                 IsSticky="True"
+                                Background="{ThemeResource SystemControlAccentAcrylicElementAccentMediumHighBrush}" 
                                 EllipsisVisibility="Collapsed">
             <t10controls:PageHeader.Content>
                 <Grid Margin="-16,0,0,-102" >

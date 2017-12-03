@@ -433,9 +433,13 @@
 
                     <TextBlock x:Name="StatusHeader" x:Uid="MangaDetailsPage_StatusHeader" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="1" FontWeight="SemiBold"/>
                     <TextBlock x:Name="Status" Text="{x:Bind ViewModel.Manga.Ongoing, Converter={StaticResource BoolToMangaStatusConverter}}" FontSize="15" Grid.Column="1" Grid.Row="1"/>
-
+                    
                     <TextBlock x:Name="NumberOfChaptersHeader" x:Uid="MangaDetailsPage_NumberOfChaptersHeader" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="2" FontWeight="SemiBold"/>
-                    <TextBlock x:Name="NumberOfChapters" Text="{x:Bind ViewModel.Manga.NumberOfChapters}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" >                        
+                        <TextBlock x:Name="NumberOfReadChapters" Text="{x:Bind ViewModel.ReadProgress}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
+                        <TextBlock Text=" /  " FontSize="15" Grid.Column="1" Grid.Row="2"/>
+                        <TextBlock x:Name="NumberOfChapters" Text="{x:Bind ViewModel.Manga.NumberOfChapters}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
+                    </StackPanel>
 
                     <TextBlock x:Name="LastUpdatedHeader" x:Uid="MangaDetailsPage_LastUpdatedHeader" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="3" FontWeight="SemiBold"/>
                     <TextBlock x:Name="LastUpdated" Text="{x:Bind ViewModel.Manga.LastUpdated, Converter={StaticResource DateTimeToPrettyDateTime}}" FontSize="15" Grid.Column="1" Grid.Row="3"/>

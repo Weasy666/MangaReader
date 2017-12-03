@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 
 namespace MangaReader_MVVM.Utils
 {
@@ -17,6 +18,29 @@ namespace MangaReader_MVVM.Utils
                 return toCategorize;
             else
                 return '&';
+        }
+
+        public static string CategorizeByPrettyDate(DateTime dateTime)
+        {
+            dateTime = dateTime.ToLocalTime();
+            var now = DateTime.Now;
+
+            if (dateTime.Date == now.Date)
+            {
+                return ResourceLoader.GetForViewIndependentUse().GetString("DateTimeToPrettyDateTime_Today").Split(' ')[0];
+            }
+            else if (dateTime.Date == now.Date.AddDays(-1))
+            {
+                return ResourceLoader.GetForViewIndependentUse().GetString("DateTimeToPrettyDateTime_Yesterday");
+            }
+            else if (dateTime.Year <= 1970)
+            {
+                return "N/A";
+            }
+            else
+            {
+                return dateTime.ToString("d. MMM yyyy");
+            }
         }
 
         public static void SetTitlebarText(Manga manga)

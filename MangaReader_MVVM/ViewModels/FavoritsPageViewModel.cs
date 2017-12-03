@@ -54,12 +54,12 @@ namespace MangaReader_MVVM.ViewModels
         {
             get
             {
-                var groups = new ObservableItemCollection<MangaGroup> { new MangaGroup() { Key = '&' },
-                                                                        new MangaGroup() { Key = '#' } };
+                var groups = new ObservableItemCollection<MangaGroup> { new MangaGroup() { Key = '&'.ToString() },
+                                                                        new MangaGroup() { Key = '#'.ToString() } };
 
                 for (int i = 'A'; i <= 'Z'; i++)
                 {
-                    groups.Add(new MangaGroup() { Key = (char)i });
+                    groups.Add(new MangaGroup() { Key = ((char)i).ToString() });
                 }
 
                 var query = from manga in Favorits
@@ -69,7 +69,7 @@ namespace MangaReader_MVVM.ViewModels
 
                 foreach (var grp in query)
                 {
-                    MangaGroup group = groups.First(g => g.Key == Helpers.CategorizeAlphabetically(grp.GroupName));
+                    MangaGroup group = groups.First(g => g.Key == Helpers.CategorizeAlphabetically(grp.GroupName).ToString());
                     foreach (var item in grp.Items)
                     {
                         group.AddSorted(item);

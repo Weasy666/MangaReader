@@ -9,7 +9,7 @@ namespace MangaReader_MVVM.Models
 {
     public class MangaGroup : ObservableCollection<Manga>
     {
-        public char Key { get; set; }
+        public string Key { get; set; }
 
         public override string ToString()
         {

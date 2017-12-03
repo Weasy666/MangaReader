@@ -130,6 +130,12 @@ namespace MangaReader_MVVM.Services.SettingsServices
             set { _helper.Write(nameof(IsGroupedFavoritsGrid), value); }
         }
 
+        public bool IsGroupedLatesReleasesGrid
+        {
+            get { return _helper.Read<bool>(nameof(IsGroupedLatesReleasesGrid), false); }
+            set { _helper.Write(nameof(IsGroupedLatesReleasesGrid), value); }
+        }
+
         public ReadMode ReadMode
         {
             get

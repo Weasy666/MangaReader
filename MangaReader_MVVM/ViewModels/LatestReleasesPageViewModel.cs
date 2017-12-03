@@ -15,6 +15,9 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Data;
+using MangaReader_MVVM.Utils;
+using MangaReader_MVVM.Converters;
 
 namespace MangaReader_MVVM.ViewModels
 {
@@ -31,6 +34,13 @@ namespace MangaReader_MVVM.ViewModels
             set { _settings.DaysOfLatestReleases = value; base.RaisePropertyChanged(nameof(DaysOfLatestReleases)); }
         }
         public MangaItemTemplate MangaGridLayout => _settings.MangaGridLayout;
+
+        public bool? IsGridGrouped
+        {
+            get => _settings.IsGroupedLatesReleasesGrid;
+            set { _settings.IsGroupedLatesReleasesGrid = (bool)value; }
+        }
+
         private void Settings_Changed(object sender, PropertyChangedEventArgs e)
         {
             if (nameof(_settings.MangaGridLayout).Equals(e.PropertyName))
@@ -54,6 +64,42 @@ namespace MangaReader_MVVM.ViewModels
 
         private ObservableItemCollection<Manga> _mangas = new ObservableItemCollection<Manga>();
         public ObservableItemCollection<Manga> Mangas { get { return _mangas; } set { Set(ref _mangas, value); } }
+
+        public ObservableItemCollection<MangaGroup> MangasGroups
+        {
+            get
+            {
+                var groups = new ObservableItemCollection<MangaGroup>();
+
+                for (int i = 0; i <= DaysOfLatestReleases; i++)
+                {
+                    groups.Add(new MangaGroup() { Key = Helpers.CategorizeByPrettyDate(DateTime.Now.Date.AddDays(-i)) });
+                }
+
+                var query = from manga in Mangas
+                            group manga by manga.LastUpdated.Date into grp
+                            orderby grp.Key
+                            select new { GroupName = grp.Key, Items = grp };
+
+                foreach (var grp in query)
+                {
+                    MangaGroup group = groups.First(g => g.Key == Helpers.CategorizeByPrettyDate(grp.GroupName));
+                    foreach (var item in grp.Items)
+                    {
+                        group.AddSorted(item);
+                    }
+                }
+
+                return groups;
+            }
+        }
+
+        private CollectionViewSource _mangasCVS;
+        public CollectionViewSource MangasCVS
+        {
+            get { return _mangasCVS = _mangasCVS ?? new CollectionViewSource() { IsSourceGrouped = (bool)IsGridGrouped, Source = (bool)IsGridGrouped ? (object)MangasGroups : (object)Mangas }; }
+            set { Set(ref _mangasCVS, value); }
+        }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
@@ -97,6 +143,20 @@ namespace MangaReader_MVVM.ViewModels
                 Mangas = await _library.GetLatestReleasesAsync(DaysOfLatestReleases, ReloadMode.Server);
                 Views.Busy.SetBusy(false);
             }, () => Mangas.Any()));
+
+        private DelegateCommand<object> _groupGridCommand;
+        public DelegateCommand<object> GroupGridCommand
+            => _groupGridCommand ?? (_groupGridCommand = new DelegateCommand<object>((param) =>
+            {
+                var source = new CollectionViewSource() { IsSourceGrouped = (bool)IsGridGrouped };
+
+                if ((bool)IsGridGrouped)
+                    source.Source = MangasGroups;
+                else
+                    source.Source = Mangas;
+
+                MangasCVS = source;
+            }));
 
         private DelegateCommand _sortGridCommand;
         public DelegateCommand SortGridCommand
