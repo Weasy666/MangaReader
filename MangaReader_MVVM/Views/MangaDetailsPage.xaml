@@ -437,8 +437,8 @@
                     <TextBlock x:Name="NumberOfChaptersHeader" x:Uid="MangaDetailsPage_NumberOfChaptersHeader" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="2" FontWeight="SemiBold"/>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" >                        
                         <TextBlock x:Name="NumberOfReadChapters" Text="{x:Bind ViewModel.ReadProgress}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
-                        <TextBlock Text=" /  " FontSize="15" Grid.Column="1" Grid.Row="2"/>
-                        <TextBlock x:Name="NumberOfChapters" Text="{x:Bind ViewModel.Manga.NumberOfChapters}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
+                        <!--<TextBlock Text=" / " FontSize="15" Grid.Column="1" Grid.Row="2"/>
+                        <TextBlock x:Name="NumberOfChapters" Text="{x:Bind ViewModel.Manga.NumberOfChapters}" FontSize="15" Grid.Column="1" Grid.Row="2"/>-->
                     </StackPanel>
 
                     <TextBlock x:Name="LastUpdatedHeader" x:Uid="MangaDetailsPage_LastUpdatedHeader" Margin="0,0,10,0" FontSize="15" Grid.Column="0" Grid.Row="3" FontWeight="SemiBold"/>

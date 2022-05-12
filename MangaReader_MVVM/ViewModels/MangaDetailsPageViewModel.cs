@@ -40,7 +40,7 @@ namespace MangaReader_MVVM.ViewModels
         private ObservableItemCollection<Chapter> _chapters = new ObservableItemCollection<Chapter>();
         public ObservableItemCollection<Chapter> Chapters { get { return _chapters; } set { Set(ref _chapters, value); } }
 
-        public int ReadProgress => Manga.ReadProgress;
+        public string ReadProgress => String.Format("{0} / {1}", Manga.ReadProgress, Manga.NumberOfChapters);
 
         public void PageGrid_Loaded(object sender, RoutedEventArgs e)
         {

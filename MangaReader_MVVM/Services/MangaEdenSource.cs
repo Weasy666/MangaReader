@@ -571,7 +571,9 @@ namespace MangaReader_MVVM.Services
                 {
                     foreach (var manga in lastRead)
                     {
-                        LastRead.Add(Mangas.Where(m => m.Id == manga.Id).First());
+                        var last = Mangas.Where(m => m.Id == manga.Id || m.Title == manga.Title);
+                        if (last.Any())
+                            LastRead.Add(last.First());
                     }
                 }
             }
